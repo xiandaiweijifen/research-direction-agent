@@ -1,4 +1,4 @@
-from app.services.topic_agent.topic_agent_service import (
+from app.services.topic_agent.topic_agent_runtime import (
     create_topic_agent_session,
     get_topic_agent_session,
     list_topic_agent_sessions,

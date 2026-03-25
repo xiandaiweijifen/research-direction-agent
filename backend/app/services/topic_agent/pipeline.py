@@ -1,0 +1,345 @@
+from __future__ import annotations
+
+import uuid
+from dataclasses import dataclass
+
+from app.schemas.topic_agent import (
+    TopicAgentCandidateTopic,
+    TopicAgentComparisonResult,
+    TopicAgentConfidenceSummary,
+    TopicAgentConvergenceResult,
+    TopicAgentExploreRequest,
+    TopicAgentFramingResult,
+    TopicAgentLandscapeSummary,
+    TopicAgentSessionResponse,
+    TopicAgentSourceRecord,
+    TopicAgentTraceEvent,
+)
+from app.services.ingestion.document_service import build_utc_timestamp
+from app.services.topic_agent.providers import TopicAgentEvidenceProvider
+
+
+@dataclass
+class TopicAgentPipelineContext:
+    request: TopicAgentExploreRequest
+    framing_result: TopicAgentFramingResult | None = None
+    evidence_records: list[TopicAgentSourceRecord] | None = None
+    landscape_summary: TopicAgentLandscapeSummary | None = None
+    candidate_topics: list[TopicAgentCandidateTopic] | None = None
+    comparison_result: TopicAgentComparisonResult | None = None
+    convergence_result: TopicAgentConvergenceResult | None = None
+    confidence_summary: TopicAgentConfidenceSummary | None = None
+    trace: list[TopicAgentTraceEvent] | None = None
+
+
+def _build_extracted_constraints(request: TopicAgentExploreRequest) -> dict[str, str]:
+    constraints: dict[str, str] = {}
+    if request.constraints.time_budget_months is not None:
+        constraints["time_budget_months"] = str(request.constraints.time_budget_months)
+    if request.constraints.resource_level:
+        constraints["resource_level"] = request.constraints.resource_level
+    if request.constraints.preferred_style:
+        constraints["preferred_style"] = request.constraints.preferred_style
+    if request.constraints.notes:
+        constraints["notes"] = request.constraints.notes
+    return constraints
+
+
+def _build_missing_clarifications(request: TopicAgentExploreRequest) -> list[str]:
+    missing: list[str] = []
+    if request.constraints.time_budget_months is None:
+        missing.append("time_budget")
+    if not request.constraints.resource_level:
+        missing.append("resource_level")
+    if not request.constraints.preferred_style:
+        missing.append("preferred_style")
+    return missing
+
+
+def _build_search_questions(request: TopicAgentExploreRequest) -> list[str]:
+    topic = request.interest.strip()
+    return [
+        f"What are the main research themes in {topic}?",
+        f"What methods and benchmarks are commonly used in {topic}?",
+        f"What open problems or underexplored gaps exist in {topic}?",
+    ]
+
+
+def frame_problem(context: TopicAgentPipelineContext) -> TopicAgentFramingResult:
+    request = context.request
+    result = TopicAgentFramingResult(
+        normalized_topic=request.interest.strip(),
+        extracted_constraints=_build_extracted_constraints(request),
+        missing_clarifications=_build_missing_clarifications(request),
+        search_questions=_build_search_questions(request),
+    )
+    context.framing_result = result
+    return result
+
+
+def retrieve_evidence(
+    context: TopicAgentPipelineContext,
+    provider: TopicAgentEvidenceProvider,
+) -> list[TopicAgentSourceRecord]:
+    records = provider.retrieve(context.request)
+    context.evidence_records = records
+    return records
+
+
+def synthesize_landscape(context: TopicAgentPipelineContext) -> TopicAgentLandscapeSummary:
+    topic = context.request.interest.strip()
+    result = TopicAgentLandscapeSummary(
+        themes=[
+            f"problem framing and task definition in {topic}",
+            f"benchmark-driven evaluation for {topic}",
+            f"practical deployment concerns in {topic}",
+        ],
+        active_methods=[
+            "survey-guided baseline comparison",
+            "benchmark-centered experimental design",
+            "cross-method error analysis",
+        ],
+        likely_gaps=[
+            "clear task scoping for narrow research questions",
+            "stronger evidence on feasibility under limited resources",
+        ],
+        saturated_areas=[
+            "broad generic summaries without a sharply defined question",
+        ],
+    )
+    context.landscape_summary = result
+    return result
+
+
+def generate_candidates(context: TopicAgentPipelineContext) -> list[TopicAgentCandidateTopic]:
+    result = [
+        TopicAgentCandidateTopic(
+            candidate_id="candidate_1",
+            title="Benchmark-Guided Narrow Task Definition",
+            research_question="How can a narrower benchmark task reveal actionable limitations in current methods?",
+            positioning="gap-driven",
+            novelty_note="Focuses on under-specified evaluation boundaries rather than generic performance claims.",
+            feasibility_note="Moderate feasibility with public resources and modest compute.",
+            risk_note="May become incremental if the task boundary is not sharply differentiated.",
+            supporting_source_ids=["source_1", "source_2"],
+            open_questions=["Which benchmark subset best represents the intended problem?"],
+        ),
+        TopicAgentCandidateTopic(
+            candidate_id="candidate_2",
+            title="Method Transfer Under Practical Constraints",
+            research_question="Can an existing method family be adapted effectively under stricter resource constraints?",
+            positioning="transfer",
+            novelty_note="Combines known methods with a narrower operating constraint.",
+            feasibility_note="Higher feasibility because it can start from existing baselines.",
+            risk_note="Novelty may depend heavily on the chosen constraint and evaluation design.",
+            supporting_source_ids=["source_1", "source_3"],
+            open_questions=["Which constraint creates the strongest research signal?"],
+        ),
+        TopicAgentCandidateTopic(
+            candidate_id="candidate_3",
+            title="Tooling And Evaluation Workflow Support",
+            research_question="What tooling or evaluation workflow improvements would make research in this area more reproducible?",
+            positioning="systems",
+            novelty_note="Shifts from model novelty to workflow and evaluation reliability.",
+            feasibility_note="Strong feasibility for a short-cycle project with engineering emphasis.",
+            risk_note="May fit a systems or tooling venue better than a method-centric venue.",
+            supporting_source_ids=["source_2", "source_3"],
+            open_questions=["What concrete reproducibility pain point should be prioritized first?"],
+        ),
+    ]
+    context.candidate_topics = result
+    return result
+
+
+def compare_candidates(context: TopicAgentPipelineContext) -> TopicAgentComparisonResult:
+    result = TopicAgentComparisonResult(
+        dimensions=[
+            "novelty",
+            "feasibility",
+            "evidence_strength",
+            "data_availability",
+            "implementation_cost",
+            "risk",
+        ],
+        summary=(
+            "Candidate 1 is strongest on research focus, candidate 2 is strongest on practical feasibility, "
+            "and candidate 3 is strongest on execution speed for an engineering-oriented project."
+        ),
+        candidate_assessments=[
+            {
+                "candidate_id": "candidate_1",
+                "novelty": "high",
+                "feasibility": "medium",
+                "evidence_strength": "medium_high",
+                "data_availability": "medium",
+                "implementation_cost": "medium",
+                "risk": "medium",
+            },
+            {
+                "candidate_id": "candidate_2",
+                "novelty": "medium",
+                "feasibility": "high",
+                "evidence_strength": "medium",
+                "data_availability": "medium_high",
+                "implementation_cost": "medium_low",
+                "risk": "medium",
+            },
+            {
+                "candidate_id": "candidate_3",
+                "novelty": "medium",
+                "feasibility": "high",
+                "evidence_strength": "medium",
+                "data_availability": "high",
+                "implementation_cost": "low",
+                "risk": "medium_high",
+            },
+        ],
+    )
+    context.comparison_result = result
+    return result
+
+
+def converge_recommendation(context: TopicAgentPipelineContext) -> TopicAgentConvergenceResult:
+    result = TopicAgentConvergenceResult(
+        recommended_candidate_id="candidate_1",
+        backup_candidate_id="candidate_2",
+        rationale=(
+            "Candidate 1 currently offers the best balance between research value, evidence support, "
+            "and scope control for a first serious topic exploration."
+        ),
+        manual_checks=[
+            "Confirm that the selected sub-problem is narrow enough for the available timeline.",
+            "Verify that at least one benchmark or dataset is realistically accessible.",
+            "Check whether the proposed gap is genuinely underexplored rather than a retrieval miss.",
+        ],
+    )
+    context.convergence_result = result
+    return result
+
+
+def _derive_evidence_coverage(evidence_records: list[TopicAgentSourceRecord]) -> str:
+    if len(evidence_records) >= 6:
+        return "high"
+    if len(evidence_records) >= 3:
+        return "medium"
+    return "low"
+
+
+def _derive_source_quality(evidence_records: list[TopicAgentSourceRecord]) -> str:
+    tier_a_count = sum(1 for record in evidence_records if record.source_tier == "A")
+    if tier_a_count >= 3:
+        return "high"
+    if tier_a_count >= 1:
+        return "medium_high"
+    return "medium"
+
+
+def _derive_candidate_separation(candidate_topics: list[TopicAgentCandidateTopic]) -> str:
+    positionings = {candidate.positioning for candidate in candidate_topics}
+    if len(positionings) >= 3:
+        return "high"
+    if len(positionings) == 2:
+        return "medium"
+    return "low"
+
+
+def build_confidence_summary(context: TopicAgentPipelineContext) -> TopicAgentConfidenceSummary:
+    evidence_records = context.evidence_records or []
+    candidate_topics = context.candidate_topics or []
+    evidence_coverage = _derive_evidence_coverage(evidence_records)
+    source_quality = _derive_source_quality(evidence_records)
+    candidate_separation = _derive_candidate_separation(candidate_topics)
+    conflict_level = "low"
+    result = TopicAgentConfidenceSummary(
+        evidence_coverage=evidence_coverage,
+        source_quality=source_quality,
+        candidate_separation=candidate_separation,
+        conflict_level=conflict_level,
+        rationale=[
+            f"Evidence coverage is {evidence_coverage} based on the current number of retrieved records.",
+            f"Source quality is {source_quality} based on the current source-tier mix.",
+            f"Candidate separation is {candidate_separation} based on the diversity of candidate positioning.",
+            f"Conflict level is {conflict_level} because this development slice does not yet model explicit source disagreement.",
+        ],
+    )
+    context.confidence_summary = result
+    return result
+
+
+def build_trace(context: TopicAgentPipelineContext) -> list[TopicAgentTraceEvent]:
+    evidence_count = len(context.evidence_records or [])
+    candidate_count = len(context.candidate_topics or [])
+    result = [
+        TopicAgentTraceEvent(
+            stage="frame_problem",
+            status="completed",
+            timestamp=build_utc_timestamp(),
+            detail="Structured the user input into a topic-exploration request.",
+        ),
+        TopicAgentTraceEvent(
+            stage="retrieve_evidence",
+            status="completed",
+            timestamp=build_utc_timestamp(),
+            detail=f"Built a mock evidence bundle with {evidence_count} records for the current development slice.",
+        ),
+        TopicAgentTraceEvent(
+            stage="synthesize_landscape",
+            status="completed",
+            timestamp=build_utc_timestamp(),
+            detail="Organized the current evidence bundle into a lightweight research landscape summary.",
+        ),
+        TopicAgentTraceEvent(
+            stage="generate_candidates",
+            status="completed",
+            timestamp=build_utc_timestamp(),
+            detail=f"Generated {candidate_count} candidate topic directions from the current evidence bundle.",
+        ),
+        TopicAgentTraceEvent(
+            stage="compare_candidates",
+            status="completed",
+            timestamp=build_utc_timestamp(),
+            detail="Produced a structured candidate comparison across fixed MVP dimensions.",
+        ),
+        TopicAgentTraceEvent(
+            stage="converge_recommendation",
+            status="completed",
+            timestamp=build_utc_timestamp(),
+            detail="Produced a recommended next-best option with manual verification checks.",
+        ),
+    ]
+    context.trace = result
+    return result
+
+
+def run_topic_agent_pipeline(
+    request: TopicAgentExploreRequest,
+    *,
+    provider: TopicAgentEvidenceProvider,
+    session_id: str | None = None,
+    created_at: str | None = None,
+) -> TopicAgentSessionResponse:
+    timestamp = build_utc_timestamp()
+    context = TopicAgentPipelineContext(request=request)
+    frame_problem(context)
+    retrieve_evidence(context, provider)
+    synthesize_landscape(context)
+    generate_candidates(context)
+    compare_candidates(context)
+    converge_recommendation(context)
+    build_confidence_summary(context)
+    build_trace(context)
+    return TopicAgentSessionResponse(
+        session_id=session_id or uuid.uuid4().hex,
+        created_at=created_at or timestamp,
+        updated_at=timestamp,
+        user_input=request,
+        framing_result=context.framing_result,
+        evidence_records=context.evidence_records or [],
+        landscape_summary=context.landscape_summary,
+        candidate_topics=context.candidate_topics or [],
+        comparison_result=context.comparison_result,
+        convergence_result=context.convergence_result,
+        human_confirmations=[],
+        trace=context.trace or [],
+        confidence_summary=context.confidence_summary,
+    )

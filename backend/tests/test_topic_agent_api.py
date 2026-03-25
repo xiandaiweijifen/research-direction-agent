@@ -6,7 +6,7 @@ from app.main import app
 def test_topic_agent_explore_creates_session_with_mock_outputs(workspace_tmp_path, monkeypatch):
     session_store_path = workspace_tmp_path / "topic_agent_sessions.json"
     monkeypatch.setattr(
-        "app.services.topic_agent.topic_agent_service.TOPIC_AGENT_STORE_PATH",
+        "app.services.topic_agent.topic_agent_runtime.TOPIC_AGENT_STORE_PATH",
         session_store_path,
     )
 
@@ -50,7 +50,7 @@ def test_topic_agent_explore_creates_session_with_mock_outputs(workspace_tmp_pat
 def test_topic_agent_sessions_list_and_get_return_persisted_session(workspace_tmp_path, monkeypatch):
     session_store_path = workspace_tmp_path / "topic_agent_sessions.json"
     monkeypatch.setattr(
-        "app.services.topic_agent.topic_agent_service.TOPIC_AGENT_STORE_PATH",
+        "app.services.topic_agent.topic_agent_runtime.TOPIC_AGENT_STORE_PATH",
         session_store_path,
     )
 
@@ -83,7 +83,7 @@ def test_topic_agent_sessions_list_and_get_return_persisted_session(workspace_tm
 def test_topic_agent_refine_updates_existing_session(workspace_tmp_path, monkeypatch):
     session_store_path = workspace_tmp_path / "topic_agent_sessions.json"
     monkeypatch.setattr(
-        "app.services.topic_agent.topic_agent_service.TOPIC_AGENT_STORE_PATH",
+        "app.services.topic_agent.topic_agent_runtime.TOPIC_AGENT_STORE_PATH",
         session_store_path,
     )
 
@@ -122,7 +122,7 @@ def test_topic_agent_refine_updates_existing_session(workspace_tmp_path, monkeyp
 def test_topic_agent_explore_rejects_empty_interest(workspace_tmp_path, monkeypatch):
     session_store_path = workspace_tmp_path / "topic_agent_sessions.json"
     monkeypatch.setattr(
-        "app.services.topic_agent.topic_agent_service.TOPIC_AGENT_STORE_PATH",
+        "app.services.topic_agent.topic_agent_runtime.TOPIC_AGENT_STORE_PATH",
         session_store_path,
     )
 
