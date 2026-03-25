@@ -35,6 +35,7 @@ import {
   runDiagnostics as runDiagnosticsRequest,
   runEvaluation as runEvaluationRequest,
   runQuery as runQueryRequest,
+  refineTopicAgentSession as refineTopicAgentSessionRequest,
   runTopicAgentExplore as runTopicAgentExploreRequest,
   uploadDocument as uploadDocumentRequest,
 } from "./api";
@@ -692,6 +693,34 @@ function App() {
     }
   }
 
+  async function refineCurrentTopicSession() {
+    if (!topicResult) {
+      return;
+    }
+
+    setTopicBusy(true);
+    setTopicError("");
+
+    try {
+      const payload = await refineTopicAgentSessionRequest(topicResult.session_id, {
+        interest: topicInterest || undefined,
+        problem_domain: topicProblemDomain || undefined,
+        seed_idea: topicSeedIdea || undefined,
+        constraints: {
+          time_budget_months: topicTimeBudgetMonths ? Number(topicTimeBudgetMonths) : undefined,
+          resource_level: topicResourceLevel || undefined,
+          preferred_style: topicPreferredStyle || undefined,
+        },
+      });
+      setTopicResult(payload);
+      await loadTopicAgentSessions();
+    } catch (error) {
+      setTopicError(error instanceof Error ? error.message : "Failed to refine Topic Agent session");
+    } finally {
+      setTopicBusy(false);
+    }
+  }
+
   async function loadTopicAgentSession(sessionId: string) {
     setTopicBusy(true);
     setTopicError("");
@@ -1056,6 +1085,7 @@ function App() {
           onChangeResourceLevel={setTopicResourceLevel}
           onChangePreferredStyle={setTopicPreferredStyle}
           onSubmit={submitTopicExplore}
+          onRefine={() => void refineCurrentTopicSession()}
           onLoadSession={(sessionId) => void loadTopicAgentSession(sessionId)}
         />
       )}

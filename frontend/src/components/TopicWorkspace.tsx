@@ -21,6 +21,7 @@ type TopicWorkspaceProps = {
   onChangeResourceLevel: (value: string) => void;
   onChangePreferredStyle: (value: string) => void;
   onSubmit: (event: FormEvent<HTMLFormElement>) => void;
+  onRefine: () => void;
   onLoadSession: (sessionId: string) => void;
 };
 
@@ -43,6 +44,7 @@ export function TopicWorkspace({
   onChangeResourceLevel,
   onChangePreferredStyle,
   onSubmit,
+  onRefine,
   onLoadSession,
 }: TopicWorkspaceProps) {
   const copy =
@@ -60,6 +62,7 @@ export function TopicWorkspace({
           resourceLevel: "资源水平",
           preferredStyle: "偏好风格",
           run: "运行 Topic Agent",
+          refine: "基于当前结果收敛",
           running: "正在运行 Topic Agent...",
           framing: "问题 Framing",
           evidence: "证据记录",
@@ -90,6 +93,7 @@ export function TopicWorkspace({
           resourceLevel: "Resource Level",
           preferredStyle: "Preferred Style",
           run: "Run Topic Agent",
+          refine: "Refine Current Session",
           running: "Running Topic Agent...",
           framing: "Problem Framing",
           evidence: "Evidence Records",
@@ -168,6 +172,14 @@ export function TopicWorkspace({
             <button type="submit" className="primary-button" disabled={topicBusy}>
               {topicBusy ? copy.running : copy.run}
             </button>
+            <button
+              type="button"
+              className="secondary-button"
+              disabled={topicBusy || !topicResult}
+              onClick={onRefine}
+            >
+              {copy.refine}
+            </button>
           </div>
         </form>
         {topicError && <p className="error">{topicError}</p>}
@@ -191,7 +203,7 @@ export function TopicWorkspace({
               <article key={session.session_id} className="trace-card">
                 <div className="trace-meta-row">
                   <strong>{session.interest}</strong>
-                  <span className="status-chip">{session.candidate_count}</span>
+                  <span className="status-chip">{session.candidate_count} topics</span>
                 </div>
                 <p className="trace-detail">{session.recommended_candidate_id ?? "-"}</p>
                 <div className="button-row">

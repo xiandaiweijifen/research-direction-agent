@@ -10,6 +10,7 @@ describe("TopicWorkspace", () => {
   it("renders topic-agent results and submits the exploration form", async () => {
     const user = userEvent.setup();
     const onSubmit = vi.fn((event: FormEvent<HTMLFormElement>) => event.preventDefault());
+    const onRefine = vi.fn();
 
     render(
       <TopicWorkspace
@@ -134,6 +135,7 @@ describe("TopicWorkspace", () => {
         onChangeResourceLevel={vi.fn()}
         onChangePreferredStyle={vi.fn()}
         onSubmit={onSubmit}
+        onRefine={onRefine}
         onLoadSession={vi.fn()}
       />,
     );
@@ -144,8 +146,12 @@ describe("TopicWorkspace", () => {
     expect(screen.getAllByText("candidate_1")).toHaveLength(2);
     expect(screen.getByText("Evidence coverage is medium.")).toBeInTheDocument();
     expect(screen.getByText("Recent Sessions")).toBeInTheDocument();
+    expect(screen.getByText("1 topics")).toBeInTheDocument();
 
     await user.click(screen.getByRole("button", { name: "Run Topic Agent" }));
     expect(onSubmit).toHaveBeenCalledTimes(1);
+
+    await user.click(screen.getByRole("button", { name: "Refine Current Session" }));
+    expect(onRefine).toHaveBeenCalledTimes(1);
   });
 });

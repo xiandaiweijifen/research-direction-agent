@@ -354,3 +354,26 @@ export function fetchTopicAgentSession(sessionId: string) {
     `/api/topic-agent/sessions/${encodeURIComponent(sessionId)}`,
   );
 }
+
+export function refineTopicAgentSession(
+  sessionId: string,
+  payload: {
+    interest?: string;
+    problem_domain?: string;
+    seed_idea?: string;
+    constraints: {
+      time_budget_months?: number;
+      resource_level?: string;
+      preferred_style?: string;
+      notes?: string;
+    };
+  },
+) {
+  return apiFetch<TopicAgentSessionResponse>(
+    `/api/topic-agent/sessions/${encodeURIComponent(sessionId)}/refine`,
+    {
+      method: "POST",
+      body: JSON.stringify(payload),
+    },
+  );
+}
