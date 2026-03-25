@@ -17,6 +17,7 @@ type TopicWorkspaceProps = {
   resourceLevel: string;
   preferredStyle: string;
   topicResult: TopicAgentSessionResponse | null;
+  topicComparisonResult: TopicAgentSessionResponse | null;
   topicSessions: TopicAgentSessionSummary[];
   topicBusy: boolean;
   topicError: string;
@@ -29,6 +30,7 @@ type TopicWorkspaceProps = {
   onSubmit: (event: FormEvent<HTMLFormElement>) => void;
   onRefine: () => void;
   onLoadSession: (sessionId: string) => void;
+  onCompareSession: (sessionId: string) => void;
 };
 
 export function TopicWorkspaceV2({
@@ -40,6 +42,7 @@ export function TopicWorkspaceV2({
   resourceLevel,
   preferredStyle,
   topicResult,
+  topicComparisonResult,
   topicSessions,
   topicBusy,
   topicError,
@@ -52,6 +55,7 @@ export function TopicWorkspaceV2({
   onSubmit,
   onRefine,
   onLoadSession,
+  onCompareSession,
 }: TopicWorkspaceProps) {
   const [evidenceTierFilter, setEvidenceTierFilter] = useState("all");
   const [evidenceTypeFilter, setEvidenceTypeFilter] = useState("all");
@@ -81,7 +85,7 @@ export function TopicWorkspaceV2({
     topicResult?.evidence_records[0] ??
     null;
 
-  const copy =
+  const copy: Record<string, string> =
     locale === "zh"
       ? {
           workspace: "选题工作台",
@@ -164,6 +168,13 @@ export function TopicWorkspaceV2({
           candidateScores: "Candidate Comparison",
           rationale: "Rationale",
           dimensions: "Dimensions",
+          compare: "Compare",
+          sessionDiff: "Session Diff",
+          currentSession: "Current Session",
+          compareSession: "Compared Session",
+          candidateDelta: "Candidate Delta",
+          evidenceDelta: "Evidence Delta",
+          noDiff: "Choose a different history record to compare convergence changes.",
           trace: "Execution Trace",
           confidence: "Confidence Summary",
           recentSessions: "Recent Sessions",
@@ -186,6 +197,17 @@ export function TopicWorkspaceV2({
 
   const resolveCandidateLabel = (candidateId?: string | null) =>
     (candidateId ? candidateTitleById.get(candidateId) : null) ?? candidateId ?? "-";
+
+  const currentCandidateTitles = new Set((topicResult?.candidate_topics ?? []).map((item) => item.title));
+  const comparisonCandidateTitles = new Set(
+    (topicComparisonResult?.candidate_topics ?? []).map((item) => item.title),
+  );
+  const addedCandidateTitles = [...currentCandidateTitles].filter(
+    (title) => !comparisonCandidateTitles.has(title),
+  );
+  const removedCandidateTitles = [...comparisonCandidateTitles].filter(
+    (title) => !currentCandidateTitles.has(title),
+  );
 
   const handleFocusEvidence = (record: TopicAgentSourceRecord) => {
     setFocusedEvidenceId(record.source_id);
@@ -298,6 +320,15 @@ export function TopicWorkspaceV2({
                   >
                     {copy.load}
                   </button>
+                  {topicResult && session.session_id !== topicResult.session_id && (
+                    <button
+                      type="button"
+                      className="ghost-button"
+                      onClick={() => onCompareSession(session.session_id)}
+                    >
+                      {copy.compare}
+                    </button>
+                  )}
                 </div>
               </article>
             ))}
@@ -347,6 +378,89 @@ export function TopicWorkspaceV2({
 
       {topicResult && (
         <>
+          <article className="panel panel-span">
+            <div className="panel-heading">
+              <div>
+                <h2>{copy.sessionDiff}</h2>
+                <p className="panel-intro">
+                  {topicComparisonResult ? topicComparisonResult.user_input.interest : copy.noDiff}
+                </p>
+              </div>
+            </div>
+            {!topicComparisonResult ? (
+              <div className="empty-state">
+                <strong>{copy.sessionDiff}</strong>
+                <p>{copy.noDiff}</p>
+              </div>
+            ) : (
+              <div className="result-stack">
+                <div className="summary-strip">
+                  <div className="summary-card summary-card-emphasis">
+                    <span>{copy.currentSession}</span>
+                    <strong>
+                      {resolveCandidateLabel(topicResult.convergence_result.recommended_candidate_id)}
+                    </strong>
+                  </div>
+                  <div className="summary-card">
+                    <span>{copy.compareSession}</span>
+                    <strong>
+                      {topicComparisonResult.candidate_topics.find(
+                        (item) =>
+                          item.candidate_id ===
+                          topicComparisonResult.convergence_result.recommended_candidate_id,
+                      )?.title ??
+                        topicComparisonResult.convergence_result.recommended_candidate_id}
+                    </strong>
+                  </div>
+                  <div className="summary-card">
+                    <span>{copy.evidenceDelta}</span>
+                    <strong>
+                      {topicResult.evidence_records.length} vs{" "}
+                      {topicComparisonResult.evidence_records.length}
+                    </strong>
+                  </div>
+                </div>
+                <article className="subsection-card">
+                  <span className="trace-label">{copy.candidateDelta}</span>
+                  <div className="comparison-diff-grid">
+                    <div className="comparison-diff-card">
+                      <span className="trace-label">Added In Current</span>
+                      <div className="list-block">
+                        {(addedCandidateTitles.length > 0 ? addedCandidateTitles : ["No new candidates"]).map(
+                          (title) => (
+                            <p key={title}>{title}</p>
+                          ),
+                        )}
+                      </div>
+                    </div>
+                    <div className="comparison-diff-card">
+                      <span className="trace-label">Only In Compared</span>
+                      <div className="list-block">
+                        {(removedCandidateTitles.length > 0 ? removedCandidateTitles : ["No removed candidates"]).map(
+                          (title) => (
+                            <p key={title}>{title}</p>
+                          ),
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </article>
+                <div className="comparison-diff-grid">
+                  <article className="subsection-card">
+                    <span className="trace-label">{copy.rationale}</span>
+                    <p className="subsection-copy">{topicResult.convergence_result.rationale}</p>
+                  </article>
+                  <article className="subsection-card">
+                    <span className="trace-label">{copy.compareSession}</span>
+                    <p className="subsection-copy">
+                      {topicComparisonResult.convergence_result.rationale}
+                    </p>
+                  </article>
+                </div>
+              </div>
+            )}
+          </article>
+
           <article className="panel">
             <div className="panel-heading">
               <div>

@@ -109,6 +109,8 @@ function App() {
   const [topicResourceLevel, setTopicResourceLevel] = useState("student");
   const [topicPreferredStyle, setTopicPreferredStyle] = useState("benchmark-driven");
   const [topicResult, setTopicResult] = useState<TopicAgentSessionResponse | null>(null);
+  const [topicComparisonResult, setTopicComparisonResult] =
+    useState<TopicAgentSessionResponse | null>(null);
   const [topicSessions, setTopicSessions] = useState<TopicAgentSessionSummary[]>([]);
   const [topicBusy, setTopicBusy] = useState(false);
   const [topicError, setTopicError] = useState("");
@@ -672,6 +674,7 @@ function App() {
     setTopicBusy(true);
     setTopicError("");
     setTopicResult(null);
+    setTopicComparisonResult(null);
 
     try {
       const payload = await runTopicAgentExploreRequest(
@@ -700,6 +703,7 @@ function App() {
 
     setTopicBusy(true);
     setTopicError("");
+    setTopicComparisonResult(null);
 
     try {
       const payload = await refineTopicAgentSessionRequest(topicResult.session_id, {
@@ -724,6 +728,7 @@ function App() {
   async function loadTopicAgentSession(sessionId: string) {
     setTopicBusy(true);
     setTopicError("");
+    setTopicComparisonResult(null);
 
     try {
       const payload = await fetchTopicAgentSession(sessionId);
@@ -740,6 +745,20 @@ function App() {
       setTopicPreferredStyle(payload.user_input.constraints.preferred_style ?? "");
     } catch (error) {
       setTopicError(error instanceof Error ? error.message : "Failed to load Topic Agent session");
+    } finally {
+      setTopicBusy(false);
+    }
+  }
+
+  async function compareTopicAgentSession(sessionId: string) {
+    setTopicBusy(true);
+    setTopicError("");
+
+    try {
+      const payload = await fetchTopicAgentSession(sessionId);
+      setTopicComparisonResult(payload);
+    } catch (error) {
+      setTopicError(error instanceof Error ? error.message : "Failed to compare Topic Agent session");
     } finally {
       setTopicBusy(false);
     }
@@ -1075,6 +1094,7 @@ function App() {
           resourceLevel={topicResourceLevel}
           preferredStyle={topicPreferredStyle}
           topicResult={topicResult}
+          topicComparisonResult={topicComparisonResult}
           topicSessions={topicSessions}
           topicBusy={topicBusy}
           topicError={topicError}
@@ -1087,6 +1107,7 @@ function App() {
           onSubmit={submitTopicExplore}
           onRefine={() => void refineCurrentTopicSession()}
           onLoadSession={(sessionId) => void loadTopicAgentSession(sessionId)}
+          onCompareSession={(sessionId) => void compareTopicAgentSession(sessionId)}
         />
       )}
     </div>
