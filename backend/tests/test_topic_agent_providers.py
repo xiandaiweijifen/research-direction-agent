@@ -98,6 +98,7 @@ def test_parse_openalex_response_maps_entries_to_topic_agent_records():
     assert records[0].source_tier == "A"
     assert records[0].authors_or_publisher == "Jane Doe, John Smith"
     assert records[0].url == "https://example.org/paper"
+    assert records[0].source_id == "openalex_w123"
 
 
 def test_build_arxiv_query_prioritizes_interest_phrase_and_core_terms():
@@ -318,7 +319,7 @@ def test_openalex_provider_uses_cache_when_query_key_is_present(workspace_tmp_pa
     cached_result = provider.retrieve(request)
 
     assert cached_result.diagnostics.cache_hit is True
-    assert cached_result.records[0].source_id == "openalex_1"
+    assert cached_result.records[0].source_id == "openalex_w123"
 
 
 def test_openalex_provider_merges_multi_query_results_and_dedupes(workspace_tmp_path, monkeypatch):
@@ -403,7 +404,7 @@ def test_openalex_provider_merges_multi_query_results_and_dedupes(workspace_tmp_
 
     assert call_count["value"] >= 2
     assert len(result.records) == 2
-    assert result.records[0].source_id == "openalex_1"
+    assert {record.source_id for record in result.records} == {"openalex_w123", "openalex_w456"}
 
 
 def test_fallback_provider_returns_mock_records_when_primary_fails():

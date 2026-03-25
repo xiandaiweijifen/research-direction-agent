@@ -184,26 +184,26 @@ def test_topic_agent_pipeline_derives_landscape_and_candidate_cues_from_evidence
             records = [
                 TopicAgentSourceRecord(
                     source_id="arxiv_a",
-                    title="Grounding Benchmark For Multimodal Medical Reasoning",
+                    title="Benchmarking Medical VQA Grounding For Trustworthy Multimodal Reasoning",
                     source_type="benchmark",
                     source_tier="A",
                     year=2026,
                     authors_or_publisher="Author A",
                     identifier="https://arxiv.org/abs/a",
                     url="https://arxiv.org/abs/a",
-                    summary="A benchmark focused on grounding and multimodal reasoning reliability.",
+                    summary="A benchmark focused on radiology VQA, grounding, and trustworthy multimodal reasoning reliability.",
                     relevance_reason="Test record",
                 ),
                 TopicAgentSourceRecord(
                     source_id="arxiv_b",
-                    title="Grounding Reliability In Medical Reasoning",
+                    title="RJUA-Style Medical Document Question Answering And Clinical Reasoning",
                     source_type="paper",
                     source_tier="B",
                     year=2025,
                     authors_or_publisher="Author B",
                     identifier="https://arxiv.org/abs/b",
                     url="https://arxiv.org/abs/b",
-                    summary="Study of reasoning reliability and grounding issues in medical settings.",
+                    summary="Study of document question answering, clinical reasoning, and image-text evidence use in medical reports.",
                     relevance_reason="Test record",
                 ),
             ]
@@ -225,9 +225,16 @@ def test_topic_agent_pipeline_derives_landscape_and_candidate_cues_from_evidence
 
     response = run_topic_agent_pipeline(request, provider=EvidenceDrivenProvider())
 
-    assert any("grounding" in theme.lower() for theme in response.landscape_summary.themes)
-    assert "grounding" in response.candidate_topics[0].novelty_note.lower()
+    joined_themes = " ".join(response.landscape_summary.themes).lower()
+    joined_methods = " ".join(response.landscape_summary.active_methods).lower()
+
+    assert "benchmark" in joined_themes
+    assert "grounding" in joined_themes
+    assert "document qa" in joined_themes or "clinical reasoning" in joined_themes
+    assert "grounding" in joined_methods or "benchmark" in joined_methods
+    assert "grounding" in response.candidate_topics[0].novelty_note.lower() or "trustworthy" in response.candidate_topics[0].novelty_note.lower()
     assert "benchmark" in response.candidate_topics[0].research_question.lower()
+    assert "document-centric clinical reasoning" in response.candidate_topics[1].research_question.lower()
 
 
 def test_topic_agent_pipeline_filters_low_quality_phrases_from_landscape_summary():

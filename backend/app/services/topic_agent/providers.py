@@ -582,6 +582,15 @@ def _reconstruct_openalex_abstract(abstract_index: dict | None) -> str:
     return " ".join(token for _, token in sorted(positions.items()))
 
 
+def _build_openalex_source_id(raw_id: str, fallback_index: int) -> str:
+    normalized = raw_id.strip().rstrip("/")
+    if normalized:
+        suffix = normalized.split("/")[-1].lower()
+        if re.fullmatch(r"w\d+", suffix):
+            return f"openalex_{suffix}"
+    return f"openalex_w{fallback_index}"
+
+
 def _parse_openalex_response(payload: dict) -> list[TopicAgentSourceRecord]:
     if not isinstance(payload, dict):
         return []
@@ -632,7 +641,7 @@ def _parse_openalex_response(payload: dict) -> list[TopicAgentSourceRecord]:
             source_tier = "A"
         records.append(
             TopicAgentSourceRecord(
-                source_id=f"openalex_{index}",
+                source_id=_build_openalex_source_id(source_id, index),
                 title=title,
                 source_type=source_type,
                 source_tier=source_tier,

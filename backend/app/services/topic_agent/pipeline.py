@@ -84,6 +84,26 @@ STOPWORDS = {
     "with",
 }
 
+EVIDENCE_CUE_TERMS = {
+    "agent",
+    "benchmark",
+    "biomedical",
+    "clinical",
+    "document",
+    "evaluation",
+    "grounding",
+    "interpretable",
+    "multimodal",
+    "qa",
+    "question answering",
+    "radiology",
+    "reasoning",
+    "safety",
+    "trustworthy",
+    "vqa",
+    "zero shot",
+}
+
 
 def _time_budget_bucket(months: int | None) -> str:
     if months is None:
@@ -218,19 +238,110 @@ def _filter_evidence_phrases(
     topic: str,
 ) -> list[str]:
     anchors = _extract_query_anchor_terms(topic)
-    evidence_cue_terms = {"benchmark", "reasoning", "grounding", "trustworthy", "multimodal"}
     filtered: list[str] = []
     for phrase in evidence_phrases:
         parts = phrase.split()
         if len(parts) == 1 and phrase not in anchors:
-            if phrase not in evidence_cue_terms:
+            if phrase not in EVIDENCE_CUE_TERMS:
                 continue
         if any(part in STOPWORDS for part in parts):
             continue
-        if anchors and not any(part in anchors or part in evidence_cue_terms for part in parts):
+        if anchors and not any(part in anchors or part in EVIDENCE_CUE_TERMS for part in parts):
             continue
         filtered.append(phrase)
     return filtered
+
+
+def _top_evidence_text(evidence_records: list[TopicAgentSourceRecord], limit: int = 4) -> str:
+    return " ".join(
+        f"{record.title} {record.summary}"
+        for record in evidence_records[:limit]
+    ).lower()
+
+
+def _detect_evidence_cues(evidence_records: list[TopicAgentSourceRecord]) -> dict[str, bool]:
+    text = _top_evidence_text(evidence_records)
+    return {
+        "benchmark": "benchmark" in text or "vqa-rad" in text or "slake" in text,
+        "trust": any(term in text for term in {"trustworthy", "ethical", "safety", "hallucination", "reliability"}),
+        "grounding": any(term in text for term in {"grounding", "grounded", "image-grounded", "cross-modal"}),
+        "radiology": any(term in text for term in {"radiology", "x-ray", "radiation oncology"}),
+        "document_qa": any(term in text for term in {"document question answering", "document qa", "medical report", "meddqa", "question answering"}),
+        "agentic": any(term in text for term in {"agent collaborative", "learner agent", "ask-answer", "multi-agent", "agent"}),
+        "zero_shot": "zero-shot" in text or "zero shot" in text,
+        "clinical_reasoning": "clinical reasoning" in text,
+    }
+
+
+def _build_landscape_themes(topic: str, evidence_records: list[TopicAgentSourceRecord], evidence_phrases: list[str]) -> list[str]:
+    cues = _detect_evidence_cues(evidence_records)
+    themes: list[str] = []
+    if cues["benchmark"]:
+        themes.append(f"benchmark design and stress-testing for {topic}")
+    if cues["grounding"]:
+        themes.append(f"cross-modal grounding and visual dependence in {topic}")
+    if cues["document_qa"]:
+        themes.append(f"document QA and report-centric reasoning in {topic}")
+    if cues["trust"]:
+        themes.append(f"trustworthy evaluation and failure analysis in {topic}")
+    if cues["radiology"]:
+        themes.append(f"radiology-oriented multimodal reasoning tasks in {topic}")
+    if cues["agentic"]:
+        themes.append(f"agent-based decomposition strategies for {topic}")
+
+    for phrase in evidence_phrases:
+        theme = _theme_from_phrase(phrase, topic)
+        if theme not in themes:
+            themes.append(theme)
+        if len(themes) == 3:
+            break
+    return themes[:3]
+
+
+def _build_active_methods(evidence_records: list[TopicAgentSourceRecord], evidence_phrases: list[str]) -> list[str]:
+    cues = _detect_evidence_cues(evidence_records)
+    methods: list[str] = []
+    if cues["benchmark"]:
+        methods.append("benchmark-centered experimental design")
+    if cues["grounding"]:
+        methods.append("grounding-aware evaluation and error analysis")
+    if cues["agentic"]:
+        methods.append("agent-mediated problem decomposition")
+    if cues["document_qa"]:
+        methods.append("document QA baseline comparison")
+    if cues["radiology"]:
+        methods.append("radiology task-specific benchmark slicing")
+    for phrase in evidence_phrases:
+        if phrase not in methods and len(phrase.split()) >= 2:
+            methods.append(phrase)
+        if len(methods) == 3:
+            break
+    return methods[:3]
+
+
+def _build_likely_gaps(evidence_records: list[TopicAgentSourceRecord], default_topic: str) -> list[str]:
+    cues = _detect_evidence_cues(evidence_records)
+    gaps: list[str] = []
+    if cues["benchmark"]:
+        gaps.append("benchmark protocols that distinguish real image use from shortcut exploitation")
+    if cues["trust"] or cues["grounding"]:
+        gaps.append("trustworthy evaluation signals beyond accuracy-only reporting")
+    if cues["radiology"]:
+        gaps.append("narrower radiology task slices that remain feasible under student-scale resources")
+    if cues["document_qa"]:
+        gaps.append("stronger evidence on reasoning over report layouts and image-text context")
+    if not gaps:
+        gaps = [
+            "clear task scoping for narrow research questions",
+            "stronger evidence on feasibility under limited resources",
+        ]
+    while len(gaps) < 2:
+        fallback = "clear task scoping for narrow research questions"
+        if fallback not in gaps:
+            gaps.append(fallback)
+        else:
+            gaps.append(f"stronger evidence on feasibility in {default_topic}")
+    return gaps[:2]
 
 
 def _theme_from_phrase(phrase: str, topic: str) -> str:
@@ -250,22 +361,15 @@ def synthesize_landscape(context: TopicAgentPipelineContext) -> TopicAgentLandsc
         _extract_evidence_phrases(evidence_records),
         topic=topic,
     )
-    derived_themes = [_theme_from_phrase(phrase, topic) for phrase in evidence_phrases[:3]]
-    active_methods = evidence_phrases[3:6]
+    derived_themes = _build_landscape_themes(topic, evidence_records, evidence_phrases)
+    active_methods = _build_active_methods(evidence_records, evidence_phrases)
     if not active_methods:
         active_methods = [
             "survey-guided baseline comparison",
             "benchmark-centered experimental design",
             "cross-method error analysis",
         ]
-    likely_gaps = [
-        "clear task scoping for narrow research questions",
-        "stronger evidence on feasibility under limited resources",
-    ]
-    if any("grounding" in phrase for phrase in evidence_phrases):
-        likely_gaps[0] = "grounding-aware evaluation beyond accuracy-only reporting"
-    if any("benchmark" in phrase for phrase in evidence_phrases):
-        likely_gaps[1] = "stronger benchmark design for verifying genuine multimodal dependence"
+    likely_gaps = _build_likely_gaps(evidence_records, topic)
     result = TopicAgentLandscapeSummary(
         themes=derived_themes
         or [
@@ -319,6 +423,7 @@ def generate_candidates(context: TopicAgentPipelineContext) -> list[TopicAgentCa
         _extract_evidence_phrases(evidence_records),
         topic=context.request.interest,
     )
+    evidence_cues = _detect_evidence_cues(evidence_records)
     benchmark_phrase = next((phrase for phrase in evidence_phrases if "benchmark" in phrase), None)
     grounding_phrase = next((phrase for phrase in evidence_phrases if "grounding" in phrase), None)
     reasoning_phrase = next((phrase for phrase in evidence_phrases if "reasoning" in phrase), None)
@@ -378,6 +483,13 @@ def generate_candidates(context: TopicAgentPipelineContext) -> list[TopicAgentCa
         candidate_1.open_questions = [
             f"Which {benchmark_phrase} slice best represents the intended problem?"
         ]
+    elif evidence_cues["benchmark"]:
+        candidate_1.research_question = (
+            "How can a narrower benchmark slice expose shortcut behavior and weak multimodal dependence in current systems?"
+        )
+        candidate_1.open_questions = [
+            "Which benchmark slice best isolates genuine image-grounded reasoning?"
+        ]
     if grounding_phrase:
         candidate_1.novelty_note = (
             f"Uses {grounding_phrase} as a concrete lens for defining a sharper evaluation target."
@@ -386,9 +498,30 @@ def generate_candidates(context: TopicAgentPipelineContext) -> list[TopicAgentCa
             0,
             f"What workflow support would make {grounding_phrase} evaluation more reproducible?",
         )
-    if reasoning_phrase:
+    if evidence_cues["clinical_reasoning"] or evidence_cues["document_qa"]:
+        candidate_2.research_question = (
+            "Can an existing method family be adapted effectively for document-centric clinical reasoning under strict compute and annotation constraints?"
+        )
+    elif reasoning_phrase:
         candidate_2.research_question = (
             f"Can an existing method family be adapted effectively for {reasoning_phrase} under strict compute and annotation constraints?"
+        )
+
+    if evidence_cues["radiology"]:
+        candidate_1.open_questions.append("Would a radiology-focused slice produce a clearer and more feasible evaluation target?")
+    if evidence_cues["trust"]:
+        candidate_1.novelty_note = (
+            "Focuses on trustworthy evaluation boundaries, not just raw task accuracy."
+            if not grounding_phrase
+            else candidate_1.novelty_note
+        )
+        candidate_3.open_questions.insert(
+            0,
+            "What workflow support would make trustworthy evaluation and audit trails easier to reproduce?",
+        )
+    if evidence_cues["agentic"]:
+        candidate_2.novelty_note = (
+            "Frames novelty through adapting agent-based reasoning workflows under tighter practical constraints."
         )
 
     if style == "applied":
