@@ -42,7 +42,7 @@ import {
 import { DocumentsView } from "./components/DocumentsView";
 import { EvaluationView } from "./components/EvaluationView";
 import { QueryView } from "./components/QueryView";
-import { TopicWorkspace } from "./components/TopicWorkspace";
+import { TopicWorkspaceV2 } from "./components/TopicWorkspaceV2";
 import { getViews, presetQuestions } from "./constants";
 import type {
   AgentWorkflowResponse,
@@ -1066,7 +1066,7 @@ function App() {
       )}
 
       {activeView === "topic" && (
-        <TopicWorkspace
+        <TopicWorkspaceV2
           locale={locale}
           interest={topicInterest}
           problemDomain={topicProblemDomain}

@@ -4,16 +4,16 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 
-import { TopicWorkspace } from "./TopicWorkspace";
+import { TopicWorkspaceV2 } from "./TopicWorkspaceV2";
 
-describe("TopicWorkspace", () => {
-  it("renders topic-agent results and submits the exploration form", async () => {
+describe("TopicWorkspaceV2", () => {
+  it("renders topic-agent results, filters evidence, and submits actions", async () => {
     const user = userEvent.setup();
     const onSubmit = vi.fn((event: FormEvent<HTMLFormElement>) => event.preventDefault());
     const onRefine = vi.fn();
 
     render(
-      <TopicWorkspace
+      <TopicWorkspaceV2
         locale="en"
         interest="trustworthy multimodal reasoning in medical imaging"
         problemDomain="medical AI"
@@ -28,7 +28,7 @@ describe("TopicWorkspace", () => {
             updated_at: "2026-03-25T00:00:00+00:00",
             interest: "trustworthy multimodal reasoning in medical imaging",
             problem_domain: "medical AI",
-            candidate_count: 1,
+            candidate_count: 2,
             recommended_candidate_id: "candidate_1",
           },
         ]}
@@ -70,6 +70,18 @@ describe("TopicWorkspace", () => {
               summary: "Survey summary",
               relevance_reason: "High-level map",
             },
+            {
+              source_id: "source_2",
+              title: "Open Repo",
+              source_type: "code",
+              source_tier: "B",
+              year: 2024,
+              authors_or_publisher: "Maintainers",
+              identifier: "repo:2",
+              url: "https://example.org/repo",
+              summary: "Reusable baselines",
+              relevance_reason: "Feasibility support",
+            },
           ],
           landscape_summary: {
             themes: ["theme"],
@@ -89,9 +101,20 @@ describe("TopicWorkspace", () => {
               supporting_source_ids: ["source_1"],
               open_questions: ["Which benchmark subset?"],
             },
+            {
+              candidate_id: "candidate_2",
+              title: "Method Transfer Under Practical Constraints",
+              research_question: "Can existing methods adapt under resource limits?",
+              positioning: "transfer",
+              novelty_note: "medium novelty",
+              feasibility_note: "high feasibility",
+              risk_note: "medium risk",
+              supporting_source_ids: ["source_2"],
+              open_questions: ["Which constraint matters most?"],
+            },
           ],
           comparison_result: {
-            dimensions: ["novelty"],
+            dimensions: ["novelty", "feasibility"],
             summary: "Candidate 1 is strongest on research focus.",
             candidate_assessments: [
               {
@@ -101,6 +124,15 @@ describe("TopicWorkspace", () => {
                 evidence_strength: "medium_high",
                 data_availability: "medium",
                 implementation_cost: "medium",
+                risk: "medium",
+              },
+              {
+                candidate_id: "candidate_2",
+                novelty: "medium",
+                feasibility: "high",
+                evidence_strength: "medium",
+                data_availability: "medium_high",
+                implementation_cost: "medium_low",
                 risk: "medium",
               },
             ],
@@ -141,21 +173,34 @@ describe("TopicWorkspace", () => {
     );
 
     expect(screen.getByText("Research Topic Copilot")).toBeInTheDocument();
-    expect(screen.getByText("Recent Survey")).toBeInTheDocument();
-    expect(screen.getByText("Benchmark-Guided Narrow Task Definition")).toBeInTheDocument();
-    expect(screen.getAllByText("candidate_1").length).toBeGreaterThanOrEqual(2);
+    expect(screen.getByText("Research Landscape")).toBeInTheDocument();
+    expect(screen.getByText("Evidence Filters")).toBeInTheDocument();
+    expect(screen.getAllByText("Focused Evidence").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("Recent Survey").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("Open Repo").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("Benchmark-Guided Narrow Task Definition").length).toBeGreaterThan(
+      0,
+    );
     expect(screen.getByText("Evidence coverage is medium.")).toBeInTheDocument();
     expect(screen.getByText("Recent Sessions")).toBeInTheDocument();
-    expect(screen.getByText("1 topics")).toBeInTheDocument();
+    expect(screen.getByText("2 topics")).toBeInTheDocument();
     expect(screen.getByText("Candidate Comparison")).toBeInTheDocument();
     expect(
       screen.getByText("Feasibility: medium | Evidence: medium_high"),
     ).toBeInTheDocument();
-    expect(
-      screen.getByText("Data: medium | Cost: medium | Risk: medium"),
-    ).toBeInTheDocument();
-    expect(screen.getByText("Supporting Evidence")).toBeInTheDocument();
+    expect(screen.getAllByText("Supporting Evidence").length).toBeGreaterThan(0);
     expect(screen.getByText("source_1: Recent Survey")).toBeInTheDocument();
+    expect(screen.getByText("source_2: Open Repo")).toBeInTheDocument();
+
+    await user.click(screen.getByRole("button", { name: "Source Tier: A" }));
+    expect(screen.getAllByText("Recent Survey").length).toBeGreaterThan(0);
+    expect(screen.queryByText("Open Repo")).not.toBeInTheDocument();
+
+    await user.click(screen.getByRole("button", { name: "Source Tier: All" }));
+    expect(screen.getAllByText("Open Repo").length).toBeGreaterThan(0);
+
+    await user.click(screen.getByRole("button", { name: "source_2: Open Repo" }));
+    expect(screen.getByText("repo:2")).toBeInTheDocument();
 
     await user.click(screen.getByRole("button", { name: "Run Topic Agent" }));
     expect(onSubmit).toHaveBeenCalledTimes(1);
