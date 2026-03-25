@@ -50,8 +50,10 @@ class TopicAgentEvidenceProviderRegistry:
 
 
 ARXIV_API_URL = "https://export.arxiv.org/api/query"
+OPENALEX_API_URL = "https://api.openalex.org/works"
 ATOM_NAMESPACE = {"atom": "http://www.w3.org/2005/Atom"}
 TOPIC_AGENT_ARXIV_CACHE_PATH = DATA_ROOT / "tool_state" / "topic_agent_arxiv_cache.json"
+TOPIC_AGENT_OPENALEX_CACHE_PATH = DATA_ROOT / "tool_state" / "topic_agent_openalex_cache.json"
 
 
 def _normalize_optional(value: str | None) -> str | None:
@@ -121,6 +123,77 @@ class MockTopicAgentEvidenceProvider:
                 relevance_reason="Supports feasibility assessment for a first project iteration.",
             ),
         ]
+        return TopicAgentEvidenceRetrievalResult(
+            records=records,
+            diagnostics=TopicAgentEvidenceDiagnostics(
+                requested_provider=self.provider_name,
+                used_provider=self.provider_name,
+                fallback_used=False,
+                fallback_reason=None,
+                record_count=len(records),
+                cache_hit=False,
+            ),
+        )
+
+
+class OpenAlexEvidenceProvider:
+    provider_name = "openalex"
+
+    def __init__(
+        self,
+        *,
+        api_url: str = OPENALEX_API_URL,
+        timeout_seconds: float = 5.0,
+        max_results: int = 5,
+        cache_path: Path = TOPIC_AGENT_OPENALEX_CACHE_PATH,
+        cache_ttl_seconds: int = 60 * 60 * 12,
+    ) -> None:
+        self.api_url = api_url
+        self.timeout_seconds = timeout_seconds
+        self.max_results = max_results
+        self.cache_path = cache_path
+        self.cache_ttl_seconds = cache_ttl_seconds
+
+    def retrieve(self, request: TopicAgentExploreRequest) -> TopicAgentEvidenceRetrievalResult:
+        query_text = _build_openalex_query(request)
+        cache_key = _build_cache_key(query_text, self.max_results)
+        cached_records = _load_cached_records(
+            self.cache_path,
+            cache_key,
+            self.cache_ttl_seconds,
+        )
+        if cached_records:
+            return TopicAgentEvidenceRetrievalResult(
+                records=cached_records,
+                diagnostics=TopicAgentEvidenceDiagnostics(
+                    requested_provider=self.provider_name,
+                    used_provider=self.provider_name,
+                    fallback_used=False,
+                    fallback_reason=None,
+                    record_count=len(cached_records),
+                    cache_hit=True,
+                ),
+            )
+        response = httpx.get(
+            self.api_url,
+            params={
+                "search": query_text,
+                "filter": "has_abstract:true",
+                "per-page": self.max_results,
+            },
+            timeout=self.timeout_seconds,
+            follow_redirects=True,
+            headers={"User-Agent": "research-topic-copilot/0.1"},
+        )
+        response.raise_for_status()
+        payload = response.json()
+        records = _rank_records(
+            [_normalize_record(record) for record in _parse_openalex_response(payload)],
+            request,
+            self.max_results,
+        )
+        records = _filter_ranked_records(records, request, self.max_results)
+        _save_cached_records(self.cache_path, cache_key, records)
         return TopicAgentEvidenceRetrievalResult(
             records=records,
             diagnostics=TopicAgentEvidenceDiagnostics(
@@ -227,18 +300,21 @@ class FallbackEvidenceProvider:
                 primary_result.diagnostics.record_count = len(primary_result.records)
                 return primary_result
             fallback_result = self.fallback.retrieve(request)
+            fallback_used_provider = fallback_result.diagnostics.used_provider
             fallback_result.diagnostics.requested_provider = primary_name
             fallback_result.diagnostics.fallback_used = True
             fallback_result.diagnostics.fallback_reason = "primary_provider_returned_no_records"
             fallback_result.diagnostics.record_count = len(fallback_result.records)
+            fallback_result.diagnostics.used_provider = fallback_used_provider
             return fallback_result
         except Exception as exc:
             fallback_result = self.fallback.retrieve(request)
+            fallback_used_provider = fallback_result.diagnostics.used_provider
             fallback_result.diagnostics.requested_provider = primary_name
             fallback_result.diagnostics.fallback_used = True
             fallback_result.diagnostics.fallback_reason = f"{type(exc).__name__}:{exc}"
             fallback_result.diagnostics.record_count = len(fallback_result.records)
-            fallback_result.diagnostics.used_provider = fallback_name
+            fallback_result.diagnostics.used_provider = fallback_used_provider or fallback_name
             return fallback_result
 
 
@@ -254,6 +330,19 @@ def _build_arxiv_query(request: TopicAgentExploreRequest) -> str:
         return interest
     focused_terms = ordered_terms[:6]
     return " ".join([f"\"{interest}\"", *focused_terms])
+
+
+def _build_openalex_query(request: TopicAgentExploreRequest) -> str:
+    query_terms = _build_query_terms(request)
+    core_terms = _core_query_terms(request)
+    ordered_terms: list[str] = []
+    for term in core_terms:
+        if term not in ordered_terms:
+            ordered_terms.append(term)
+    for term in sorted(query_terms):
+        if term not in ordered_terms:
+            ordered_terms.append(term)
+    return " ".join(ordered_terms[:8]) or request.interest.strip()
 
 
 def _build_cache_key(query_text: str, max_results: int) -> str:
@@ -440,6 +529,84 @@ def _save_cached_records(
     atomic_write_json(cache_path, cache)
 
 
+def _reconstruct_openalex_abstract(abstract_index: dict | None) -> str:
+    if not isinstance(abstract_index, dict):
+        return ""
+    positions: dict[int, str] = {}
+    for token, token_positions in abstract_index.items():
+        if not isinstance(token, str) or not isinstance(token_positions, list):
+            continue
+        for position in token_positions:
+            if isinstance(position, int):
+                positions[position] = token
+    return " ".join(token for _, token in sorted(positions.items()))
+
+
+def _parse_openalex_response(payload: dict) -> list[TopicAgentSourceRecord]:
+    if not isinstance(payload, dict):
+        return []
+    results = payload.get("results")
+    if not isinstance(results, list):
+        return []
+
+    records: list[TopicAgentSourceRecord] = []
+    for index, item in enumerate(results, start=1):
+        if not isinstance(item, dict):
+            continue
+        title = _clean_xml_text(str(item.get("display_name") or f"OpenAlex Result {index}"))
+        summary = _clean_xml_text(_reconstruct_openalex_abstract(item.get("abstract_inverted_index")))
+        primary_location = item.get("primary_location") or {}
+        if not isinstance(primary_location, dict):
+            primary_location = {}
+        source_id = str(item.get("id") or f"https://openalex.org/W{index}")
+        url = str(
+            primary_location.get("landing_page_url")
+            or item.get("doi")
+            or source_id
+        )
+        authorships = item.get("authorships")
+        authors: list[str] = []
+        if isinstance(authorships, list):
+            for authorship in authorships[:4]:
+                if not isinstance(authorship, dict):
+                    continue
+                author = authorship.get("author") or {}
+                if isinstance(author, dict):
+                    display_name = author.get("display_name")
+                    if isinstance(display_name, str) and display_name.strip():
+                        authors.append(display_name.strip())
+        year = item.get("publication_year")
+        try:
+            normalized_year = int(year)
+        except (TypeError, ValueError):
+            normalized_year = datetime.now().year
+        lower_title = title.lower()
+        lower_summary = summary.lower()
+        source_type = "paper"
+        source_tier = "B"
+        if "survey" in lower_title or "survey" in lower_summary:
+            source_type = "survey"
+            source_tier = "A"
+        elif "benchmark" in lower_title or "benchmark" in lower_summary:
+            source_type = "benchmark"
+            source_tier = "A"
+        records.append(
+            TopicAgentSourceRecord(
+                source_id=f"openalex_{index}",
+                title=title,
+                source_type=source_type,
+                source_tier=source_tier,
+                year=normalized_year,
+                authors_or_publisher=", ".join(authors) or "OpenAlex Authors",
+                identifier=source_id,
+                url=url,
+                summary=summary or "No abstract available from OpenAlex.",
+                relevance_reason="Retrieved from OpenAlex as a public scholarly metadata source for the current topic query.",
+            )
+        )
+    return records
+
+
 def _parse_arxiv_response(xml_text: str) -> list[TopicAgentSourceRecord]:
     root = ElementTree.fromstring(xml_text)
     records: list[TopicAgentSourceRecord] = []
@@ -494,12 +661,23 @@ def _parse_arxiv_year(value: str) -> int:
 def build_topic_agent_provider_registry() -> TopicAgentEvidenceProviderRegistry:
     registry = TopicAgentEvidenceProviderRegistry()
     registry.register("mock", MockTopicAgentEvidenceProvider())
+    registry.register("openalex", OpenAlexEvidenceProvider())
     registry.register("arxiv", ArxivEvidenceProvider())
     registry.register(
         "arxiv_or_mock",
         FallbackEvidenceProvider(
             primary=ArxivEvidenceProvider(),
             fallback=MockTopicAgentEvidenceProvider(),
+        ),
+    )
+    registry.register(
+        "openalex_or_arxiv_or_mock",
+        FallbackEvidenceProvider(
+            primary=OpenAlexEvidenceProvider(),
+            fallback=FallbackEvidenceProvider(
+                primary=ArxivEvidenceProvider(),
+                fallback=MockTopicAgentEvidenceProvider(),
+            ),
         ),
     )
     return registry

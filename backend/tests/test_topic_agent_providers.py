@@ -5,9 +5,11 @@ from app.services.topic_agent.providers import (
     ArxivEvidenceProvider,
     FallbackEvidenceProvider,
     MockTopicAgentEvidenceProvider,
+    OpenAlexEvidenceProvider,
     _build_arxiv_query,
     _core_query_terms,
     _filter_ranked_records,
+    _parse_openalex_response,
     _parse_arxiv_response,
     _rank_records,
     build_topic_agent_provider_registry,
@@ -18,10 +20,18 @@ from app.services.topic_agent.topic_agent_runtime import _pipeline_provider
 def test_topic_agent_provider_registry_registers_mock_provider():
     registry = build_topic_agent_provider_registry()
 
-    assert registry.list_names() == ["arxiv", "arxiv_or_mock", "mock"]
+    assert registry.list_names() == [
+        "arxiv",
+        "arxiv_or_mock",
+        "mock",
+        "openalex",
+        "openalex_or_arxiv_or_mock",
+    ]
     assert isinstance(registry.get("mock"), MockTopicAgentEvidenceProvider)
     assert isinstance(registry.get("arxiv"), ArxivEvidenceProvider)
+    assert isinstance(registry.get("openalex"), OpenAlexEvidenceProvider)
     assert isinstance(registry.get("arxiv_or_mock"), FallbackEvidenceProvider)
+    assert isinstance(registry.get("openalex_or_arxiv_or_mock"), FallbackEvidenceProvider)
 
 
 def test_topic_agent_runtime_rejects_unknown_provider_name():
@@ -53,6 +63,41 @@ def test_parse_arxiv_response_maps_entries_to_topic_agent_records():
     assert records[0].year == 2025
     assert records[0].authors_or_publisher == "Jane Doe, John Smith"
     assert records[0].url == "http://arxiv.org/abs/2501.12345v1"
+
+
+def test_parse_openalex_response_maps_entries_to_topic_agent_records():
+    payload = {
+        "results": [
+            {
+                "id": "https://openalex.org/W123",
+                "display_name": "Benchmarking Grounded Medical Reasoning",
+                "publication_year": 2025,
+                "abstract_inverted_index": {
+                    "Benchmark": [0],
+                    "for": [1],
+                    "grounded": [2],
+                    "medical": [3],
+                    "reasoning": [4],
+                },
+                "authorships": [
+                    {"author": {"display_name": "Jane Doe"}},
+                    {"author": {"display_name": "John Smith"}},
+                ],
+                "primary_location": {
+                    "landing_page_url": "https://example.org/paper"
+                },
+            }
+        ]
+    }
+
+    records = _parse_openalex_response(payload)
+
+    assert len(records) == 1
+    assert records[0].title == "Benchmarking Grounded Medical Reasoning"
+    assert records[0].source_type == "benchmark"
+    assert records[0].source_tier == "A"
+    assert records[0].authors_or_publisher == "Jane Doe, John Smith"
+    assert records[0].url == "https://example.org/paper"
 
 
 def test_build_arxiv_query_prioritizes_interest_phrase_and_core_terms():
@@ -219,6 +264,61 @@ def test_arxiv_provider_uses_cache_when_query_key_is_present(workspace_tmp_path,
 
     assert cached_result.diagnostics.cache_hit is True
     assert cached_result.records
+
+
+def test_openalex_provider_uses_cache_when_query_key_is_present(workspace_tmp_path, monkeypatch):
+    request = TopicAgentExploreRequest(
+        interest="trustworthy multimodal reasoning in medical imaging",
+        problem_domain="medical AI",
+        constraints=TopicAgentConstraintSet(preferred_style="benchmark-driven"),
+    )
+    cache_path = workspace_tmp_path / "topic_agent_openalex_cache.json"
+    provider = OpenAlexEvidenceProvider(cache_path=cache_path, cache_ttl_seconds=3600)
+
+    class FakeResponse:
+        def json(self):
+            return {
+                "results": [
+                    {
+                        "id": "https://openalex.org/W123",
+                        "display_name": "Benchmarking Grounded Medical Reasoning",
+                        "publication_year": 2025,
+                        "abstract_inverted_index": {
+                            "Benchmark": [0],
+                            "for": [1],
+                            "grounded": [2],
+                            "medical": [3],
+                            "reasoning": [4],
+                        },
+                        "authorships": [
+                            {"author": {"display_name": "Jane Doe"}},
+                        ],
+                        "primary_location": {
+                            "landing_page_url": "https://example.org/paper"
+                        },
+                    }
+                ]
+            }
+
+        def raise_for_status(self):
+            return None
+
+    monkeypatch.setattr(
+        "app.services.topic_agent.providers.httpx.get",
+        lambda *args, **kwargs: FakeResponse(),
+    )
+    first_result = provider.retrieve(request)
+    assert first_result.diagnostics.cache_hit is False
+
+    def fail_http_get(*args, **kwargs):
+        raise AssertionError("httpx.get should not be called on cache hit")
+
+    monkeypatch.setattr("app.services.topic_agent.providers.httpx.get", fail_http_get)
+
+    cached_result = provider.retrieve(request)
+
+    assert cached_result.diagnostics.cache_hit is True
+    assert cached_result.records[0].source_id == "openalex_1"
 
 
 def test_fallback_provider_returns_mock_records_when_primary_fails():

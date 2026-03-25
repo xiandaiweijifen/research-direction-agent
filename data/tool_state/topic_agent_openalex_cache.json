@@ -1,0 +1,19 @@
+{
+  "trustworthy multimodal reasoning medical imaging applied::max=5": {
+    "saved_at": "2026-03-25T20:38:18.828659+08:00",
+    "records": [
+      {
+        "source_id": "openalex_5",
+        "title": "Translating Image XAI to Multivariate Time Series",
+        "source_type": "paper",
+        "source_tier": "B",
+        "year": 2024,
+        "authors_or_publisher": "Lorenzo Tronchin, Ermanno Cordelli, Lorenzo Ricciardi Celsi, Daniele Maccagnola",
+        "identifier": "https://openalex.org/W4391936052",
+        "url": "https://doi.org/10.1109/access.2024.3366994",
+        "summary": "As Artificial Intelligence (AI) is becoming part of our daily lives, the need to understand and trust its decisions is becoming a pressing issue. EXplainable AI (XAI) aims at answering this demand, providing tools to get insights into the models’ behaviour and reasoning. Following this trend, our research paper explores the explainability of a deployed multimodal architecture applied to a real-world dataset of multivariate time series. The study aims to enhance the trustworthiness of an AI agent responsible for crash detection in an insurance company’s automatic assistance service. By introducing an XAI layer, we provide insights into the AI agent’s decision-making process, enabling the optimization of emergency medical services allocation. The dataset consists of real-world telematics data collected from vehicles equipped with black box technology. The challenge lies in explaining the complex interactions within the multivariate time series data to accurately understand the forces applied to vehicles during accidents. To this end, we adapt to this context two state-of-the-art XAI model-specific approaches, originally designed for images. We offer a qualitative and a quantitative evaluation, also comparing with a well-known agnostic method, and further validating our findings on an external dataset. The results show that Integrated Gradients, among the methodologies examined, is the most effective approach. Its ability to handle the complexity of the data provides the most comprehensive and insightful explanations for the considered use case. The findings emphasize the potential of XAI to enhance the trustworthiness of AI systems and optimize emergency response in the insurance industry. Code is available at https://github.com/ltronchin/translating-xai-mts.git.",
+        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
+      }
+    ]
+  }
+}

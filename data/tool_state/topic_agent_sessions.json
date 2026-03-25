@@ -6955,5 +6955,451 @@
       "record_count": 3,
       "cache_hit": true
     }
+  },
+  {
+    "session_id": "7fa8cef8dd4b4d37a75e9cb5411a698c",
+    "created_at": "2026-03-25T12:38:14.284744+00:00",
+    "updated_at": "2026-03-25T12:38:14.284744+00:00",
+    "user_input": {
+      "interest": "trustworthy multimodal reasoning in medical imaging",
+      "problem_domain": "medical AI",
+      "seed_idea": "I want a narrow and feasible research topic.",
+      "constraints": {
+        "time_budget_months": 4,
+        "resource_level": "student",
+        "preferred_style": "applied",
+        "notes": null
+      }
+    },
+    "framing_result": {
+      "normalized_topic": "trustworthy multimodal reasoning in medical imaging",
+      "extracted_constraints": {
+        "time_budget_months": "4",
+        "resource_level": "student",
+        "preferred_style": "applied"
+      },
+      "missing_clarifications": [],
+      "search_questions": [
+        "What are the main research themes in trustworthy multimodal reasoning in medical imaging?",
+        "What methods and benchmarks are commonly used in trustworthy multimodal reasoning in medical imaging?",
+        "What open problems or underexplored gaps exist in trustworthy multimodal reasoning in medical imaging?"
+      ]
+    },
+    "evidence_records": [
+      {
+        "source_id": "openalex_5",
+        "title": "Translating Image XAI to Multivariate Time Series",
+        "source_type": "paper",
+        "source_tier": "B",
+        "year": 2024,
+        "authors_or_publisher": "Lorenzo Tronchin, Ermanno Cordelli, Lorenzo Ricciardi Celsi, Daniele Maccagnola",
+        "identifier": "https://openalex.org/W4391936052",
+        "url": "https://doi.org/10.1109/access.2024.3366994",
+        "summary": "As Artificial Intelligence (AI) is becoming part of our daily lives, the need to understand and trust its decisions is becoming a pressing issue. EXplainable AI (XAI) aims at answering this demand, providing tools to get insights into the models’ behaviour and reasoning. Following this trend, our research paper explores the explainability of a deployed multimodal architecture applied to a real-world dataset of multivariate time series. The study aims to enhance the trustworthiness of an AI agent responsible for crash detection in an insurance company’s automatic assistance service. By introducing an XAI layer, we provide insights into the AI agent’s decision-making process, enabling the optimization of emergency medical services allocation. The dataset consists of real-world telematics data collected from vehicles equipped with black box technology. The challenge lies in explaining the complex interactions within the multivariate time series data to accurately understand the forces applied to vehicles during accidents. To this end, we adapt to this context two state-of-the-art XAI model-specific approaches, originally designed for images. We offer a qualitative and a quantitative evaluation, also comparing with a well-known agnostic method, and further validating our findings on an external dataset. The results show that Integrated Gradients, among the methodologies examined, is the most effective approach. Its ability to handle the complexity of the data provides the most comprehensive and insightful explanations for the considered use case. The findings emphasize the potential of XAI to enhance the trustworthiness of AI systems and optimize emergency response in the insurance industry. Code is available at https://github.com/ltronchin/translating-xai-mts.git.",
+        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
+      }
+    ],
+    "landscape_summary": {
+      "themes": [
+        "problem framing and task definition in trustworthy multimodal reasoning in medical imaging",
+        "benchmark-driven evaluation for trustworthy multimodal reasoning in medical imaging",
+        "practical deployment concerns in trustworthy multimodal reasoning in medical imaging"
+      ],
+      "active_methods": [
+        "survey-guided baseline comparison",
+        "benchmark-centered experimental design",
+        "cross-method error analysis"
+      ],
+      "likely_gaps": [
+        "clear task scoping for narrow research questions",
+        "stronger evidence on feasibility under limited resources"
+      ],
+      "saturated_areas": [
+        "broad generic summaries without a sharply defined question"
+      ]
+    },
+    "candidate_topics": [
+      {
+        "candidate_id": "candidate_1",
+        "title": "Benchmark-Guided Narrow Task Definition",
+        "research_question": "How can a narrower benchmark task reveal actionable limitations in current methods?",
+        "positioning": "gap-driven",
+        "novelty_note": "Focuses on under-specified evaluation boundaries rather than generic performance claims.",
+        "feasibility_note": "Lower feasibility under a tight timeline unless the benchmark scope is aggressively constrained.",
+        "risk_note": "May become incremental if the task boundary is not sharply differentiated.",
+        "supporting_source_ids": [
+          "openalex_5"
+        ],
+        "open_questions": [
+          "Which benchmark subset best represents the intended problem?",
+          "Can the task be scoped to a 4-month or shorter execution window?"
+        ]
+      },
+      {
+        "candidate_id": "candidate_2",
+        "title": "Applied Method Transfer Under Practical Constraints",
+        "research_question": "Can an existing method family be adapted effectively under strict compute and annotation constraints?",
+        "positioning": "applied-transfer",
+        "novelty_note": "Frames novelty through constraint-aware adaptation rather than larger-model gains.",
+        "feasibility_note": "Strong fit for an applied project that needs a visible baseline-to-improvement story.",
+        "risk_note": "Novelty may depend heavily on the chosen constraint and evaluation design.",
+        "supporting_source_ids": [
+          "openalex_5",
+          "openalex_5"
+        ],
+        "open_questions": [
+          "Which constraint creates the strongest research signal?"
+        ]
+      },
+      {
+        "candidate_id": "candidate_3",
+        "title": "Tooling And Evaluation Workflow Support",
+        "research_question": "What tooling or evaluation workflow improvements would make research in this area more reproducible?",
+        "positioning": "systems",
+        "novelty_note": "Shifts from model novelty to workflow and evaluation reliability.",
+        "feasibility_note": "High feasibility for a short-cycle project with engineering emphasis and bounded implementation scope.",
+        "risk_note": "Applied impact may be clearer than publication novelty unless evaluation endpoints are sharply chosen.",
+        "supporting_source_ids": [
+          "openalex_5"
+        ],
+        "open_questions": [
+          "What concrete reproducibility pain point should be prioritized first?",
+          "Which workflow improvement reduces compute or setup cost the most?"
+        ]
+      }
+    ],
+    "comparison_result": {
+      "dimensions": [
+        "novelty",
+        "feasibility",
+        "evidence_strength",
+        "data_availability",
+        "implementation_cost",
+        "risk"
+      ],
+      "summary": "Candidate 2 is strongest for applied feasibility under the current constraints, candidate 1 remains strongest on research framing, and candidate 3 remains the fastest engineering path.",
+      "candidate_assessments": [
+        {
+          "candidate_id": "candidate_1",
+          "novelty": "high",
+          "feasibility": "low_medium",
+          "evidence_strength": "medium_high",
+          "data_availability": "medium",
+          "implementation_cost": "medium_high",
+          "risk": "medium"
+        },
+        {
+          "candidate_id": "candidate_2",
+          "novelty": "medium_high",
+          "feasibility": "high",
+          "evidence_strength": "medium_high",
+          "data_availability": "medium_high",
+          "implementation_cost": "medium_low",
+          "risk": "medium_low"
+        },
+        {
+          "candidate_id": "candidate_3",
+          "novelty": "medium",
+          "feasibility": "high",
+          "evidence_strength": "medium",
+          "data_availability": "high",
+          "implementation_cost": "low",
+          "risk": "medium_high"
+        }
+      ]
+    },
+    "convergence_result": {
+      "recommended_candidate_id": "candidate_2",
+      "backup_candidate_id": "candidate_1",
+      "rationale": "Candidate 2 is the best fit for the current constraints because it starts from reusable baselines, matches an applied project style, and is easier to execute within a tighter timeline.",
+      "manual_checks": [
+        "Confirm that the selected sub-problem can be completed within a 4-month or shorter timeline.",
+        "Verify that at least one benchmark or dataset is realistically accessible.",
+        "Check whether the proposed gap is genuinely underexplored rather than a retrieval miss.",
+        "Verify that the topic still has enough novelty signal for the intended venue."
+      ]
+    },
+    "human_confirmations": [],
+    "trace": [
+      {
+        "stage": "frame_problem",
+        "status": "completed",
+        "timestamp": "2026-03-25T12:38:18.831230+00:00",
+        "detail": "Structured the user input into a topic-exploration request."
+      },
+      {
+        "stage": "retrieve_evidence",
+        "status": "completed",
+        "timestamp": "2026-03-25T12:38:18.831241+00:00",
+        "detail": "Retrieved 1 evidence records using the openalex provider."
+      },
+      {
+        "stage": "synthesize_landscape",
+        "status": "completed",
+        "timestamp": "2026-03-25T12:38:18.831247+00:00",
+        "detail": "Organized the current evidence bundle into a lightweight research landscape summary."
+      },
+      {
+        "stage": "generate_candidates",
+        "status": "completed",
+        "timestamp": "2026-03-25T12:38:18.831250+00:00",
+        "detail": "Generated 3 candidate topic directions from the current evidence bundle."
+      },
+      {
+        "stage": "compare_candidates",
+        "status": "completed",
+        "timestamp": "2026-03-25T12:38:18.831254+00:00",
+        "detail": "Produced a structured candidate comparison across fixed MVP dimensions."
+      },
+      {
+        "stage": "converge_recommendation",
+        "status": "completed",
+        "timestamp": "2026-03-25T12:38:18.831257+00:00",
+        "detail": "Produced a recommended next-best option with manual verification checks."
+      }
+    ],
+    "confidence_summary": {
+      "evidence_coverage": "low",
+      "source_quality": "medium",
+      "candidate_separation": "high",
+      "conflict_level": "low",
+      "rationale": [
+        "Evidence coverage is low based on the current number of retrieved records.",
+        "Source quality is medium based on the current source-tier mix.",
+        "Candidate separation is high based on the diversity of candidate positioning.",
+        "Conflict level is low because this development slice does not yet model explicit source disagreement."
+      ]
+    },
+    "evidence_diagnostics": {
+      "requested_provider": "openalex",
+      "used_provider": "openalex",
+      "fallback_used": false,
+      "fallback_reason": null,
+      "record_count": 1,
+      "cache_hit": false
+    }
+  },
+  {
+    "session_id": "3f5be202c7844e4f9b9b3759fafd412d",
+    "created_at": "2026-03-25T12:38:41.517263+00:00",
+    "updated_at": "2026-03-25T12:38:41.517263+00:00",
+    "user_input": {
+      "interest": "trustworthy multimodal reasoning in medical imaging",
+      "problem_domain": "medical AI",
+      "seed_idea": "I want a narrow and feasible research topic.",
+      "constraints": {
+        "time_budget_months": 4,
+        "resource_level": "student",
+        "preferred_style": "applied",
+        "notes": null
+      }
+    },
+    "framing_result": {
+      "normalized_topic": "trustworthy multimodal reasoning in medical imaging",
+      "extracted_constraints": {
+        "time_budget_months": "4",
+        "resource_level": "student",
+        "preferred_style": "applied"
+      },
+      "missing_clarifications": [],
+      "search_questions": [
+        "What are the main research themes in trustworthy multimodal reasoning in medical imaging?",
+        "What methods and benchmarks are commonly used in trustworthy multimodal reasoning in medical imaging?",
+        "What open problems or underexplored gaps exist in trustworthy multimodal reasoning in medical imaging?"
+      ]
+    },
+    "evidence_records": [
+      {
+        "source_id": "openalex_5",
+        "title": "Translating Image XAI to Multivariate Time Series",
+        "source_type": "paper",
+        "source_tier": "B",
+        "year": 2024,
+        "authors_or_publisher": "Lorenzo Tronchin, Ermanno Cordelli, Lorenzo Ricciardi Celsi, Daniele Maccagnola",
+        "identifier": "https://openalex.org/W4391936052",
+        "url": "https://doi.org/10.1109/access.2024.3366994",
+        "summary": "As Artificial Intelligence (AI) is becoming part of our daily lives, the need to understand and trust its decisions is becoming a pressing issue. EXplainable AI (XAI) aims at answering this demand, providing tools to get insights into the models’ behaviour and reasoning. Following this trend, our research paper explores the explainability of a deployed multimodal architecture applied to a real-world dataset of multivariate time series. The study aims to enhance the trustworthiness of an AI agent responsible for crash detection in an insurance company’s automatic assistance service. By introducing an XAI layer, we provide insights into the AI agent’s decision-making process, enabling the optimization of emergency medical services allocation. The dataset consists of real-world telematics data collected from vehicles equipped with black box technology. The challenge lies in explaining the complex interactions within the multivariate time series data to accurately understand the forces applied to vehicles during accidents. To this end, we adapt to this context two state-of-the-art XAI model-specific approaches, originally designed for images. We offer a qualitative and a quantitative evaluation, also comparing with a well-known agnostic method, and further validating our findings on an external dataset. The results show that Integrated Gradients, among the methodologies examined, is the most effective approach. Its ability to handle the complexity of the data provides the most comprehensive and insightful explanations for the considered use case. The findings emphasize the potential of XAI to enhance the trustworthiness of AI systems and optimize emergency response in the insurance industry. Code is available at https://github.com/ltronchin/translating-xai-mts.git.",
+        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
+      }
+    ],
+    "landscape_summary": {
+      "themes": [
+        "problem framing and task definition in trustworthy multimodal reasoning in medical imaging",
+        "benchmark-driven evaluation for trustworthy multimodal reasoning in medical imaging",
+        "practical deployment concerns in trustworthy multimodal reasoning in medical imaging"
+      ],
+      "active_methods": [
+        "survey-guided baseline comparison",
+        "benchmark-centered experimental design",
+        "cross-method error analysis"
+      ],
+      "likely_gaps": [
+        "clear task scoping for narrow research questions",
+        "stronger evidence on feasibility under limited resources"
+      ],
+      "saturated_areas": [
+        "broad generic summaries without a sharply defined question"
+      ]
+    },
+    "candidate_topics": [
+      {
+        "candidate_id": "candidate_1",
+        "title": "Benchmark-Guided Narrow Task Definition",
+        "research_question": "How can a narrower benchmark task reveal actionable limitations in current methods?",
+        "positioning": "gap-driven",
+        "novelty_note": "Focuses on under-specified evaluation boundaries rather than generic performance claims.",
+        "feasibility_note": "Lower feasibility under a tight timeline unless the benchmark scope is aggressively constrained.",
+        "risk_note": "May become incremental if the task boundary is not sharply differentiated.",
+        "supporting_source_ids": [
+          "openalex_5"
+        ],
+        "open_questions": [
+          "Which benchmark subset best represents the intended problem?",
+          "Can the task be scoped to a 4-month or shorter execution window?"
+        ]
+      },
+      {
+        "candidate_id": "candidate_2",
+        "title": "Applied Method Transfer Under Practical Constraints",
+        "research_question": "Can an existing method family be adapted effectively under strict compute and annotation constraints?",
+        "positioning": "applied-transfer",
+        "novelty_note": "Frames novelty through constraint-aware adaptation rather than larger-model gains.",
+        "feasibility_note": "Strong fit for an applied project that needs a visible baseline-to-improvement story.",
+        "risk_note": "Novelty may depend heavily on the chosen constraint and evaluation design.",
+        "supporting_source_ids": [
+          "openalex_5",
+          "openalex_5"
+        ],
+        "open_questions": [
+          "Which constraint creates the strongest research signal?"
+        ]
+      },
+      {
+        "candidate_id": "candidate_3",
+        "title": "Tooling And Evaluation Workflow Support",
+        "research_question": "What tooling or evaluation workflow improvements would make research in this area more reproducible?",
+        "positioning": "systems",
+        "novelty_note": "Shifts from model novelty to workflow and evaluation reliability.",
+        "feasibility_note": "High feasibility for a short-cycle project with engineering emphasis and bounded implementation scope.",
+        "risk_note": "Applied impact may be clearer than publication novelty unless evaluation endpoints are sharply chosen.",
+        "supporting_source_ids": [
+          "openalex_5"
+        ],
+        "open_questions": [
+          "What concrete reproducibility pain point should be prioritized first?",
+          "Which workflow improvement reduces compute or setup cost the most?"
+        ]
+      }
+    ],
+    "comparison_result": {
+      "dimensions": [
+        "novelty",
+        "feasibility",
+        "evidence_strength",
+        "data_availability",
+        "implementation_cost",
+        "risk"
+      ],
+      "summary": "Candidate 2 is strongest for applied feasibility under the current constraints, candidate 1 remains strongest on research framing, and candidate 3 remains the fastest engineering path.",
+      "candidate_assessments": [
+        {
+          "candidate_id": "candidate_1",
+          "novelty": "high",
+          "feasibility": "low_medium",
+          "evidence_strength": "medium_high",
+          "data_availability": "medium",
+          "implementation_cost": "medium_high",
+          "risk": "medium"
+        },
+        {
+          "candidate_id": "candidate_2",
+          "novelty": "medium_high",
+          "feasibility": "high",
+          "evidence_strength": "medium_high",
+          "data_availability": "medium_high",
+          "implementation_cost": "medium_low",
+          "risk": "medium_low"
+        },
+        {
+          "candidate_id": "candidate_3",
+          "novelty": "medium",
+          "feasibility": "high",
+          "evidence_strength": "medium",
+          "data_availability": "high",
+          "implementation_cost": "low",
+          "risk": "medium_high"
+        }
+      ]
+    },
+    "convergence_result": {
+      "recommended_candidate_id": "candidate_2",
+      "backup_candidate_id": "candidate_1",
+      "rationale": "Candidate 2 is the best fit for the current constraints because it starts from reusable baselines, matches an applied project style, and is easier to execute within a tighter timeline.",
+      "manual_checks": [
+        "Confirm that the selected sub-problem can be completed within a 4-month or shorter timeline.",
+        "Verify that at least one benchmark or dataset is realistically accessible.",
+        "Check whether the proposed gap is genuinely underexplored rather than a retrieval miss.",
+        "Verify that the topic still has enough novelty signal for the intended venue."
+      ]
+    },
+    "human_confirmations": [],
+    "trace": [
+      {
+        "stage": "frame_problem",
+        "status": "completed",
+        "timestamp": "2026-03-25T12:38:41.539131+00:00",
+        "detail": "Structured the user input into a topic-exploration request."
+      },
+      {
+        "stage": "retrieve_evidence",
+        "status": "completed",
+        "timestamp": "2026-03-25T12:38:41.539149+00:00",
+        "detail": "Retrieved 1 evidence records using the openalex provider."
+      },
+      {
+        "stage": "synthesize_landscape",
+        "status": "completed",
+        "timestamp": "2026-03-25T12:38:41.539155+00:00",
+        "detail": "Organized the current evidence bundle into a lightweight research landscape summary."
+      },
+      {
+        "stage": "generate_candidates",
+        "status": "completed",
+        "timestamp": "2026-03-25T12:38:41.539158+00:00",
+        "detail": "Generated 3 candidate topic directions from the current evidence bundle."
+      },
+      {
+        "stage": "compare_candidates",
+        "status": "completed",
+        "timestamp": "2026-03-25T12:38:41.539163+00:00",
+        "detail": "Produced a structured candidate comparison across fixed MVP dimensions."
+      },
+      {
+        "stage": "converge_recommendation",
+        "status": "completed",
+        "timestamp": "2026-03-25T12:38:41.539166+00:00",
+        "detail": "Produced a recommended next-best option with manual verification checks."
+      }
+    ],
+    "confidence_summary": {
+      "evidence_coverage": "low",
+      "source_quality": "medium",
+      "candidate_separation": "high",
+      "conflict_level": "low",
+      "rationale": [
+        "Evidence coverage is low based on the current number of retrieved records.",
+        "Source quality is medium based on the current source-tier mix.",
+        "Candidate separation is high based on the diversity of candidate positioning.",
+        "Conflict level is low because this development slice does not yet model explicit source disagreement."
+      ]
+    },
+    "evidence_diagnostics": {
+      "requested_provider": "openalex",
+      "used_provider": "openalex",
+      "fallback_used": false,
+      "fallback_reason": null,
+      "record_count": 1,
+      "cache_hit": true
+    }
   }
 ]
