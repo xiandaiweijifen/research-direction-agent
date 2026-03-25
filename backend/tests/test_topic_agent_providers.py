@@ -831,6 +831,111 @@ def test_openalex_reranking_prefers_med_vqa_over_generic_multimodal_overview(wor
     assert "The application of multimodal large language models in medicine" not in ranked_titles[:1]
 
 
+def test_openalex_overview_records_are_backfill_only_when_task_specific_records_are_sufficient(workspace_tmp_path, monkeypatch):
+    request = TopicAgentExploreRequest(
+        interest="trustworthy multimodal reasoning in medical imaging",
+        problem_domain="medical AI",
+        constraints=TopicAgentConstraintSet(preferred_style="applied"),
+    )
+    cache_path = workspace_tmp_path / "topic_agent_openalex_cache.json"
+    provider = OpenAlexEvidenceProvider(cache_path=cache_path, cache_ttl_seconds=3600, max_results=3)
+
+    class FakeResponse:
+        def __init__(self, payload):
+            self._payload = payload
+
+        def json(self):
+            return self._payload
+
+        def raise_for_status(self):
+            return None
+
+    payload = {
+        "results": [
+            {
+                "id": "https://openalex.org/W4392881223",
+                "display_name": "The application of multimodal large language models in medicine",
+                "publication_year": 2024,
+                "abstract_inverted_index": {
+                    "multimodal": [0],
+                    "large": [1],
+                    "language": [2],
+                    "models": [3],
+                    "medicine": [4],
+                    "overview": [5],
+                },
+                "authorships": [{"author": {"display_name": "Author A"}}],
+                "primary_location": {"landing_page_url": "https://example.org/overview"},
+            },
+            {
+                "id": "https://openalex.org/W4414530509",
+                "display_name": "Benchmarking GPT-5 for Zero-Shot Multimodal Medical Reasoning in Radiology and Radiation Oncology",
+                "publication_year": 2025,
+                "abstract_inverted_index": {
+                    "benchmarking": [0],
+                    "multimodal": [1],
+                    "medical": [2],
+                    "reasoning": [3],
+                    "radiology": [4],
+                    "grounding": [5],
+                },
+                "authorships": [{"author": {"display_name": "Author B"}}],
+                "primary_location": {"landing_page_url": "https://example.org/benchmark"},
+            },
+            {
+                "id": "https://openalex.org/W4401863364",
+                "display_name": "RJUA-MedDQA: A Multimodal Benchmark for Medical Document Question Answering and Clinical Reasoning",
+                "publication_year": 2024,
+                "abstract_inverted_index": {
+                    "multimodal": [0],
+                    "benchmark": [1],
+                    "medical": [2],
+                    "document": [3],
+                    "question": [4],
+                    "answering": [5],
+                    "clinical": [6],
+                    "reasoning": [7],
+                },
+                "authorships": [{"author": {"display_name": "Author C"}}],
+                "primary_location": {"landing_page_url": "https://example.org/meddqa"},
+            },
+            {
+                "id": "https://openalex.org/W3094950914",
+                "display_name": "Medical Visual Question Answering via Conditional Reasoning",
+                "publication_year": 2020,
+                "abstract_inverted_index": {
+                    "medical": [0],
+                    "visual": [1],
+                    "question": [2],
+                    "answering": [3],
+                    "conditional": [4],
+                    "reasoning": [5],
+                    "vqa-rad": [6],
+                    "trustworthy": [7],
+                    "grounding": [8],
+                    "multimodal": [9],
+                },
+                "authorships": [{"author": {"display_name": "Author D"}}],
+                "primary_location": {"landing_page_url": "https://example.org/medvqa"},
+            },
+        ]
+    }
+
+    monkeypatch.setattr(
+        "app.services.topic_agent.providers.httpx.get",
+        lambda *args, **kwargs: FakeResponse(payload),
+    )
+
+    result = provider.retrieve(request)
+    ranked_titles = [record.title for record in result.records]
+
+    assert ranked_titles == [
+        "Benchmarking GPT-5 for Zero-Shot Multimodal Medical Reasoning in Radiology and Radiation Oncology",
+        "RJUA-MedDQA: A Multimodal Benchmark for Medical Document Question Answering and Clinical Reasoning",
+        "Medical Visual Question Answering via Conditional Reasoning",
+    ]
+
+
 def test_fallback_provider_returns_mock_records_when_primary_fails():
     class FailingProvider:
         provider_name = "primary"

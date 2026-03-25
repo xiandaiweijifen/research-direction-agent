@@ -654,6 +654,32 @@ def _matched_interest_term_count(record: TopicAgentSourceRecord, request: TopicA
     return sum(1 for term in interest_terms if term in haystack)
 
 
+def _is_generic_overview_record(record: TopicAgentSourceRecord) -> bool:
+    title_lower = record.title.lower()
+    haystack = f"{title_lower} {record.summary.lower()}"
+    generic_overview_terms = {
+        "application of",
+        "applications of",
+        "overview",
+        "foundation models",
+        "highlight four example areas",
+    }
+    task_specific_terms = {
+        "benchmark",
+        "question answering",
+        "vqa",
+        "vqa-rad",
+        "med-vqa",
+        "conditional reasoning",
+        "clinical reasoning",
+        "document",
+        "report",
+        "radiology",
+        "grounding",
+    }
+    return _contains_any(haystack, generic_overview_terms) and not _contains_any(haystack, task_specific_terms)
+
+
 def _normalize_record(record: TopicAgentSourceRecord) -> TopicAgentSourceRecord:
     return record.model_copy(
         update={
@@ -730,8 +756,12 @@ def _filter_ranked_records(
             and _matched_interest_term_count(record, request) >= 2
         ]
     if not filtered:
-        return records[:max_results]
-    return filtered[:max_results]
+        filtered = records
+
+    non_overview_records = [record for record in filtered if not _is_generic_overview_record(record)]
+    overview_backfill_records = [record for record in filtered if _is_generic_overview_record(record)]
+    ranked_filtered = non_overview_records + overview_backfill_records
+    return ranked_filtered[:max_results]
 
 
 def _load_cached_records(

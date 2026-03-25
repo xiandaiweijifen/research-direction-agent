@@ -12619,5 +12619,747 @@
       "record_count": 4,
       "cache_hit": true
     }
+  },
+  {
+    "session_id": "92a744b0115a4fccb99dec4458d8e815",
+    "created_at": "2026-03-25T13:45:38.507303+00:00",
+    "updated_at": "2026-03-25T13:45:38.507303+00:00",
+    "user_input": {
+      "interest": "trustworthy visual question answering in radiology",
+      "problem_domain": "medical AI",
+      "seed_idea": "I want a narrow and feasible benchmark-oriented topic.",
+      "constraints": {
+        "time_budget_months": 6,
+        "resource_level": "student",
+        "preferred_style": "applied",
+        "notes": null
+      }
+    },
+    "framing_result": {
+      "normalized_topic": "trustworthy visual question answering in radiology",
+      "extracted_constraints": {
+        "time_budget_months": "6",
+        "resource_level": "student",
+        "preferred_style": "applied"
+      },
+      "missing_clarifications": [],
+      "search_questions": [
+        "What are the main research themes in trustworthy visual question answering in radiology?",
+        "What methods and benchmarks are commonly used in trustworthy visual question answering in radiology?",
+        "What open problems or underexplored gaps exist in trustworthy visual question answering in radiology?"
+      ]
+    },
+    "evidence_records": [
+      {
+        "source_id": "openalex_w4405021649",
+        "title": "Why we need to be careful with LLMs in medicine",
+        "source_type": "paper",
+        "source_tier": "B",
+        "year": 2024,
+        "authors_or_publisher": "Jean‐Christophe Bélisle‐Pipon",
+        "identifier": "https://openalex.org/W4405021649",
+        "url": "https://doi.org/10.3389/fmed.2024.1495582",
+        "summary": "Large language models (LLMs), the core of many generative AI (genAI) tools, are gaining attention for their potential applications in healthcare. These applications are wide-ranging, including tasks such as assisting with diagnostic processes, streamlining patient communication, and providing decision support to healthcare professionals. Their ability to process and generate large volumes of text makes them promising tools for managing medical documentation and enhancing the efficiency of clinical workflows (Harrer, 2023). LLMs offer a distinct advantage in that they are relatively straightforward to use, particularly since the introduction of ChatGPT-3.5, and they exhibit a notable alignment with human language and communication patterns, facilitating more natural interactions (Ayers et al., 2023) and acceptance of the LLMs&#39; conclusions (Shekar et al., 2024). LLMs operate by predicting the next word in a sequence based on statistical correlations identified in large datasets (Patil et al., 2021;Schubert et al., 2023). However, while these models are effective at producing text that appears coherent and contextually appropriate, they do so without a genuine understanding of meaning or context. This limitation is particularly significant in healthcare, where accuracy is critical. Unlike human cognition, which is driven by a complex array of goals and behaviors, LLMs are narrowly focused on text generation. This focus can lead to the production of plausible sounding but inaccurate information, a phenomenon referred to as &quot;AI hallucination&quot; (OpenAI et al., 2024). In high-stakes environments like prediction, triaging, diagnosis, monitoring, or patient care, these inaccuracies can have serious consequences.While numerous articles across various Frontiers journals discuss LLMs, relatively few focus on AI hallucinations as a central issue. For example, Jin et al. (2023) in Frontiers in Medicine note that &quot;While LLMs like ChatGPT offer tremendous potential in ophthalmology, addressing the challenges of AI hallucination and misinformation is paramount.&quot; Similarly, Giorgino et al. (2023) in Frontiers in Surgery emphasize that &quot;The responsible use of this tool must be based on an awareness of its limitations and biases. Foremost among these is the dangerous concept of AI hallucination.&quot; Beyond the realm of healthcare, Williams (2024) in Frontiers in Education observes that &quot;The concept of AI hallucination gained widespread attention around 2022, coinciding with the rise of LLMs such as ChatGPT. Users noticed these chatbots often generated random falsehoods in their responses, seemingly indifferent to relevance or accuracy.&quot; Williams (2024) continues by stressing that the &quot;term AI hallucination has been criticized for its anthropomorphic connotations, as it likens human perception to the behavior of language models.&quot; Despite these critical discussions, they remain sparse compared to the many articles praising LLMs in medicine, highlighting the need for greater engagement in addressing the limitations of these technologies. This imbalance highlights the need for greater emphasis on mitigating the risks posed by these models. Building on this concern, Hicks, Humphries, and Slater (2024) challenge conventional thinking in their paper &quot;ChatGPT is Bullshit.&quot; They assert that the inaccuracies produced by LLMs should not simply be labeled as &quot;hallucinations,&quot; but as &quot;bullshit,&quot; a term based on philosopher Harry Frankfurt&#39;s (2009) work. According to this perspective, &quot;bullshit&quot; reflects a disregard for accuracy, which poses serious challenges for the use of genAI in healthcare. By reconceptualizing LLMs in healthcare as &quot;bullshiting&quot; instead of &quot;hallucinating,&quot; this paper aims to provide a perspective on the risks these tools pose in critical applications. It explores practical solutions such as layered LLM architectures and improved XAI methods, and emphasizes the urgency of implementing tailored oversight mechanisms to counterbalance the political and industry push for AI deregulation in sensitive domains like medicine.LLMs generate text by predicting the next word based on large datasets. While they produce human-like text, they don&#39;t inherently understand or verify its accuracy, acting as &quot;prop-oriented make-believe tools&quot; (Mallory, 2023). Their errors are not the result of technical glitches that can be resolved with better data or refined algorithms but stem from their fundamental nature-they do not evaluate evidence or reason in the human sense. This critical distinction between LLMs&#39; statistical processing and human reasoning can lead to misconceptions, particularly when LLMs are portrayed or perceived as capable of human-like cognition. While LLMs can generate accurate and contextually relevant text, their outputs are based on statistical correlations, not genuine comprehension. As Bender et al. (2021) famously argued, LLMs, which generate word sequences based on learned patterns, function as &quot;stochastic parrots.&quot; In contrast, human reasoning involves deeper cognitive processes such as understanding, critical thinking, and interpretation. While some, like Downes et al. (2024), challenge this view, suggesting that LLMs can produce sensible answers by leveraging higher-level structural information inherent in their design, the fact remains that LLMs remain fundamentally agnostic to empirical reality. Recognizing this distinction is crucial, as the statistical predictions made by AI models-no matter how convincing-should not be equated with deliberate, evidence-based reasoning of the human mind. When these AI systems make mistakes, it is not because they are malfunctioning in a way that can be fixed with better data or tweaked algorithms. It is because they fundamentally do not arbitrate evidence in the first place. As Hicks et al. (2024) point out: &quot;ChatGPT is not trying to communicate something they believe or perceive. Their inaccuracy is not due to misperception or hallucination. As we have pointed out, they are not trying to convey information at all. They are bullshitting.&quot; This indifference to evidence is especially concerning in medicine, where accuracy, interpretability, and liability are paramount. Consider the implications of using genAI to provide medical advice or assist in diagnosing patients-if the nature of its outputs is misunderstood, it poses significant risks. Trusting and acting on potentially flawed information could result in misdiagnoses and improper treatments, with serious consequences for patient care. As stated by Harrer (2023): &quot;Health buyers beware: generative AI is an experimental technology not yet ready for primetime.&quot;Recognizing that these AI systems produce &quot;bullshit&quot; rather than &quot;hallucinations&quot; calls for a more cautious and skeptical approach, according to Hicks and colleagues. Titus (2024) convincingly stated that &quot;Attributing semantic understanding to these systems when we are not warranted in doing so could have serious social and ethical implications related to anthropormorphizing (sic) these systems or over-trusting their ability to produce meaningful or truthful responses.&quot; In the health sector, this implies that, mMedical professionals should be wary about them and avoid using LLMs as standalone sources of information or advice (Cohen, 2023). Instead, LLMs should serve as supplementary tools, with all outputs rigorously validated by human experts before being applied and used in any clinical setting. The ethical implications of using AI in medicine are significant. If AI systems are inherently indifferent to the truth, there is a heightened responsibility on developers and users to ensure these tools do not cause harm. This involves not only improving the technical accuracy of AI models but also clearly communicating their limitations to users. As Hicks et al (2024) note, &quot;Calling chatbot inaccuracies &#39;hallucinations&#39; feeds into overblown hype about their abilities among technology cheerleaders, and could lead to unnecessary consternation among the general public. It also suggests solutions to the inaccuracy problems which might not work, and could lead to misguided efforts at AI alignment amongst specialists.&quot; Given the significant ethical implications of AI in medicine, LLMs should be used as supplementary tools with expert validation of both medical AI design and outputs prior to clinical applications (B&#233;lisle-Pipon et al., 2021;Cohen, 2023).Ensuring AI trustworthiness in healthcare requires shared responsibility, with developers creating transparent systems and medical professionals critically assessing AI outputs and their limitations (Amann et al., 2020;D&#237;az-Rodr&#237;guez et al., 2023;Siala &amp; Wang, 2022;Smith, 2021). Medical professionals must be trained to understand that AI-generated content that may sound convincing, is not always reliable. Developers should prioritize creating interfaces that highlight these limitations and encourage critical evaluation of AI outputs. For example, including disclaimers or confidence scores can help users better assess the reliability of the information provided (Gallifant et al., 2024). This is basically what the Notice and Explanation section of the the White House&#39;s AI Bill of Rights (2022) requires: &quot;Medical professionals should not use AI as a standalone source of information or advice. Instead, AI should serve as a supplementary tool, with all outputs rigorously validated by human experts before being applied in any clinical setting.&quot; However, disclosure is not enough in itself as it is also conducive to problems, particularly by shifting the burden onto users. Such disclosure should be accessible and understandable in a way that does not reproduce the problems of consumer products&#39; Terms and Conditions, which are made ridiculously long to ensure that nobody reads them (Solove, 2024).Employing multiple layers of LLMs to mitigate the limitations inherent in individual models could be a way to solve the previously raised issues. Work is currently underway in this area (Farquhar et al., 2024). Usually this entails enabling one model to cross-validate the outputs of another to identify and correct inaccuracies, thereby reducing the incidence of AI hallucination. This layered approach, wherein different models are assigned specialized tasks such as factchecking or contextual validation, has the potential to enhance the robustness and reliability of AI-generated content (Springer, 2024). However, this methodology introduces significant complexity, including the risk of error propagation and the challenges associated with the coordination of multiple models. Furthermore, while this strategy, which Verspoor (2024) calls &quot;fighting fire with fire,&quot; may incrementally improve the accuracy of outputs, it fails to address the foundational issue of LLMs&#39; lack of true semantic understanding. An over-reliance on layered LLMs could result in diminishing returns, where the added complexity and potential for novel errors negate the anticipated benefits of enhanced accuracy. Additionally, this approach risks fostering an overdependence on AI systems (Levinstein &amp; Herrmann, 2024), potentially undermining the role of human expertise in domains requiring nuanced understanding and ethical decision-making.LLMs can still offer valuable contributions to medical practice if used wisely. LLMs can assist in administrative tasks, generate patient documentation, or provide preliminary information on medical topics. They can even be useful in defending patients&#39; interests in health insurance claims (Rosenbluth, 2024). However, these applications must be designed with safeguards to prevent over-reliance on potentially inaccurate outputs (Cohen, 2023). One way to enhance LLMs&#39; utility in medicine is not to rely solely on them, but also to implement verification systems based on reliable databases (not just web-scrapping). Even Hicks et al. (2024) emphasize that there are practical solutions to address the concerns of AI &quot;bullshit.&quot; For example, connecting a LLM to a trusted medical database can help ensure the information it provides is cross-referenced with reliable sources. Such a system would also incorporate a mechanism for arbitrating evidence, further enhancing accuracy and providing a certain level of trustworthiness. However, this integration must be implemented carefully to avoid introducing new forms of misinformation or inadvertently embedding values that are inconsistent with the context in which the tool is being deployed (B&#233;lisle-Pipon et al., 2021).Explainable AI (XAI) aims to increase transparency in AI decision-making, including in LLMs. Techniques like attention mechanisms and post-hoc explanations help users understand how AI generates outputs, especially in high-stakes fields like healthcare. However, XAI does not address the core limitation: LLMs depend on statistical patterns, not genuine reasoning or evidence evaluation (Titus, 2024). Moreover, while these techniques are valuable for tracing outputs back to their underlying processes, they often fail to expose the deeper epistemic limitations of LLMs, such as their inability to reason or evaluate evidence. Their explanations, therefore, reflect these patterns rather than any meaningful understanding. Regulatory frameworks, such as the European Union&#39;s AI Regulation ( 2024) and the US AI Bill of Rights Blueprint (The White House, 2022), establish critical standards for transparency, safety, and accountability. However, adapting LLMs to meet these standards may not overcome their fundamental limitations in reasoning and evidence-based decision-making. Experts argue for shifting focus from refining LLMs to developing new AI paradigms, such as neurosymbolic AI, which combines neural networks with logical reasoning to address these gaps.Neurosymbolic AI offers a promising alternative, integrating neural adaptability with logical precision to enable more robust reasoning and contextual understanding (Hamilton et al., 2024;Wan et al., 2024). These models can potentially overcome key limitations of LLMs, offering greater efficiency and interpretability. As Vivek Wadhwa (2024) suggests, LLMs are nearing their developmental ceiling, and further investment in them risks diminishing returns. Instead, regulators and investors may explore advancing neurosymbolic AI to drive the next generation of innovation, while ensuring AI systems are both transparent and capable of increased trustworthy reasoning. Despite its promise, neurosymbolic AI is not a panacea. It faces challenges in scalability, interpretability, and handling the complexity of real-world medical data (Marra et al., 2024). Moreover, its reliance on logical structures may not fully capture the nuances of probabilistic and ambiguous information common in medicine. Thus, while neurosymbolic AI represents an incremental advance, robust oversight, multidisciplinary collaboration, and continued innovation remain essential for addressing AI&#39;s limitations in critical domains like healthcare.A deep, critical examination of the inherent limitations of LLMs is crucial for advancing medical AI in ways that prioritize patient safety and ethical integrity. While LLMs like ChatGPT can generate fluent, coherent text, this proficiency often conceals a more troubling reality: their responses are not necessarily grounded in verified facts or consistent logic. In the medical field, where evidence-based decision-making is paramount, relying on these models without addressing their fundamental flaws presents significant risks. LLMs, at their core, are probabilistic models designed to predict the next word in a sequence based on patterns in training data. This mechanism, though powerful for generating human-like text, is fundamentally indifferent to truth. If the goal of the model is to generate the most statistically likely response rather than the correct or most appropriate one, there is a significant risk of misinformation infiltrating clinical workflows.As Jin et al. (2023) underscore, &quot;Responsible AI implementation and continuous monitoring are essential to harness the benefits of AI while minimizing potential risks.&quot; A key concern with LLMs in medical applications is their lack of reproducibility. Unlike traditional software systems, where identical inputs yield consistent outputs, LLMs can generate different answers to the same question on different occasions. This unpredictability undermines the reliability needed in medical settings, where consistency is essential for delivering safe and effective care. Medicine, as a discipline, cannot afford to embrace tools that exhibit &quot;epistemic insouciance&quot;-a disregard for the reliability and validity of knowledge. This is especially problematic given that LLMs, in many cases, are not anchored in factual reality but are designed to produce text that merely sounds plausible. The use of the term &quot;hallucination&quot; to describe when LLMs generate factually incorrect statements trivializes the severity of the issue. In truth, this behavior reflects a deeper problem: LLMs are trained to predict patterns, not to produce factual outputs. In medicine-an evidence-based practice since the 1990s-this fundamental flaw can lead to the adoption of unreliable tools that compromise the integrity of patient care.The standard disclaimers provided by models like ChatGPT, which warn that &quot;ChatGPT can make mistakes. Check important info,&quot; are insufficient safeguards in clinical settings. While Harrer (2023) points out that &quot;In defence of OpenAI, it never advertised ChatGPT as trustworthy advisor but rather as a crowdsourced technology evaluation and refinement experiment&quot;; Harrer also acknowledged that there is insufficient risk mitigation across genAI, including ChatGPT, which has sparked growing caution amid internet-level hype. The implications for the health sector are significant, most users (especially Hhealthcare professionals) often lack the time or expertise to verify every piece of AI-generated information, especially in high-pressure stake environments where the margin for error is slim, but the consequences significant. Entrusting users with the responsibility of fact-checking AI outputs without giving them the resources or assurances of accuracy exposes the field to potentially dangerous mistakes, as well as to arguably lead to AI ethics dumping, so to offload such responsibility to downstream users (B&#233;lisle-Pipon &amp; Victor, 2024). The casual acceptance of these limitations in AI use-particularly in medicine, where errors can have life-threatening consequences-reflects a dangerous complacency. Transparency, interpretability, and trustworthiness in medical AI is are not a luxury but a necessity. Healthcare professionals need to understand not only what the AI recommends but also how and why it arrived at its conclusions. Explainability in AI systems is critical for building trust and enabling professionals to make informed based on AI this transparency, the tools are offering answers without or in clinical challenges of ensuring ethical and trustworthy AI are further by the political especially in the The is to prioritize the of AI to innovation 2024). The efforts of like The (2024) represents such as and for that to AI While the the of and its focus on to innovation risks critical safeguards as ethical AI standards and oversight Furthermore, to AI efforts by the a risk designed to AI transparency and a potential AI deregulation &amp; 2024), and an AI Such a could efforts to mitigate the inherent risks of LLMs and flawed AI systems in domains like this it is crucial to emphasize shared responsibility for trustworthy AI and healthcare must to ethical transparency, and in AI of the such the drive for deregulation may the risks posed by LLMs, particularly their to produce plausible yet inaccurate or outputs. AI cannot be as a especially in healthcare, where patient and are at AI errors from being as &quot;hallucinations&quot; to them as dangerous &quot;bullshit&quot; is more than just a in is a critical of how to approach the integration of AI into healthcare. These are not but fundamental flaws in how these systems healthcare and AI developers must that the are and that without LLMs and genAI could trust and the of care.",
+        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
+      }
+    ],
+    "landscape_summary": {
+      "themes": [
+        "cross-modal grounding and visual dependence in trustworthy visual question answering in radiology",
+        "trustworthy evaluation and failure analysis in trustworthy visual question answering in radiology"
+      ],
+      "active_methods": [
+        "grounding-aware evaluation and error analysis"
+      ],
+      "likely_gaps": [
+        "trustworthy evaluation signals beyond accuracy-only reporting",
+        "clear task scoping for narrow research questions"
+      ],
+      "saturated_areas": [
+        "broad generic summaries without a sharply defined question"
+      ]
+    },
+    "candidate_topics": [
+      {
+        "candidate_id": "candidate_1",
+        "title": "Benchmark-Guided Narrow Task Definition",
+        "research_question": "How can a narrower benchmark task reveal actionable limitations in current methods?",
+        "positioning": "gap-driven",
+        "novelty_note": "Focuses on trustworthy evaluation boundaries, not just raw task accuracy.",
+        "feasibility_note": "Moderate feasibility with public resources and modest compute.",
+        "risk_note": "May become incremental if the task boundary is not sharply differentiated.",
+        "supporting_source_ids": [
+          "openalex_w4405021649"
+        ],
+        "open_questions": [
+          "Which benchmark subset best represents the intended problem?"
+        ]
+      },
+      {
+        "candidate_id": "candidate_2",
+        "title": "Applied Method Transfer Under Practical Constraints",
+        "research_question": "Can an existing method family be adapted effectively under strict compute and annotation constraints?",
+        "positioning": "applied-transfer",
+        "novelty_note": "Frames novelty through constraint-aware adaptation rather than larger-model gains.",
+        "feasibility_note": "Strong fit for an applied project that needs a visible baseline-to-improvement story.",
+        "risk_note": "Novelty may depend heavily on the chosen constraint and evaluation design.",
+        "supporting_source_ids": [
+          "openalex_w4405021649"
+        ],
+        "open_questions": [
+          "Which constraint creates the strongest research signal?"
+        ]
+      },
+      {
+        "candidate_id": "candidate_3",
+        "title": "Tooling And Evaluation Workflow Support",
+        "research_question": "What tooling or evaluation workflow improvements would make research in this area more reproducible?",
+        "positioning": "systems",
+        "novelty_note": "Shifts from model novelty to workflow and evaluation reliability.",
+        "feasibility_note": "Strong feasibility for a short-cycle project with engineering emphasis.",
+        "risk_note": "Applied impact may be clearer than publication novelty unless evaluation endpoints are sharply chosen.",
+        "supporting_source_ids": [
+          "openalex_w4405021649"
+        ],
+        "open_questions": [
+          "What workflow support would make trustworthy evaluation and audit trails easier to reproduce?",
+          "What concrete reproducibility pain point should be prioritized first?",
+          "Which workflow improvement reduces compute or setup cost the most?"
+        ]
+      }
+    ],
+    "comparison_result": {
+      "dimensions": [
+        "novelty",
+        "feasibility",
+        "evidence_strength",
+        "data_availability",
+        "implementation_cost",
+        "risk"
+      ],
+      "summary": "Candidate 2 is strongest for applied feasibility under the current constraints, candidate 1 remains strongest on research framing, and candidate 3 remains the fastest engineering path.",
+      "candidate_assessments": [
+        {
+          "candidate_id": "candidate_1",
+          "novelty": "high",
+          "feasibility": "medium",
+          "evidence_strength": "medium_high",
+          "data_availability": "medium",
+          "implementation_cost": "medium",
+          "risk": "medium"
+        },
+        {
+          "candidate_id": "candidate_2",
+          "novelty": "medium_high",
+          "feasibility": "high",
+          "evidence_strength": "medium_high",
+          "data_availability": "medium_high",
+          "implementation_cost": "medium_low",
+          "risk": "medium_low"
+        },
+        {
+          "candidate_id": "candidate_3",
+          "novelty": "medium",
+          "feasibility": "high",
+          "evidence_strength": "medium",
+          "data_availability": "high",
+          "implementation_cost": "low",
+          "risk": "medium_high"
+        }
+      ]
+    },
+    "convergence_result": {
+      "recommended_candidate_id": "candidate_2",
+      "backup_candidate_id": "candidate_1",
+      "rationale": "Candidate 2 is the best fit for the current constraints because it starts from reusable baselines, matches an applied project style, and is easier to execute within a tighter timeline.",
+      "manual_checks": [
+        "Confirm that the selected sub-problem is narrow enough for the available timeline.",
+        "Verify that at least one benchmark or dataset is realistically accessible.",
+        "Check whether the proposed gap is genuinely underexplored rather than a retrieval miss.",
+        "Verify that the topic still has enough novelty signal for the intended venue."
+      ]
+    },
+    "human_confirmations": [],
+    "trace": [
+      {
+        "stage": "frame_problem",
+        "status": "completed",
+        "timestamp": "2026-03-25T13:45:47.357362+00:00",
+        "detail": "Structured the user input into a topic-exploration request."
+      },
+      {
+        "stage": "retrieve_evidence",
+        "status": "completed",
+        "timestamp": "2026-03-25T13:45:47.357375+00:00",
+        "detail": "Retrieved 1 evidence records using the openalex provider."
+      },
+      {
+        "stage": "synthesize_landscape",
+        "status": "completed",
+        "timestamp": "2026-03-25T13:45:47.357380+00:00",
+        "detail": "Organized the current evidence bundle into a lightweight research landscape summary."
+      },
+      {
+        "stage": "generate_candidates",
+        "status": "completed",
+        "timestamp": "2026-03-25T13:45:47.357383+00:00",
+        "detail": "Generated 3 candidate topic directions from the current evidence bundle."
+      },
+      {
+        "stage": "compare_candidates",
+        "status": "completed",
+        "timestamp": "2026-03-25T13:45:47.357387+00:00",
+        "detail": "Produced a structured candidate comparison across fixed MVP dimensions."
+      },
+      {
+        "stage": "converge_recommendation",
+        "status": "completed",
+        "timestamp": "2026-03-25T13:45:47.357390+00:00",
+        "detail": "Produced a recommended next-best option with manual verification checks."
+      }
+    ],
+    "confidence_summary": {
+      "evidence_coverage": "low",
+      "source_quality": "medium",
+      "candidate_separation": "high",
+      "conflict_level": "low",
+      "rationale": [
+        "Evidence coverage is low based on the current number of retrieved records.",
+        "Source quality is medium based on the current source-tier mix.",
+        "Candidate separation is high based on the diversity of candidate positioning.",
+        "Conflict level is low because this development slice does not yet model explicit source disagreement."
+      ]
+    },
+    "evidence_diagnostics": {
+      "requested_provider": "openalex",
+      "used_provider": "openalex",
+      "fallback_used": false,
+      "fallback_reason": null,
+      "record_count": 1,
+      "cache_hit": false
+    }
+  },
+  {
+    "session_id": "15b32b050c804c32b8a7a3059ca94c6e",
+    "created_at": "2026-03-25T13:46:00.303329+00:00",
+    "updated_at": "2026-03-25T13:46:00.303329+00:00",
+    "user_input": {
+      "interest": "document-centric clinical reasoning with multimodal medical reports",
+      "problem_domain": "medical AI",
+      "seed_idea": "I want a feasible topic using public data and modest compute.",
+      "constraints": {
+        "time_budget_months": 6,
+        "resource_level": "student",
+        "preferred_style": "applied",
+        "notes": null
+      }
+    },
+    "framing_result": {
+      "normalized_topic": "document-centric clinical reasoning with multimodal medical reports",
+      "extracted_constraints": {
+        "time_budget_months": "6",
+        "resource_level": "student",
+        "preferred_style": "applied"
+      },
+      "missing_clarifications": [],
+      "search_questions": [
+        "What are the main research themes in document-centric clinical reasoning with multimodal medical reports?",
+        "What methods and benchmarks are commonly used in document-centric clinical reasoning with multimodal medical reports?",
+        "What open problems or underexplored gaps exist in document-centric clinical reasoning with multimodal medical reports?"
+      ]
+    },
+    "evidence_records": [
+      {
+        "source_id": "openalex_w4401863364",
+        "title": "RJUA-MedDQA: A Multimodal Benchmark for Medical Document Question Answering and Clinical Reasoning",
+        "source_type": "benchmark",
+        "source_tier": "A",
+        "year": 2024,
+        "authors_or_publisher": "Congyun Jin, Ming Zhang, Weixiao Ma, Yujiao Li",
+        "identifier": "https://openalex.org/W4401863364",
+        "url": "https://doi.org/10.1145/3637528.3671644",
+        "summary": "Recent advancements in Large Language Models (LLMs) and Large Multi-modal Models (LMMs) have shown potential in various medical applications, such as Intelligent Medical Diagnosis. Although impressive results have been achieved, we find that existing benchmarks do not reflect the complexity of real medical reports and specialized in-depth reasoning capabilities. In this work, we establish a comprehensive benchmark in the field of medical specialization and introduced RJUA-MedDQA, which contains 2000 real-world Chinese medical report images poses several challenges: comprehensively interpreting imgage content across a wide variety of challenging layouts, possessing the numerical reasoning ability to identify abnormal indicators and demonstrating robust clinical reasoning ability to provide the statement of disease diagnosis, status and advice based on a collection of medical contexts. We carefully design the data generation pipeline and proposed the Efficient Structural Restoration Annotation (ESRA) Method, aimed at restoring textual and tabular content in medical report images. This method substantially enhances annotation efficiency, doubling the productivity of each annotator, and yields a 26.8% improvement in accuracy. We conduct extensive evaluations, including few-shot assessments of 5 LMMs which are capable of solving Chinese medical QA tasks. To further investigate the limitations and potential of current LMMs, we conduct comparative experiments on a set of strong LLMs by using image-text generated by ESRA method. We report the performance of baselines and offer several observations: (1) The overall performance of existing LMMs is still limited; however LMMs more robust to low-quality and diverse-structured images compared to LLMs. (3) Reasoning across context and image content present significant challenges. We hope this benchmark helps the community make progress on these challenging tasks in multi-modal medical document understanding and facilitate its application in healthcare. Our dataset will be publicly available for noncommercial use at https://github.com/Alipay-Med/medDQA_benchmark.git",
+        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
+      },
+      {
+        "source_id": "openalex_w4414530509",
+        "title": "Benchmarking GPT-5 for Zero-Shot Multimodal Medical Reasoning in Radiology and Radiation Oncology",
+        "source_type": "benchmark",
+        "source_tier": "A",
+        "year": 2025,
+        "authors_or_publisher": "Mingzhe Hu, Zach Eidex, Shansong Wang, Mojtaba Safari",
+        "identifier": "https://openalex.org/W4414530509",
+        "url": "https://arxiv.org/abs/2508.13192",
+        "summary": "Radiology, radiation oncology, and medical physics require decision-making that integrates medical images, textual reports, and quantitative data under high-stakes conditions. With the introduction of GPT-5, it is critical to assess whether recent advances in large multimodal models translate into measurable gains in these safety-critical domains. We present a targeted zero-shot evaluation of GPT-5 and its smaller variants (GPT-5-mini, GPT-5-nano) against GPT-4o across three representative tasks. We present a targeted zero-shot evaluation of GPT-5 and its smaller variants (GPT-5-mini, GPT-5-nano) against GPT-4o across three representative tasks: (1) VQA-RAD, a benchmark for visual question answering in radiology; (2) SLAKE, a semantically annotated, multilingual VQA dataset testing cross-modal grounding; and (3) a curated Medical Physics Board Examination-style dataset of 150 multiple-choice questions spanning treatment planning, dosimetry, imaging, and quality assurance. Across all datasets, GPT-5 achieved the highest accuracy, with substantial gains over GPT-4o up to +20.00% in challenging anatomical regions such as the chest-mediastinal, +13.60% in lung-focused questions, and +11.44% in brain-tissue interpretation. On the board-style physics questions, GPT-5 attained 90.7% accuracy (136/150), exceeding the estimated human passing threshold, while GPT-4o trailed at 78.0%. These results demonstrate that GPT-5 delivers consistent and often pronounced performance improvements over GPT-4o in both image-grounded reasoning and domain-specific numerical problem-solving, highlighting its potential to augment expert workflows in medical imaging and therapeutic physics.",
+        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
+      },
+      {
+        "source_id": "openalex_w3094950914",
+        "title": "Medical Visual Question Answering via Conditional Reasoning",
+        "source_type": "benchmark",
+        "source_tier": "A",
+        "year": 2020,
+        "authors_or_publisher": "Li-Ming Zhan, Bo Liu, Lu Fan, Jiaxin Chen",
+        "identifier": "https://openalex.org/W3094950914",
+        "url": "https://doi.org/10.1145/3394171.3413761",
+        "summary": "Medical visual question answering (Med-VQA) aims to accurately answer a clinical question presented with a medical image. Despite its enormous potential in healthcare industry and services, the technology is still in its infancy and is far from practical use. Med-VQA tasks are highly challenging due to the massive diversity of clinical questions and the disparity of required visual reasoning skills for different types of questions. In this paper, we propose a novel conditional reasoning framework for Med-VQA, aiming to automatically learn effective reasoning skills for various Med-VQA tasks. Particularly, we develop a question-conditioned reasoning module to guide the importance selection over multimodal fusion features. Considering the different nature of closed-ended and open-ended Med-VQA tasks, we further propose a type-conditioned reasoning module to learn a different set of reasoning skills for the two types of tasks separately. Our conditional reasoning framework can be easily applied to existing Med-VQA systems to bring performance gains. In the experiments, we build our system on top of a recent state-of-the-art Med-VQA model and evaluate it on the VQA-RAD benchmark [23]. Remarkably, our system achieves significantly increased accuracy in predicting answers to both closed-ended and open-ended questions, especially for open-ended questions, where a 10.8% increase in absolute accuracy is obtained. The source code can be downloaded from https://github.com/awenbocc/med-vqa.",
+        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
+      },
+      {
+        "source_id": "openalex_w4396570449",
+        "title": "Capabilities of Gemini Models in Medicine",
+        "source_type": "benchmark",
+        "source_tier": "A",
+        "year": 2024,
+        "authors_or_publisher": "Khaled Saab, Tao Tu, Wei‐Hung Weng, Ryutaro Tanno",
+        "identifier": "https://openalex.org/W4396570449",
+        "url": "https://arxiv.org/abs/2404.18416",
+        "summary": "Excellence in a wide variety of medical applications poses considerable challenges for AI, requiring advanced reasoning, access to up-to-date medical knowledge and understanding of complex multimodal data. Gemini models, with strong general capabilities in multimodal and long-context reasoning, offer exciting possibilities in medicine. Building on these core strengths of Gemini, we introduce Med-Gemini, a family of highly capable multimodal models that are specialized in medicine with the ability to seamlessly use web search, and that can be efficiently tailored to novel modalities using custom encoders. We evaluate Med-Gemini on 14 medical benchmarks, establishing new state-of-the-art (SoTA) performance on 10 of them, and surpass the GPT-4 model family on every benchmark where a direct comparison is viable, often by a wide margin. On the popular MedQA (USMLE) benchmark, our best-performing Med-Gemini model achieves SoTA performance of 91.1% accuracy, using a novel uncertainty-guided search strategy. On 7 multimodal benchmarks including NEJM Image Challenges and MMMU (health &amp; medicine), Med-Gemini improves over GPT-4V by an average relative margin of 44.5%. We demonstrate the effectiveness of Med-Gemini's long-context capabilities through SoTA performance on a needle-in-a-haystack retrieval task from long de-identified health records and medical video question answering, surpassing prior bespoke methods using only in-context learning. Finally, Med-Gemini's performance suggests real-world utility by surpassing human experts on tasks such as medical text summarization, alongside demonstrations of promising potential for multimodal medical dialogue, medical research and education. Taken together, our results offer compelling evidence for Med-Gemini's potential, although further rigorous evaluation will be crucial before real-world deployment in this safety-critical domain.",
+        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
+      }
+    ],
+    "landscape_summary": {
+      "themes": [
+        "benchmark design and stress-testing for document-centric clinical reasoning with multimodal medical reports",
+        "cross-modal grounding and visual dependence in document-centric clinical reasoning with multimodal medical reports",
+        "document QA and report-centric reasoning in document-centric clinical reasoning with multimodal medical reports"
+      ],
+      "active_methods": [
+        "benchmark-centered experimental design",
+        "grounding-aware evaluation and error analysis",
+        "document QA baseline comparison"
+      ],
+      "likely_gaps": [
+        "benchmark protocols that distinguish real image use from shortcut exploitation",
+        "trustworthy evaluation signals beyond accuracy-only reporting"
+      ],
+      "saturated_areas": [
+        "broad generic summaries without a sharply defined question"
+      ]
+    },
+    "candidate_topics": [
+      {
+        "candidate_id": "candidate_1",
+        "title": "Benchmark-Guided Narrow Task Definition",
+        "research_question": "How can a narrower benchmark slice expose shortcut behavior and weak multimodal dependence in current systems?",
+        "positioning": "gap-driven",
+        "novelty_note": "Focuses on trustworthy evaluation boundaries, not just raw task accuracy.",
+        "feasibility_note": "Moderate feasibility with public resources and modest compute.",
+        "risk_note": "May become incremental if the task boundary is not sharply differentiated.",
+        "supporting_source_ids": [
+          "openalex_w4401863364",
+          "openalex_w4414530509"
+        ],
+        "open_questions": [
+          "Which benchmark slice best isolates genuine image-grounded reasoning?",
+          "Would a radiology-focused slice produce a clearer and more feasible evaluation target?"
+        ]
+      },
+      {
+        "candidate_id": "candidate_2",
+        "title": "Applied Method Transfer Under Practical Constraints",
+        "research_question": "Can an existing method family be adapted effectively for document-centric clinical reasoning under strict compute and annotation constraints?",
+        "positioning": "applied-transfer",
+        "novelty_note": "Frames novelty through constraint-aware adaptation rather than larger-model gains.",
+        "feasibility_note": "Strong fit for an applied project that needs a visible baseline-to-improvement story.",
+        "risk_note": "Novelty may depend heavily on the chosen constraint and evaluation design.",
+        "supporting_source_ids": [
+          "openalex_w4401863364",
+          "openalex_w3094950914"
+        ],
+        "open_questions": [
+          "Which constraint creates the strongest research signal?"
+        ]
+      },
+      {
+        "candidate_id": "candidate_3",
+        "title": "Tooling And Evaluation Workflow Support",
+        "research_question": "What tooling or evaluation workflow improvements would make research in this area more reproducible?",
+        "positioning": "systems",
+        "novelty_note": "Shifts from model novelty to workflow and evaluation reliability.",
+        "feasibility_note": "Strong feasibility for a short-cycle project with engineering emphasis.",
+        "risk_note": "Applied impact may be clearer than publication novelty unless evaluation endpoints are sharply chosen.",
+        "supporting_source_ids": [
+          "openalex_w4414530509",
+          "openalex_w3094950914"
+        ],
+        "open_questions": [
+          "What workflow support would make trustworthy evaluation and audit trails easier to reproduce?",
+          "What concrete reproducibility pain point should be prioritized first?",
+          "Which workflow improvement reduces compute or setup cost the most?"
+        ]
+      }
+    ],
+    "comparison_result": {
+      "dimensions": [
+        "novelty",
+        "feasibility",
+        "evidence_strength",
+        "data_availability",
+        "implementation_cost",
+        "risk"
+      ],
+      "summary": "Candidate 2 is strongest for applied feasibility under the current constraints, candidate 1 remains strongest on research framing, and candidate 3 remains the fastest engineering path.",
+      "candidate_assessments": [
+        {
+          "candidate_id": "candidate_1",
+          "novelty": "high",
+          "feasibility": "medium",
+          "evidence_strength": "medium_high",
+          "data_availability": "medium",
+          "implementation_cost": "medium",
+          "risk": "medium"
+        },
+        {
+          "candidate_id": "candidate_2",
+          "novelty": "medium_high",
+          "feasibility": "high",
+          "evidence_strength": "medium_high",
+          "data_availability": "medium_high",
+          "implementation_cost": "medium_low",
+          "risk": "medium_low"
+        },
+        {
+          "candidate_id": "candidate_3",
+          "novelty": "medium",
+          "feasibility": "high",
+          "evidence_strength": "medium",
+          "data_availability": "high",
+          "implementation_cost": "low",
+          "risk": "medium_high"
+        }
+      ]
+    },
+    "convergence_result": {
+      "recommended_candidate_id": "candidate_2",
+      "backup_candidate_id": "candidate_1",
+      "rationale": "Candidate 2 is the best fit for the current constraints because it starts from reusable baselines, matches an applied project style, and is easier to execute within a tighter timeline.",
+      "manual_checks": [
+        "Confirm that the selected sub-problem is narrow enough for the available timeline.",
+        "Verify that at least one benchmark or dataset is realistically accessible.",
+        "Check whether the proposed gap is genuinely underexplored rather than a retrieval miss.",
+        "Verify that the topic still has enough novelty signal for the intended venue."
+      ]
+    },
+    "human_confirmations": [],
+    "trace": [
+      {
+        "stage": "frame_problem",
+        "status": "completed",
+        "timestamp": "2026-03-25T13:46:13.932641+00:00",
+        "detail": "Structured the user input into a topic-exploration request."
+      },
+      {
+        "stage": "retrieve_evidence",
+        "status": "completed",
+        "timestamp": "2026-03-25T13:46:13.932653+00:00",
+        "detail": "Retrieved 4 evidence records using the openalex provider."
+      },
+      {
+        "stage": "synthesize_landscape",
+        "status": "completed",
+        "timestamp": "2026-03-25T13:46:13.932659+00:00",
+        "detail": "Organized the current evidence bundle into a lightweight research landscape summary."
+      },
+      {
+        "stage": "generate_candidates",
+        "status": "completed",
+        "timestamp": "2026-03-25T13:46:13.932662+00:00",
+        "detail": "Generated 3 candidate topic directions from the current evidence bundle."
+      },
+      {
+        "stage": "compare_candidates",
+        "status": "completed",
+        "timestamp": "2026-03-25T13:46:13.932666+00:00",
+        "detail": "Produced a structured candidate comparison across fixed MVP dimensions."
+      },
+      {
+        "stage": "converge_recommendation",
+        "status": "completed",
+        "timestamp": "2026-03-25T13:46:13.932669+00:00",
+        "detail": "Produced a recommended next-best option with manual verification checks."
+      }
+    ],
+    "confidence_summary": {
+      "evidence_coverage": "medium",
+      "source_quality": "high",
+      "candidate_separation": "high",
+      "conflict_level": "low",
+      "rationale": [
+        "Evidence coverage is medium based on the current number of retrieved records.",
+        "Source quality is high based on the current source-tier mix.",
+        "Candidate separation is high based on the diversity of candidate positioning.",
+        "Conflict level is low because this development slice does not yet model explicit source disagreement."
+      ]
+    },
+    "evidence_diagnostics": {
+      "requested_provider": "openalex",
+      "used_provider": "openalex",
+      "fallback_used": false,
+      "fallback_reason": null,
+      "record_count": 4,
+      "cache_hit": false
+    }
+  },
+  {
+    "session_id": "2c5006b633b74753b7a4fbe0457e7bad",
+    "created_at": "2026-03-25T13:46:33.628126+00:00",
+    "updated_at": "2026-03-25T13:46:33.628126+00:00",
+    "user_input": {
+      "interest": "hallucination detection and grounding evaluation for multimodal medical reasoning",
+      "problem_domain": "medical AI",
+      "seed_idea": "I want a narrow evaluation-focused research topic.",
+      "constraints": {
+        "time_budget_months": 5,
+        "resource_level": "student",
+        "preferred_style": "applied",
+        "notes": null
+      }
+    },
+    "framing_result": {
+      "normalized_topic": "hallucination detection and grounding evaluation for multimodal medical reasoning",
+      "extracted_constraints": {
+        "time_budget_months": "5",
+        "resource_level": "student",
+        "preferred_style": "applied"
+      },
+      "missing_clarifications": [],
+      "search_questions": [
+        "What are the main research themes in hallucination detection and grounding evaluation for multimodal medical reasoning?",
+        "What methods and benchmarks are commonly used in hallucination detection and grounding evaluation for multimodal medical reasoning?",
+        "What open problems or underexplored gaps exist in hallucination detection and grounding evaluation for multimodal medical reasoning?"
+      ]
+    },
+    "evidence_records": [
+      {
+        "source_id": "openalex_w4319793302",
+        "title": "A Multitask, Multilingual, Multimodal Evaluation of ChatGPT on Reasoning, Hallucination, and Interactivity",
+        "source_type": "paper",
+        "source_tier": "B",
+        "year": 2023,
+        "authors_or_publisher": "Yejin Bang, Samuel Cahyawijaya, Nayeon Lee, Wenliang Dai",
+        "identifier": "https://openalex.org/W4319793302",
+        "url": "https://arxiv.org/abs/2302.04023",
+        "summary": "This paper proposes a framework for quantitatively evaluating interactive LLMs such as ChatGPT using publicly available data sets. We carry out an extensive technical evaluation of ChatGPT using 23 data sets covering 8 different common NLP application tasks. We evaluate the multitask, multilingual and multi-modal aspects of ChatGPT based on these data sets and a newly designed multimodal dataset. We find that ChatGPT outperforms LLMs with zero-shot learning on most tasks and even outperforms fine-tuned models on some tasks. We find that it is better at understanding non-Latin script languages than generating them. It is able to generate multimodal content from textual prompts, via an intermediate code generation step. Moreover, we find that ChatGPT is 63.41% accurate on average in 10 different reasoning categories under logical reasoning, non-textual reasoning, and commonsense reasoning, hence making it an unreliable reasoner. It is, for example, better at deductive than inductive reasoning. ChatGPT suffers from hallucination problems like other LLMs and it generates more extrinsic hallucinations from its parametric memory as it does not have access to an external knowledge base. Finally, the interactive feature of ChatGPT enables human collaboration with the underlying LLM to improve its performance, i.e, 8% ROUGE-1 on summarization and 2% ChrF++ on machine translation, in a multi-turn \"prompt engineering\" fashion. We also release codebase for evaluation set extraction.",
+        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
+      },
+      {
+        "source_id": "openalex_w4406152279",
+        "title": "Toward expert-level medical question answering with large language models",
+        "source_type": "paper",
+        "source_tier": "B",
+        "year": 2025,
+        "authors_or_publisher": "K. K. Singhal, Tao Tu, Juraj Gottweis, Rory Sayres",
+        "identifier": "https://openalex.org/W4406152279",
+        "url": "https://doi.org/10.1038/s41591-024-03423-7",
+        "summary": "Large language models (LLMs) have shown promise in medical question answering, with Med-PaLM being the first to exceed a 'passing' score in United States Medical Licensing Examination style questions. However, challenges remain in long-form medical question answering and handling real-world workflows. Here, we present Med-PaLM 2, which bridges these gaps with a combination of base LLM improvements, medical domain fine-tuning and new strategies for improving reasoning and grounding through ensemble refinement and chain of retrieval. Med-PaLM 2 scores up to 86.5% on the MedQA dataset, improving upon Med-PaLM by over 19%, and demonstrates dramatic performance increases across MedMCQA, PubMedQA and MMLU clinical topics datasets. Our detailed human evaluations framework shows that physicians prefer Med-PaLM 2 answers to those from other physicians on eight of nine clinical axes. Med-PaLM 2 also demonstrates significant improvements over its predecessor across all evaluation metrics, particularly on new adversarial datasets designed to probe LLM limitations (P < 0.001). In a pilot study using real-world medical questions, specialists preferred Med-PaLM 2 answers to generalist physician answers 65% of the time. While specialist answers were still preferred overall, both specialists and generalists rated Med-PaLM 2 to be as safe as physician answers, demonstrating its growing potential in real-world medical applications.",
+        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
+      },
+      {
+        "source_id": "openalex_w4386501849",
+        "title": "Siren's Song in the AI Ocean: A Survey on Hallucination in Large Language Models",
+        "source_type": "survey",
+        "source_tier": "A",
+        "year": 2023,
+        "authors_or_publisher": "Yue Zhang, Yafu Li, Leyang Cui, Deng Cai",
+        "identifier": "https://openalex.org/W4386501849",
+        "url": "https://arxiv.org/abs/2309.01219",
+        "summary": "While large language models (LLMs) have demonstrated remarkable capabilities across a range of downstream tasks, a significant concern revolves around their propensity to exhibit hallucinations: LLMs occasionally generate content that diverges from the user input, contradicts previously generated context, or misaligns with established world knowledge. This phenomenon poses a substantial challenge to the reliability of LLMs in real-world scenarios. In this paper, we survey recent efforts on the detection, explanation, and mitigation of hallucination, with an emphasis on the unique challenges posed by LLMs. We present taxonomies of the LLM hallucination phenomena and evaluation benchmarks, analyze existing approaches aiming at mitigating LLM hallucination, and discuss potential directions for future research.",
+        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
+      },
+      {
+        "source_id": "openalex_w4388585881",
+        "title": "A Survey on Hallucination in Large Language Models: Principles, Taxonomy, Challenges, and Open Questions",
+        "source_type": "survey",
+        "source_tier": "A",
+        "year": 2023,
+        "authors_or_publisher": "Lei Huang, Weijiang Yu, Weitao Ma, Wei‐Hong Zhong",
+        "identifier": "https://openalex.org/W4388585881",
+        "url": "https://arxiv.org/abs/2311.05232",
+        "summary": "The emergence of large language models (LLMs) has marked a significant breakthrough in natural language processing (NLP), fueling a paradigm shift in information acquisition. Nevertheless, LLMs are prone to hallucination, generating plausible yet nonfactual content. This phenomenon raises significant concerns over the reliability of LLMs in real-world information retrieval (IR) systems and has attracted intensive research to detect and mitigate such hallucinations. Given the open-ended general-purpose attributes inherent to LLMs, LLM hallucinations present distinct challenges that diverge from prior task-specific models. This divergence highlights the urgency for a nuanced understanding and comprehensive overview of recent advances in LLM hallucinations. In this survey, we begin with an innovative taxonomy of hallucination in the era of LLM and then delve into the factors contributing to hallucinations. Subsequently, we present a thorough overview of hallucination detection methods and benchmarks. Our discussion then transfers to representative methodologies for mitigating LLM hallucinations. Additionally, we delve into the current limitations faced by retrieval-augmented LLMs in combating hallucinations, offering insights for developing more robust IR systems. Finally, we highlight the promising research directions on LLM hallucinations, including hallucination in large vision-language models and understanding of knowledge boundaries in LLM hallucinations.",
+        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
+      }
+    ],
+    "landscape_summary": {
+      "themes": [
+        "benchmark design and stress-testing for hallucination detection and grounding evaluation for multimodal medical reasoning",
+        "cross-modal grounding and visual dependence in hallucination detection and grounding evaluation for multimodal medical reasoning",
+        "document QA and report-centric reasoning in hallucination detection and grounding evaluation for multimodal medical reasoning"
+      ],
+      "active_methods": [
+        "benchmark-centered experimental design",
+        "grounding-aware evaluation and error analysis",
+        "document QA baseline comparison"
+      ],
+      "likely_gaps": [
+        "benchmark protocols that distinguish real image use from shortcut exploitation",
+        "trustworthy evaluation signals beyond accuracy-only reporting"
+      ],
+      "saturated_areas": [
+        "broad generic summaries without a sharply defined question"
+      ]
+    },
+    "candidate_topics": [
+      {
+        "candidate_id": "candidate_1",
+        "title": "Benchmark-Guided Narrow Task Definition",
+        "research_question": "How can a narrower benchmark slice expose shortcut behavior and weak multimodal dependence in current systems?",
+        "positioning": "gap-driven",
+        "novelty_note": "Focuses on trustworthy evaluation boundaries, not just raw task accuracy.",
+        "feasibility_note": "Moderate feasibility with public resources and modest compute.",
+        "risk_note": "May become incremental if the task boundary is not sharply differentiated.",
+        "supporting_source_ids": [
+          "openalex_w4319793302",
+          "openalex_w4406152279"
+        ],
+        "open_questions": [
+          "Which benchmark slice best isolates genuine image-grounded reasoning?"
+        ]
+      },
+      {
+        "candidate_id": "candidate_2",
+        "title": "Applied Method Transfer Under Practical Constraints",
+        "research_question": "Can an existing method family be adapted effectively for document-centric clinical reasoning under strict compute and annotation constraints?",
+        "positioning": "applied-transfer",
+        "novelty_note": "Frames novelty through constraint-aware adaptation rather than larger-model gains.",
+        "feasibility_note": "Strong fit for an applied project that needs a visible baseline-to-improvement story.",
+        "risk_note": "Novelty may depend heavily on the chosen constraint and evaluation design.",
+        "supporting_source_ids": [
+          "openalex_w4319793302",
+          "openalex_w4386501849"
+        ],
+        "open_questions": [
+          "Which constraint creates the strongest research signal?"
+        ]
+      },
+      {
+        "candidate_id": "candidate_3",
+        "title": "Tooling And Evaluation Workflow Support",
+        "research_question": "What tooling or evaluation workflow improvements would make research in this area more reproducible?",
+        "positioning": "systems",
+        "novelty_note": "Shifts from model novelty to workflow and evaluation reliability.",
+        "feasibility_note": "Strong feasibility for a short-cycle project with engineering emphasis.",
+        "risk_note": "Applied impact may be clearer than publication novelty unless evaluation endpoints are sharply chosen.",
+        "supporting_source_ids": [
+          "openalex_w4406152279",
+          "openalex_w4386501849"
+        ],
+        "open_questions": [
+          "What workflow support would make trustworthy evaluation and audit trails easier to reproduce?",
+          "What concrete reproducibility pain point should be prioritized first?",
+          "Which workflow improvement reduces compute or setup cost the most?"
+        ]
+      }
+    ],
+    "comparison_result": {
+      "dimensions": [
+        "novelty",
+        "feasibility",
+        "evidence_strength",
+        "data_availability",
+        "implementation_cost",
+        "risk"
+      ],
+      "summary": "Candidate 2 is strongest for applied feasibility under the current constraints, candidate 1 remains strongest on research framing, and candidate 3 remains the fastest engineering path.",
+      "candidate_assessments": [
+        {
+          "candidate_id": "candidate_1",
+          "novelty": "high",
+          "feasibility": "medium",
+          "evidence_strength": "medium_high",
+          "data_availability": "medium",
+          "implementation_cost": "medium",
+          "risk": "medium"
+        },
+        {
+          "candidate_id": "candidate_2",
+          "novelty": "medium_high",
+          "feasibility": "high",
+          "evidence_strength": "medium_high",
+          "data_availability": "medium_high",
+          "implementation_cost": "medium_low",
+          "risk": "medium_low"
+        },
+        {
+          "candidate_id": "candidate_3",
+          "novelty": "medium",
+          "feasibility": "high",
+          "evidence_strength": "medium",
+          "data_availability": "high",
+          "implementation_cost": "low",
+          "risk": "medium_high"
+        }
+      ]
+    },
+    "convergence_result": {
+      "recommended_candidate_id": "candidate_2",
+      "backup_candidate_id": "candidate_1",
+      "rationale": "Candidate 2 is the best fit for the current constraints because it starts from reusable baselines, matches an applied project style, and is easier to execute within a tighter timeline.",
+      "manual_checks": [
+        "Confirm that the selected sub-problem is narrow enough for the available timeline.",
+        "Verify that at least one benchmark or dataset is realistically accessible.",
+        "Check whether the proposed gap is genuinely underexplored rather than a retrieval miss.",
+        "Verify that the topic still has enough novelty signal for the intended venue."
+      ]
+    },
+    "human_confirmations": [],
+    "trace": [
+      {
+        "stage": "frame_problem",
+        "status": "completed",
+        "timestamp": "2026-03-25T13:46:45.438539+00:00",
+        "detail": "Structured the user input into a topic-exploration request."
+      },
+      {
+        "stage": "retrieve_evidence",
+        "status": "completed",
+        "timestamp": "2026-03-25T13:46:45.438552+00:00",
+        "detail": "Retrieved 4 evidence records using the openalex provider."
+      },
+      {
+        "stage": "synthesize_landscape",
+        "status": "completed",
+        "timestamp": "2026-03-25T13:46:45.438557+00:00",
+        "detail": "Organized the current evidence bundle into a lightweight research landscape summary."
+      },
+      {
+        "stage": "generate_candidates",
+        "status": "completed",
+        "timestamp": "2026-03-25T13:46:45.438560+00:00",
+        "detail": "Generated 3 candidate topic directions from the current evidence bundle."
+      },
+      {
+        "stage": "compare_candidates",
+        "status": "completed",
+        "timestamp": "2026-03-25T13:46:45.438563+00:00",
+        "detail": "Produced a structured candidate comparison across fixed MVP dimensions."
+      },
+      {
+        "stage": "converge_recommendation",
+        "status": "completed",
+        "timestamp": "2026-03-25T13:46:45.438567+00:00",
+        "detail": "Produced a recommended next-best option with manual verification checks."
+      }
+    ],
+    "confidence_summary": {
+      "evidence_coverage": "medium",
+      "source_quality": "medium_high",
+      "candidate_separation": "high",
+      "conflict_level": "low",
+      "rationale": [
+        "Evidence coverage is medium based on the current number of retrieved records.",
+        "Source quality is medium_high based on the current source-tier mix.",
+        "Candidate separation is high based on the diversity of candidate positioning.",
+        "Conflict level is low because this development slice does not yet model explicit source disagreement."
+      ]
+    },
+    "evidence_diagnostics": {
+      "requested_provider": "openalex",
+      "used_provider": "openalex",
+      "fallback_used": false,
+      "fallback_reason": null,
+      "record_count": 4,
+      "cache_hit": false
+    }
   }
 ]
