@@ -155,8 +155,8 @@ class OpenAlexEvidenceProvider:
         self.cache_ttl_seconds = cache_ttl_seconds
 
     def retrieve(self, request: TopicAgentExploreRequest) -> TopicAgentEvidenceRetrievalResult:
-        query_text = _build_openalex_query(request)
-        cache_key = _build_cache_key(query_text, self.max_results)
+        query_texts = _build_openalex_queries(request)
+        cache_key = _build_cache_key("||".join(query_texts), self.max_results)
         cached_records = _load_cached_records(
             self.cache_path,
             cache_key,
@@ -174,21 +174,26 @@ class OpenAlexEvidenceProvider:
                     cache_hit=True,
                 ),
             )
-        response = httpx.get(
-            self.api_url,
-            params={
-                "search": query_text,
-                "filter": "has_abstract:true",
-                "per-page": self.max_results,
-            },
-            timeout=self.timeout_seconds,
-            follow_redirects=True,
-            headers={"User-Agent": "research-topic-copilot/0.1"},
-        )
-        response.raise_for_status()
-        payload = response.json()
+        merged_records: list[TopicAgentSourceRecord] = []
+        for query_text in query_texts:
+            response = httpx.get(
+                self.api_url,
+                params={
+                    "search": query_text,
+                    "filter": "has_abstract:true",
+                    "per-page": self.max_results,
+                },
+                timeout=self.timeout_seconds,
+                follow_redirects=True,
+                headers={"User-Agent": "research-topic-copilot/0.1"},
+            )
+            response.raise_for_status()
+            payload = response.json()
+            merged_records.extend(
+                [_normalize_record(record) for record in _parse_openalex_response(payload)]
+            )
         records = _rank_records(
-            [_normalize_record(record) for record in _parse_openalex_response(payload)],
+            _dedupe_records(merged_records),
             request,
             self.max_results,
         )
@@ -345,8 +350,43 @@ def _build_openalex_query(request: TopicAgentExploreRequest) -> str:
     return " ".join(ordered_terms[:8]) or request.interest.strip()
 
 
+def _build_openalex_queries(request: TopicAgentExploreRequest) -> list[str]:
+    base_query = _build_openalex_query(request)
+    core_terms = _core_query_terms(request)
+    domain_terms = [
+        term
+        for term in re.findall(r"[a-z0-9]+", (request.problem_domain or "").lower())
+        if len(term) >= 4
+    ]
+    queries: list[str] = [base_query]
+    if len(core_terms) >= 3:
+        queries.append(" ".join(core_terms[:3] + domain_terms[:2]))
+    if "multimodal" in core_terms and "reasoning" in core_terms:
+        queries.append(" ".join(["multimodal", "reasoning", *domain_terms[:2], "benchmark"]))
+    if "trustworthy" in core_terms:
+        queries.append(" ".join(["trustworthy", "reasoning", *domain_terms[:2], "evaluation"]))
+    deduped_queries: list[str] = []
+    for query in queries:
+        normalized = query.strip()
+        if normalized and normalized not in deduped_queries:
+            deduped_queries.append(normalized)
+    return deduped_queries
+
+
 def _build_cache_key(query_text: str, max_results: int) -> str:
     return f"{query_text.strip().lower()}::max={max_results}"
+
+
+def _dedupe_records(records: list[TopicAgentSourceRecord]) -> list[TopicAgentSourceRecord]:
+    deduped: list[TopicAgentSourceRecord] = []
+    seen_keys: set[str] = set()
+    for record in records:
+        key = (record.identifier or record.url or record.title).strip().lower()
+        if not key or key in seen_keys:
+            continue
+        seen_keys.add(key)
+        deduped.append(record)
+    return deduped
 
 
 def _build_query_terms(request: TopicAgentExploreRequest) -> set[str]:

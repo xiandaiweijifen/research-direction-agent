@@ -294,7 +294,20 @@ def _supporting_source_ids(
     selected = evidence_records[start : start + count]
     if len(selected) < count:
         selected = evidence_records[:count]
-    return [record.source_id for record in selected]
+    ordered_ids: list[str] = []
+    for record in selected:
+        if record.source_id not in ordered_ids:
+            ordered_ids.append(record.source_id)
+    return ordered_ids
+
+
+def _merge_supporting_source_ids(*groups: list[str]) -> list[str]:
+    merged: list[str] = []
+    for group in groups:
+        for source_id in group:
+            if source_id not in merged:
+                merged.append(source_id)
+    return merged
 
 
 def generate_candidates(context: TopicAgentPipelineContext) -> list[TopicAgentCandidateTopic]:
@@ -329,8 +342,10 @@ def generate_candidates(context: TopicAgentPipelineContext) -> list[TopicAgentCa
         novelty_note="Combines known methods with a narrower operating constraint.",
         feasibility_note="Higher feasibility because it can start from existing baselines.",
         risk_note="Novelty may depend heavily on the chosen constraint and evaluation design.",
-        supporting_source_ids=_supporting_source_ids(evidence_records, start=0, count=1)
-        + _supporting_source_ids(evidence_records, start=2, count=1),
+        supporting_source_ids=_merge_supporting_source_ids(
+            _supporting_source_ids(evidence_records, start=0, count=1),
+            _supporting_source_ids(evidence_records, start=2, count=1),
+        ),
         open_questions=["Which constraint creates the strongest research signal?"],
     )
     candidate_3 = TopicAgentCandidateTopic(

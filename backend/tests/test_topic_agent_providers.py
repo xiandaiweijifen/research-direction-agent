@@ -321,6 +321,91 @@ def test_openalex_provider_uses_cache_when_query_key_is_present(workspace_tmp_pa
     assert cached_result.records[0].source_id == "openalex_1"
 
 
+def test_openalex_provider_merges_multi_query_results_and_dedupes(workspace_tmp_path, monkeypatch):
+    request = TopicAgentExploreRequest(
+        interest="trustworthy multimodal reasoning in medical imaging",
+        problem_domain="medical AI",
+        constraints=TopicAgentConstraintSet(preferred_style="applied"),
+    )
+    cache_path = workspace_tmp_path / "topic_agent_openalex_cache.json"
+    provider = OpenAlexEvidenceProvider(cache_path=cache_path, cache_ttl_seconds=3600, max_results=5)
+
+    call_count = {"value": 0}
+
+    class FakeResponse:
+        def __init__(self, payload):
+            self._payload = payload
+
+        def json(self):
+            return self._payload
+
+        def raise_for_status(self):
+            return None
+
+    def fake_http_get(*args, **kwargs):
+        call_count["value"] += 1
+        if call_count["value"] == 1:
+            return FakeResponse(
+                {
+                    "results": [
+                        {
+                            "id": "https://openalex.org/W123",
+                            "display_name": "Medical Multimodal Reasoning Benchmark",
+                            "publication_year": 2025,
+                            "abstract_inverted_index": {
+                                "Medical": [0],
+                                "multimodal": [1],
+                                "reasoning": [2],
+                                "benchmark": [3],
+                            },
+                            "authorships": [{"author": {"display_name": "Jane Doe"}}],
+                            "primary_location": {"landing_page_url": "https://example.org/paper1"},
+                        }
+                    ]
+                }
+            )
+        return FakeResponse(
+            {
+                "results": [
+                    {
+                        "id": "https://openalex.org/W123",
+                        "display_name": "Medical Multimodal Reasoning Benchmark",
+                        "publication_year": 2025,
+                        "abstract_inverted_index": {
+                            "Medical": [0],
+                            "multimodal": [1],
+                            "reasoning": [2],
+                            "benchmark": [3],
+                        },
+                        "authorships": [{"author": {"display_name": "Jane Doe"}}],
+                        "primary_location": {"landing_page_url": "https://example.org/paper1"},
+                    },
+                    {
+                        "id": "https://openalex.org/W456",
+                        "display_name": "Trustworthy Evaluation for Medical Reasoning",
+                        "publication_year": 2024,
+                        "abstract_inverted_index": {
+                            "Trustworthy": [0],
+                            "evaluation": [1],
+                            "medical": [2],
+                            "reasoning": [3],
+                        },
+                        "authorships": [{"author": {"display_name": "John Smith"}}],
+                        "primary_location": {"landing_page_url": "https://example.org/paper2"},
+                    },
+                ]
+            }
+        )
+
+    monkeypatch.setattr("app.services.topic_agent.providers.httpx.get", fake_http_get)
+
+    result = provider.retrieve(request)
+
+    assert call_count["value"] >= 2
+    assert len(result.records) == 2
+    assert result.records[0].source_id == "openalex_1"
+
+
 def test_fallback_provider_returns_mock_records_when_primary_fails():
     class FailingProvider:
         provider_name = "primary"

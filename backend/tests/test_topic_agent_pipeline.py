@@ -134,6 +134,48 @@ def test_topic_agent_pipeline_maps_candidate_supporting_ids_from_current_evidenc
     assert response.candidate_topics[2].supporting_source_ids == ["arxiv_b", "arxiv_c"]
 
 
+def test_topic_agent_pipeline_dedupes_supporting_source_ids_when_evidence_is_sparse():
+    class SparseProvider:
+        provider_name = "static"
+
+        def retrieve(self, request: TopicAgentExploreRequest):
+            records = [
+                TopicAgentSourceRecord(
+                    source_id="openalex_1",
+                    title="Sparse Evidence",
+                    source_type="paper",
+                    source_tier="B",
+                    year=2025,
+                    authors_or_publisher="Author A",
+                    identifier="https://openalex.org/W1",
+                    url="https://example.org/paper1",
+                    summary="A single relevant paper.",
+                    relevance_reason="Test record",
+                )
+            ]
+            return TopicAgentEvidenceRetrievalResult(
+                records=records,
+                diagnostics=TopicAgentEvidenceDiagnostics(
+                    requested_provider="static",
+                    used_provider="static",
+                    fallback_used=False,
+                    fallback_reason=None,
+                    record_count=1,
+                ),
+            )
+
+    request = TopicAgentExploreRequest(
+        interest="medical reasoning",
+        constraints=TopicAgentConstraintSet(),
+    )
+
+    response = run_topic_agent_pipeline(request, provider=SparseProvider())
+
+    assert response.candidate_topics[0].supporting_source_ids == ["openalex_1"]
+    assert response.candidate_topics[1].supporting_source_ids == ["openalex_1"]
+    assert response.candidate_topics[2].supporting_source_ids == ["openalex_1"]
+
+
 def test_topic_agent_pipeline_derives_landscape_and_candidate_cues_from_evidence():
     class EvidenceDrivenProvider:
         provider_name = "static"
