@@ -180,5 +180,6 @@ If measured against this phased plan:
 The current implementation is best described as:
 
 - a focused backend Topic Agent slice with a credible evidence-driven workflow
+- a backend minimum viable closed loop that already supports end-to-end exploratory runs
 - strong enough for design review and manual acceptance discussion
 - still needing explicit confirmation UX and stronger conflict handling before it can be called fully product-complete
