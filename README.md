@@ -68,6 +68,7 @@ Planned system modules:
 - Roadmap: [docs/roadmap.md](/d:/project/research-topic-copilot/docs/roadmap.md)
 - Topic Agent initial design: [docs/topic_agent_design.md](/d:/project/research-topic-copilot/docs/topic_agent_design.md)
 - Topic Agent acceptance plan: [docs/topic_agent_acceptance.md](/d:/project/research-topic-copilot/docs/topic_agent_acceptance.md)
+- Topic Agent MVP plan: [docs/topic_agent_mvp.md](/d:/project/research-topic-copilot/docs/topic_agent_mvp.md)
 
 ## Local Setup
 
@@ -194,6 +195,7 @@ Research Topic Copilot 是一个本地优先的科研选题副驾系统，目标
 - 规划路线：[docs/roadmap.md](/d:/project/research-topic-copilot/docs/roadmap.md)
 - Topic Agent 初步设计：[docs/topic_agent_design.md](/d:/project/research-topic-copilot/docs/topic_agent_design.md)
 - Topic Agent 验收规划：[docs/topic_agent_acceptance.md](/d:/project/research-topic-copilot/docs/topic_agent_acceptance.md)
+- Topic Agent MVP 规划：[docs/topic_agent_mvp.md](/d:/project/research-topic-copilot/docs/topic_agent_mvp.md)
 
 ## 本地启动
 
