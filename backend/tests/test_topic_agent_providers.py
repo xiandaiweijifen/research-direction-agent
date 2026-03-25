@@ -764,6 +764,73 @@ def test_openalex_reranking_prefers_task_specific_benchmarks_over_generic_review
     assert "Building an Ethical and Trustworthy Biomedical AI Ecosystem for the Translational and Clinical Integration of Foundation Models" not in ranked_titles[:2]
 
 
+def test_openalex_reranking_prefers_med_vqa_over_generic_multimodal_overview(workspace_tmp_path, monkeypatch):
+    request = TopicAgentExploreRequest(
+        interest="trustworthy multimodal reasoning in medical imaging",
+        problem_domain="medical AI",
+        constraints=TopicAgentConstraintSet(preferred_style="applied"),
+    )
+    cache_path = workspace_tmp_path / "topic_agent_openalex_cache.json"
+    provider = OpenAlexEvidenceProvider(cache_path=cache_path, cache_ttl_seconds=3600, max_results=5)
+
+    class FakeResponse:
+        def __init__(self, payload):
+            self._payload = payload
+
+        def json(self):
+            return self._payload
+
+        def raise_for_status(self):
+            return None
+
+    payload = {
+        "results": [
+            {
+                "id": "https://openalex.org/W4392881223",
+                "display_name": "The application of multimodal large language models in medicine",
+                "publication_year": 2024,
+                "abstract_inverted_index": {
+                    "multimodal": [0],
+                    "large": [1],
+                    "language": [2],
+                    "models": [3],
+                    "medicine": [4],
+                    "overview": [5],
+                },
+                "authorships": [{"author": {"display_name": "Author A"}}],
+                "primary_location": {"landing_page_url": "https://example.org/overview"},
+            },
+            {
+                "id": "https://openalex.org/W3094950914",
+                "display_name": "Medical Visual Question Answering via Conditional Reasoning",
+                "publication_year": 2020,
+                "abstract_inverted_index": {
+                    "Medical": [0],
+                    "visual": [1],
+                    "question": [2],
+                    "answering": [3],
+                    "conditional": [4],
+                    "reasoning": [5],
+                    "vqa-rad": [6],
+                },
+                "authorships": [{"author": {"display_name": "Author B"}}],
+                "primary_location": {"landing_page_url": "https://example.org/medvqa"},
+            },
+        ]
+    }
+
+    monkeypatch.setattr(
+        "app.services.topic_agent.providers.httpx.get",
+        lambda *args, **kwargs: FakeResponse(payload),
+    )
+
+    result = provider.retrieve(request)
+    ranked_titles = [record.title for record in result.records]
+
+    assert ranked_titles[0] == "Medical Visual Question Answering via Conditional Reasoning"
+    assert "The application of multimodal large language models in medicine" not in ranked_titles[:1]
+
+
 def test_fallback_provider_returns_mock_records_when_primary_fails():
     class FailingProvider:
         provider_name = "primary"

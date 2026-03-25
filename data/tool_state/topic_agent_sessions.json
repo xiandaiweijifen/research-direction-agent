@@ -12357,5 +12357,267 @@
       "record_count": 4,
       "cache_hit": true
     }
+  },
+  {
+    "session_id": "9ea5c170f2f74c959ab5ebea3193e584",
+    "created_at": "2026-03-25T13:37:49.133839+00:00",
+    "updated_at": "2026-03-25T13:37:49.133839+00:00",
+    "user_input": {
+      "interest": "trustworthy multimodal reasoning in medical imaging",
+      "problem_domain": "medical AI",
+      "seed_idea": "I want a narrow and feasible research topic.",
+      "constraints": {
+        "time_budget_months": 6,
+        "resource_level": "student",
+        "preferred_style": "applied",
+        "notes": null
+      }
+    },
+    "framing_result": {
+      "normalized_topic": "trustworthy multimodal reasoning in medical imaging",
+      "extracted_constraints": {
+        "time_budget_months": "6",
+        "resource_level": "student",
+        "preferred_style": "applied"
+      },
+      "missing_clarifications": [],
+      "search_questions": [
+        "What are the main research themes in trustworthy multimodal reasoning in medical imaging?",
+        "What methods and benchmarks are commonly used in trustworthy multimodal reasoning in medical imaging?",
+        "What open problems or underexplored gaps exist in trustworthy multimodal reasoning in medical imaging?"
+      ]
+    },
+    "evidence_records": [
+      {
+        "source_id": "openalex_w4414530509",
+        "title": "Benchmarking GPT-5 for Zero-Shot Multimodal Medical Reasoning in Radiology and Radiation Oncology",
+        "source_type": "benchmark",
+        "source_tier": "A",
+        "year": 2025,
+        "authors_or_publisher": "Mingzhe Hu, Zach Eidex, Shansong Wang, Mojtaba Safari",
+        "identifier": "https://openalex.org/W4414530509",
+        "url": "https://arxiv.org/abs/2508.13192",
+        "summary": "Radiology, radiation oncology, and medical physics require decision-making that integrates medical images, textual reports, and quantitative data under high-stakes conditions. With the introduction of GPT-5, it is critical to assess whether recent advances in large multimodal models translate into measurable gains in these safety-critical domains. We present a targeted zero-shot evaluation of GPT-5 and its smaller variants (GPT-5-mini, GPT-5-nano) against GPT-4o across three representative tasks. We present a targeted zero-shot evaluation of GPT-5 and its smaller variants (GPT-5-mini, GPT-5-nano) against GPT-4o across three representative tasks: (1) VQA-RAD, a benchmark for visual question answering in radiology; (2) SLAKE, a semantically annotated, multilingual VQA dataset testing cross-modal grounding; and (3) a curated Medical Physics Board Examination-style dataset of 150 multiple-choice questions spanning treatment planning, dosimetry, imaging, and quality assurance. Across all datasets, GPT-5 achieved the highest accuracy, with substantial gains over GPT-4o up to +20.00% in challenging anatomical regions such as the chest-mediastinal, +13.60% in lung-focused questions, and +11.44% in brain-tissue interpretation. On the board-style physics questions, GPT-5 attained 90.7% accuracy (136/150), exceeding the estimated human passing threshold, while GPT-4o trailed at 78.0%. These results demonstrate that GPT-5 delivers consistent and often pronounced performance improvements over GPT-4o in both image-grounded reasoning and domain-specific numerical problem-solving, highlighting its potential to augment expert workflows in medical imaging and therapeutic physics.",
+        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
+      },
+      {
+        "source_id": "openalex_w4401863364",
+        "title": "RJUA-MedDQA: A Multimodal Benchmark for Medical Document Question Answering and Clinical Reasoning",
+        "source_type": "benchmark",
+        "source_tier": "A",
+        "year": 2024,
+        "authors_or_publisher": "Congyun Jin, Ming Zhang, Weixiao Ma, Yujiao Li",
+        "identifier": "https://openalex.org/W4401863364",
+        "url": "https://doi.org/10.1145/3637528.3671644",
+        "summary": "Recent advancements in Large Language Models (LLMs) and Large Multi-modal Models (LMMs) have shown potential in various medical applications, such as Intelligent Medical Diagnosis. Although impressive results have been achieved, we find that existing benchmarks do not reflect the complexity of real medical reports and specialized in-depth reasoning capabilities. In this work, we establish a comprehensive benchmark in the field of medical specialization and introduced RJUA-MedDQA, which contains 2000 real-world Chinese medical report images poses several challenges: comprehensively interpreting imgage content across a wide variety of challenging layouts, possessing the numerical reasoning ability to identify abnormal indicators and demonstrating robust clinical reasoning ability to provide the statement of disease diagnosis, status and advice based on a collection of medical contexts. We carefully design the data generation pipeline and proposed the Efficient Structural Restoration Annotation (ESRA) Method, aimed at restoring textual and tabular content in medical report images. This method substantially enhances annotation efficiency, doubling the productivity of each annotator, and yields a 26.8% improvement in accuracy. We conduct extensive evaluations, including few-shot assessments of 5 LMMs which are capable of solving Chinese medical QA tasks. To further investigate the limitations and potential of current LMMs, we conduct comparative experiments on a set of strong LLMs by using image-text generated by ESRA method. We report the performance of baselines and offer several observations: (1) The overall performance of existing LMMs is still limited; however LMMs more robust to low-quality and diverse-structured images compared to LLMs. (3) Reasoning across context and image content present significant challenges. We hope this benchmark helps the community make progress on these challenging tasks in multi-modal medical document understanding and facilitate its application in healthcare. Our dataset will be publicly available for noncommercial use at https://github.com/Alipay-Med/medDQA_benchmark.git",
+        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
+      },
+      {
+        "source_id": "openalex_w3094950914",
+        "title": "Medical Visual Question Answering via Conditional Reasoning",
+        "source_type": "benchmark",
+        "source_tier": "A",
+        "year": 2020,
+        "authors_or_publisher": "Li-Ming Zhan, Bo Liu, Lu Fan, Jiaxin Chen",
+        "identifier": "https://openalex.org/W3094950914",
+        "url": "https://doi.org/10.1145/3394171.3413761",
+        "summary": "Medical visual question answering (Med-VQA) aims to accurately answer a clinical question presented with a medical image. Despite its enormous potential in healthcare industry and services, the technology is still in its infancy and is far from practical use. Med-VQA tasks are highly challenging due to the massive diversity of clinical questions and the disparity of required visual reasoning skills for different types of questions. In this paper, we propose a novel conditional reasoning framework for Med-VQA, aiming to automatically learn effective reasoning skills for various Med-VQA tasks. Particularly, we develop a question-conditioned reasoning module to guide the importance selection over multimodal fusion features. Considering the different nature of closed-ended and open-ended Med-VQA tasks, we further propose a type-conditioned reasoning module to learn a different set of reasoning skills for the two types of tasks separately. Our conditional reasoning framework can be easily applied to existing Med-VQA systems to bring performance gains. In the experiments, we build our system on top of a recent state-of-the-art Med-VQA model and evaluate it on the VQA-RAD benchmark [23]. Remarkably, our system achieves significantly increased accuracy in predicting answers to both closed-ended and open-ended questions, especially for open-ended questions, where a 10.8% increase in absolute accuracy is obtained. The source code can be downloaded from https://github.com/awenbocc/med-vqa.",
+        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
+      },
+      {
+        "source_id": "openalex_w4392881223",
+        "title": "The application of multimodal large language models in medicine",
+        "source_type": "benchmark",
+        "source_tier": "A",
+        "year": 2024,
+        "authors_or_publisher": "Jianing Qiu, Wu Yuan, Kyle Lam",
+        "identifier": "https://openalex.org/W4392881223",
+        "url": "https://doi.org/10.1016/j.lanwpc.2024.101048",
+        "summary": "In September 2023, OpenAI released GPT-4V,1OpenAI GPT-4V(ision) system card.2023https://cdn.openai.com/papers/GPTV_System_Card.pdfDate accessed: October 18, 2023Google Scholar a multimodal foundation model2Qiu J. Li L. Sun J. et al.Large AI models in health informatics: applications, challenges, and the future.IEEE J Biomed Health Inform. 2023; : 1-14Google Scholar,3Moor M. Banerjee O. Abad Z.S.H. et al.Foundation models for generalist medical artificial intelligence.Nature. 2023; 616: 259-265Crossref PubMed Scopus (131) Google Scholar connecting large language models (LLMs) with vision input. Foundation models, defined as large AI models which are trained upon vast datasets that can be later adapted to a range of downstream tasks,4Bommasani R. Hudson D.A. Adeli E. et al.On the opportunities and risks of foundation models.arXiv. 2021; https://doi.org/10.48550/arXiv.2108.07258Crossref Scopus (0) Google Scholar represent the latest wave in AI research. Differing from specific AI models which are trained for a single function, foundation models are designed to be multi-purpose. The most widely known of these are the GPT models, powering ChatGPT, which previously could input language alone. Language represents only a proportion of the data encountered within healthcare and previously this limitation of ‘unimodal’ AI including LLMs has meant that vital data sources such as radiology, endoscopic images and laboratory investigations have not been incorporated. However, OpenAI's latest offering, GPT-4V, allows image input; in conjunction with Whisper,5Radford A. Kim J.W. Xu T. Brockman G. Mcleavey C. Sutskever I. Robust speech recognition via large-scale weak supervision.in: Andreas K. Emma B. Kyunghyun C. Barbara E. Sivan S. Jonathan S. Proceedings of the 40th international conference on machine learning. Proceedings of machine learning Research. PMLR, 2023: 28492-28518Google Scholar an automatic speech recognition system, and text-to-speech generation techniques, this now means that ChatGPT can see, hear, and speak.6OpenAI ChatGPT can now see, hear, and speak.2023https://openai.com/blog/chatgpt-can-now-see-hear-and-speakGoogle Scholar ChatGPT's leap into multimodality therefore opens new horizons for clinical work processes and applications. Here, we highlight four example areas where multimodal LLMs can benefit clinicians in an example scenario of a patient presenting with small bowel obstruction (Fig. 1) and across varying specialties (Supplement). Multimodal LLMs empower LLMs further through seamless transcription and summarisation of speech data, allowing generation of clinical records or letters directly from the doctor-patient consult (Fig. 1); this could reduce the burden of clinical documentation significantly. Secondly, multimodal LLMs build upon existing AI image interpretation through their ability to integrate existing information including the patient's history, indications for imaging, and comparisons with previous imaging, and by offering recommendations (Fig. 1). They can reduce the need for large datasets through their few-shot or zero-shot learning abilities (completing a task through limited or no training examples respectively) and support visual prompting to refine the prediction (for example, a user can manually indicate the region of interest within an image).7Kirillov A. Mintun E. Ravi N. et al.Segment anything.arXiv. 2023; https://doi.org/10.48550/arXiv.2304.02643Crossref Scopus (0) Google Scholar,8Yang Z. Li L. Lin K. et al.The dawn of LMMs: preliminary explorations with GPT-4V(ision)2023.https://ui.adsabs.harvard.edu/abs/2023arXiv230917421YDate accessed: October 18, 2023Google Scholar Thirdly, optical character recognition empowers multimodal LLMs to detect numerical and text (irrespective of the language used) from image input (Fig. 1). Finally, capabilities in video understanding could allow automatic documentation of procedural notes, improving efficiency and accuracy of documentation. Scene understanding–for example identification of anatomical landmarks–could open doors to procedure assistance, augment clinician capabilities, and ultimately lead to improved clinical outcomes. These newfound capabilities of multimodal LLMs also pose newfound challenges for their adoption within healthcare. Hallucinations, where the model outputs incorrect or nonsensical information, are a fundamental issue. In our example, the multimodal ChatGPT outputs an incorrect interpretation of an ECG which is convincing at face-value (Fig. 1). Exploratory studies1OpenAI GPT-4V(ision) system card.2023https://cdn.openai.com/papers/GPTV_System_Card.pdfDate accessed: October 18, 2023Google Scholar,8Yang Z. Li L. Lin K. et al.The dawn of LMMs: preliminary explorations with GPT-4V(ision)2023.https://ui.adsabs.harvard.edu/abs/2023arXiv230917421YDate accessed: October 18, 2023Google Scholar have also shown that GPT-4V can hallucinate while responding to vision-based queries, secondary to either incorrect reasoning from the underlying LLM or incorrect recognition of visual content. Input of increasing numbers of clinical data types is a concern as broader expertise will be required to determine ground truth resulting in greater challenges in identifying the source of hallucinations. Reliability must therefore be improved in order to meet the high threshold required for translation into clinical practice. Secondly, increasing data modalities will lead to greater privacy concerns. The growing size of foundation models threatens the accidental exposure of patient data from the data used within its training process. Data modalities such as speech and video threaten not only the privacy of patients but also clinicians themselves. Finally, regulation of multimodal LLMs presents a significant challenge. While task specific AI requires validation only for the task it is designed for, the emergent intelligence of foundation models (where future capabilities of the model are still to be discovered) demands a rethink for regulators in the approach taken both to test models and mitigate against AI failure. It is likely that foundation models will not fit neatly into existing regulation and require novel custom solutions. This should be a key priority for translation as innovation is likely to outpace regulation. One potential approach is to adapt existing regulation for anticipated downstream applications from the foundation model and monitor for emerging functions, risks, and failures. However, multimodal LLMs are trained on huge amounts of data taken from the internet, and it is difficult for users to know what data are being used to train them. This calls into question the traditional approach of validating models upon public benchmarks as the data used to train the multimodal LLMs may have included these benchmarks. Thus, regulators need to establish isolated validation datasets which are inaccessible to model developers, and conduct independent examinations using such datasets to ensure trustworthy and objective validation. Despite these challenges, multimodal AI powered by foundation models offers significant promise in augmenting the medical workforce in clinical decision-making and management. The release of GPT-4V will spark future endeavours in the responsible development, use, and regulation of multimodal medical AI, and the improvement of AI trustworthiness and accessibility in medicine. The authors declare no competing interests. Funding: Funding and infrastructural support was provided by the NIHR Imperial Biomedical Research Centre. Kyle Lam is supported by a NIHR Academic Clinical Fellowship. Download .docx (.01 MB) Help with docx files Supplementary Table",
+        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
+      }
+    ],
+    "landscape_summary": {
+      "themes": [
+        "benchmark design and stress-testing for trustworthy multimodal reasoning in medical imaging",
+        "cross-modal grounding and visual dependence in trustworthy multimodal reasoning in medical imaging",
+        "document QA and report-centric reasoning in trustworthy multimodal reasoning in medical imaging"
+      ],
+      "active_methods": [
+        "benchmark-centered experimental design",
+        "grounding-aware evaluation and error analysis",
+        "document QA baseline comparison"
+      ],
+      "likely_gaps": [
+        "benchmark protocols that distinguish real image use from shortcut exploitation",
+        "trustworthy evaluation signals beyond accuracy-only reporting"
+      ],
+      "saturated_areas": [
+        "broad generic summaries without a sharply defined question"
+      ]
+    },
+    "candidate_topics": [
+      {
+        "candidate_id": "candidate_1",
+        "title": "Benchmark-Guided Narrow Task Definition",
+        "research_question": "How can a narrower benchmark slice expose shortcut behavior and weak multimodal dependence in current systems?",
+        "positioning": "gap-driven",
+        "novelty_note": "Focuses on trustworthy evaluation boundaries, not just raw task accuracy.",
+        "feasibility_note": "Moderate feasibility with public resources and modest compute.",
+        "risk_note": "May become incremental if the task boundary is not sharply differentiated.",
+        "supporting_source_ids": [
+          "openalex_w4414530509",
+          "openalex_w4401863364"
+        ],
+        "open_questions": [
+          "Which benchmark slice best isolates genuine image-grounded reasoning?",
+          "Would a radiology-focused slice produce a clearer and more feasible evaluation target?"
+        ]
+      },
+      {
+        "candidate_id": "candidate_2",
+        "title": "Applied Method Transfer Under Practical Constraints",
+        "research_question": "Can an existing method family be adapted effectively for document-centric clinical reasoning under strict compute and annotation constraints?",
+        "positioning": "applied-transfer",
+        "novelty_note": "Frames novelty through constraint-aware adaptation rather than larger-model gains.",
+        "feasibility_note": "Strong fit for an applied project that needs a visible baseline-to-improvement story.",
+        "risk_note": "Novelty may depend heavily on the chosen constraint and evaluation design.",
+        "supporting_source_ids": [
+          "openalex_w4414530509",
+          "openalex_w3094950914"
+        ],
+        "open_questions": [
+          "Which constraint creates the strongest research signal?"
+        ]
+      },
+      {
+        "candidate_id": "candidate_3",
+        "title": "Tooling And Evaluation Workflow Support",
+        "research_question": "What tooling or evaluation workflow improvements would make research in this area more reproducible?",
+        "positioning": "systems",
+        "novelty_note": "Shifts from model novelty to workflow and evaluation reliability.",
+        "feasibility_note": "Strong feasibility for a short-cycle project with engineering emphasis.",
+        "risk_note": "Applied impact may be clearer than publication novelty unless evaluation endpoints are sharply chosen.",
+        "supporting_source_ids": [
+          "openalex_w4401863364",
+          "openalex_w3094950914"
+        ],
+        "open_questions": [
+          "What workflow support would make trustworthy evaluation and audit trails easier to reproduce?",
+          "What concrete reproducibility pain point should be prioritized first?",
+          "Which workflow improvement reduces compute or setup cost the most?"
+        ]
+      }
+    ],
+    "comparison_result": {
+      "dimensions": [
+        "novelty",
+        "feasibility",
+        "evidence_strength",
+        "data_availability",
+        "implementation_cost",
+        "risk"
+      ],
+      "summary": "Candidate 2 is strongest for applied feasibility under the current constraints, candidate 1 remains strongest on research framing, and candidate 3 remains the fastest engineering path.",
+      "candidate_assessments": [
+        {
+          "candidate_id": "candidate_1",
+          "novelty": "high",
+          "feasibility": "medium",
+          "evidence_strength": "medium_high",
+          "data_availability": "medium",
+          "implementation_cost": "medium",
+          "risk": "medium"
+        },
+        {
+          "candidate_id": "candidate_2",
+          "novelty": "medium_high",
+          "feasibility": "high",
+          "evidence_strength": "medium_high",
+          "data_availability": "medium_high",
+          "implementation_cost": "medium_low",
+          "risk": "medium_low"
+        },
+        {
+          "candidate_id": "candidate_3",
+          "novelty": "medium",
+          "feasibility": "high",
+          "evidence_strength": "medium",
+          "data_availability": "high",
+          "implementation_cost": "low",
+          "risk": "medium_high"
+        }
+      ]
+    },
+    "convergence_result": {
+      "recommended_candidate_id": "candidate_2",
+      "backup_candidate_id": "candidate_1",
+      "rationale": "Candidate 2 is the best fit for the current constraints because it starts from reusable baselines, matches an applied project style, and is easier to execute within a tighter timeline.",
+      "manual_checks": [
+        "Confirm that the selected sub-problem is narrow enough for the available timeline.",
+        "Verify that at least one benchmark or dataset is realistically accessible.",
+        "Check whether the proposed gap is genuinely underexplored rather than a retrieval miss.",
+        "Verify that the topic still has enough novelty signal for the intended venue."
+      ]
+    },
+    "human_confirmations": [],
+    "trace": [
+      {
+        "stage": "frame_problem",
+        "status": "completed",
+        "timestamp": "2026-03-25T13:37:49.145815+00:00",
+        "detail": "Structured the user input into a topic-exploration request."
+      },
+      {
+        "stage": "retrieve_evidence",
+        "status": "completed",
+        "timestamp": "2026-03-25T13:37:49.145836+00:00",
+        "detail": "Retrieved 4 evidence records using the openalex provider."
+      },
+      {
+        "stage": "synthesize_landscape",
+        "status": "completed",
+        "timestamp": "2026-03-25T13:37:49.145844+00:00",
+        "detail": "Organized the current evidence bundle into a lightweight research landscape summary."
+      },
+      {
+        "stage": "generate_candidates",
+        "status": "completed",
+        "timestamp": "2026-03-25T13:37:49.145850+00:00",
+        "detail": "Generated 3 candidate topic directions from the current evidence bundle."
+      },
+      {
+        "stage": "compare_candidates",
+        "status": "completed",
+        "timestamp": "2026-03-25T13:37:49.145856+00:00",
+        "detail": "Produced a structured candidate comparison across fixed MVP dimensions."
+      },
+      {
+        "stage": "converge_recommendation",
+        "status": "completed",
+        "timestamp": "2026-03-25T13:37:49.145862+00:00",
+        "detail": "Produced a recommended next-best option with manual verification checks."
+      }
+    ],
+    "confidence_summary": {
+      "evidence_coverage": "medium",
+      "source_quality": "high",
+      "candidate_separation": "high",
+      "conflict_level": "low",
+      "rationale": [
+        "Evidence coverage is medium based on the current number of retrieved records.",
+        "Source quality is high based on the current source-tier mix.",
+        "Candidate separation is high based on the diversity of candidate positioning.",
+        "Conflict level is low because this development slice does not yet model explicit source disagreement."
+      ]
+    },
+    "evidence_diagnostics": {
+      "requested_provider": "openalex",
+      "used_provider": "openalex",
+      "fallback_used": false,
+      "fallback_reason": null,
+      "record_count": 4,
+      "cache_hit": true
+    }
   }
 ]

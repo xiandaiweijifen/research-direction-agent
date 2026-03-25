@@ -540,7 +540,10 @@ def _task_specificity_score(
     benchmark_terms = {
         "benchmark",
         "vqa",
+        "vqa-rad",
+        "med-vqa",
         "question answering",
+        "conditional reasoning",
         "document",
         "report",
         "grounding",
@@ -561,6 +564,9 @@ def _task_specificity_score(
         "foundation models",
         "application of",
         "applications of",
+        "overview",
+        "highlight",
+        "highlight four example areas",
     }
 
     if "reasoning" in core_terms:
@@ -598,7 +604,11 @@ def _task_specificity_score(
     if _contains_any(haystack, generic_review_terms) and not _contains_any(haystack, benchmark_terms):
         score -= 8
     if title_lower.startswith("the application of"):
-        score -= 6
+        score -= 12
+    if "foundation models" in title_lower:
+        score -= 4
+    if "large language models" in title_lower and not _contains_any(title_lower, {"question answering", "vqa", "reasoning", "radiology"}):
+        score -= 3
     return score
 
 
