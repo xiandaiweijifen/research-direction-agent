@@ -263,10 +263,18 @@ textarea {
   background: rgba(255, 251, 245, 0.88);
 }
 
+.summary-card-emphasis {
+  background:
+    linear-gradient(180deg, rgba(247, 227, 217, 0.9), rgba(255, 248, 240, 0.92)),
+    rgba(255, 251, 245, 0.88);
+  border-color: rgba(159, 58, 29, 0.22);
+}
+
 .summary-card strong {
   display: block;
   margin-top: 10px;
-  font-size: 1.55rem;
+  font-size: 1.3rem;
+  line-height: 1.25;
 }
 
 .tab-row {
@@ -1112,6 +1120,32 @@ textarea {
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
 }
 
+.comparison-card {
+  align-content: start;
+}
+
+.comparison-metric-grid {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.comparison-metric {
+  display: grid;
+  gap: 6px;
+  padding: 10px 12px;
+  border: 1px solid rgba(31, 41, 51, 0.08);
+  border-radius: 14px;
+  background: rgba(255, 252, 245, 0.9);
+}
+
+.comparison-metric strong {
+  font-size: 0.96rem;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
 .trace-card {
   display: grid;
   gap: 10px;
@@ -1426,6 +1460,10 @@ textarea {
   }
 
   .summary-strip {
+    grid-template-columns: 1fr;
+  }
+
+  .comparison-metric-grid {
     grid-template-columns: 1fr;
   }
 

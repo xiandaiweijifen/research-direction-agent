@@ -185,9 +185,9 @@ describe("TopicWorkspaceV2", () => {
     expect(screen.getByText("Recent Sessions")).toBeInTheDocument();
     expect(screen.getByText("2 topics")).toBeInTheDocument();
     expect(screen.getByText("Candidate Comparison")).toBeInTheDocument();
-    expect(
-      screen.getByText("Feasibility: medium | Evidence: medium_high"),
-    ).toBeInTheDocument();
+    expect(screen.getByText("Best balance.")).toBeInTheDocument();
+    expect(screen.getByText("Check benchmark availability.")).toBeInTheDocument();
+    expect(screen.getAllByText("medium_high").length).toBeGreaterThan(0);
     expect(screen.getAllByText("Supporting Evidence").length).toBeGreaterThan(0);
     expect(screen.getByText("source_1: Recent Survey")).toBeInTheDocument();
     expect(screen.getByText("source_2: Open Repo")).toBeInTheDocument();

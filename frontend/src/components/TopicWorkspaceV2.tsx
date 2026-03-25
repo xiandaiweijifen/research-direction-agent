@@ -184,6 +184,9 @@ export function TopicWorkspaceV2({
   const resolveAssessmentTitle = (assessment: TopicAgentComparisonAssessment) =>
     candidateTitleById.get(assessment.candidate_id) ?? assessment.candidate_id;
 
+  const resolveCandidateLabel = (candidateId?: string | null) =>
+    (candidateId ? candidateTitleById.get(candidateId) : null) ?? candidateId ?? "-";
+
   const handleFocusEvidence = (record: TopicAgentSourceRecord) => {
     setFocusedEvidenceId(record.source_id);
   };
@@ -284,7 +287,9 @@ export function TopicWorkspaceV2({
                     {session.candidate_count} {copy.topicCount}
                   </span>
                 </div>
-                <p className="trace-detail">{session.recommended_candidate_id ?? "-"}</p>
+                <p className="trace-detail">
+                  {resolveCandidateLabel(session.recommended_candidate_id)}
+                </p>
                 <div className="button-row">
                   <button
                     type="button"
@@ -574,13 +579,17 @@ export function TopicWorkspaceV2({
               </div>
             </div>
             <div className="summary-strip">
-              <div className="summary-card">
+              <div className="summary-card summary-card-emphasis">
                 <span>{copy.recommendation}</span>
-                <strong>{topicResult.convergence_result.recommended_candidate_id}</strong>
+                <strong>
+                  {resolveCandidateLabel(topicResult.convergence_result.recommended_candidate_id)}
+                </strong>
               </div>
               <div className="summary-card">
                 <span>{copy.backup}</span>
-                <strong>{topicResult.convergence_result.backup_candidate_id ?? "-"}</strong>
+                <strong>
+                  {resolveCandidateLabel(topicResult.convergence_result.backup_candidate_id)}
+                </strong>
               </div>
               <div className="summary-card">
                 <span>{copy.confidence}</span>
@@ -601,14 +610,14 @@ export function TopicWorkspaceV2({
                 ))}
               </div>
             </article>
-            <div className="trace-list">
-              {topicResult.convergence_result.manual_checks.map((check) => (
-                <article key={check} className="trace-card">
-                  <span className="trace-label">{copy.manualChecks}</span>
-                  <p className="trace-detail">{check}</p>
-                </article>
-              ))}
-            </div>
+            <article className="subsection-card">
+              <span className="trace-label">{copy.manualChecks}</span>
+              <div className="list-block">
+                {topicResult.convergence_result.manual_checks.map((check) => (
+                  <p key={check}>{check}</p>
+                ))}
+              </div>
+            </article>
             <div className="panel-heading">
               <div>
                 <h2>{copy.candidateScores}</h2>
@@ -619,19 +628,37 @@ export function TopicWorkspaceV2({
             </div>
             <div className="trace-list candidate-grid">
               {topicResult.comparison_result.candidate_assessments.map((assessment) => (
-                <article key={assessment.candidate_id} className="trace-card">
+                <article key={assessment.candidate_id} className="trace-card comparison-card">
                   <div className="trace-meta-row">
                     <strong>{resolveAssessmentTitle(assessment)}</strong>
                     <span className="status-chip">{assessment.novelty}</span>
                   </div>
-                  <p className="trace-detail">
-                    Feasibility: {assessment.feasibility} | Evidence:{" "}
-                    {assessment.evidence_strength}
-                  </p>
-                  <p className="trace-detail">
-                    Data: {assessment.data_availability} | Cost:{" "}
-                    {assessment.implementation_cost} | Risk: {assessment.risk}
-                  </p>
+                  <div className="comparison-metric-grid">
+                    <div className="comparison-metric">
+                      <span className="trace-label">Novelty</span>
+                      <strong>{assessment.novelty}</strong>
+                    </div>
+                    <div className="comparison-metric">
+                      <span className="trace-label">Feasibility</span>
+                      <strong>{assessment.feasibility}</strong>
+                    </div>
+                    <div className="comparison-metric">
+                      <span className="trace-label">Evidence</span>
+                      <strong>{assessment.evidence_strength}</strong>
+                    </div>
+                    <div className="comparison-metric">
+                      <span className="trace-label">Data</span>
+                      <strong>{assessment.data_availability}</strong>
+                    </div>
+                    <div className="comparison-metric">
+                      <span className="trace-label">Cost</span>
+                      <strong>{assessment.implementation_cost}</strong>
+                    </div>
+                    <div className="comparison-metric">
+                      <span className="trace-label">Risk</span>
+                      <strong>{assessment.risk}</strong>
+                    </div>
+                  </div>
                 </article>
               ))}
             </div>
