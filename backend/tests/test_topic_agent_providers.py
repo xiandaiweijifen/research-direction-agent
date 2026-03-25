@@ -184,8 +184,8 @@ def test_arxiv_provider_ranking_prefers_records_with_query_term_overlap():
 
     ranked_records = _rank_records(records, request, max_results=3)
 
-    assert ranked_records[0].title == "Trustworthy Multimodal Medical Reasoning"
-    assert ranked_records[1].title == "Medical Multimodal Reasoning Benchmark"
+    assert ranked_records[0].title == "Medical Multimodal Reasoning Benchmark"
+    assert ranked_records[1].title == "Trustworthy Multimodal Medical Reasoning"
 
 
 def test_filter_ranked_records_prefers_core_term_overlap():
@@ -469,6 +469,94 @@ def test_openalex_provider_merges_multi_query_results_and_dedupes(workspace_tmp_
     assert call_count["value"] >= 2
     assert len(result.records) == 2
     assert {record.source_id for record in result.records} == {"openalex_w123", "openalex_w456"}
+
+
+def test_openalex_reranking_prefers_task_specific_benchmarks_over_generic_reviews(workspace_tmp_path, monkeypatch):
+    request = TopicAgentExploreRequest(
+        interest="trustworthy multimodal reasoning in medical imaging",
+        problem_domain="medical AI",
+        constraints=TopicAgentConstraintSet(preferred_style="applied"),
+    )
+    cache_path = workspace_tmp_path / "topic_agent_openalex_cache.json"
+    provider = OpenAlexEvidenceProvider(cache_path=cache_path, cache_ttl_seconds=3600, max_results=5)
+
+    class FakeResponse:
+        def __init__(self, payload):
+            self._payload = payload
+
+        def json(self):
+            return self._payload
+
+        def raise_for_status(self):
+            return None
+
+    payload = {
+        "results": [
+            {
+                "id": "https://openalex.org/W4402987506",
+                "display_name": "Building an Ethical and Trustworthy Biomedical AI Ecosystem for the Translational and Clinical Integration of Foundation Models",
+                "publication_year": 2024,
+                "abstract_inverted_index": {
+                    "Ethical": [0],
+                    "and": [1],
+                    "trustworthy": [2],
+                    "biomedical": [3],
+                    "AI": [4],
+                    "ecosystem": [5],
+                    "for": [6],
+                    "clinical": [7],
+                    "integration": [8],
+                },
+                "authorships": [{"author": {"display_name": "Author A"}}],
+                "primary_location": {"landing_page_url": "https://example.org/review"},
+            },
+            {
+                "id": "https://openalex.org/W4414530509",
+                "display_name": "Benchmarking GPT-5 for Zero-Shot Multimodal Medical Reasoning in Radiology and Radiation Oncology",
+                "publication_year": 2025,
+                "abstract_inverted_index": {
+                    "Benchmarking": [0],
+                    "zero-shot": [1],
+                    "multimodal": [2],
+                    "medical": [3],
+                    "reasoning": [4],
+                    "radiology": [5],
+                    "grounding": [6],
+                },
+                "authorships": [{"author": {"display_name": "Author B"}}],
+                "primary_location": {"landing_page_url": "https://example.org/benchmark"},
+            },
+            {
+                "id": "https://openalex.org/W4401863364",
+                "display_name": "RJUA-MedDQA: A Multimodal Benchmark for Medical Document Question Answering and Clinical Reasoning",
+                "publication_year": 2024,
+                "abstract_inverted_index": {
+                    "Multimodal": [0],
+                    "benchmark": [1],
+                    "medical": [2],
+                    "document": [3],
+                    "question": [4],
+                    "answering": [5],
+                    "clinical": [6],
+                    "reasoning": [7],
+                },
+                "authorships": [{"author": {"display_name": "Author C"}}],
+                "primary_location": {"landing_page_url": "https://example.org/docqa"},
+            },
+        ]
+    }
+
+    monkeypatch.setattr(
+        "app.services.topic_agent.providers.httpx.get",
+        lambda *args, **kwargs: FakeResponse(payload),
+    )
+
+    result = provider.retrieve(request)
+    ranked_titles = [record.title for record in result.records]
+
+    assert ranked_titles[0] == "Benchmarking GPT-5 for Zero-Shot Multimodal Medical Reasoning in Radiology and Radiation Oncology"
+    assert ranked_titles[1] == "RJUA-MedDQA: A Multimodal Benchmark for Medical Document Question Answering and Clinical Reasoning"
+    assert "Building an Ethical and Trustworthy Biomedical AI Ecosystem for the Translational and Clinical Integration of Foundation Models" not in ranked_titles[:2]
 
 
 def test_fallback_provider_returns_mock_records_when_primary_fails():

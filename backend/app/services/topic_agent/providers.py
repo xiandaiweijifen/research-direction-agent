@@ -437,10 +437,89 @@ def _interest_signal_terms(request: TopicAgentExploreRequest) -> list[str]:
     ]
 
 
+def _contains_any(text: str, terms: set[str]) -> bool:
+    return any(term in text for term in terms)
+
+
+def _task_specificity_score(
+    record: TopicAgentSourceRecord,
+    request: TopicAgentExploreRequest,
+) -> int:
+    title_lower = record.title.lower()
+    haystack = f"{title_lower} {record.summary.lower()}"
+    core_terms = set(_core_query_terms(request))
+    score = 0
+
+    benchmark_terms = {
+        "benchmark",
+        "vqa",
+        "question answering",
+        "document",
+        "report",
+        "grounding",
+        "radiology",
+        "x-ray",
+        "zero-shot",
+        "zero shot",
+        "clinical reasoning",
+    }
+    generic_review_terms = {
+        "ecosystem",
+        "integration",
+        "regulation",
+        "stewardship",
+        "co-design",
+        "translational",
+        "translation",
+        "foundation models",
+        "application of",
+        "applications of",
+    }
+
+    if "reasoning" in core_terms:
+        for term in benchmark_terms:
+            if term in title_lower:
+                score += 5
+            elif term in haystack:
+                score += 2
+    if "trustworthy" in core_terms:
+        for term in {"trustworthy", "reliability", "safety", "grounding", "hallucination", "evaluation"}:
+            if term in title_lower:
+                score += 4
+            elif term in haystack:
+                score += 2
+    if "multimodal" in core_terms:
+        for term in {"multimodal", "cross-modal", "image-grounded", "image-text", "visual question answering", "vqa"}:
+            if term in title_lower:
+                score += 3
+            elif term in haystack:
+                score += 1
+    if _contains_any((request.problem_domain or "").lower(), {"medical", "biomedical", "clinical", "radiology"}):
+        for term in {"radiology", "clinical", "x-ray", "oncology", "medical report"}:
+            if term in title_lower:
+                score += 3
+            elif term in haystack:
+                score += 1
+
+    if record.source_type == "benchmark":
+        score += 8
+    elif record.source_type == "survey":
+        score -= 2
+    if record.source_tier == "A":
+        score += 3
+
+    if _contains_any(haystack, generic_review_terms) and not _contains_any(haystack, benchmark_terms):
+        score -= 8
+    if title_lower.startswith("the application of"):
+        score -= 6
+    return score
+
+
 def _score_record(
     record: TopicAgentSourceRecord,
     query_terms: set[str],
     core_terms: list[str],
+    request: TopicAgentExploreRequest,
 ) -> int:
     title_lower = record.title.lower()
     haystack = f"{title_lower} {record.summary.lower()}"
@@ -463,6 +542,7 @@ def _score_record(
         score += 4
     matched_core_terms = sum(1 for term in core_terms if term in haystack)
     score += matched_core_terms * 3
+    score += _task_specificity_score(record, request)
     return score
 
 
@@ -517,7 +597,8 @@ def _rank_records(
     scored_records = sorted(
         records,
         key=lambda record: (
-            _score_record(record, query_terms, core_terms),
+            _score_record(record, query_terms, core_terms, request),
+            1 if record.source_tier == "A" else 0,
             record.year,
         ),
         reverse=True,
