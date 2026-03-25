@@ -163,6 +163,9 @@ class OpenAlexEvidenceProvider:
             self.cache_ttl_seconds,
         )
         if cached_records:
+            cached_records, changed = _normalize_openalex_cached_records(cached_records)
+            if changed:
+                _save_cached_records(self.cache_path, cache_key, cached_records)
             return TopicAgentEvidenceRetrievalResult(
                 records=cached_records,
                 diagnostics=TopicAgentEvidenceDiagnostics(
@@ -483,6 +486,25 @@ def _normalize_record(record: TopicAgentSourceRecord) -> TopicAgentSourceRecord:
             "summary": _clean_xml_text(record.summary),
         }
     )
+
+
+def _normalize_openalex_cached_records(
+    records: list[TopicAgentSourceRecord],
+) -> tuple[list[TopicAgentSourceRecord], bool]:
+    normalized_records: list[TopicAgentSourceRecord] = []
+    changed = False
+    for index, record in enumerate(records, start=1):
+        raw_identifier = record.identifier or record.url
+        stable_source_id = _build_openalex_source_id(raw_identifier, index)
+        if stable_source_id != record.source_id:
+            normalized_records.append(record.model_copy(update={"source_id": stable_source_id}))
+            changed = True
+        else:
+            normalized_records.append(record)
+    deduped_records = _dedupe_records(normalized_records)
+    if len(deduped_records) != len(normalized_records):
+        changed = True
+    return deduped_records, changed
 
 
 def _rank_records(

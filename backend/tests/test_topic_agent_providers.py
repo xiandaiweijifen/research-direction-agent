@@ -322,6 +322,70 @@ def test_openalex_provider_uses_cache_when_query_key_is_present(workspace_tmp_pa
     assert cached_result.records[0].source_id == "openalex_w123"
 
 
+def test_openalex_provider_normalizes_legacy_cached_source_ids(workspace_tmp_path):
+    request = TopicAgentExploreRequest(
+        interest="trustworthy multimodal reasoning in medical imaging",
+        problem_domain="medical AI",
+        constraints=TopicAgentConstraintSet(preferred_style="applied"),
+    )
+    cache_path = workspace_tmp_path / "topic_agent_openalex_cache.json"
+    provider = OpenAlexEvidenceProvider(cache_path=cache_path, cache_ttl_seconds=3600)
+    cache_key = (
+        "trustworthy multimodal reasoning medical imaging applied||"
+        "trustworthy multimodal reasoning medical||"
+        "multimodal reasoning medical benchmark||"
+        "trustworthy reasoning medical evaluation::max=5"
+    )
+    cache_path.write_text(
+        """
+        {
+          "trustworthy multimodal reasoning medical imaging applied||trustworthy multimodal reasoning medical||multimodal reasoning medical benchmark||trustworthy reasoning medical evaluation::max=5": {
+            "saved_at": "2026-03-25T20:48:24.956512+08:00",
+            "records": [
+              {
+                "source_id": "openalex_2",
+                "title": "Building an Ethical and Trustworthy Biomedical AI Ecosystem",
+                "source_type": "paper",
+                "source_tier": "B",
+                "year": 2024,
+                "authors_or_publisher": "Author A",
+                "identifier": "https://openalex.org/W4402987506",
+                "url": "https://doi.org/10.3390/example",
+                "summary": "Summary A",
+                "relevance_reason": "Test"
+              },
+              {
+                "source_id": "openalex_2",
+                "title": "Benchmarking GPT-5 for Zero-Shot Multimodal Medical Reasoning in Radiology and Radiation Oncology",
+                "source_type": "benchmark",
+                "source_tier": "A",
+                "year": 2025,
+                "authors_or_publisher": "Author B",
+                "identifier": "https://openalex.org/W4414530509",
+                "url": "https://arxiv.org/abs/2508.13192",
+                "summary": "Summary B",
+                "relevance_reason": "Test"
+              }
+            ]
+          }
+        }
+        """.strip(),
+        encoding="utf-8",
+    )
+
+    result = provider.retrieve(request)
+
+    assert result.diagnostics.cache_hit is True
+    assert [record.source_id for record in result.records] == [
+        "openalex_w4402987506",
+        "openalex_w4414530509",
+    ]
+    normalized_cache = cache_path.read_text(encoding="utf-8")
+    assert "openalex_w4402987506" in normalized_cache
+    assert "openalex_w4414530509" in normalized_cache
+    assert cache_key in normalized_cache
+
+
 def test_openalex_provider_merges_multi_query_results_and_dedupes(workspace_tmp_path, monkeypatch):
     request = TopicAgentExploreRequest(
         interest="trustworthy multimodal reasoning in medical imaging",

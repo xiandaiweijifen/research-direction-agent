@@ -17,10 +17,10 @@
     ]
   },
   "trustworthy multimodal reasoning medical imaging applied||trustworthy multimodal reasoning medical||multimodal reasoning medical benchmark||trustworthy reasoning medical evaluation::max=5": {
-    "saved_at": "2026-03-25T20:48:24.956512+08:00",
+    "saved_at": "2026-03-25T21:02:30.139235+08:00",
     "records": [
       {
-        "source_id": "openalex_2",
+        "source_id": "openalex_w4402987506",
         "title": "Building an Ethical and Trustworthy Biomedical AI Ecosystem for the Translational and Clinical Integration of Foundation Models",
         "source_type": "paper",
         "source_tier": "B",
@@ -32,7 +32,7 @@
         "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
       },
       {
-        "source_id": "openalex_5",
+        "source_id": "openalex_w4407153981",
         "title": "A Proactive Agent Collaborative Framework for Zero‐Shot Multimodal Medical Reasoning",
         "source_type": "paper",
         "source_tier": "B",
@@ -44,7 +44,7 @@
         "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
       },
       {
-        "source_id": "openalex_2",
+        "source_id": "openalex_w4414530509",
         "title": "Benchmarking GPT-5 for Zero-Shot Multimodal Medical Reasoning in Radiology and Radiation Oncology",
         "source_type": "benchmark",
         "source_tier": "A",
@@ -56,7 +56,7 @@
         "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
       },
       {
-        "source_id": "openalex_3",
+        "source_id": "openalex_w4392881223",
         "title": "The application of multimodal large language models in medicine",
         "source_type": "benchmark",
         "source_tier": "A",
@@ -68,7 +68,7 @@
         "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
       },
       {
-        "source_id": "openalex_1",
+        "source_id": "openalex_w4401863364",
         "title": "RJUA-MedDQA: A Multimodal Benchmark for Medical Document Question Answering and Clinical Reasoning",
         "source_type": "benchmark",
         "source_tier": "A",
