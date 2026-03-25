@@ -625,5 +625,6 @@ def run_topic_agent_pipeline(
             fallback_used=False,
             fallback_reason=None,
             record_count=len(context.evidence_records or []),
+            cache_hit=False,
         ),
     )

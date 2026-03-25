@@ -5971,5 +5971,499 @@
       "fallback_reason": null,
       "record_count": 3
     }
+  },
+  {
+    "session_id": "41d31c0ee2f243c38ae1721d4da1e141",
+    "created_at": "2026-03-25T12:16:42.158974+00:00",
+    "updated_at": "2026-03-25T12:16:42.158974+00:00",
+    "user_input": {
+      "interest": "trustworthy multimodal reasoning in medical imaging",
+      "problem_domain": "medical AI",
+      "seed_idea": "I want a narrow and feasible research topic.",
+      "constraints": {
+        "time_budget_months": 6,
+        "resource_level": "student",
+        "preferred_style": "benchmark-driven",
+        "notes": null
+      }
+    },
+    "framing_result": {
+      "normalized_topic": "trustworthy multimodal reasoning in medical imaging",
+      "extracted_constraints": {
+        "time_budget_months": "6",
+        "resource_level": "student",
+        "preferred_style": "benchmark-driven"
+      },
+      "missing_clarifications": [],
+      "search_questions": [
+        "What are the main research themes in trustworthy multimodal reasoning in medical imaging?",
+        "What methods and benchmarks are commonly used in trustworthy multimodal reasoning in medical imaging?",
+        "What open problems or underexplored gaps exist in trustworthy multimodal reasoning in medical imaging?"
+      ]
+    },
+    "evidence_records": [
+      {
+        "source_id": "arxiv_3",
+        "title": "Liver Segmentation from Multimodal Images using HED-Mask R-CNN",
+        "source_type": "paper",
+        "source_tier": "B",
+        "year": 2019,
+        "authors_or_publisher": "Supriti Mulay, Deepika G, Jeevakala S, Keerthi Ram",
+        "identifier": "https://arxiv.org/abs/1910.10504v1",
+        "url": "https://arxiv.org/abs/1910.10504v1",
+        "summary": "Precise segmentation of the liver is critical for computer-aided diagnosis such as pre-evaluation of the liver for living donor-based transplantation surgery. This task is challenging due to the weak boundaries of organs, countless anatomical variations, and the complexity of the background. Computed tomography (CT) scanning and magnetic resonance imaging (MRI) images have different parameters and settings. Thus, images acquired from different modalities differ from one another making liver segmentation challenging task. We propose an efficient liver segmentation with the combination of holistically-nested edge detection (HED) and the Mask-region-convolutional neural network (R-CNN) to address these challenges. The proposed HED-Mask R-CNN approach is based on effective identification of edge maps from multimodal images. The proposed system firstly applies a preprocessing step of image enhancement to get the 'primal sketches' of the abdomen. Then the HED network is applied to enhanced CT and MRI modality images to get a better edge map. Finally, the Mask R-CNN is used to segment the liver from edge map images. We used a dataset of 20 CT patients and 9 MR patients from the CHAOS challenge. The system is trained on CT and MRI images separately and then converted to 2D slices. We significantly improved the segmentation accuracy of CT and MRI images on a database with a Dice value of 0.94 for CT, 0.89 for T2-weighted MRI and 0.91 for T1-weighted MRI.",
+        "relevance_reason": "Retrieved from arXiv as a public academic source for the current topic query."
+      },
+      {
+        "source_id": "arxiv_2",
+        "title": "SADM: Sequence-Aware Diffusion Model for Longitudinal Medical Image Generation",
+        "source_type": "paper",
+        "source_tier": "B",
+        "year": 2022,
+        "authors_or_publisher": "Jee Seok Yoon, Chenghao Zhang, Heung-Il Suk, Jia Guo",
+        "identifier": "https://arxiv.org/abs/2212.08228v2",
+        "url": "https://arxiv.org/abs/2212.08228v2",
+        "summary": "Human organs constantly undergo anatomical changes due to a complex mix of short-term (e.g., heartbeat) and long-term (e.g., aging) factors. Evidently, prior knowledge of these factors will be beneficial when modeling their future state, i.e., via image generation. However, most of the medical image generation tasks only rely on the input from a single image, thus ignoring the sequential dependency even when longitudinal data is available. Sequence-aware deep generative models, where model input is a sequence of ordered and timestamped images, are still underexplored in the medical imaging domain that is featured by several unique challenges: 1) Sequences with various lengths; 2) Missing data or frame, and 3) High dimensionality. To this end, we propose a sequence-aware diffusion model (SADM) for the generation of longitudinal medical images. Recently, diffusion models have shown promising results in high-fidelity image generation. Our method extends this new technique by introducing a sequence-aware transformer as the conditional module in a diffusion model. The novel design enables learning longitudinal dependency even with missing data during training and allows autoregressive generation of a sequence of images during inference. Our extensive experiments on 3D longitudinal medical images demonstrate the effectiveness of SADM compared with baselines and alternative methods. The code is available at https://github.com/ubc-tea/SADM-Longitudinal-Medical-Image-Generation.",
+        "relevance_reason": "Retrieved from arXiv as a public academic source for the current topic query."
+      },
+      {
+        "source_id": "arxiv_1",
+        "title": "Automatic Landmarks Correspondence Detection in Medical Images with an Application to Deformable Image Registration",
+        "source_type": "paper",
+        "source_tier": "B",
+        "year": 2021,
+        "authors_or_publisher": "Monika Grewal, Jan Wiersma, Henrike Westerveld, Peter A. N. Bosman",
+        "identifier": "https://arxiv.org/abs/2109.02722v2",
+        "url": "https://arxiv.org/abs/2109.02722v2",
+        "summary": "Purpose: Deformable Image Registration (DIR) can benefit from additional guidance using corresponding landmarks in the images. However, the benefits thereof are largely understudied, especially due to the lack of automatic landmark detection methods for three-dimensional (3D) medical images. Approach: We present a Deep Convolutional Neural Network (DCNN), called DCNN-Match, that learns to predict landmark correspondences in 3D images in a self-supervised manner. We trained DCNN-Match on pairs of Computed Tomography (CT) scans containing simulated deformations. We explored five variants of DCNN-Match that use different loss functions and assessed their effect on the spatial density of predicted landmarks and the associated matching errors. We also tested DCNN-Match variants in combination with the open-source registration software Elastix to assess the impact of predicted landmarks in providing additional guidance to DIR. Results: We tested our approach on lower-abdominal CT scans from cervical cancer patients: 121 pairs containing simulated deformations and 11 pairs demonstrating clinical deformations. The results showed significant improvement in DIR performance when landmark correspondences predicted by DCNN-Match were used in the case of simulated (p = $0e^0$) as well as clinical deformations (p = 0.030). We also observed that the spatial density of the automatic landmarks with respect to the underlying deformation affect the extent of improvement in DIR. Finally, DCNN-Match was found to generalize to Magnetic Resonance Imaging (MRI) scans without requiring retraining, indicating easy applicability to other datasets. Conclusions: DCNN-Match learns to predict landmark correspondences in 3D medical images in a self-supervised manner, which can improve DIR performance.",
+        "relevance_reason": "Retrieved from arXiv as a public academic source for the current topic query."
+      }
+    ],
+    "landscape_summary": {
+      "themes": [
+        "from as an emerging theme in trustworthy multimodal reasoning in medical imaging",
+        "liver as an emerging theme in trustworthy multimodal reasoning in medical imaging",
+        "generation as an emerging theme in trustworthy multimodal reasoning in medical imaging"
+      ],
+      "active_methods": [
+        "sequence aware",
+        "sadm sequence",
+        "multimodal mask"
+      ],
+      "likely_gaps": [
+        "clear task scoping for narrow research questions",
+        "stronger evidence on feasibility under limited resources"
+      ],
+      "saturated_areas": [
+        "broad generic summaries without a sharply defined question"
+      ]
+    },
+    "candidate_topics": [
+      {
+        "candidate_id": "candidate_1",
+        "title": "Benchmark-Guided Narrow Task Definition",
+        "research_question": "How can a narrower benchmark task reveal actionable limitations in current methods?",
+        "positioning": "benchmark-gap",
+        "novelty_note": "Targets benchmark slicing and evaluation boundary design as the main source of research value.",
+        "feasibility_note": "Moderate feasibility with public resources and modest compute.",
+        "risk_note": "May become incremental if the task boundary is not sharply differentiated.",
+        "supporting_source_ids": [
+          "arxiv_3",
+          "arxiv_2"
+        ],
+        "open_questions": [
+          "Which benchmark subset best represents the intended problem?"
+        ]
+      },
+      {
+        "candidate_id": "candidate_2",
+        "title": "Method Transfer Under Practical Constraints",
+        "research_question": "Can an existing method family be adapted effectively under strict compute and annotation constraints?",
+        "positioning": "transfer",
+        "novelty_note": "Frames novelty through constraint-aware adaptation rather than larger-model gains.",
+        "feasibility_note": "Higher feasibility because it can start from existing baselines.",
+        "risk_note": "Novelty may depend heavily on the chosen constraint and evaluation design.",
+        "supporting_source_ids": [
+          "arxiv_3",
+          "arxiv_1"
+        ],
+        "open_questions": [
+          "Which constraint creates the strongest research signal?"
+        ]
+      },
+      {
+        "candidate_id": "candidate_3",
+        "title": "Tooling And Evaluation Workflow Support",
+        "research_question": "What tooling or evaluation workflow improvements would make research in this area more reproducible?",
+        "positioning": "systems",
+        "novelty_note": "Shifts from model novelty to workflow and evaluation reliability.",
+        "feasibility_note": "Strong feasibility for a short-cycle project with engineering emphasis.",
+        "risk_note": "May fit a systems or tooling venue better than a method-centric venue.",
+        "supporting_source_ids": [
+          "arxiv_2",
+          "arxiv_1"
+        ],
+        "open_questions": [
+          "What concrete reproducibility pain point should be prioritized first?",
+          "Which workflow improvement reduces compute or setup cost the most?"
+        ]
+      }
+    ],
+    "comparison_result": {
+      "dimensions": [
+        "novelty",
+        "feasibility",
+        "evidence_strength",
+        "data_availability",
+        "implementation_cost",
+        "risk"
+      ],
+      "summary": "Candidate 1 is strongest on research focus, candidate 2 is strongest on practical feasibility, and candidate 3 is strongest on execution speed for an engineering-oriented project.",
+      "candidate_assessments": [
+        {
+          "candidate_id": "candidate_1",
+          "novelty": "high",
+          "feasibility": "medium",
+          "evidence_strength": "medium_high",
+          "data_availability": "medium",
+          "implementation_cost": "medium",
+          "risk": "medium"
+        },
+        {
+          "candidate_id": "candidate_2",
+          "novelty": "medium",
+          "feasibility": "high",
+          "evidence_strength": "medium",
+          "data_availability": "medium_high",
+          "implementation_cost": "medium_low",
+          "risk": "medium"
+        },
+        {
+          "candidate_id": "candidate_3",
+          "novelty": "medium",
+          "feasibility": "high",
+          "evidence_strength": "medium",
+          "data_availability": "high",
+          "implementation_cost": "low",
+          "risk": "medium_high"
+        }
+      ]
+    },
+    "convergence_result": {
+      "recommended_candidate_id": "candidate_1",
+      "backup_candidate_id": "candidate_2",
+      "rationale": "Candidate 1 currently offers the best balance between research value, evidence support, and scope control for a first serious topic exploration.",
+      "manual_checks": [
+        "Confirm that the selected sub-problem is narrow enough for the available timeline.",
+        "Verify that at least one benchmark or dataset is realistically accessible.",
+        "Check whether the proposed gap is genuinely underexplored rather than a retrieval miss."
+      ]
+    },
+    "human_confirmations": [],
+    "trace": [
+      {
+        "stage": "frame_problem",
+        "status": "completed",
+        "timestamp": "2026-03-25T12:16:43.701064+00:00",
+        "detail": "Structured the user input into a topic-exploration request."
+      },
+      {
+        "stage": "retrieve_evidence",
+        "status": "completed",
+        "timestamp": "2026-03-25T12:16:43.701077+00:00",
+        "detail": "Retrieved 3 evidence records using the arxiv provider."
+      },
+      {
+        "stage": "synthesize_landscape",
+        "status": "completed",
+        "timestamp": "2026-03-25T12:16:43.701083+00:00",
+        "detail": "Organized the current evidence bundle into a lightweight research landscape summary."
+      },
+      {
+        "stage": "generate_candidates",
+        "status": "completed",
+        "timestamp": "2026-03-25T12:16:43.701090+00:00",
+        "detail": "Generated 3 candidate topic directions from the current evidence bundle."
+      },
+      {
+        "stage": "compare_candidates",
+        "status": "completed",
+        "timestamp": "2026-03-25T12:16:43.701094+00:00",
+        "detail": "Produced a structured candidate comparison across fixed MVP dimensions."
+      },
+      {
+        "stage": "converge_recommendation",
+        "status": "completed",
+        "timestamp": "2026-03-25T12:16:43.701098+00:00",
+        "detail": "Produced a recommended next-best option with manual verification checks."
+      }
+    ],
+    "confidence_summary": {
+      "evidence_coverage": "medium",
+      "source_quality": "medium",
+      "candidate_separation": "high",
+      "conflict_level": "low",
+      "rationale": [
+        "Evidence coverage is medium based on the current number of retrieved records.",
+        "Source quality is medium based on the current source-tier mix.",
+        "Candidate separation is high based on the diversity of candidate positioning.",
+        "Conflict level is low because this development slice does not yet model explicit source disagreement."
+      ]
+    },
+    "evidence_diagnostics": {
+      "requested_provider": "arxiv",
+      "used_provider": "arxiv",
+      "fallback_used": false,
+      "fallback_reason": null,
+      "record_count": 3,
+      "cache_hit": false
+    }
+  },
+  {
+    "session_id": "18a4f2a7b59d4bed92220c5a8707435b",
+    "created_at": "2026-03-25T12:16:54.617268+00:00",
+    "updated_at": "2026-03-25T12:16:54.617268+00:00",
+    "user_input": {
+      "interest": "trustworthy multimodal reasoning in medical imaging",
+      "problem_domain": "medical AI",
+      "seed_idea": "I want a narrow and feasible research topic.",
+      "constraints": {
+        "time_budget_months": 6,
+        "resource_level": "student",
+        "preferred_style": "benchmark-driven",
+        "notes": null
+      }
+    },
+    "framing_result": {
+      "normalized_topic": "trustworthy multimodal reasoning in medical imaging",
+      "extracted_constraints": {
+        "time_budget_months": "6",
+        "resource_level": "student",
+        "preferred_style": "benchmark-driven"
+      },
+      "missing_clarifications": [],
+      "search_questions": [
+        "What are the main research themes in trustworthy multimodal reasoning in medical imaging?",
+        "What methods and benchmarks are commonly used in trustworthy multimodal reasoning in medical imaging?",
+        "What open problems or underexplored gaps exist in trustworthy multimodal reasoning in medical imaging?"
+      ]
+    },
+    "evidence_records": [
+      {
+        "source_id": "arxiv_3",
+        "title": "Liver Segmentation from Multimodal Images using HED-Mask R-CNN",
+        "source_type": "paper",
+        "source_tier": "B",
+        "year": 2019,
+        "authors_or_publisher": "Supriti Mulay, Deepika G, Jeevakala S, Keerthi Ram",
+        "identifier": "https://arxiv.org/abs/1910.10504v1",
+        "url": "https://arxiv.org/abs/1910.10504v1",
+        "summary": "Precise segmentation of the liver is critical for computer-aided diagnosis such as pre-evaluation of the liver for living donor-based transplantation surgery. This task is challenging due to the weak boundaries of organs, countless anatomical variations, and the complexity of the background. Computed tomography (CT) scanning and magnetic resonance imaging (MRI) images have different parameters and settings. Thus, images acquired from different modalities differ from one another making liver segmentation challenging task. We propose an efficient liver segmentation with the combination of holistically-nested edge detection (HED) and the Mask-region-convolutional neural network (R-CNN) to address these challenges. The proposed HED-Mask R-CNN approach is based on effective identification of edge maps from multimodal images. The proposed system firstly applies a preprocessing step of image enhancement to get the 'primal sketches' of the abdomen. Then the HED network is applied to enhanced CT and MRI modality images to get a better edge map. Finally, the Mask R-CNN is used to segment the liver from edge map images. We used a dataset of 20 CT patients and 9 MR patients from the CHAOS challenge. The system is trained on CT and MRI images separately and then converted to 2D slices. We significantly improved the segmentation accuracy of CT and MRI images on a database with a Dice value of 0.94 for CT, 0.89 for T2-weighted MRI and 0.91 for T1-weighted MRI.",
+        "relevance_reason": "Retrieved from arXiv as a public academic source for the current topic query."
+      },
+      {
+        "source_id": "arxiv_2",
+        "title": "SADM: Sequence-Aware Diffusion Model for Longitudinal Medical Image Generation",
+        "source_type": "paper",
+        "source_tier": "B",
+        "year": 2022,
+        "authors_or_publisher": "Jee Seok Yoon, Chenghao Zhang, Heung-Il Suk, Jia Guo",
+        "identifier": "https://arxiv.org/abs/2212.08228v2",
+        "url": "https://arxiv.org/abs/2212.08228v2",
+        "summary": "Human organs constantly undergo anatomical changes due to a complex mix of short-term (e.g., heartbeat) and long-term (e.g., aging) factors. Evidently, prior knowledge of these factors will be beneficial when modeling their future state, i.e., via image generation. However, most of the medical image generation tasks only rely on the input from a single image, thus ignoring the sequential dependency even when longitudinal data is available. Sequence-aware deep generative models, where model input is a sequence of ordered and timestamped images, are still underexplored in the medical imaging domain that is featured by several unique challenges: 1) Sequences with various lengths; 2) Missing data or frame, and 3) High dimensionality. To this end, we propose a sequence-aware diffusion model (SADM) for the generation of longitudinal medical images. Recently, diffusion models have shown promising results in high-fidelity image generation. Our method extends this new technique by introducing a sequence-aware transformer as the conditional module in a diffusion model. The novel design enables learning longitudinal dependency even with missing data during training and allows autoregressive generation of a sequence of images during inference. Our extensive experiments on 3D longitudinal medical images demonstrate the effectiveness of SADM compared with baselines and alternative methods. The code is available at https://github.com/ubc-tea/SADM-Longitudinal-Medical-Image-Generation.",
+        "relevance_reason": "Retrieved from arXiv as a public academic source for the current topic query."
+      },
+      {
+        "source_id": "arxiv_1",
+        "title": "Automatic Landmarks Correspondence Detection in Medical Images with an Application to Deformable Image Registration",
+        "source_type": "paper",
+        "source_tier": "B",
+        "year": 2021,
+        "authors_or_publisher": "Monika Grewal, Jan Wiersma, Henrike Westerveld, Peter A. N. Bosman",
+        "identifier": "https://arxiv.org/abs/2109.02722v2",
+        "url": "https://arxiv.org/abs/2109.02722v2",
+        "summary": "Purpose: Deformable Image Registration (DIR) can benefit from additional guidance using corresponding landmarks in the images. However, the benefits thereof are largely understudied, especially due to the lack of automatic landmark detection methods for three-dimensional (3D) medical images. Approach: We present a Deep Convolutional Neural Network (DCNN), called DCNN-Match, that learns to predict landmark correspondences in 3D images in a self-supervised manner. We trained DCNN-Match on pairs of Computed Tomography (CT) scans containing simulated deformations. We explored five variants of DCNN-Match that use different loss functions and assessed their effect on the spatial density of predicted landmarks and the associated matching errors. We also tested DCNN-Match variants in combination with the open-source registration software Elastix to assess the impact of predicted landmarks in providing additional guidance to DIR. Results: We tested our approach on lower-abdominal CT scans from cervical cancer patients: 121 pairs containing simulated deformations and 11 pairs demonstrating clinical deformations. The results showed significant improvement in DIR performance when landmark correspondences predicted by DCNN-Match were used in the case of simulated (p = $0e^0$) as well as clinical deformations (p = 0.030). We also observed that the spatial density of the automatic landmarks with respect to the underlying deformation affect the extent of improvement in DIR. Finally, DCNN-Match was found to generalize to Magnetic Resonance Imaging (MRI) scans without requiring retraining, indicating easy applicability to other datasets. Conclusions: DCNN-Match learns to predict landmark correspondences in 3D medical images in a self-supervised manner, which can improve DIR performance.",
+        "relevance_reason": "Retrieved from arXiv as a public academic source for the current topic query."
+      }
+    ],
+    "landscape_summary": {
+      "themes": [
+        "from as an emerging theme in trustworthy multimodal reasoning in medical imaging",
+        "liver as an emerging theme in trustworthy multimodal reasoning in medical imaging",
+        "generation as an emerging theme in trustworthy multimodal reasoning in medical imaging"
+      ],
+      "active_methods": [
+        "sequence aware",
+        "sadm sequence",
+        "multimodal mask"
+      ],
+      "likely_gaps": [
+        "clear task scoping for narrow research questions",
+        "stronger evidence on feasibility under limited resources"
+      ],
+      "saturated_areas": [
+        "broad generic summaries without a sharply defined question"
+      ]
+    },
+    "candidate_topics": [
+      {
+        "candidate_id": "candidate_1",
+        "title": "Benchmark-Guided Narrow Task Definition",
+        "research_question": "How can a narrower benchmark task reveal actionable limitations in current methods?",
+        "positioning": "benchmark-gap",
+        "novelty_note": "Targets benchmark slicing and evaluation boundary design as the main source of research value.",
+        "feasibility_note": "Moderate feasibility with public resources and modest compute.",
+        "risk_note": "May become incremental if the task boundary is not sharply differentiated.",
+        "supporting_source_ids": [
+          "arxiv_3",
+          "arxiv_2"
+        ],
+        "open_questions": [
+          "Which benchmark subset best represents the intended problem?"
+        ]
+      },
+      {
+        "candidate_id": "candidate_2",
+        "title": "Method Transfer Under Practical Constraints",
+        "research_question": "Can an existing method family be adapted effectively under strict compute and annotation constraints?",
+        "positioning": "transfer",
+        "novelty_note": "Frames novelty through constraint-aware adaptation rather than larger-model gains.",
+        "feasibility_note": "Higher feasibility because it can start from existing baselines.",
+        "risk_note": "Novelty may depend heavily on the chosen constraint and evaluation design.",
+        "supporting_source_ids": [
+          "arxiv_3",
+          "arxiv_1"
+        ],
+        "open_questions": [
+          "Which constraint creates the strongest research signal?"
+        ]
+      },
+      {
+        "candidate_id": "candidate_3",
+        "title": "Tooling And Evaluation Workflow Support",
+        "research_question": "What tooling or evaluation workflow improvements would make research in this area more reproducible?",
+        "positioning": "systems",
+        "novelty_note": "Shifts from model novelty to workflow and evaluation reliability.",
+        "feasibility_note": "Strong feasibility for a short-cycle project with engineering emphasis.",
+        "risk_note": "May fit a systems or tooling venue better than a method-centric venue.",
+        "supporting_source_ids": [
+          "arxiv_2",
+          "arxiv_1"
+        ],
+        "open_questions": [
+          "What concrete reproducibility pain point should be prioritized first?",
+          "Which workflow improvement reduces compute or setup cost the most?"
+        ]
+      }
+    ],
+    "comparison_result": {
+      "dimensions": [
+        "novelty",
+        "feasibility",
+        "evidence_strength",
+        "data_availability",
+        "implementation_cost",
+        "risk"
+      ],
+      "summary": "Candidate 1 is strongest on research focus, candidate 2 is strongest on practical feasibility, and candidate 3 is strongest on execution speed for an engineering-oriented project.",
+      "candidate_assessments": [
+        {
+          "candidate_id": "candidate_1",
+          "novelty": "high",
+          "feasibility": "medium",
+          "evidence_strength": "medium_high",
+          "data_availability": "medium",
+          "implementation_cost": "medium",
+          "risk": "medium"
+        },
+        {
+          "candidate_id": "candidate_2",
+          "novelty": "medium",
+          "feasibility": "high",
+          "evidence_strength": "medium",
+          "data_availability": "medium_high",
+          "implementation_cost": "medium_low",
+          "risk": "medium"
+        },
+        {
+          "candidate_id": "candidate_3",
+          "novelty": "medium",
+          "feasibility": "high",
+          "evidence_strength": "medium",
+          "data_availability": "high",
+          "implementation_cost": "low",
+          "risk": "medium_high"
+        }
+      ]
+    },
+    "convergence_result": {
+      "recommended_candidate_id": "candidate_1",
+      "backup_candidate_id": "candidate_2",
+      "rationale": "Candidate 1 currently offers the best balance between research value, evidence support, and scope control for a first serious topic exploration.",
+      "manual_checks": [
+        "Confirm that the selected sub-problem is narrow enough for the available timeline.",
+        "Verify that at least one benchmark or dataset is realistically accessible.",
+        "Check whether the proposed gap is genuinely underexplored rather than a retrieval miss."
+      ]
+    },
+    "human_confirmations": [],
+    "trace": [
+      {
+        "stage": "frame_problem",
+        "status": "completed",
+        "timestamp": "2026-03-25T12:16:54.643825+00:00",
+        "detail": "Structured the user input into a topic-exploration request."
+      },
+      {
+        "stage": "retrieve_evidence",
+        "status": "completed",
+        "timestamp": "2026-03-25T12:16:54.643842+00:00",
+        "detail": "Retrieved 3 evidence records using the arxiv provider."
+      },
+      {
+        "stage": "synthesize_landscape",
+        "status": "completed",
+        "timestamp": "2026-03-25T12:16:54.643850+00:00",
+        "detail": "Organized the current evidence bundle into a lightweight research landscape summary."
+      },
+      {
+        "stage": "generate_candidates",
+        "status": "completed",
+        "timestamp": "2026-03-25T12:16:54.643856+00:00",
+        "detail": "Generated 3 candidate topic directions from the current evidence bundle."
+      },
+      {
+        "stage": "compare_candidates",
+        "status": "completed",
+        "timestamp": "2026-03-25T12:16:54.643863+00:00",
+        "detail": "Produced a structured candidate comparison across fixed MVP dimensions."
+      },
+      {
+        "stage": "converge_recommendation",
+        "status": "completed",
+        "timestamp": "2026-03-25T12:16:54.643869+00:00",
+        "detail": "Produced a recommended next-best option with manual verification checks."
+      }
+    ],
+    "confidence_summary": {
+      "evidence_coverage": "medium",
+      "source_quality": "medium",
+      "candidate_separation": "high",
+      "conflict_level": "low",
+      "rationale": [
+        "Evidence coverage is medium based on the current number of retrieved records.",
+        "Source quality is medium based on the current source-tier mix.",
+        "Candidate separation is high based on the diversity of candidate positioning.",
+        "Conflict level is low because this development slice does not yet model explicit source disagreement."
+      ]
+    },
+    "evidence_diagnostics": {
+      "requested_provider": "arxiv",
+      "used_provider": "arxiv",
+      "fallback_used": false,
+      "fallback_reason": null,
+      "record_count": 3,
+      "cache_hit": true
+    }
   }
 ]

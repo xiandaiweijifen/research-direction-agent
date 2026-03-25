@@ -3,16 +3,19 @@ from __future__ import annotations
 import re
 from dataclasses import dataclass, field
 from datetime import datetime
+from pathlib import Path
 from xml.etree import ElementTree
 from typing import Protocol
 
 import httpx
 
+from app.core.config import DATA_ROOT
 from app.schemas.topic_agent import (
     TopicAgentEvidenceDiagnostics,
     TopicAgentExploreRequest,
     TopicAgentSourceRecord,
 )
+from app.services.agent.state_store import atomic_write_json
 
 
 @dataclass
@@ -48,6 +51,7 @@ class TopicAgentEvidenceProviderRegistry:
 
 ARXIV_API_URL = "https://export.arxiv.org/api/query"
 ATOM_NAMESPACE = {"atom": "http://www.w3.org/2005/Atom"}
+TOPIC_AGENT_ARXIV_CACHE_PATH = DATA_ROOT / "tool_state" / "topic_agent_arxiv_cache.json"
 
 
 def _normalize_optional(value: str | None) -> str | None:
@@ -55,6 +59,22 @@ def _normalize_optional(value: str | None) -> str | None:
         return None
     normalized = value.strip()
     return normalized or None
+
+
+def _load_cache(path: Path) -> dict[str, dict]:
+    if not path.exists():
+        return {}
+    try:
+        import json
+
+        loaded = json.loads(path.read_text(encoding="utf-8"))
+    except Exception:
+        return {}
+    return loaded if isinstance(loaded, dict) else {}
+
+
+def _save_cache(path: Path, payload: dict[str, dict]) -> None:
+    atomic_write_json(path, payload)
 
 
 class MockTopicAgentEvidenceProvider:
@@ -109,6 +129,7 @@ class MockTopicAgentEvidenceProvider:
                 fallback_used=False,
                 fallback_reason=None,
                 record_count=len(records),
+                cache_hit=False,
             ),
         )
 
@@ -120,15 +141,37 @@ class ArxivEvidenceProvider:
         self,
         *,
         api_url: str = ARXIV_API_URL,
-        timeout_seconds: float = 10.0,
+        timeout_seconds: float = 5.0,
         max_results: int = 3,
+        cache_path: Path = TOPIC_AGENT_ARXIV_CACHE_PATH,
+        cache_ttl_seconds: int = 60 * 60 * 12,
     ) -> None:
         self.api_url = api_url
         self.timeout_seconds = timeout_seconds
         self.max_results = max_results
+        self.cache_path = cache_path
+        self.cache_ttl_seconds = cache_ttl_seconds
 
     def retrieve(self, request: TopicAgentExploreRequest) -> TopicAgentEvidenceRetrievalResult:
         query_text = _build_arxiv_query(request)
+        cache_key = _build_cache_key(query_text, self.max_results)
+        cached_records = _load_cached_records(
+            self.cache_path,
+            cache_key,
+            self.cache_ttl_seconds,
+        )
+        if cached_records:
+            return TopicAgentEvidenceRetrievalResult(
+                records=cached_records,
+                diagnostics=TopicAgentEvidenceDiagnostics(
+                    requested_provider=self.provider_name,
+                    used_provider=self.provider_name,
+                    fallback_used=False,
+                    fallback_reason=None,
+                    record_count=len(cached_records),
+                    cache_hit=True,
+                ),
+            )
         response = httpx.get(
             self.api_url,
             params={
@@ -148,6 +191,8 @@ class ArxivEvidenceProvider:
             request,
             self.max_results,
         )
+        records = _filter_ranked_records(records, request, self.max_results)
+        _save_cached_records(self.cache_path, cache_key, records)
         return TopicAgentEvidenceRetrievalResult(
             records=records,
             diagnostics=TopicAgentEvidenceDiagnostics(
@@ -156,6 +201,7 @@ class ArxivEvidenceProvider:
                 fallback_used=False,
                 fallback_reason=None,
                 record_count=len(records),
+                cache_hit=False,
             ),
         )
 
@@ -208,6 +254,10 @@ def _build_arxiv_query(request: TopicAgentExploreRequest) -> str:
         return interest
     focused_terms = ordered_terms[:6]
     return " ".join([f"\"{interest}\"", *focused_terms])
+
+
+def _build_cache_key(query_text: str, max_results: int) -> str:
+    return f"{query_text.strip().lower()}::max={max_results}"
 
 
 def _build_query_terms(request: TopicAgentExploreRequest) -> set[str]:
@@ -267,6 +317,11 @@ def _score_record(
     return score
 
 
+def _matched_core_term_count(record: TopicAgentSourceRecord, core_terms: list[str]) -> int:
+    haystack = f"{record.title.lower()} {record.summary.lower()}"
+    return sum(1 for term in core_terms if term in haystack)
+
+
 def _normalize_record(record: TopicAgentSourceRecord) -> TopicAgentSourceRecord:
     return record.model_copy(
         update={
@@ -294,6 +349,70 @@ def _rank_records(
         reverse=True,
     )
     return scored_records[:max_results]
+
+
+def _filter_ranked_records(
+    records: list[TopicAgentSourceRecord],
+    request: TopicAgentExploreRequest,
+    max_results: int,
+) -> list[TopicAgentSourceRecord]:
+    core_terms = _core_query_terms(request)
+    if not core_terms:
+        return records[:max_results]
+    filtered = [
+        record
+        for record in records
+        if _matched_core_term_count(record, core_terms) >= 2
+    ]
+    if not filtered:
+        filtered = [
+            record
+            for record in records
+            if _matched_core_term_count(record, core_terms) >= 1
+        ]
+    if not filtered:
+        return records[:max_results]
+    return filtered[:max_results]
+
+
+def _load_cached_records(
+    cache_path: Path,
+    cache_key: str,
+    cache_ttl_seconds: int,
+) -> list[TopicAgentSourceRecord]:
+    cache = _load_cache(cache_path)
+    entry = cache.get(cache_key)
+    if not isinstance(entry, dict):
+        return []
+    saved_at = entry.get("saved_at")
+    serialized_records = entry.get("records")
+    if not isinstance(saved_at, str) or not isinstance(serialized_records, list):
+        return []
+    try:
+        saved_time = datetime.fromisoformat(saved_at)
+    except ValueError:
+        return []
+    age_seconds = (datetime.now(saved_time.tzinfo) - saved_time).total_seconds()
+    if age_seconds > cache_ttl_seconds:
+        return []
+    return [
+        TopicAgentSourceRecord.model_validate(record)
+        for record in serialized_records
+        if isinstance(record, dict)
+    ]
+
+
+def _save_cached_records(
+    cache_path: Path,
+    cache_key: str,
+    records: list[TopicAgentSourceRecord],
+) -> None:
+    cache = _load_cache(cache_path)
+    cache[cache_key] = {
+        "saved_at": datetime.now().astimezone().isoformat(),
+        "records": [record.model_dump() for record in records],
+    }
+    atomic_write_json(cache_path, cache)
 
 
 def _parse_arxiv_response(xml_text: str) -> list[TopicAgentSourceRecord]:

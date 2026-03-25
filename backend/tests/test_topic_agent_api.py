@@ -37,6 +37,7 @@ def test_topic_agent_explore_creates_session_with_mock_outputs(workspace_tmp_pat
     assert payload["confidence_summary"]["candidate_separation"] == "high"
     assert payload["evidence_diagnostics"]["used_provider"] in {"mock", "arxiv"}
     assert payload["evidence_diagnostics"]["record_count"] == len(payload["evidence_records"])
+    assert isinstance(payload["evidence_diagnostics"]["cache_hit"], bool)
     assert payload["confidence_summary"]["rationale"]
     assert payload["trace"]
     assert [event["stage"] for event in payload["trace"]] == [

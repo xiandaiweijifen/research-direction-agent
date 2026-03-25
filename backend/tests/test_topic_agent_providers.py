@@ -6,6 +6,7 @@ from app.services.topic_agent.providers import (
     FallbackEvidenceProvider,
     MockTopicAgentEvidenceProvider,
     _build_arxiv_query,
+    _filter_ranked_records,
     _parse_arxiv_response,
     _rank_records,
     build_topic_agent_provider_registry,
@@ -123,6 +124,85 @@ def test_arxiv_provider_ranking_prefers_records_with_query_term_overlap():
 
     assert ranked_records[0].title == "Trustworthy Multimodal Medical Reasoning"
     assert ranked_records[1].title == "Medical Multimodal Reasoning Benchmark"
+
+
+def test_filter_ranked_records_prefers_core_term_overlap():
+    request = TopicAgentExploreRequest(
+        interest="trustworthy multimodal reasoning in medical imaging",
+        problem_domain="medical AI",
+        constraints=TopicAgentConstraintSet(preferred_style="benchmark-driven"),
+    )
+    records = _parse_arxiv_response(
+        """
+        <feed xmlns="http://www.w3.org/2005/Atom">
+          <entry>
+            <id>http://arxiv.org/abs/2501.00001v1</id>
+            <updated>2025-01-20T00:00:00Z</updated>
+            <published>2025-01-19T00:00:00Z</published>
+            <title>Trustworthy Multimodal Medical Reasoning Benchmark</title>
+            <summary>Medical benchmark for trustworthy reasoning.</summary>
+            <author><name>Jane Doe</name></author>
+          </entry>
+          <entry>
+            <id>http://arxiv.org/abs/2501.00002v1</id>
+            <updated>2025-01-20T00:00:00Z</updated>
+            <published>2025-01-19T00:00:00Z</published>
+            <title>Deep Learning for Medical Image Segmentation</title>
+            <summary>Generic segmentation method in medical imaging.</summary>
+            <author><name>John Smith</name></author>
+          </entry>
+        </feed>
+        """
+    )
+
+    filtered_records = _filter_ranked_records(records, request, max_results=2)
+
+    assert len(filtered_records) == 1
+    assert filtered_records[0].title == "Trustworthy Multimodal Medical Reasoning Benchmark"
+
+
+def test_arxiv_provider_uses_cache_when_query_key_is_present(workspace_tmp_path, monkeypatch):
+    request = TopicAgentExploreRequest(
+        interest="trustworthy multimodal reasoning in medical imaging",
+        problem_domain="medical AI",
+        constraints=TopicAgentConstraintSet(preferred_style="benchmark-driven"),
+    )
+    cache_path = workspace_tmp_path / "topic_agent_arxiv_cache.json"
+    provider = ArxivEvidenceProvider(cache_path=cache_path, cache_ttl_seconds=3600)
+
+    class FakeResponse:
+        text = """
+        <feed xmlns="http://www.w3.org/2005/Atom">
+          <entry>
+            <id>http://arxiv.org/abs/2603.03437v1</id>
+            <updated>2026-03-20T00:00:00Z</updated>
+            <published>2026-03-19T00:00:00Z</published>
+            <title>Trustworthy Multimodal Medical Reasoning Benchmark</title>
+            <summary>Medical benchmark for trustworthy reasoning.</summary>
+            <author><name>Jane Doe</name></author>
+          </entry>
+        </feed>
+        """
+
+        def raise_for_status(self):
+            return None
+
+    monkeypatch.setattr(
+        "app.services.topic_agent.providers.httpx.get",
+        lambda *args, **kwargs: FakeResponse(),
+    )
+    first_result = provider.retrieve(request)
+    assert first_result.diagnostics.cache_hit is False
+
+    def fail_http_get(*args, **kwargs):
+        raise AssertionError("httpx.get should not be called on cache hit")
+
+    monkeypatch.setattr("app.services.topic_agent.providers.httpx.get", fail_http_get)
+
+    cached_result = provider.retrieve(request)
+
+    assert cached_result.diagnostics.cache_hit is True
+    assert cached_result.records
 
 
 def test_fallback_provider_returns_mock_records_when_primary_fails():

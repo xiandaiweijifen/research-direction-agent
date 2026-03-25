@@ -29,6 +29,7 @@ def test_topic_agent_pipeline_returns_structured_session_response():
     assert len(response.evidence_records) == 3
     assert response.evidence_diagnostics.used_provider == "mock"
     assert response.evidence_diagnostics.record_count == 3
+    assert response.evidence_diagnostics.cache_hit is False
     assert len(response.candidate_topics) == 3
     assert response.comparison_result.candidate_assessments[0]["candidate_id"] == "candidate_1"
     assert response.convergence_result.recommended_candidate_id == "candidate_1"

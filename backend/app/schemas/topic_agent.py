@@ -88,6 +88,7 @@ class TopicAgentEvidenceDiagnostics(BaseModel):
     fallback_used: bool = False
     fallback_reason: str | None = None
     record_count: int = 0
+    cache_hit: bool = False
 
 
 class TopicAgentTraceEvent(BaseModel):
