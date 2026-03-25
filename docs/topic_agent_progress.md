@@ -49,6 +49,22 @@ This file tracks the recent development progress for the backend Topic Agent ret
 
 ## Current Status
 
+### Completion Against The Original Topic Agent Plan
+
+Estimated completion for the current design-and-MVP slice: `80% to 85%`.
+
+Rough breakdown:
+
+- target user and core task definition: `done`
+- system boundary and capability structure: `done`
+- input and output organization: `done`
+- retrieval / synthesis / comparison / convergence workflow: `done`
+- source diagnostics, citation metadata, source grading: `mostly done`
+- human confirmation and verification flow: `partially done`
+- acceptance logic and evaluation plan: `done in docs, partial in product flow`
+- full conflict modeling across disagreeing sources: `not done`
+- polished end-user validation UX and explicit human-confirm checkpoints: `not done`
+
 ### Stable
 
 - OpenAlex is the normal successful path in recent manual tests.
@@ -69,6 +85,8 @@ This file tracks the recent development progress for the backend Topic Agent ret
 - Some landscape summaries can still surface a secondary theme that is broader than ideal when evidence mixes surveys with task-specific benchmarks.
 - Candidate wording is much better, but final research-question phrasing still benefits from manual review for venue-specific positioning.
 - The current slice does not model explicit source disagreement or controversy beyond basic confidence summaries.
+- Human confirmation is represented in the design and response schema, but the current product slice still does not enforce an explicit confirmation workflow in the UI.
+- The current implementation is a focused workflow slice, not a full standalone Topic Agent platform.
 
 ## Manual Validation Notes
 
