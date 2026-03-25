@@ -78,6 +78,49 @@ For the current design-and-MVP scope, the original requirement is approximately 
 - a broader benchmark-based acceptance harness for multiple topic classes
 - a more formal demo or prototype narrative tying the design docs to a user-facing walkthrough
 
+## Practical Must-Have Reading Of The Requirement
+
+The most useful way to interpret the original requirement is to separate:
+
+- what must exist in the minimal closed loop
+- what should exist for a stronger submission
+- what is explicitly not required for the current phase
+
+### Must-Have For The Minimal Closed Loop
+
+- a clear structured input entry for:
+  - research interest or problem domain
+  - seed idea
+  - practical constraints
+- an explicit framing or clarification step showing task-modeling awareness
+- real evidence retrieval from at least one external or curated scholarly source
+- a landscape synthesis step that organizes evidence into sub-directions instead of only summarizing papers
+- 2 to 3 candidate research directions with explicit comparison dimensions
+- a convergence recommendation that explains:
+  - which direction is preferred
+  - why
+  - what risks remain
+  - what still needs human judgment
+- visible source references and evidence links
+
+### Should-Have For A Stronger Submission
+
+- explicit human confirmation checkpoints
+- source grading and conflict-handling rules surfaced to the user
+- a demo walkthrough with one end-to-end example
+- clearer separation between:
+  - source-backed facts
+  - system synthesis
+  - tentative inference
+
+### Not Required For The Current Phase
+
+- a large multi-agent architecture
+- a heavy frontend or polished product shell
+- a full knowledge graph
+- a large-scale production retrieval platform
+- a complete academic-workflow assistant
+
 ## Recommended Reading Order For Reviewers
 
 1. Read [topic_agent_design.md](/d:/project/research-topic-copilot/docs/topic_agent_design.md) for the product and system logic.
