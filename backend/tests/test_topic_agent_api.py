@@ -32,9 +32,19 @@ def test_topic_agent_explore_creates_session_with_mock_outputs(workspace_tmp_pat
     assert payload["framing_result"]["normalized_topic"] == "trustworthy multimodal reasoning in medical imaging"
     assert len(payload["evidence_records"]) == 3
     assert len(payload["candidate_topics"]) == 3
+    assert payload["comparison_result"]["candidate_assessments"]
     assert payload["convergence_result"]["recommended_candidate_id"] == "candidate_1"
     assert payload["confidence_summary"]["candidate_separation"] == "high"
+    assert payload["confidence_summary"]["rationale"]
     assert payload["trace"]
+    assert [event["stage"] for event in payload["trace"]] == [
+        "frame_problem",
+        "retrieve_evidence",
+        "synthesize_landscape",
+        "generate_candidates",
+        "compare_candidates",
+        "converge_recommendation",
+    ]
 
 
 def test_topic_agent_sessions_list_and_get_return_persisted_session(workspace_tmp_path, monkeypatch):
@@ -67,6 +77,7 @@ def test_topic_agent_sessions_list_and_get_return_persisted_session(workspace_tm
     get_payload = get_response.json()
     assert get_payload["session_id"] == session_id
     assert get_payload["convergence_result"]["backup_candidate_id"] == "candidate_2"
+    assert len(get_payload["comparison_result"]["candidate_assessments"]) == 3
 
 
 def test_topic_agent_refine_updates_existing_session(workspace_tmp_path, monkeypatch):
@@ -105,6 +116,7 @@ def test_topic_agent_refine_updates_existing_session(workspace_tmp_path, monkeyp
     assert refined_payload["user_input"]["constraints"]["time_budget_months"] == 4
     assert refined_payload["user_input"]["constraints"]["preferred_style"] == "applied"
     assert refined_payload["created_at"] == original_payload["created_at"]
+    assert refined_payload["confidence_summary"]["source_quality"] == "medium_high"
 
 
 def test_topic_agent_explore_rejects_empty_interest(workspace_tmp_path, monkeypatch):

@@ -71,7 +71,16 @@ def _build_search_questions(request: TopicAgentExploreRequest) -> list[str]:
     ]
 
 
-def _build_mock_evidence_records(request: TopicAgentExploreRequest) -> list[TopicAgentSourceRecord]:
+def _frame_problem(request: TopicAgentExploreRequest) -> TopicAgentFramingResult:
+    return TopicAgentFramingResult(
+        normalized_topic=request.interest.strip(),
+        extracted_constraints=_build_extracted_constraints(request),
+        missing_clarifications=_build_missing_clarifications(request),
+        search_questions=_build_search_questions(request),
+    )
+
+
+def _retrieve_evidence(request: TopicAgentExploreRequest) -> list[TopicAgentSourceRecord]:
     base_topic = request.interest.strip()
     domain = _normalize_optional(request.problem_domain) or "the target domain"
     return [
@@ -114,7 +123,11 @@ def _build_mock_evidence_records(request: TopicAgentExploreRequest) -> list[Topi
     ]
 
 
-def _build_mock_landscape_summary(request: TopicAgentExploreRequest) -> TopicAgentLandscapeSummary:
+def _synthesize_landscape(
+    request: TopicAgentExploreRequest,
+    evidence_records: list[TopicAgentSourceRecord],
+) -> TopicAgentLandscapeSummary:
+    del evidence_records
     topic = request.interest.strip()
     return TopicAgentLandscapeSummary(
         themes=[
@@ -137,7 +150,14 @@ def _build_mock_landscape_summary(request: TopicAgentExploreRequest) -> TopicAge
     )
 
 
-def _build_mock_candidate_topics() -> list[TopicAgentCandidateTopic]:
+def _generate_candidates(
+    request: TopicAgentExploreRequest,
+    landscape_summary: TopicAgentLandscapeSummary,
+    evidence_records: list[TopicAgentSourceRecord],
+) -> list[TopicAgentCandidateTopic]:
+    del request
+    del landscape_summary
+    del evidence_records
     return [
         TopicAgentCandidateTopic(
             candidate_id="candidate_1",
@@ -175,7 +195,10 @@ def _build_mock_candidate_topics() -> list[TopicAgentCandidateTopic]:
     ]
 
 
-def _build_mock_comparison_result() -> TopicAgentComparisonResult:
+def _compare_candidates(
+    candidate_topics: list[TopicAgentCandidateTopic],
+) -> TopicAgentComparisonResult:
+    del candidate_topics
     return TopicAgentComparisonResult(
         dimensions=[
             "novelty",
@@ -189,10 +212,42 @@ def _build_mock_comparison_result() -> TopicAgentComparisonResult:
             "Candidate 1 is strongest on research focus, candidate 2 is strongest on practical feasibility, "
             "and candidate 3 is strongest on execution speed for an engineering-oriented project."
         ),
+        candidate_assessments=[
+            {
+                "candidate_id": "candidate_1",
+                "novelty": "high",
+                "feasibility": "medium",
+                "evidence_strength": "medium_high",
+                "data_availability": "medium",
+                "implementation_cost": "medium",
+                "risk": "medium",
+            },
+            {
+                "candidate_id": "candidate_2",
+                "novelty": "medium",
+                "feasibility": "high",
+                "evidence_strength": "medium",
+                "data_availability": "medium_high",
+                "implementation_cost": "medium_low",
+                "risk": "medium",
+            },
+            {
+                "candidate_id": "candidate_3",
+                "novelty": "medium",
+                "feasibility": "high",
+                "evidence_strength": "medium",
+                "data_availability": "high",
+                "implementation_cost": "low",
+                "risk": "medium_high",
+            },
+        ],
     )
 
 
-def _build_mock_convergence_result() -> TopicAgentConvergenceResult:
+def _converge_recommendation(
+    comparison_result: TopicAgentComparisonResult,
+) -> TopicAgentConvergenceResult:
+    del comparison_result
     return TopicAgentConvergenceResult(
         recommended_candidate_id="candidate_1",
         backup_candidate_id="candidate_2",
@@ -208,31 +263,99 @@ def _build_mock_convergence_result() -> TopicAgentConvergenceResult:
     )
 
 
-def _build_trace() -> list[TopicAgentTraceEvent]:
-    now = build_utc_timestamp()
+def _derive_evidence_coverage(evidence_records: list[TopicAgentSourceRecord]) -> str:
+    if len(evidence_records) >= 6:
+        return "high"
+    if len(evidence_records) >= 3:
+        return "medium"
+    return "low"
+
+
+def _derive_source_quality(evidence_records: list[TopicAgentSourceRecord]) -> str:
+    tier_a_count = sum(1 for record in evidence_records if record.source_tier == "A")
+    if tier_a_count >= 3:
+        return "high"
+    if tier_a_count >= 1:
+        return "medium_high"
+    return "medium"
+
+
+def _derive_candidate_separation(candidate_topics: list[TopicAgentCandidateTopic]) -> str:
+    positionings = {candidate.positioning for candidate in candidate_topics}
+    if len(positionings) >= 3:
+        return "high"
+    if len(positionings) == 2:
+        return "medium"
+    return "low"
+
+
+def _derive_conflict_level(evidence_records: list[TopicAgentSourceRecord]) -> str:
+    del evidence_records
+    return "low"
+
+
+def _build_confidence_summary(
+    evidence_records: list[TopicAgentSourceRecord],
+    candidate_topics: list[TopicAgentCandidateTopic],
+) -> TopicAgentConfidenceSummary:
+    evidence_coverage = _derive_evidence_coverage(evidence_records)
+    source_quality = _derive_source_quality(evidence_records)
+    candidate_separation = _derive_candidate_separation(candidate_topics)
+    conflict_level = _derive_conflict_level(evidence_records)
+    return TopicAgentConfidenceSummary(
+        evidence_coverage=evidence_coverage,
+        source_quality=source_quality,
+        candidate_separation=candidate_separation,
+        conflict_level=conflict_level,
+        rationale=[
+            f"Evidence coverage is {evidence_coverage} based on the current number of retrieved records.",
+            f"Source quality is {source_quality} based on the current source-tier mix.",
+            f"Candidate separation is {candidate_separation} based on the diversity of candidate positioning.",
+            f"Conflict level is {conflict_level} because this development slice does not yet model explicit source disagreement.",
+        ],
+    )
+
+
+def _build_trace(
+    *,
+    evidence_count: int,
+    candidate_count: int,
+) -> list[TopicAgentTraceEvent]:
     return [
         TopicAgentTraceEvent(
             stage="frame_problem",
             status="completed",
-            timestamp=now,
+            timestamp=build_utc_timestamp(),
             detail="Structured the user input into a topic-exploration request.",
         ),
         TopicAgentTraceEvent(
             stage="retrieve_evidence",
             status="completed",
-            timestamp=now,
-            detail="Built a mock evidence bundle for the first development slice.",
+            timestamp=build_utc_timestamp(),
+            detail=f"Built a mock evidence bundle with {evidence_count} records for the current development slice.",
+        ),
+        TopicAgentTraceEvent(
+            stage="synthesize_landscape",
+            status="completed",
+            timestamp=build_utc_timestamp(),
+            detail="Organized the current evidence bundle into a lightweight research landscape summary.",
         ),
         TopicAgentTraceEvent(
             stage="generate_candidates",
             status="completed",
-            timestamp=now,
-            detail="Generated three candidate topic directions from the current evidence bundle.",
+            timestamp=build_utc_timestamp(),
+            detail=f"Generated {candidate_count} candidate topic directions from the current evidence bundle.",
+        ),
+        TopicAgentTraceEvent(
+            stage="compare_candidates",
+            status="completed",
+            timestamp=build_utc_timestamp(),
+            detail="Produced a structured candidate comparison across fixed MVP dimensions.",
         ),
         TopicAgentTraceEvent(
             stage="converge_recommendation",
             status="completed",
-            timestamp=now,
+            timestamp=build_utc_timestamp(),
             detail="Produced a recommended next-best option with manual verification checks.",
         ),
     ]
@@ -245,31 +368,30 @@ def _build_session_payload(
     created_at: str | None = None,
 ) -> TopicAgentSessionResponse:
     timestamp = build_utc_timestamp()
-    framing_result = TopicAgentFramingResult(
-        normalized_topic=request.interest.strip(),
-        extracted_constraints=_build_extracted_constraints(request),
-        missing_clarifications=_build_missing_clarifications(request),
-        search_questions=_build_search_questions(request),
-    )
+    framing_result = _frame_problem(request)
+    evidence_records = _retrieve_evidence(request)
+    landscape_summary = _synthesize_landscape(request, evidence_records)
+    candidate_topics = _generate_candidates(request, landscape_summary, evidence_records)
+    comparison_result = _compare_candidates(candidate_topics)
+    convergence_result = _converge_recommendation(comparison_result)
+    confidence_summary = _build_confidence_summary(evidence_records, candidate_topics)
     return TopicAgentSessionResponse(
         session_id=session_id or uuid.uuid4().hex,
         created_at=created_at or timestamp,
         updated_at=timestamp,
         user_input=request,
         framing_result=framing_result,
-        evidence_records=_build_mock_evidence_records(request),
-        landscape_summary=_build_mock_landscape_summary(request),
-        candidate_topics=_build_mock_candidate_topics(),
-        comparison_result=_build_mock_comparison_result(),
-        convergence_result=_build_mock_convergence_result(),
+        evidence_records=evidence_records,
+        landscape_summary=landscape_summary,
+        candidate_topics=candidate_topics,
+        comparison_result=comparison_result,
+        convergence_result=convergence_result,
         human_confirmations=[],
-        trace=_build_trace(),
-        confidence_summary=TopicAgentConfidenceSummary(
-            evidence_coverage="medium",
-            source_quality="medium_high",
-            candidate_separation="high",
-            conflict_level="low",
+        trace=_build_trace(
+            evidence_count=len(evidence_records),
+            candidate_count=len(candidate_topics),
         ),
+        confidence_summary=confidence_summary,
     )
 
 

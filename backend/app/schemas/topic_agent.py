@@ -64,6 +64,7 @@ class TopicAgentCandidateTopic(BaseModel):
 class TopicAgentComparisonResult(BaseModel):
     dimensions: list[str] = Field(default_factory=list)
     summary: str
+    candidate_assessments: list[dict[str, str]] = Field(default_factory=list)
 
 
 class TopicAgentConvergenceResult(BaseModel):
@@ -78,6 +79,7 @@ class TopicAgentConfidenceSummary(BaseModel):
     source_quality: str
     candidate_separation: str
     conflict_level: str
+    rationale: list[str] = Field(default_factory=list)
 
 
 class TopicAgentTraceEvent(BaseModel):
