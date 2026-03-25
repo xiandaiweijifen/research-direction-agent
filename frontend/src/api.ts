@@ -18,6 +18,7 @@ import type {
   PersistedEmbeddingDocument,
   QueryResponse,
   SystemHealthResponse,
+  TopicAgentSessionResponse,
   UploadDocumentResponse,
 } from "./types";
 
@@ -319,4 +320,26 @@ export function fetchEvaluationExportBundle(refresh = false) {
   }
   const suffix = searchParams.toString() ? `?${searchParams.toString()}` : "";
   return apiFetch<EvaluationExportBundleResponse>(`/api/evaluation/export-bundle${suffix}`);
+}
+
+export function runTopicAgentExplore(
+  interest: string,
+  problemDomain: string,
+  seedIdea: string,
+  constraints: {
+    time_budget_months?: number;
+    resource_level?: string;
+    preferred_style?: string;
+    notes?: string;
+  },
+) {
+  return apiFetch<TopicAgentSessionResponse>("/api/topic-agent/explore", {
+    method: "POST",
+    body: JSON.stringify({
+      interest,
+      problem_domain: problemDomain || null,
+      seed_idea: seedIdea || null,
+      constraints,
+    }),
+  });
 }

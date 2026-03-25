@@ -19,11 +19,13 @@ const viewCopy: Record<Locale, Array<{ key: ViewKey; label: string; kicker: stri
   en: [
     { key: "documents", label: "Documents", kicker: "Ingestion artifacts" },
     { key: "query", label: "Query Lab", kicker: "Retrieval and answer tracing" },
+    { key: "topic", label: "Topic Agent", kicker: "Research topic copilot" },
     { key: "evaluation", label: "Evaluation", kicker: "Retrieval benchmark sets" },
   ],
   zh: [
     { key: "documents", label: "文档", kicker: "摄取产物" },
     { key: "query", label: "查询台", kicker: "检索与回答追踪" },
+    { key: "topic", label: "选题 Agent", kicker: "科研选题副驾" },
     { key: "evaluation", label: "评测", kicker: "检索基准集" },
   ],
 };

@@ -33,11 +33,13 @@ import {
   runDiagnostics as runDiagnosticsRequest,
   runEvaluation as runEvaluationRequest,
   runQuery as runQueryRequest,
+  runTopicAgentExplore as runTopicAgentExploreRequest,
   uploadDocument as uploadDocumentRequest,
 } from "./api";
 import { DocumentsView } from "./components/DocumentsView";
 import { EvaluationView } from "./components/EvaluationView";
 import { QueryView } from "./components/QueryView";
+import { TopicWorkspace } from "./components/TopicWorkspace";
 import { getViews, presetQuestions } from "./constants";
 import type {
   AgentWorkflowResponse,
@@ -56,6 +58,7 @@ import type {
   EvaluationMetricsSummaryResponse,
   EvalReportResponse,
   ToolExecutionEvalReportResponse,
+  TopicAgentSessionResponse,
   PersistedChunkDocument,
   PersistedEmbeddingDocument,
   QueryResponse,
@@ -91,6 +94,19 @@ function App() {
   const [diagnosticsResult, setDiagnosticsResult] = useState<DiagnosticsResponse | null>(null);
   const [queryError, setQueryError] = useState("");
   const [queryBusy, setQueryBusy] = useState(false);
+  const [topicInterest, setTopicInterest] = useState(
+    "trustworthy multimodal reasoning in medical imaging",
+  );
+  const [topicProblemDomain, setTopicProblemDomain] = useState("medical AI");
+  const [topicSeedIdea, setTopicSeedIdea] = useState(
+    "I want a narrow and feasible research topic.",
+  );
+  const [topicTimeBudgetMonths, setTopicTimeBudgetMonths] = useState("6");
+  const [topicResourceLevel, setTopicResourceLevel] = useState("student");
+  const [topicPreferredStyle, setTopicPreferredStyle] = useState("benchmark-driven");
+  const [topicResult, setTopicResult] = useState<TopicAgentSessionResponse | null>(null);
+  const [topicBusy, setTopicBusy] = useState(false);
+  const [topicError, setTopicError] = useState("");
 
   const [datasets, setDatasets] = useState<EvalDatasetInfo[]>([]);
   const [agentRouteDatasets, setAgentRouteDatasets] = useState<AgentEvalDatasetInfo[]>([]);
@@ -125,8 +141,9 @@ function App() {
     en: {
       eyebrow: "Enterprise RAG Agent Console",
       heroCopy:
-        "A focused console for inspecting ingestion artifacts, tracing retrieval, and benchmarking retrieval quality across curated datasets.",
+        "A focused console for inspecting ingestion artifacts, tracing retrieval, exploring research topics, and benchmarking retrieval quality across curated datasets.",
       documents: "Documents",
+      topic: "Topic Agent",
       evalDatasets: "Eval Datasets",
       defaultTopK: "Default Query Top-K",
       brand: "Agent Knowledge System",
@@ -145,15 +162,16 @@ function App() {
       off: "off",
       modules: "Console Modules",
       modulesCopy:
-        "Choose the operating surface for ingestion, retrieval diagnostics, or benchmark review.",
+        "Choose the operating surface for ingestion, retrieval diagnostics, topic exploration, or benchmark review.",
       language: "Language",
       english: "English",
       chinese: "中文",
     },
     zh: {
       eyebrow: "企业级 RAG Agent 控制台",
-      heroCopy: "一个聚焦于摄取产物检查、检索追踪和基准评测的控制台。",
+      heroCopy: "一个聚焦于摄取产物检查、检索追踪、选题探索和基准评测的控制台。",
       documents: "文档数",
+      topic: "选题 Agent",
       evalDatasets: "评测数据集",
       defaultTopK: "默认查询 Top-K",
       brand: "Agent Knowledge System",
@@ -170,7 +188,7 @@ function App() {
       on: "开启",
       off: "关闭",
       modules: "控制台模块",
-      modulesCopy: "选择用于摄取、检索诊断或基准结果查看的工作界面。",
+      modulesCopy: "选择用于摄取、检索诊断、选题探索或基准结果查看的工作界面。",
       language: "语言",
       english: "English",
       chinese: "中文",
@@ -634,6 +652,31 @@ function App() {
     }
   }
 
+  async function submitTopicExplore(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setTopicBusy(true);
+    setTopicError("");
+    setTopicResult(null);
+
+    try {
+      const payload = await runTopicAgentExploreRequest(
+        topicInterest,
+        topicProblemDomain,
+        topicSeedIdea,
+        {
+          time_budget_months: topicTimeBudgetMonths ? Number(topicTimeBudgetMonths) : undefined,
+          resource_level: topicResourceLevel || undefined,
+          preferred_style: topicPreferredStyle || undefined,
+        },
+      );
+      setTopicResult(payload);
+    } catch (error) {
+      setTopicError(error instanceof Error ? error.message : "Failed to run Topic Agent");
+    } finally {
+      setTopicBusy(false);
+    }
+  }
+
   async function loadAgentWorkflowRun(runId: string) {
     setQueryBusy(true);
     setQueryError("");
@@ -765,6 +808,10 @@ function App() {
             <div className="stat-card">
               <span>{appCopy.documents}</span>
               <strong>{documents.length}</strong>
+            </div>
+            <div className="stat-card">
+              <span>{appCopy.topic}</span>
+              <strong>{topicResult ? topicResult.candidate_topics.length : 0}</strong>
             </div>
             <div className="stat-card">
               <span>{appCopy.evalDatasets}</span>
@@ -947,6 +994,28 @@ function App() {
           onChangeEvalTopK={setEvalTopK}
           onSubmitEvaluation={submitEvaluation}
           onChangeEvalCaseFilter={setEvalCaseFilter}
+        />
+      )}
+
+      {activeView === "topic" && (
+        <TopicWorkspace
+          locale={locale}
+          interest={topicInterest}
+          problemDomain={topicProblemDomain}
+          seedIdea={topicSeedIdea}
+          timeBudgetMonths={topicTimeBudgetMonths}
+          resourceLevel={topicResourceLevel}
+          preferredStyle={topicPreferredStyle}
+          topicResult={topicResult}
+          topicBusy={topicBusy}
+          topicError={topicError}
+          onChangeInterest={setTopicInterest}
+          onChangeProblemDomain={setTopicProblemDomain}
+          onChangeSeedIdea={setTopicSeedIdea}
+          onChangeTimeBudgetMonths={setTopicTimeBudgetMonths}
+          onChangeResourceLevel={setTopicResourceLevel}
+          onChangePreferredStyle={setTopicPreferredStyle}
+          onSubmit={submitTopicExplore}
         />
       )}
     </div>

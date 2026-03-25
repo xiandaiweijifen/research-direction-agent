@@ -1,6 +1,6 @@
 export type Locale = "en" | "zh";
 
-export type ViewKey = "documents" | "query" | "evaluation";
+export type ViewKey = "documents" | "query" | "topic" | "evaluation";
 
 export type DocumentItem = {
   filename: string;
@@ -343,6 +343,113 @@ export type EvaluationReportHistoryEntry = {
 
 export type EvaluationReportHistoryResponse = {
   entries: EvaluationReportHistoryEntry[];
+};
+
+export type TopicAgentConstraintSet = {
+  time_budget_months?: number | null;
+  resource_level?: string | null;
+  preferred_style?: string | null;
+  notes?: string | null;
+};
+
+export type TopicAgentExploreRequest = {
+  interest: string;
+  problem_domain?: string | null;
+  seed_idea?: string | null;
+  constraints: TopicAgentConstraintSet;
+};
+
+export type TopicAgentSourceRecord = {
+  source_id: string;
+  title: string;
+  source_type: string;
+  source_tier: string;
+  year: number;
+  authors_or_publisher: string;
+  identifier: string;
+  url: string;
+  summary: string;
+  relevance_reason: string;
+};
+
+export type TopicAgentFramingResult = {
+  normalized_topic: string;
+  extracted_constraints: Record<string, string>;
+  missing_clarifications: string[];
+  search_questions: string[];
+};
+
+export type TopicAgentLandscapeSummary = {
+  themes: string[];
+  active_methods: string[];
+  likely_gaps: string[];
+  saturated_areas: string[];
+};
+
+export type TopicAgentCandidateTopic = {
+  candidate_id: string;
+  title: string;
+  research_question: string;
+  positioning: string;
+  novelty_note: string;
+  feasibility_note: string;
+  risk_note: string;
+  supporting_source_ids: string[];
+  open_questions: string[];
+};
+
+export type TopicAgentComparisonAssessment = {
+  candidate_id: string;
+  novelty: string;
+  feasibility: string;
+  evidence_strength: string;
+  data_availability: string;
+  implementation_cost: string;
+  risk: string;
+};
+
+export type TopicAgentComparisonResult = {
+  dimensions: string[];
+  summary: string;
+  candidate_assessments: TopicAgentComparisonAssessment[];
+};
+
+export type TopicAgentConvergenceResult = {
+  recommended_candidate_id: string;
+  backup_candidate_id?: string | null;
+  rationale: string;
+  manual_checks: string[];
+};
+
+export type TopicAgentTraceEvent = {
+  stage: string;
+  status: string;
+  timestamp: string;
+  detail: string;
+};
+
+export type TopicAgentConfidenceSummary = {
+  evidence_coverage: string;
+  source_quality: string;
+  candidate_separation: string;
+  conflict_level: string;
+  rationale: string[];
+};
+
+export type TopicAgentSessionResponse = {
+  session_id: string;
+  created_at: string;
+  updated_at: string;
+  user_input: TopicAgentExploreRequest;
+  framing_result: TopicAgentFramingResult;
+  evidence_records: TopicAgentSourceRecord[];
+  landscape_summary: TopicAgentLandscapeSummary;
+  candidate_topics: TopicAgentCandidateTopic[];
+  comparison_result: TopicAgentComparisonResult;
+  convergence_result: TopicAgentConvergenceResult;
+  human_confirmations: string[];
+  trace: TopicAgentTraceEvent[];
+  confidence_summary: TopicAgentConfidenceSummary;
 };
 
 export type EvalReportResponse = {
