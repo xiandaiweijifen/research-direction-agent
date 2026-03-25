@@ -1,0 +1,44 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.venv/
+.env
+
+# Node
+node_modules/
+dist/
+
+# IDE / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Data
+data/raw/*
+!data/raw/.gitkeep
+data/processed/*
+!data/processed/.gitkeep
+data/chunks/*
+!data/chunks/.gitkeep
+data/tool_state/.tmp/
+data/tool_state/*.tmp
+data/tool_state/workflow_planner_debug.json
+
+# Python test / cache
+.pytest_cache/
+.mypy_cache/
+backend/tests/_tmp/
+backend/tests/.pytest_tmp/
+
+# Build
+build/
+coverage/
+*.tsbuildinfo
+.codex_write_check.tmp
+
