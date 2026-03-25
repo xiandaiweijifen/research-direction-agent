@@ -117,6 +117,15 @@ def test_topic_agent_refine_updates_existing_session(workspace_tmp_path, monkeyp
     assert refined_payload["user_input"]["constraints"]["preferred_style"] == "applied"
     assert refined_payload["created_at"] == original_payload["created_at"]
     assert refined_payload["confidence_summary"]["source_quality"] == "medium_high"
+    assert (
+        refined_payload["candidate_topics"][1]["title"]
+        == "Applied Method Transfer Under Practical Constraints"
+    )
+    assert refined_payload["convergence_result"]["recommended_candidate_id"] == "candidate_2"
+    assert "applied project style" in refined_payload["convergence_result"]["rationale"]
+    assert refined_payload["comparison_result"]["summary"].startswith(
+        "Candidate 2 is strongest for applied feasibility"
+    )
 
 
 def test_topic_agent_explore_rejects_empty_interest(workspace_tmp_path, monkeypatch):
