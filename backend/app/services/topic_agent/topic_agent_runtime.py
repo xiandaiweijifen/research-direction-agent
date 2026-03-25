@@ -10,9 +10,13 @@ from app.schemas.topic_agent import (
 )
 from app.services.agent.state_store import JsonListRepository
 from app.services.topic_agent.pipeline import run_topic_agent_pipeline
-from app.services.topic_agent.providers import MockTopicAgentEvidenceProvider
+from app.services.topic_agent.providers import (
+    TopicAgentEvidenceProvider,
+    build_topic_agent_provider_registry,
+)
 
 TOPIC_AGENT_STORE_PATH = DATA_ROOT / "tool_state" / "topic_agent_sessions.json"
+DEFAULT_TOPIC_AGENT_PROVIDER_NAME = "mock"
 
 
 def _load_sessions() -> list[dict]:
@@ -43,8 +47,12 @@ def _normalize_request(request: TopicAgentExploreRequest) -> TopicAgentExploreRe
     )
 
 
-def _pipeline_provider() -> MockTopicAgentEvidenceProvider:
-    return MockTopicAgentEvidenceProvider()
+def _pipeline_provider(provider_name: str = DEFAULT_TOPIC_AGENT_PROVIDER_NAME) -> TopicAgentEvidenceProvider:
+    registry = build_topic_agent_provider_registry()
+    try:
+        return registry.get(provider_name)
+    except KeyError as exc:
+        raise ValueError(f"unknown_topic_agent_provider:{provider_name}") from exc
 
 
 def create_topic_agent_session(request: TopicAgentExploreRequest) -> TopicAgentSessionResponse:

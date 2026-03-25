@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from dataclasses import dataclass, field
 from typing import Protocol
 
 from app.schemas.topic_agent import TopicAgentExploreRequest, TopicAgentSourceRecord
@@ -8,6 +9,26 @@ from app.schemas.topic_agent import TopicAgentExploreRequest, TopicAgentSourceRe
 class TopicAgentEvidenceProvider(Protocol):
     def retrieve(self, request: TopicAgentExploreRequest) -> list[TopicAgentSourceRecord]:
         ...
+
+
+@dataclass
+class TopicAgentEvidenceProviderRegistry:
+    providers: dict[str, TopicAgentEvidenceProvider] = field(default_factory=dict)
+
+    def register(self, name: str, provider: TopicAgentEvidenceProvider) -> None:
+        normalized_name = name.strip().lower()
+        if not normalized_name:
+            raise ValueError("provider_name_must_not_be_empty")
+        self.providers[normalized_name] = provider
+
+    def get(self, name: str) -> TopicAgentEvidenceProvider:
+        normalized_name = name.strip().lower()
+        if normalized_name not in self.providers:
+            raise KeyError(normalized_name)
+        return self.providers[normalized_name]
+
+    def list_names(self) -> list[str]:
+        return sorted(self.providers.keys())
 
 
 def _normalize_optional(value: str | None) -> str | None:
@@ -59,3 +80,9 @@ class MockTopicAgentEvidenceProvider:
                 relevance_reason="Supports feasibility assessment for a first project iteration.",
             ),
         ]
+
+
+def build_topic_agent_provider_registry() -> TopicAgentEvidenceProviderRegistry:
+    registry = TopicAgentEvidenceProviderRegistry()
+    registry.register("mock", MockTopicAgentEvidenceProvider())
+    return registry
