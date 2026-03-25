@@ -143,10 +143,17 @@ describe("TopicWorkspace", () => {
     expect(screen.getByText("Research Topic Copilot")).toBeInTheDocument();
     expect(screen.getByText("Recent Survey")).toBeInTheDocument();
     expect(screen.getByText("Benchmark-Guided Narrow Task Definition")).toBeInTheDocument();
-    expect(screen.getAllByText("candidate_1")).toHaveLength(2);
+    expect(screen.getAllByText("candidate_1").length).toBeGreaterThanOrEqual(2);
     expect(screen.getByText("Evidence coverage is medium.")).toBeInTheDocument();
     expect(screen.getByText("Recent Sessions")).toBeInTheDocument();
     expect(screen.getByText("1 topics")).toBeInTheDocument();
+    expect(screen.getByText("Candidate Comparison")).toBeInTheDocument();
+    expect(
+      screen.getByText("Feasibility: medium | Evidence: medium_high"),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText("Data: medium | Cost: medium | Risk: medium"),
+    ).toBeInTheDocument();
 
     await user.click(screen.getByRole("button", { name: "Run Topic Agent" }));
     expect(onSubmit).toHaveBeenCalledTimes(1);

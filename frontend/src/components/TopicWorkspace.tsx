@@ -68,6 +68,7 @@ export function TopicWorkspace({
           evidence: "证据记录",
           candidates: "候选选题",
           comparison: "比较与收敛",
+          candidateScores: "候选比较",
           trace: "执行轨迹",
           confidence: "可信度摘要",
           recentSessions: "最近探索记录",
@@ -99,6 +100,7 @@ export function TopicWorkspace({
           evidence: "Evidence Records",
           candidates: "Candidate Topics",
           comparison: "Comparison And Convergence",
+          candidateScores: "Candidate Comparison",
           trace: "Execution Trace",
           confidence: "Confidence Summary",
           recentSessions: "Recent Sessions",
@@ -315,6 +317,30 @@ export function TopicWorkspace({
                 <article key={check} className="trace-card">
                   <span className="trace-label">{copy.manualChecks}</span>
                   <p className="trace-detail">{check}</p>
+                </article>
+              ))}
+            </div>
+            <div className="panel-heading">
+              <div>
+                <h2>{copy.candidateScores}</h2>
+                <p className="panel-intro">
+                  {topicResult.comparison_result.candidate_assessments.length} assessments
+                </p>
+              </div>
+            </div>
+            <div className="trace-list">
+              {topicResult.comparison_result.candidate_assessments.map((assessment) => (
+                <article key={assessment.candidate_id} className="trace-card">
+                  <div className="trace-meta-row">
+                    <strong>{assessment.candidate_id}</strong>
+                    <span className="status-chip">{assessment.novelty}</span>
+                  </div>
+                  <p className="trace-detail">
+                    Feasibility: {assessment.feasibility} | Evidence: {assessment.evidence_strength}
+                  </p>
+                  <p className="trace-detail">
+                    Data: {assessment.data_availability} | Cost: {assessment.implementation_cost} | Risk: {assessment.risk}
+                  </p>
                 </article>
               ))}
             </div>
