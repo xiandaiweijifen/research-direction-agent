@@ -259,28 +259,56 @@ def _top_evidence_text(evidence_records: list[TopicAgentSourceRecord], limit: in
     ).lower()
 
 
-def _detect_evidence_cues(evidence_records: list[TopicAgentSourceRecord]) -> dict[str, bool]:
+def _query_context_text(request: TopicAgentExploreRequest) -> str:
+    return " ".join(
+        part
+        for part in [
+            request.interest,
+            request.problem_domain or "",
+            request.seed_idea or "",
+        ]
+        if part
+    ).lower()
+
+
+def _detect_evidence_cues(
+    evidence_records: list[TopicAgentSourceRecord],
+    request: TopicAgentExploreRequest | None = None,
+) -> dict[str, bool]:
     text = _top_evidence_text(evidence_records)
+    query_text = _query_context_text(request) if request is not None else ""
+    combined_text = f"{text} {query_text}".strip()
     return {
-        "benchmark": "benchmark" in text or "vqa-rad" in text or "slake" in text,
-        "trust": any(term in text for term in {"trustworthy", "ethical", "safety", "hallucination", "reliability"}),
-        "grounding": any(term in text for term in {"grounding", "grounded", "image-grounded", "cross-modal"}),
-        "radiology": any(term in text for term in {"radiology", "x-ray", "radiation oncology"}),
-        "document_qa": any(term in text for term in {"document question answering", "document qa", "medical report", "meddqa", "question answering"}),
-        "agentic": any(term in text for term in {"agent collaborative", "learner agent", "ask-answer", "multi-agent", "agent"}),
-        "zero_shot": "zero-shot" in text or "zero shot" in text,
-        "clinical_reasoning": "clinical reasoning" in text,
+        "benchmark": "benchmark" in combined_text or "vqa-rad" in combined_text or "slake" in combined_text,
+        "trust": any(term in combined_text for term in {"trustworthy", "ethical", "safety", "hallucination", "reliability"}),
+        "grounding": any(term in combined_text for term in {"grounding", "grounded", "image-grounded", "cross-modal"}),
+        "radiology": any(term in combined_text for term in {"radiology", "x-ray", "radiation oncology"}),
+        "document_qa": any(term in combined_text for term in {"document question answering", "document qa", "medical report", "meddqa", "question answering"}),
+        "agentic": any(term in combined_text for term in {"agent collaborative", "learner agent", "ask-answer", "multi-agent", "agent"}),
+        "zero_shot": "zero-shot" in combined_text or "zero shot" in combined_text,
+        "clinical_reasoning": "clinical reasoning" in combined_text,
+        "hallucination_eval": any(term in combined_text for term in {"hallucination", "grounding evaluation", "failure analysis", "faithfulness"}),
+        "visual_qa": any(term in combined_text for term in {"visual question answering", "med-vqa", "medical vqa", "vqa-rad", "radiology question answering"}),
     }
 
 
-def _build_landscape_themes(topic: str, evidence_records: list[TopicAgentSourceRecord], evidence_phrases: list[str]) -> list[str]:
-    cues = _detect_evidence_cues(evidence_records)
+def _build_landscape_themes(
+    topic: str,
+    evidence_records: list[TopicAgentSourceRecord],
+    evidence_phrases: list[str],
+    request: TopicAgentExploreRequest,
+) -> list[str]:
+    cues = _detect_evidence_cues(evidence_records, request)
     themes: list[str] = []
     if cues["benchmark"]:
         themes.append(f"benchmark design and stress-testing for {topic}")
     if cues["grounding"]:
         themes.append(f"cross-modal grounding and visual dependence in {topic}")
-    if cues["document_qa"]:
+    if cues["hallucination_eval"]:
+        themes.append(f"hallucination detection and failure analysis in {topic}")
+    if cues["visual_qa"]:
+        themes.append(f"radiology VQA and image-grounded answer reliability in {topic}")
+    if cues["document_qa"] and not cues["hallucination_eval"]:
         themes.append(f"document QA and report-centric reasoning in {topic}")
     if cues["trust"]:
         themes.append(f"trustworthy evaluation and failure analysis in {topic}")
@@ -298,16 +326,22 @@ def _build_landscape_themes(topic: str, evidence_records: list[TopicAgentSourceR
     return themes[:3]
 
 
-def _build_active_methods(evidence_records: list[TopicAgentSourceRecord], evidence_phrases: list[str]) -> list[str]:
-    cues = _detect_evidence_cues(evidence_records)
+def _build_active_methods(
+    evidence_records: list[TopicAgentSourceRecord],
+    evidence_phrases: list[str],
+    request: TopicAgentExploreRequest,
+) -> list[str]:
+    cues = _detect_evidence_cues(evidence_records, request)
     methods: list[str] = []
     if cues["benchmark"]:
         methods.append("benchmark-centered experimental design")
     if cues["grounding"]:
         methods.append("grounding-aware evaluation and error analysis")
+    if cues["hallucination_eval"]:
+        methods.append("hallucination auditing and faithfulness checks")
     if cues["agentic"]:
         methods.append("agent-mediated problem decomposition")
-    if cues["document_qa"]:
+    if cues["document_qa"] and not cues["hallucination_eval"]:
         methods.append("document QA baseline comparison")
     if cues["radiology"]:
         methods.append("radiology task-specific benchmark slicing")
@@ -319,16 +353,22 @@ def _build_active_methods(evidence_records: list[TopicAgentSourceRecord], eviden
     return methods[:3]
 
 
-def _build_likely_gaps(evidence_records: list[TopicAgentSourceRecord], default_topic: str) -> list[str]:
-    cues = _detect_evidence_cues(evidence_records)
+def _build_likely_gaps(
+    evidence_records: list[TopicAgentSourceRecord],
+    default_topic: str,
+    request: TopicAgentExploreRequest,
+) -> list[str]:
+    cues = _detect_evidence_cues(evidence_records, request)
     gaps: list[str] = []
     if cues["benchmark"]:
         gaps.append("benchmark protocols that distinguish real image use from shortcut exploitation")
     if cues["trust"] or cues["grounding"]:
         gaps.append("trustworthy evaluation signals beyond accuracy-only reporting")
+    if cues["hallucination_eval"]:
+        gaps.append("medical hallucination checks that separate unsupported answers from weak image grounding")
     if cues["radiology"]:
         gaps.append("narrower radiology task slices that remain feasible under student-scale resources")
-    if cues["document_qa"]:
+    if cues["document_qa"] and not cues["hallucination_eval"]:
         gaps.append("stronger evidence on reasoning over report layouts and image-text context")
     if not gaps:
         gaps = [
@@ -361,15 +401,15 @@ def synthesize_landscape(context: TopicAgentPipelineContext) -> TopicAgentLandsc
         _extract_evidence_phrases(evidence_records),
         topic=topic,
     )
-    derived_themes = _build_landscape_themes(topic, evidence_records, evidence_phrases)
-    active_methods = _build_active_methods(evidence_records, evidence_phrases)
+    derived_themes = _build_landscape_themes(topic, evidence_records, evidence_phrases, context.request)
+    active_methods = _build_active_methods(evidence_records, evidence_phrases, context.request)
     if not active_methods:
         active_methods = [
             "survey-guided baseline comparison",
             "benchmark-centered experimental design",
             "cross-method error analysis",
         ]
-    likely_gaps = _build_likely_gaps(evidence_records, topic)
+    likely_gaps = _build_likely_gaps(evidence_records, topic, context.request)
     result = TopicAgentLandscapeSummary(
         themes=derived_themes
         or [
@@ -423,7 +463,7 @@ def generate_candidates(context: TopicAgentPipelineContext) -> list[TopicAgentCa
         _extract_evidence_phrases(evidence_records),
         topic=context.request.interest,
     )
-    evidence_cues = _detect_evidence_cues(evidence_records)
+    evidence_cues = _detect_evidence_cues(evidence_records, context.request)
     benchmark_phrase = next((phrase for phrase in evidence_phrases if "benchmark" in phrase), None)
     grounding_phrase = next((phrase for phrase in evidence_phrases if "grounding" in phrase), None)
     reasoning_phrase = next((phrase for phrase in evidence_phrases if "reasoning" in phrase), None)
@@ -505,6 +545,22 @@ def generate_candidates(context: TopicAgentPipelineContext) -> list[TopicAgentCa
     elif reasoning_phrase:
         candidate_2.research_question = (
             f"Can an existing method family be adapted effectively for {reasoning_phrase} under strict compute and annotation constraints?"
+        )
+    if evidence_cues["hallucination_eval"]:
+        candidate_1.research_question = (
+            "How can a narrower evaluation slice expose hallucination risk and weak image grounding in current systems?"
+        )
+        candidate_2.research_question = (
+            "Can an existing evaluation method be adapted to detect unsupported or weakly grounded answers in multimodal medical reasoning under strict compute constraints?"
+        )
+        candidate_3.open_questions.insert(
+            0,
+            "What workflow support would make hallucination audits and grounding checks easier to reproduce?",
+        )
+    if evidence_cues["visual_qa"]:
+        candidate_1.open_questions.insert(
+            0,
+            "Which VQA-RAD or Med-VQA slice best isolates genuine image-grounded answering?",
         )
 
     if evidence_cues["radiology"]:

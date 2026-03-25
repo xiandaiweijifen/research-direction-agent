@@ -230,7 +230,11 @@ def test_topic_agent_pipeline_derives_landscape_and_candidate_cues_from_evidence
 
     assert "benchmark" in joined_themes
     assert "grounding" in joined_themes
-    assert "document qa" in joined_themes or "clinical reasoning" in joined_themes
+    assert (
+        "document qa" in joined_themes
+        or "clinical reasoning" in joined_themes
+        or "radiology vqa" in joined_themes
+    )
     assert "grounding" in joined_methods or "benchmark" in joined_methods
     assert "grounding" in response.candidate_topics[0].novelty_note.lower() or "trustworthy" in response.candidate_topics[0].novelty_note.lower()
     assert "benchmark" in response.candidate_topics[0].research_question.lower()
@@ -290,3 +294,63 @@ def test_topic_agent_pipeline_filters_low_quality_phrases_from_landscape_summary
     assert "liver" not in joined_themes
     assert "deep" not in joined_themes
     assert "multimodal" in joined_themes or "reasoning" in joined_themes
+
+
+def test_topic_agent_pipeline_uses_query_context_for_hallucination_grounding_synthesis():
+    class HallucinationProvider:
+        provider_name = "static"
+
+        def retrieve(self, request: TopicAgentExploreRequest):
+            records = [
+                TopicAgentSourceRecord(
+                    source_id="openalex_a",
+                    title="A Multitask Multimodal Evaluation of ChatGPT on Reasoning and Hallucination",
+                    source_type="paper",
+                    source_tier="B",
+                    year=2023,
+                    authors_or_publisher="Author A",
+                    identifier="https://example.org/a",
+                    url="https://example.org/a",
+                    summary="Evaluates hallucination, reasoning, and multimodal model failures.",
+                    relevance_reason="Test record",
+                ),
+                TopicAgentSourceRecord(
+                    source_id="openalex_b",
+                    title="Toward expert-level medical question answering with large language models",
+                    source_type="paper",
+                    source_tier="B",
+                    year=2025,
+                    authors_or_publisher="Author B",
+                    identifier="https://example.org/b",
+                    url="https://example.org/b",
+                    summary="Grounding-aware medical question answering evaluation with adversarial datasets.",
+                    relevance_reason="Test record",
+                ),
+            ]
+            return TopicAgentEvidenceRetrievalResult(
+                records=records,
+                diagnostics=TopicAgentEvidenceDiagnostics(
+                    requested_provider="static",
+                    used_provider="static",
+                    fallback_used=False,
+                    fallback_reason=None,
+                    record_count=2,
+                ),
+            )
+
+    request = TopicAgentExploreRequest(
+        interest="hallucination detection and grounding evaluation for multimodal medical reasoning",
+        problem_domain="medical AI",
+        constraints=TopicAgentConstraintSet(preferred_style="applied"),
+    )
+
+    response = run_topic_agent_pipeline(request, provider=HallucinationProvider())
+    joined_themes = " ".join(response.landscape_summary.themes).lower()
+    joined_methods = " ".join(response.landscape_summary.active_methods).lower()
+    joined_gaps = " ".join(response.landscape_summary.likely_gaps).lower()
+
+    assert "hallucination" in joined_themes
+    assert "grounding" in joined_themes
+    assert "hallucination" in joined_methods or "faithfulness" in joined_methods
+    assert "unsupported" in joined_gaps or "grounding" in joined_gaps
+    assert "unsupported" in response.candidate_topics[1].research_question.lower() or "grounded" in response.candidate_topics[1].research_question.lower()

@@ -360,6 +360,41 @@ def _build_openalex_query(request: TopicAgentExploreRequest) -> str:
     return " ".join(ordered_terms[:8]) or request.interest.strip()
 
 
+def _openalex_query_aliases(request: TopicAgentExploreRequest) -> list[str]:
+    topic_text = f"{request.interest} {request.problem_domain or ''}".lower()
+    aliases: list[str] = []
+
+    if "visual question answering" in topic_text or "vqa" in topic_text:
+        aliases.extend(
+            [
+                "medical vqa",
+                "med-vqa",
+                "visual question answering radiology",
+            ]
+        )
+    if "radiology" in topic_text:
+        aliases.extend(
+            [
+                "vqa-rad radiology",
+                "radiology question answering",
+            ]
+        )
+    if "hallucination" in topic_text or "grounding" in topic_text:
+        aliases.extend(
+            [
+                "medical hallucination grounding evaluation",
+                "multimodal medical grounding evaluation",
+            ]
+        )
+
+    deduped_aliases: list[str] = []
+    for alias in aliases:
+        normalized = alias.strip()
+        if normalized and normalized not in deduped_aliases:
+            deduped_aliases.append(normalized)
+    return deduped_aliases
+
+
 def _build_openalex_queries(request: TopicAgentExploreRequest) -> list[str]:
     base_query = _build_openalex_query(request)
     core_terms = _core_query_terms(request)
@@ -375,6 +410,7 @@ def _build_openalex_queries(request: TopicAgentExploreRequest) -> list[str]:
         queries.append(" ".join(["multimodal", "reasoning", *domain_terms[:2], "benchmark"]))
     if "trustworthy" in core_terms:
         queries.append(" ".join(["trustworthy", "reasoning", *domain_terms[:2], "evaluation"]))
+    queries.extend(_openalex_query_aliases(request))
     deduped_queries: list[str] = []
     for query in queries:
         normalized = query.strip()

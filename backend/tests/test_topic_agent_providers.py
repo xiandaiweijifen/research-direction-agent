@@ -1,4 +1,5 @@
 import json
+from datetime import datetime, timezone
 
 import httpx
 import pytest
@@ -10,6 +11,7 @@ from app.services.topic_agent.providers import (
     FallbackEvidenceProvider,
     MockTopicAgentEvidenceProvider,
     OpenAlexEvidenceProvider,
+    _build_openalex_queries,
     _build_cache_key,
     _build_arxiv_query,
     _core_query_terms,
@@ -379,19 +381,17 @@ def test_openalex_provider_normalizes_legacy_cached_source_ids(workspace_tmp_pat
     )
     cache_path = workspace_tmp_path / "topic_agent_openalex_cache.json"
     provider = OpenAlexEvidenceProvider(cache_path=cache_path, cache_ttl_seconds=3600)
-    cache_key = (
-        f"{OPENALEX_CACHE_SCHEMA_VERSION}::"
-        "trustworthy multimodal reasoning medical imaging applied||"
-        "trustworthy multimodal reasoning medical||"
-        "multimodal reasoning medical benchmark||"
-        "trustworthy reasoning medical evaluation::max=5"
+    cache_key = _build_cache_key(
+        "||".join(_build_openalex_queries(request)),
+        provider.max_results,
+        version=OPENALEX_CACHE_SCHEMA_VERSION,
     )
     cache_path.write_text(
         json.dumps(
-            {
-                cache_key: {
-                    "saved_at": "2026-03-25T20:48:24.956512+08:00",
-                    "records": [
+                {
+                    cache_key: {
+                        "saved_at": datetime.now(timezone.utc).isoformat(),
+                        "records": [
                         {
                             "source_id": "openalex_2",
                             "title": "Building an Ethical and Trustworthy Biomedical AI Ecosystem",
@@ -442,6 +442,22 @@ def test_openalex_cache_key_is_versioned():
     )
 
     assert key.startswith(f"{OPENALEX_CACHE_SCHEMA_VERSION}::")
+
+
+def test_openalex_queries_expand_radiology_vqa_aliases():
+    request = TopicAgentExploreRequest(
+        interest="trustworthy visual question answering in radiology",
+        problem_domain="medical AI",
+        constraints=TopicAgentConstraintSet(preferred_style="applied"),
+    )
+
+    queries = _build_openalex_queries(request)
+    joined_queries = " || ".join(queries).lower()
+
+    assert "med-vqa" in joined_queries
+    assert "medical vqa" in joined_queries
+    assert "vqa-rad radiology" in joined_queries
+    assert "radiology question answering" in joined_queries
 
 
 def test_openalex_provider_ignores_legacy_unversioned_cache_key(workspace_tmp_path, monkeypatch):
