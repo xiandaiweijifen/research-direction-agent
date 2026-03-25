@@ -142,10 +142,25 @@ def synthesize_landscape(context: TopicAgentPipelineContext) -> TopicAgentLandsc
     return result
 
 
+def _supporting_source_ids(
+    evidence_records: list[TopicAgentSourceRecord],
+    *,
+    start: int,
+    count: int,
+) -> list[str]:
+    if not evidence_records:
+        return []
+    selected = evidence_records[start : start + count]
+    if len(selected) < count:
+        selected = evidence_records[:count]
+    return [record.source_id for record in selected]
+
+
 def generate_candidates(context: TopicAgentPipelineContext) -> list[TopicAgentCandidateTopic]:
     budget_bucket = _time_budget_bucket(context.request.constraints.time_budget_months)
     resource_bucket = _resource_bucket(context.request.constraints.resource_level)
     style = _preferred_style(context.request)
+    evidence_records = context.evidence_records or []
 
     candidate_1 = TopicAgentCandidateTopic(
         candidate_id="candidate_1",
@@ -155,7 +170,7 @@ def generate_candidates(context: TopicAgentPipelineContext) -> list[TopicAgentCa
         novelty_note="Focuses on under-specified evaluation boundaries rather than generic performance claims.",
         feasibility_note="Moderate feasibility with public resources and modest compute.",
         risk_note="May become incremental if the task boundary is not sharply differentiated.",
-        supporting_source_ids=["source_1", "source_2"],
+        supporting_source_ids=_supporting_source_ids(evidence_records, start=0, count=2),
         open_questions=["Which benchmark subset best represents the intended problem?"],
     )
     candidate_2 = TopicAgentCandidateTopic(
@@ -166,7 +181,8 @@ def generate_candidates(context: TopicAgentPipelineContext) -> list[TopicAgentCa
         novelty_note="Combines known methods with a narrower operating constraint.",
         feasibility_note="Higher feasibility because it can start from existing baselines.",
         risk_note="Novelty may depend heavily on the chosen constraint and evaluation design.",
-        supporting_source_ids=["source_1", "source_3"],
+        supporting_source_ids=_supporting_source_ids(evidence_records, start=0, count=1)
+        + _supporting_source_ids(evidence_records, start=2, count=1),
         open_questions=["Which constraint creates the strongest research signal?"],
     )
     candidate_3 = TopicAgentCandidateTopic(
@@ -177,7 +193,7 @@ def generate_candidates(context: TopicAgentPipelineContext) -> list[TopicAgentCa
         novelty_note="Shifts from model novelty to workflow and evaluation reliability.",
         feasibility_note="Strong feasibility for a short-cycle project with engineering emphasis.",
         risk_note="May fit a systems or tooling venue better than a method-centric venue.",
-        supporting_source_ids=["source_2", "source_3"],
+        supporting_source_ids=_supporting_source_ids(evidence_records, start=1, count=2),
         open_questions=["What concrete reproducibility pain point should be prioritized first?"],
     )
 

@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import re
 from dataclasses import dataclass, field
 from datetime import datetime
 from xml.etree import ElementTree
@@ -142,7 +143,11 @@ class ArxivEvidenceProvider:
             headers={"User-Agent": "research-topic-copilot/0.1"},
         )
         response.raise_for_status()
-        records = _parse_arxiv_response(response.text)
+        records = _rank_records(
+            [_normalize_record(record) for record in _parse_arxiv_response(response.text)],
+            request,
+            self.max_results,
+        )
         return TopicAgentEvidenceRetrievalResult(
             records=records,
             diagnostics=TopicAgentEvidenceDiagnostics(
@@ -200,6 +205,67 @@ def _build_arxiv_query(request: TopicAgentExploreRequest) -> str:
     if style:
         parts.append(style)
     return " ".join(parts)
+
+
+def _build_query_terms(request: TopicAgentExploreRequest) -> set[str]:
+    combined = " ".join(
+        filter(
+            None,
+            [
+                request.interest,
+                request.problem_domain or "",
+                request.constraints.preferred_style or "",
+            ],
+        )
+    ).lower()
+    return {
+        term
+        for term in re.findall(r"[a-z0-9]+", combined)
+        if len(term) >= 3 and term not in {"and", "the", "for", "with"}
+    }
+
+
+def _score_record(record: TopicAgentSourceRecord, query_terms: set[str]) -> int:
+    title_lower = record.title.lower()
+    haystack = f"{title_lower} {record.summary.lower()}"
+    score = 0
+    for term in query_terms:
+        if term in title_lower:
+            score += 3
+        elif term in haystack:
+            score += 1
+    if "multimodal" in haystack:
+        score += 2
+    if "medical" in haystack:
+        score += 1
+    if "reason" in haystack or "reasoning" in haystack:
+        score += 2
+    return score
+
+
+def _normalize_record(record: TopicAgentSourceRecord) -> TopicAgentSourceRecord:
+    return record.model_copy(
+        update={
+            "url": record.url.replace("http://arxiv.org", "https://arxiv.org"),
+            "identifier": record.identifier.replace("http://arxiv.org", "https://arxiv.org"),
+            "title": _clean_xml_text(record.title),
+            "summary": _clean_xml_text(record.summary),
+        }
+    )
+
+
+def _rank_records(
+    records: list[TopicAgentSourceRecord],
+    request: TopicAgentExploreRequest,
+    max_results: int,
+) -> list[TopicAgentSourceRecord]:
+    query_terms = _build_query_terms(request)
+    scored_records = sorted(
+        records,
+        key=lambda record: (_score_record(record, query_terms), record.year),
+        reverse=True,
+    )
+    return scored_records[:max_results]
 
 
 def _parse_arxiv_response(xml_text: str) -> list[TopicAgentSourceRecord]:
