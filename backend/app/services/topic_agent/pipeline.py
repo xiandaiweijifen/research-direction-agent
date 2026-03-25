@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import re
 import uuid
 from dataclasses import dataclass
 
@@ -35,6 +36,44 @@ class TopicAgentPipelineContext:
     confidence_summary: TopicAgentConfidenceSummary | None = None
     evidence_diagnostics: TopicAgentEvidenceDiagnostics | None = None
     trace: list[TopicAgentTraceEvent] | None = None
+
+
+STOPWORDS = {
+    "about",
+    "across",
+    "analysis",
+    "approach",
+    "based",
+    "benchmark",
+    "benchmarks",
+    "context",
+    "data",
+    "evaluation",
+    "effective",
+    "framework",
+    "image",
+    "images",
+    "imaging",
+    "large",
+    "learning",
+    "medical",
+    "method",
+    "methods",
+    "model",
+    "models",
+    "paper",
+    "recent",
+    "results",
+    "study",
+    "support",
+    "system",
+    "systems",
+    "task",
+    "tasks",
+    "using",
+    "visual",
+    "with",
+}
 
 
 def _time_budget_bucket(months: int | None) -> str:
@@ -117,23 +156,84 @@ def retrieve_evidence(
     return retrieval_result.records
 
 
+def _tokenize_text(text: str) -> list[str]:
+    return [
+        token
+        for token in re.findall(r"[a-z0-9]+", text.lower())
+        if len(token) >= 4 and token not in STOPWORDS
+    ]
+
+
+def _extract_evidence_phrases(evidence_records: list[TopicAgentSourceRecord]) -> list[str]:
+    phrase_scores: dict[str, int] = {}
+    for record in evidence_records:
+        title_tokens = _tokenize_text(record.title)
+        summary_tokens = _tokenize_text(record.summary)
+        weight = 2 if record.source_tier == "A" else 1
+        for token in title_tokens:
+            phrase_scores[token] = phrase_scores.get(token, 0) + (3 * weight)
+        for token in summary_tokens[:40]:
+            phrase_scores[token] = phrase_scores.get(token, 0) + weight
+        title_bigrams = zip(title_tokens, title_tokens[1:])
+        for left, right in title_bigrams:
+            phrase = f"{left} {right}"
+            phrase_scores[phrase] = phrase_scores.get(phrase, 0) + (4 * weight)
+    ranked_phrases = sorted(
+        phrase_scores.items(),
+        key=lambda item: (item[1], len(item[0].split()), item[0]),
+        reverse=True,
+    )
+    selected: list[str] = []
+    for phrase, _score in ranked_phrases:
+        if phrase in selected:
+            continue
+        if any(phrase in existing or existing in phrase for existing in selected):
+            continue
+        selected.append(phrase)
+        if len(selected) == 6:
+            break
+    return selected
+
+
+def _theme_from_phrase(phrase: str, topic: str) -> str:
+    if "reasoning" in phrase:
+        return f"{phrase} challenges in {topic}"
+    if "grounding" in phrase:
+        return f"{phrase} and evidence faithfulness in {topic}"
+    if "benchmark" in phrase:
+        return f"{phrase} design and evaluation in {topic}"
+    return f"{phrase} as an emerging theme in {topic}"
+
+
 def synthesize_landscape(context: TopicAgentPipelineContext) -> TopicAgentLandscapeSummary:
     topic = context.request.interest.strip()
+    evidence_records = context.evidence_records or []
+    evidence_phrases = _extract_evidence_phrases(evidence_records)
+    derived_themes = [_theme_from_phrase(phrase, topic) for phrase in evidence_phrases[:3]]
+    active_methods = evidence_phrases[3:6]
+    if not active_methods:
+        active_methods = [
+            "survey-guided baseline comparison",
+            "benchmark-centered experimental design",
+            "cross-method error analysis",
+        ]
+    likely_gaps = [
+        "clear task scoping for narrow research questions",
+        "stronger evidence on feasibility under limited resources",
+    ]
+    if any("grounding" in phrase for phrase in evidence_phrases):
+        likely_gaps[0] = "grounding-aware evaluation beyond accuracy-only reporting"
+    if any("benchmark" in phrase for phrase in evidence_phrases):
+        likely_gaps[1] = "stronger benchmark design for verifying genuine multimodal dependence"
     result = TopicAgentLandscapeSummary(
-        themes=[
+        themes=derived_themes
+        or [
             f"problem framing and task definition in {topic}",
             f"benchmark-driven evaluation for {topic}",
             f"practical deployment concerns in {topic}",
         ],
-        active_methods=[
-            "survey-guided baseline comparison",
-            "benchmark-centered experimental design",
-            "cross-method error analysis",
-        ],
-        likely_gaps=[
-            "clear task scoping for narrow research questions",
-            "stronger evidence on feasibility under limited resources",
-        ],
+        active_methods=active_methods,
+        likely_gaps=likely_gaps,
         saturated_areas=[
             "broad generic summaries without a sharply defined question",
         ],
@@ -161,6 +261,10 @@ def generate_candidates(context: TopicAgentPipelineContext) -> list[TopicAgentCa
     resource_bucket = _resource_bucket(context.request.constraints.resource_level)
     style = _preferred_style(context.request)
     evidence_records = context.evidence_records or []
+    evidence_phrases = _extract_evidence_phrases(evidence_records)
+    benchmark_phrase = next((phrase for phrase in evidence_phrases if "benchmark" in phrase), None)
+    grounding_phrase = next((phrase for phrase in evidence_phrases if "grounding" in phrase), None)
+    reasoning_phrase = next((phrase for phrase in evidence_phrases if "reasoning" in phrase), None)
 
     candidate_1 = TopicAgentCandidateTopic(
         candidate_id="candidate_1",
@@ -208,6 +312,26 @@ def generate_candidates(context: TopicAgentPipelineContext) -> list[TopicAgentCa
         candidate_2.novelty_note = "Frames novelty through constraint-aware adaptation rather than larger-model gains."
         candidate_3.open_questions.append("Which workflow improvement reduces compute or setup cost the most?")
 
+    if benchmark_phrase:
+        candidate_1.research_question = (
+            f"How can a narrower {benchmark_phrase} setting reveal actionable limitations in current methods?"
+        )
+        candidate_1.open_questions = [
+            f"Which {benchmark_phrase} slice best represents the intended problem?"
+        ]
+    if grounding_phrase:
+        candidate_1.novelty_note = (
+            f"Uses {grounding_phrase} as a concrete lens for defining a sharper evaluation target."
+        )
+        candidate_3.open_questions.insert(
+            0,
+            f"What workflow support would make {grounding_phrase} evaluation more reproducible?",
+        )
+    if reasoning_phrase:
+        candidate_2.research_question = (
+            f"Can an existing method family be adapted effectively for {reasoning_phrase} under strict compute and annotation constraints?"
+        )
+
     if style == "applied":
         candidate_2.title = "Applied Method Transfer Under Practical Constraints"
         candidate_2.positioning = "applied-transfer"
@@ -220,7 +344,11 @@ def generate_candidates(context: TopicAgentPipelineContext) -> list[TopicAgentCa
     elif style == "benchmark-driven":
         candidate_1.title = "Benchmark-Guided Narrow Task Definition"
         candidate_1.positioning = "benchmark-gap"
-        candidate_1.novelty_note = "Targets benchmark slicing and evaluation boundary design as the main source of research value."
+        candidate_1.novelty_note = (
+            candidate_1.novelty_note
+            if grounding_phrase
+            else "Targets benchmark slicing and evaluation boundary design as the main source of research value."
+        )
 
     result = [
         candidate_1,

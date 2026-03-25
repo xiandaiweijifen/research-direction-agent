@@ -131,3 +131,57 @@ def test_topic_agent_pipeline_maps_candidate_supporting_ids_from_current_evidenc
     assert response.candidate_topics[0].supporting_source_ids == ["arxiv_a", "arxiv_b"]
     assert response.candidate_topics[1].supporting_source_ids == ["arxiv_a", "arxiv_c"]
     assert response.candidate_topics[2].supporting_source_ids == ["arxiv_b", "arxiv_c"]
+
+
+def test_topic_agent_pipeline_derives_landscape_and_candidate_cues_from_evidence():
+    class EvidenceDrivenProvider:
+        provider_name = "static"
+
+        def retrieve(self, request: TopicAgentExploreRequest):
+            records = [
+                TopicAgentSourceRecord(
+                    source_id="arxiv_a",
+                    title="Grounding Benchmark For Multimodal Medical Reasoning",
+                    source_type="benchmark",
+                    source_tier="A",
+                    year=2026,
+                    authors_or_publisher="Author A",
+                    identifier="https://arxiv.org/abs/a",
+                    url="https://arxiv.org/abs/a",
+                    summary="A benchmark focused on grounding and multimodal reasoning reliability.",
+                    relevance_reason="Test record",
+                ),
+                TopicAgentSourceRecord(
+                    source_id="arxiv_b",
+                    title="Grounding Reliability In Medical Reasoning",
+                    source_type="paper",
+                    source_tier="B",
+                    year=2025,
+                    authors_or_publisher="Author B",
+                    identifier="https://arxiv.org/abs/b",
+                    url="https://arxiv.org/abs/b",
+                    summary="Study of reasoning reliability and grounding issues in medical settings.",
+                    relevance_reason="Test record",
+                ),
+            ]
+            return TopicAgentEvidenceRetrievalResult(
+                records=records,
+                diagnostics=TopicAgentEvidenceDiagnostics(
+                    requested_provider="static",
+                    used_provider="static",
+                    fallback_used=False,
+                    fallback_reason=None,
+                    record_count=2,
+                ),
+            )
+
+    request = TopicAgentExploreRequest(
+        interest="trustworthy multimodal reasoning in medical imaging",
+        constraints=TopicAgentConstraintSet(preferred_style="benchmark-driven"),
+    )
+
+    response = run_topic_agent_pipeline(request, provider=EvidenceDrivenProvider())
+
+    assert any("grounding" in theme.lower() for theme in response.landscape_summary.themes)
+    assert "grounding" in response.candidate_topics[0].novelty_note.lower()
+    assert "benchmark" in response.candidate_topics[0].research_question.lower()
