@@ -388,6 +388,40 @@ def _build_cache_key(query_text: str, max_results: int, *, version: str | None =
     return f"{version_prefix}{query_text.strip().lower()}::max={max_results}"
 
 
+def _normalized_title_key(title: str) -> str:
+    normalized = re.sub(r"[^a-z0-9]+", " ", title.lower()).strip()
+    normalized = re.sub(r"\s+", " ", normalized)
+    return normalized
+
+
+def _record_deduplication_keys(record: TopicAgentSourceRecord) -> list[str]:
+    keys: list[str] = []
+    for value in (record.identifier, record.url):
+        normalized = value.strip().lower()
+        if normalized:
+            keys.append(normalized)
+    title_key = _normalized_title_key(record.title)
+    if title_key:
+        keys.append(f"title:{title_key}")
+    return keys
+
+
+def _prefer_record(candidate: TopicAgentSourceRecord, incumbent: TopicAgentSourceRecord) -> bool:
+    candidate_rank = (
+        1 if candidate.source_tier == "A" else 0,
+        1 if candidate.source_type == "benchmark" else 0,
+        candidate.year,
+        len(candidate.summary),
+    )
+    incumbent_rank = (
+        1 if incumbent.source_tier == "A" else 0,
+        1 if incumbent.source_type == "benchmark" else 0,
+        incumbent.year,
+        len(incumbent.summary),
+    )
+    return candidate_rank > incumbent_rank
+
+
 def _http_get_with_retries(
     url: str,
     *,
@@ -418,13 +452,30 @@ def _http_get_with_retries(
 
 def _dedupe_records(records: list[TopicAgentSourceRecord]) -> list[TopicAgentSourceRecord]:
     deduped: list[TopicAgentSourceRecord] = []
-    seen_keys: set[str] = set()
+    key_to_index: dict[str, int] = {}
     for record in records:
-        key = (record.identifier or record.url or record.title).strip().lower()
-        if not key or key in seen_keys:
+        keys = _record_deduplication_keys(record)
+        if not keys:
             continue
-        seen_keys.add(key)
-        deduped.append(record)
+        matching_indexes = {
+            key_to_index[key]
+            for key in keys
+            if key in key_to_index
+        }
+        if not matching_indexes:
+            deduped.append(record)
+            new_index = len(deduped) - 1
+            for key in keys:
+                key_to_index[key] = new_index
+            continue
+
+        incumbent_index = min(matching_indexes)
+        incumbent = deduped[incumbent_index]
+        winner = record if _prefer_record(record, incumbent) else incumbent
+        deduped[incumbent_index] = winner
+        winner_keys = _record_deduplication_keys(winner)
+        for key in winner_keys:
+            key_to_index[key] = incumbent_index
     return deduped
 
 

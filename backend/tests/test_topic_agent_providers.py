@@ -607,6 +607,75 @@ def test_openalex_provider_merges_multi_query_results_and_dedupes(workspace_tmp_
     assert {record.source_id for record in result.records} == {"openalex_w123", "openalex_w456"}
 
 
+def test_openalex_provider_collapses_near_duplicate_title_versions(workspace_tmp_path, monkeypatch):
+    request = TopicAgentExploreRequest(
+        interest="trustworthy multimodal reasoning in medical imaging",
+        problem_domain="medical AI",
+        constraints=TopicAgentConstraintSet(preferred_style="applied"),
+    )
+    cache_path = workspace_tmp_path / "topic_agent_openalex_cache.json"
+    provider = OpenAlexEvidenceProvider(cache_path=cache_path, cache_ttl_seconds=3600, max_results=5)
+
+    class FakeResponse:
+        def __init__(self, payload):
+            self._payload = payload
+
+        def json(self):
+            return self._payload
+
+        def raise_for_status(self):
+            return None
+
+    payload = {
+        "results": [
+            {
+                "id": "https://openalex.org/W4401863364",
+                "display_name": "RJUA-MedDQA: A Multimodal Benchmark for Medical Document Question Answering and Clinical Reasoning",
+                "publication_year": 2024,
+                "abstract_inverted_index": {
+                    "Multimodal": [0],
+                    "benchmark": [1],
+                    "medical": [2],
+                    "document": [3],
+                    "question": [4],
+                    "answering": [5],
+                    "clinical": [6],
+                    "reasoning": [7],
+                },
+                "authorships": [{"author": {"display_name": "Author A"}}],
+                "primary_location": {"landing_page_url": "https://doi.org/10.1145/example"},
+            },
+            {
+                "id": "https://openalex.org/W4392181732",
+                "display_name": "RJUA-MedDQA: A Multimodal Benchmark for Medical Document Question Answering and Clinical Reasoning",
+                "publication_year": 2024,
+                "abstract_inverted_index": {
+                    "Multimodal": [0],
+                    "benchmark": [1],
+                    "medical": [2],
+                    "document": [3],
+                    "question": [4],
+                    "answering": [5],
+                    "clinical": [6],
+                    "reasoning": [7],
+                },
+                "authorships": [{"author": {"display_name": "Author B"}}],
+                "primary_location": {"landing_page_url": "https://arxiv.org/abs/2402.14840"},
+            },
+        ]
+    }
+
+    monkeypatch.setattr(
+        "app.services.topic_agent.providers.httpx.get",
+        lambda *args, **kwargs: FakeResponse(payload),
+    )
+
+    result = provider.retrieve(request)
+
+    assert len(result.records) == 1
+    assert result.records[0].source_id == "openalex_w4401863364"
+
+
 def test_openalex_reranking_prefers_task_specific_benchmarks_over_generic_reviews(workspace_tmp_path, monkeypatch):
     request = TopicAgentExploreRequest(
         interest="trustworthy multimodal reasoning in medical imaging",
