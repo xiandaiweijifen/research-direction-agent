@@ -186,3 +186,58 @@ def test_topic_agent_pipeline_derives_landscape_and_candidate_cues_from_evidence
     assert any("grounding" in theme.lower() for theme in response.landscape_summary.themes)
     assert "grounding" in response.candidate_topics[0].novelty_note.lower()
     assert "benchmark" in response.candidate_topics[0].research_question.lower()
+
+
+def test_topic_agent_pipeline_filters_low_quality_phrases_from_landscape_summary():
+    class NoisyEvidenceProvider:
+        provider_name = "static"
+
+        def retrieve(self, request: TopicAgentExploreRequest):
+            records = [
+                TopicAgentSourceRecord(
+                    source_id="arxiv_a",
+                    title="Deep Liver Application For Medical Imaging",
+                    source_type="paper",
+                    source_tier="B",
+                    year=2025,
+                    authors_or_publisher="Author A",
+                    identifier="https://arxiv.org/abs/a",
+                    url="https://arxiv.org/abs/a",
+                    summary="Application from liver imaging workflows with generic deep features.",
+                    relevance_reason="Test record",
+                ),
+                TopicAgentSourceRecord(
+                    source_id="arxiv_b",
+                    title="Multimodal Reasoning Benchmark For Medical Imaging",
+                    source_type="benchmark",
+                    source_tier="A",
+                    year=2026,
+                    authors_or_publisher="Author B",
+                    identifier="https://arxiv.org/abs/b",
+                    url="https://arxiv.org/abs/b",
+                    summary="Benchmark for multimodal reasoning and trustworthy evaluation.",
+                    relevance_reason="Test record",
+                ),
+            ]
+            return TopicAgentEvidenceRetrievalResult(
+                records=records,
+                diagnostics=TopicAgentEvidenceDiagnostics(
+                    requested_provider="static",
+                    used_provider="static",
+                    fallback_used=False,
+                    fallback_reason=None,
+                    record_count=2,
+                ),
+            )
+
+    request = TopicAgentExploreRequest(
+        interest="trustworthy multimodal reasoning in medical imaging",
+        constraints=TopicAgentConstraintSet(),
+    )
+
+    response = run_topic_agent_pipeline(request, provider=NoisyEvidenceProvider())
+    joined_themes = " ".join(response.landscape_summary.themes).lower()
+
+    assert "liver" not in joined_themes
+    assert "deep" not in joined_themes
+    assert "multimodal" in joined_themes or "reasoning" in joined_themes

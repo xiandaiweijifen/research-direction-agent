@@ -6,6 +6,7 @@ from app.services.topic_agent.providers import (
     FallbackEvidenceProvider,
     MockTopicAgentEvidenceProvider,
     _build_arxiv_query,
+    _core_query_terms,
     _filter_ranked_records,
     _parse_arxiv_response,
     _rank_records,
@@ -67,6 +68,21 @@ def test_build_arxiv_query_prioritizes_interest_phrase_and_core_terms():
     assert "trustworthy" in query
     assert "multimodal" in query
     assert "reasoning" in query
+
+
+def test_core_query_terms_are_derived_from_request_instead_of_fixed_keywords():
+    request = TopicAgentExploreRequest(
+        interest="causal representation learning for clinical time series",
+        problem_domain="healthcare ML",
+        constraints=TopicAgentConstraintSet(),
+    )
+
+    terms = _core_query_terms(request)
+
+    assert "causal" in terms
+    assert "representation" in terms
+    assert "clinical" in terms
+    assert "series" in terms
 
 
 def test_arxiv_provider_ranking_prefers_records_with_query_term_overlap():

@@ -70,6 +70,15 @@ STOPWORDS = {
     "systems",
     "task",
     "tasks",
+    "application",
+    "applications",
+    "deep",
+    "from",
+    "liver",
+    "open",
+    "practical",
+    "repository",
+    "survey",
     "using",
     "visual",
     "with",
@@ -195,6 +204,35 @@ def _extract_evidence_phrases(evidence_records: list[TopicAgentSourceRecord]) ->
     return selected
 
 
+def _extract_query_anchor_terms(topic: str) -> set[str]:
+    return {
+        token
+        for token in re.findall(r"[a-z0-9]+", topic.lower())
+        if len(token) >= 5 and token not in STOPWORDS
+    }
+
+
+def _filter_evidence_phrases(
+    evidence_phrases: list[str],
+    *,
+    topic: str,
+) -> list[str]:
+    anchors = _extract_query_anchor_terms(topic)
+    evidence_cue_terms = {"benchmark", "reasoning", "grounding", "trustworthy", "multimodal"}
+    filtered: list[str] = []
+    for phrase in evidence_phrases:
+        parts = phrase.split()
+        if len(parts) == 1 and phrase not in anchors:
+            if phrase not in evidence_cue_terms:
+                continue
+        if any(part in STOPWORDS for part in parts):
+            continue
+        if anchors and not any(part in anchors or part in evidence_cue_terms for part in parts):
+            continue
+        filtered.append(phrase)
+    return filtered
+
+
 def _theme_from_phrase(phrase: str, topic: str) -> str:
     if "reasoning" in phrase:
         return f"{phrase} challenges in {topic}"
@@ -208,7 +246,10 @@ def _theme_from_phrase(phrase: str, topic: str) -> str:
 def synthesize_landscape(context: TopicAgentPipelineContext) -> TopicAgentLandscapeSummary:
     topic = context.request.interest.strip()
     evidence_records = context.evidence_records or []
-    evidence_phrases = _extract_evidence_phrases(evidence_records)
+    evidence_phrases = _filter_evidence_phrases(
+        _extract_evidence_phrases(evidence_records),
+        topic=topic,
+    )
     derived_themes = [_theme_from_phrase(phrase, topic) for phrase in evidence_phrases[:3]]
     active_methods = evidence_phrases[3:6]
     if not active_methods:
@@ -261,7 +302,10 @@ def generate_candidates(context: TopicAgentPipelineContext) -> list[TopicAgentCa
     resource_bucket = _resource_bucket(context.request.constraints.resource_level)
     style = _preferred_style(context.request)
     evidence_records = context.evidence_records or []
-    evidence_phrases = _extract_evidence_phrases(evidence_records)
+    evidence_phrases = _filter_evidence_phrases(
+        _extract_evidence_phrases(evidence_records),
+        topic=context.request.interest,
+    )
     benchmark_phrase = next((phrase for phrase in evidence_phrases if "benchmark" in phrase), None)
     grounding_phrase = next((phrase for phrase in evidence_phrases if "grounding" in phrase), None)
     reasoning_phrase = next((phrase for phrase in evidence_phrases if "reasoning" in phrase), None)

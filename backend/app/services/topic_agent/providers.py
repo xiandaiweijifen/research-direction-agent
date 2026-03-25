@@ -274,18 +274,35 @@ def _build_query_terms(request: TopicAgentExploreRequest) -> set[str]:
     return {
         term
         for term in re.findall(r"[a-z0-9]+", combined)
-        if len(term) >= 3 and term not in {"and", "the", "for", "with", "using", "from"}
+        if len(term) >= 4 and term not in {"and", "the", "for", "with", "using", "from", "into", "that"}
     }
 
 
 def _core_query_terms(request: TopicAgentExploreRequest) -> list[str]:
-    phrase = request.interest.lower()
-    prioritized_terms = [
+    interest_terms = [
         term
-        for term in ["trustworthy", "multimodal", "reasoning", "benchmark", "medical"]
-        if term in phrase
+        for term in re.findall(r"[a-z0-9]+", request.interest.lower())
+        if len(term) >= 5 and term not in {"about", "using", "study", "based", "approach"}
     ]
-    return prioritized_terms
+    domain_terms = [
+        term
+        for term in re.findall(r"[a-z0-9]+", (request.problem_domain or "").lower())
+        if len(term) >= 4 and term not in {"domain", "field", "study"}
+    ]
+    ordered_terms: list[str] = []
+    for term in interest_terms + domain_terms:
+        if term not in ordered_terms:
+            ordered_terms.append(term)
+    return ordered_terms[:6]
+
+
+def _interest_signal_terms(request: TopicAgentExploreRequest) -> list[str]:
+    generic_domain_terms = {"medical", "imaging", "clinical", "healthcare"}
+    return [
+        term
+        for term in _core_query_terms(request)
+        if term not in generic_domain_terms
+    ]
 
 
 def _score_record(
@@ -320,6 +337,12 @@ def _score_record(
 def _matched_core_term_count(record: TopicAgentSourceRecord, core_terms: list[str]) -> int:
     haystack = f"{record.title.lower()} {record.summary.lower()}"
     return sum(1 for term in core_terms if term in haystack)
+
+
+def _matched_interest_term_count(record: TopicAgentSourceRecord, request: TopicAgentExploreRequest) -> int:
+    interest_terms = _interest_signal_terms(request)
+    haystack = f"{record.title.lower()} {record.summary.lower()}"
+    return sum(1 for term in interest_terms if term in haystack)
 
 
 def _normalize_record(record: TopicAgentSourceRecord) -> TopicAgentSourceRecord:
@@ -363,12 +386,14 @@ def _filter_ranked_records(
         record
         for record in records
         if _matched_core_term_count(record, core_terms) >= 2
+        and _matched_interest_term_count(record, request) >= 2
     ]
     if not filtered:
         filtered = [
             record
             for record in records
             if _matched_core_term_count(record, core_terms) >= 1
+            and _matched_interest_term_count(record, request) >= 2
         ]
     if not filtered:
         return records[:max_results]
