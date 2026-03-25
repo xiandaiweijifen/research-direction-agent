@@ -23,6 +23,8 @@ def test_topic_agent_pipeline_returns_structured_session_response():
     assert response.user_input.interest == request.interest
     assert response.framing_result.normalized_topic == request.interest
     assert len(response.evidence_records) == 3
+    assert response.evidence_diagnostics.used_provider == "mock"
+    assert response.evidence_diagnostics.record_count == 3
     assert len(response.candidate_topics) == 3
     assert response.comparison_result.candidate_assessments[0]["candidate_id"] == "candidate_1"
     assert response.convergence_result.recommended_candidate_id == "candidate_1"
@@ -55,6 +57,7 @@ def test_topic_agent_pipeline_changes_recommendation_for_applied_tight_constrain
 
     assert response.convergence_result.recommended_candidate_id == "candidate_2"
     assert response.candidate_topics[1].title == "Applied Method Transfer Under Practical Constraints"
+    assert response.evidence_diagnostics.used_provider == "mock"
     assert response.comparison_result.summary.startswith(
         "Candidate 2 is strongest for applied feasibility"
     )

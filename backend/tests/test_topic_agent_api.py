@@ -35,6 +35,8 @@ def test_topic_agent_explore_creates_session_with_mock_outputs(workspace_tmp_pat
     assert payload["comparison_result"]["candidate_assessments"]
     assert payload["convergence_result"]["recommended_candidate_id"] == "candidate_1"
     assert payload["confidence_summary"]["candidate_separation"] == "high"
+    assert payload["evidence_diagnostics"]["used_provider"] in {"mock", "arxiv"}
+    assert payload["evidence_diagnostics"]["record_count"] == len(payload["evidence_records"])
     assert payload["confidence_summary"]["rationale"]
     assert payload["trace"]
     assert [event["stage"] for event in payload["trace"]] == [
@@ -117,6 +119,9 @@ def test_topic_agent_refine_updates_existing_session(workspace_tmp_path, monkeyp
     assert refined_payload["user_input"]["constraints"]["preferred_style"] == "applied"
     assert refined_payload["created_at"] == original_payload["created_at"]
     assert refined_payload["confidence_summary"]["source_quality"] == "medium_high"
+    assert refined_payload["evidence_diagnostics"]["record_count"] == len(
+        refined_payload["evidence_records"]
+    )
     assert (
         refined_payload["candidate_topics"][1]["title"]
         == "Applied Method Transfer Under Practical Constraints"

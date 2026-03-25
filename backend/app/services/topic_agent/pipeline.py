@@ -8,6 +8,7 @@ from app.schemas.topic_agent import (
     TopicAgentComparisonResult,
     TopicAgentConfidenceSummary,
     TopicAgentConvergenceResult,
+    TopicAgentEvidenceDiagnostics,
     TopicAgentExploreRequest,
     TopicAgentFramingResult,
     TopicAgentLandscapeSummary,
@@ -16,7 +17,10 @@ from app.schemas.topic_agent import (
     TopicAgentTraceEvent,
 )
 from app.services.ingestion.document_service import build_utc_timestamp
-from app.services.topic_agent.providers import TopicAgentEvidenceProvider
+from app.services.topic_agent.providers import (
+    TopicAgentEvidenceProvider,
+    TopicAgentEvidenceRetrievalResult,
+)
 
 
 @dataclass
@@ -29,6 +33,7 @@ class TopicAgentPipelineContext:
     comparison_result: TopicAgentComparisonResult | None = None
     convergence_result: TopicAgentConvergenceResult | None = None
     confidence_summary: TopicAgentConfidenceSummary | None = None
+    evidence_diagnostics: TopicAgentEvidenceDiagnostics | None = None
     trace: list[TopicAgentTraceEvent] | None = None
 
 
@@ -106,9 +111,10 @@ def retrieve_evidence(
     context: TopicAgentPipelineContext,
     provider: TopicAgentEvidenceProvider,
 ) -> list[TopicAgentSourceRecord]:
-    records = provider.retrieve(context.request)
-    context.evidence_records = records
-    return records
+    retrieval_result: TopicAgentEvidenceRetrievalResult = provider.retrieve(context.request)
+    context.evidence_records = retrieval_result.records
+    context.evidence_diagnostics = retrieval_result.diagnostics
+    return retrieval_result.records
 
 
 def synthesize_landscape(context: TopicAgentPipelineContext) -> TopicAgentLandscapeSummary:
@@ -384,6 +390,17 @@ def build_confidence_summary(context: TopicAgentPipelineContext) -> TopicAgentCo
 def build_trace(context: TopicAgentPipelineContext) -> list[TopicAgentTraceEvent]:
     evidence_count = len(context.evidence_records or [])
     candidate_count = len(context.candidate_topics or [])
+    diagnostics = context.evidence_diagnostics
+    provider_detail = "an unknown evidence provider"
+    if diagnostics:
+        provider_detail = (
+            f"{diagnostics.used_provider} provider"
+            if not diagnostics.fallback_used
+            else (
+                f"{diagnostics.used_provider} provider after fallback from "
+                f"{diagnostics.requested_provider} ({diagnostics.fallback_reason})"
+            )
+        )
     result = [
         TopicAgentTraceEvent(
             stage="frame_problem",
@@ -395,7 +412,7 @@ def build_trace(context: TopicAgentPipelineContext) -> list[TopicAgentTraceEvent
             stage="retrieve_evidence",
             status="completed",
             timestamp=build_utc_timestamp(),
-            detail=f"Built a mock evidence bundle with {evidence_count} records for the current development slice.",
+            detail=f"Retrieved {evidence_count} evidence records using the {provider_detail}.",
         ),
         TopicAgentTraceEvent(
             stage="synthesize_landscape",
@@ -457,4 +474,12 @@ def run_topic_agent_pipeline(
         human_confirmations=[],
         trace=context.trace or [],
         confidence_summary=context.confidence_summary,
+        evidence_diagnostics=context.evidence_diagnostics
+        or TopicAgentEvidenceDiagnostics(
+            requested_provider="unknown",
+            used_provider="unknown",
+            fallback_used=False,
+            fallback_reason=None,
+            record_count=len(context.evidence_records or []),
+        ),
     )

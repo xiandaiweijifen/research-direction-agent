@@ -82,6 +82,14 @@ class TopicAgentConfidenceSummary(BaseModel):
     rationale: list[str] = Field(default_factory=list)
 
 
+class TopicAgentEvidenceDiagnostics(BaseModel):
+    requested_provider: str
+    used_provider: str
+    fallback_used: bool = False
+    fallback_reason: str | None = None
+    record_count: int = 0
+
+
 class TopicAgentTraceEvent(BaseModel):
     stage: str
     status: str
@@ -103,6 +111,7 @@ class TopicAgentSessionResponse(BaseModel):
     human_confirmations: list[str] = Field(default_factory=list)
     trace: list[TopicAgentTraceEvent] = Field(default_factory=list)
     confidence_summary: TopicAgentConfidenceSummary
+    evidence_diagnostics: TopicAgentEvidenceDiagnostics
 
 
 class TopicAgentSessionSummary(BaseModel):

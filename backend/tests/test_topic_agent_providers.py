@@ -52,6 +52,8 @@ def test_parse_arxiv_response_maps_entries_to_topic_agent_records():
 
 def test_fallback_provider_returns_mock_records_when_primary_fails():
     class FailingProvider:
+        provider_name = "primary"
+
         def retrieve(self, request: TopicAgentExploreRequest):
             raise RuntimeError("network down")
 
@@ -64,7 +66,11 @@ def test_fallback_provider_returns_mock_records_when_primary_fails():
         fallback=MockTopicAgentEvidenceProvider(),
     )
 
-    records = provider.retrieve(request)
+    result = provider.retrieve(request)
 
-    assert len(records) == 3
-    assert records[0].source_id == "source_1"
+    assert len(result.records) == 3
+    assert result.records[0].source_id == "source_1"
+    assert result.diagnostics.requested_provider == "primary"
+    assert result.diagnostics.used_provider == "mock"
+    assert result.diagnostics.fallback_used is True
+    assert "RuntimeError:network down" == result.diagnostics.fallback_reason

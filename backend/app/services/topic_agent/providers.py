@@ -7,11 +7,21 @@ from typing import Protocol
 
 import httpx
 
-from app.schemas.topic_agent import TopicAgentExploreRequest, TopicAgentSourceRecord
+from app.schemas.topic_agent import (
+    TopicAgentEvidenceDiagnostics,
+    TopicAgentExploreRequest,
+    TopicAgentSourceRecord,
+)
+
+
+@dataclass
+class TopicAgentEvidenceRetrievalResult:
+    records: list[TopicAgentSourceRecord]
+    diagnostics: TopicAgentEvidenceDiagnostics
 
 
 class TopicAgentEvidenceProvider(Protocol):
-    def retrieve(self, request: TopicAgentExploreRequest) -> list[TopicAgentSourceRecord]:
+    def retrieve(self, request: TopicAgentExploreRequest) -> TopicAgentEvidenceRetrievalResult:
         ...
 
 
@@ -47,10 +57,12 @@ def _normalize_optional(value: str | None) -> str | None:
 
 
 class MockTopicAgentEvidenceProvider:
-    def retrieve(self, request: TopicAgentExploreRequest) -> list[TopicAgentSourceRecord]:
+    provider_name = "mock"
+
+    def retrieve(self, request: TopicAgentExploreRequest) -> TopicAgentEvidenceRetrievalResult:
         base_topic = request.interest.strip()
         domain = _normalize_optional(request.problem_domain) or "the target domain"
-        return [
+        records = [
             TopicAgentSourceRecord(
                 source_id="source_1",
                 title=f"Recent Survey On {base_topic.title()}",
@@ -88,9 +100,21 @@ class MockTopicAgentEvidenceProvider:
                 relevance_reason="Supports feasibility assessment for a first project iteration.",
             ),
         ]
+        return TopicAgentEvidenceRetrievalResult(
+            records=records,
+            diagnostics=TopicAgentEvidenceDiagnostics(
+                requested_provider=self.provider_name,
+                used_provider=self.provider_name,
+                fallback_used=False,
+                fallback_reason=None,
+                record_count=len(records),
+            ),
+        )
 
 
 class ArxivEvidenceProvider:
+    provider_name = "arxiv"
+
     def __init__(
         self,
         *,
@@ -102,7 +126,7 @@ class ArxivEvidenceProvider:
         self.timeout_seconds = timeout_seconds
         self.max_results = max_results
 
-    def retrieve(self, request: TopicAgentExploreRequest) -> list[TopicAgentSourceRecord]:
+    def retrieve(self, request: TopicAgentExploreRequest) -> TopicAgentEvidenceRetrievalResult:
         query_text = _build_arxiv_query(request)
         response = httpx.get(
             self.api_url,
@@ -117,7 +141,17 @@ class ArxivEvidenceProvider:
             headers={"User-Agent": "research-topic-copilot/0.1"},
         )
         response.raise_for_status()
-        return _parse_arxiv_response(response.text)
+        records = _parse_arxiv_response(response.text)
+        return TopicAgentEvidenceRetrievalResult(
+            records=records,
+            diagnostics=TopicAgentEvidenceDiagnostics(
+                requested_provider=self.provider_name,
+                used_provider=self.provider_name,
+                fallback_used=False,
+                fallback_reason=None,
+                record_count=len(records),
+            ),
+        )
 
 
 class FallbackEvidenceProvider:
@@ -129,12 +163,31 @@ class FallbackEvidenceProvider:
         self.primary = primary
         self.fallback = fallback
 
-    def retrieve(self, request: TopicAgentExploreRequest) -> list[TopicAgentSourceRecord]:
+    provider_name = "fallback"
+
+    def retrieve(self, request: TopicAgentExploreRequest) -> TopicAgentEvidenceRetrievalResult:
+        primary_name = getattr(self.primary, "provider_name", "primary")
+        fallback_name = getattr(self.fallback, "provider_name", "fallback")
         try:
-            records = self.primary.retrieve(request)
-            return records or self.fallback.retrieve(request)
-        except Exception:
-            return self.fallback.retrieve(request)
+            primary_result = self.primary.retrieve(request)
+            if primary_result.records:
+                primary_result.diagnostics.requested_provider = primary_name
+                primary_result.diagnostics.record_count = len(primary_result.records)
+                return primary_result
+            fallback_result = self.fallback.retrieve(request)
+            fallback_result.diagnostics.requested_provider = primary_name
+            fallback_result.diagnostics.fallback_used = True
+            fallback_result.diagnostics.fallback_reason = "primary_provider_returned_no_records"
+            fallback_result.diagnostics.record_count = len(fallback_result.records)
+            return fallback_result
+        except Exception as exc:
+            fallback_result = self.fallback.retrieve(request)
+            fallback_result.diagnostics.requested_provider = primary_name
+            fallback_result.diagnostics.fallback_used = True
+            fallback_result.diagnostics.fallback_reason = f"{type(exc).__name__}:{exc}"
+            fallback_result.diagnostics.record_count = len(fallback_result.records)
+            fallback_result.diagnostics.used_provider = fallback_name
+            return fallback_result
 
 
 def _build_arxiv_query(request: TopicAgentExploreRequest) -> str:
