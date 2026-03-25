@@ -144,16 +144,18 @@ class OpenAlexEvidenceProvider:
         self,
         *,
         api_url: str = OPENALEX_API_URL,
-        timeout_seconds: float = 5.0,
+        timeout_seconds: float = 10.0,
         max_results: int = 5,
         cache_path: Path = TOPIC_AGENT_OPENALEX_CACHE_PATH,
         cache_ttl_seconds: int = 60 * 60 * 12,
+        max_retries: int = 2,
     ) -> None:
         self.api_url = api_url
         self.timeout_seconds = timeout_seconds
         self.max_results = max_results
         self.cache_path = cache_path
         self.cache_ttl_seconds = cache_ttl_seconds
+        self.max_retries = max_retries
 
     def retrieve(self, request: TopicAgentExploreRequest) -> TopicAgentEvidenceRetrievalResult:
         query_texts = _build_openalex_queries(request)
@@ -184,18 +186,17 @@ class OpenAlexEvidenceProvider:
             )
         merged_records: list[TopicAgentSourceRecord] = []
         for query_text in query_texts:
-            response = httpx.get(
+            response = _http_get_with_retries(
                 self.api_url,
                 params={
                     "search": query_text,
                     "filter": "has_abstract:true",
                     "per-page": self.max_results,
                 },
-                timeout=self.timeout_seconds,
-                follow_redirects=True,
-                headers={"User-Agent": "research-topic-copilot/0.1"},
+                timeout_seconds=self.timeout_seconds,
+                max_retries=self.max_retries,
+                user_agent="research-topic-copilot/0.1",
             )
-            response.raise_for_status()
             payload = response.json()
             merged_records.extend(
                 [_normalize_record(record) for record in _parse_openalex_response(payload)]
@@ -227,16 +228,18 @@ class ArxivEvidenceProvider:
         self,
         *,
         api_url: str = ARXIV_API_URL,
-        timeout_seconds: float = 5.0,
+        timeout_seconds: float = 8.0,
         max_results: int = 3,
         cache_path: Path = TOPIC_AGENT_ARXIV_CACHE_PATH,
         cache_ttl_seconds: int = 60 * 60 * 12,
+        max_retries: int = 1,
     ) -> None:
         self.api_url = api_url
         self.timeout_seconds = timeout_seconds
         self.max_results = max_results
         self.cache_path = cache_path
         self.cache_ttl_seconds = cache_ttl_seconds
+        self.max_retries = max_retries
 
     def retrieve(self, request: TopicAgentExploreRequest) -> TopicAgentEvidenceRetrievalResult:
         query_text = _build_arxiv_query(request)
@@ -258,7 +261,7 @@ class ArxivEvidenceProvider:
                     cache_hit=True,
                 ),
             )
-        response = httpx.get(
+        response = _http_get_with_retries(
             self.api_url,
             params={
                 "search_query": f"all:{query_text}",
@@ -267,11 +270,10 @@ class ArxivEvidenceProvider:
                 "sortBy": "relevance",
                 "sortOrder": "descending",
             },
-            timeout=self.timeout_seconds,
-            follow_redirects=True,
-            headers={"User-Agent": "research-topic-copilot/0.1"},
+            timeout_seconds=self.timeout_seconds,
+            max_retries=self.max_retries,
+            user_agent="research-topic-copilot/0.1",
         )
-        response.raise_for_status()
         records = _rank_records(
             [_normalize_record(record) for record in _parse_arxiv_response(response.text)],
             request,
@@ -384,6 +386,34 @@ def _build_openalex_queries(request: TopicAgentExploreRequest) -> list[str]:
 def _build_cache_key(query_text: str, max_results: int, *, version: str | None = None) -> str:
     version_prefix = f"{version}::" if version else ""
     return f"{version_prefix}{query_text.strip().lower()}::max={max_results}"
+
+
+def _http_get_with_retries(
+    url: str,
+    *,
+    params: dict[str, str | int],
+    timeout_seconds: float,
+    max_retries: int,
+    user_agent: str,
+) -> httpx.Response:
+    timeout = httpx.Timeout(connect=5.0, read=timeout_seconds, write=5.0, pool=5.0)
+    last_exc: Exception | None = None
+    for _attempt in range(max_retries + 1):
+        try:
+            response = httpx.get(
+                url,
+                params=params,
+                timeout=timeout,
+                follow_redirects=True,
+                headers={"User-Agent": user_agent},
+            )
+            response.raise_for_status()
+            return response
+        except (httpx.ConnectError, httpx.ReadTimeout, httpx.HTTPStatusError) as exc:
+            last_exc = exc
+    if last_exc is not None:
+        raise last_exc
+    raise RuntimeError("http_request_failed_without_exception")
 
 
 def _dedupe_records(records: list[TopicAgentSourceRecord]) -> list[TopicAgentSourceRecord]:

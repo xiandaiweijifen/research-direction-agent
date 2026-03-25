@@ -1,5 +1,6 @@
 import json
 
+import httpx
 import pytest
 
 from app.schemas.topic_agent import TopicAgentConstraintSet, TopicAgentExploreRequest
@@ -13,6 +14,7 @@ from app.services.topic_agent.providers import (
     _build_arxiv_query,
     _core_query_terms,
     _filter_ranked_records,
+    _http_get_with_retries,
     _parse_openalex_response,
     _parse_arxiv_response,
     _rank_records,
@@ -324,6 +326,49 @@ def test_openalex_provider_uses_cache_when_query_key_is_present(workspace_tmp_pa
 
     assert cached_result.diagnostics.cache_hit is True
     assert cached_result.records[0].source_id == "openalex_w123"
+
+
+def test_http_get_with_retries_retries_transient_connect_errors(monkeypatch):
+    call_count = {"value": 0}
+
+    class FakeResponse:
+        def raise_for_status(self):
+            return None
+
+    def flaky_get(*args, **kwargs):
+        call_count["value"] += 1
+        if call_count["value"] < 3:
+            raise httpx.ConnectError("temporary reset")
+        return FakeResponse()
+
+    monkeypatch.setattr("app.services.topic_agent.providers.httpx.get", flaky_get)
+
+    response = _http_get_with_retries(
+        "https://example.org",
+        params={"search": "test"},
+        timeout_seconds=10.0,
+        max_retries=2,
+        user_agent="research-topic-copilot/0.1",
+    )
+
+    assert isinstance(response, FakeResponse)
+    assert call_count["value"] == 3
+
+
+def test_http_get_with_retries_raises_after_retry_budget(monkeypatch):
+    def always_fail(*args, **kwargs):
+        raise httpx.ReadTimeout("still timing out")
+
+    monkeypatch.setattr("app.services.topic_agent.providers.httpx.get", always_fail)
+
+    with pytest.raises(httpx.ReadTimeout):
+        _http_get_with_retries(
+            "https://example.org",
+            params={"search": "test"},
+            timeout_seconds=10.0,
+            max_retries=1,
+            user_agent="research-topic-copilot/0.1",
+        )
 
 
 def test_openalex_provider_normalizes_legacy_cached_source_ids(workspace_tmp_path):
