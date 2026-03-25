@@ -465,3 +465,115 @@ def test_topic_agent_pipeline_keeps_hallucination_queries_from_defaulting_to_vqa
 
     assert "hallucination risk" in response.candidate_topics[0].research_question.lower()
     assert "vqa-rad or med-vqa" not in " ".join(response.candidate_topics[0].open_questions).lower()
+
+
+def test_topic_agent_pipeline_polishes_visual_qa_candidate_wording():
+    class VisualQaProvider:
+        provider_name = "static"
+
+        def retrieve(self, request: TopicAgentExploreRequest):
+            records = [
+                TopicAgentSourceRecord(
+                    source_id="openalex_a",
+                    title="Medical Visual Question Answering via Conditional Reasoning",
+                    source_type="benchmark",
+                    source_tier="A",
+                    year=2020,
+                    authors_or_publisher="Author A",
+                    identifier="https://example.org/a",
+                    url="https://example.org/a",
+                    summary="Med-VQA on VQA-RAD for radiology question answering.",
+                    relevance_reason="Test record",
+                ),
+                TopicAgentSourceRecord(
+                    source_id="openalex_b",
+                    title="Free Form Medical Visual Question Answering in Radiology",
+                    source_type="paper",
+                    source_tier="B",
+                    year=2024,
+                    authors_or_publisher="Author B",
+                    identifier="https://example.org/b",
+                    url="https://example.org/b",
+                    summary="Radiology VQA benchmark and multimodal answer generation.",
+                    relevance_reason="Test record",
+                ),
+            ]
+            return TopicAgentEvidenceRetrievalResult(
+                records=records,
+                diagnostics=TopicAgentEvidenceDiagnostics(
+                    requested_provider="static",
+                    used_provider="static",
+                    fallback_used=False,
+                    fallback_reason=None,
+                    record_count=2,
+                ),
+            )
+
+    request = TopicAgentExploreRequest(
+        interest="trustworthy visual question answering in radiology",
+        problem_domain="medical AI",
+        constraints=TopicAgentConstraintSet(preferred_style="applied"),
+    )
+
+    response = run_topic_agent_pipeline(request, provider=VisualQaProvider())
+
+    assert "radiology vqa method family" in response.candidate_topics[1].research_question.lower()
+    assert "document-centric clinical reasoning" not in response.candidate_topics[1].research_question.lower()
+
+
+def test_topic_agent_pipeline_dedupes_hallucination_workflow_questions():
+    class HallucinationWorkflowProvider:
+        provider_name = "static"
+
+        def retrieve(self, request: TopicAgentExploreRequest):
+            records = [
+                TopicAgentSourceRecord(
+                    source_id="openalex_a",
+                    title="Parameter-Efficient Fine-Tuning Medical Multimodal Large Language Models for Medical Visual Grounding",
+                    source_type="benchmark",
+                    source_tier="A",
+                    year=2025,
+                    authors_or_publisher="Author A",
+                    identifier="https://example.org/a",
+                    url="https://example.org/a",
+                    summary="Grounding evaluation benchmark for medical multimodal models.",
+                    relevance_reason="Test record",
+                ),
+                TopicAgentSourceRecord(
+                    source_id="openalex_b",
+                    title="A Multitask, Multilingual, Multimodal Evaluation of ChatGPT on Reasoning, Hallucination, and Interactivity",
+                    source_type="paper",
+                    source_tier="B",
+                    year=2023,
+                    authors_or_publisher="Author B",
+                    identifier="https://example.org/b",
+                    url="https://example.org/b",
+                    summary="Hallucination and faithfulness evaluation evidence.",
+                    relevance_reason="Test record",
+                ),
+            ]
+            return TopicAgentEvidenceRetrievalResult(
+                records=records,
+                diagnostics=TopicAgentEvidenceDiagnostics(
+                    requested_provider="static",
+                    used_provider="static",
+                    fallback_used=False,
+                    fallback_reason=None,
+                    record_count=2,
+                ),
+            )
+
+    request = TopicAgentExploreRequest(
+        interest="hallucination detection and grounding evaluation for multimodal medical reasoning",
+        problem_domain="medical AI",
+        constraints=TopicAgentConstraintSet(preferred_style="applied"),
+    )
+
+    response = run_topic_agent_pipeline(request, provider=HallucinationWorkflowProvider())
+    questions = response.candidate_topics[2].open_questions
+
+    assert questions == [
+        "What workflow support would make hallucination audits and grounding checks easier to reproduce?",
+        "What concrete reproducibility pain point should be prioritized first?",
+        "Which workflow improvement reduces compute or setup cost the most?",
+    ]

@@ -475,6 +475,46 @@ def _merge_supporting_source_ids(*groups: list[str]) -> list[str]:
     return merged
 
 
+def _dedupe_open_questions(questions: list[str]) -> list[str]:
+    deduped: list[str] = []
+    normalized_seen: set[str] = set()
+    for question in questions:
+        normalized = re.sub(r"[^a-z0-9]+", " ", question.lower()).strip()
+        if not normalized or normalized in normalized_seen:
+            continue
+        normalized_seen.add(normalized)
+        deduped.append(question)
+    return deduped
+
+
+def _apply_query_specific_candidate_polish(
+    candidates: list[TopicAgentCandidateTopic],
+    *,
+    query_flags: dict[str, bool],
+) -> list[TopicAgentCandidateTopic]:
+    if not candidates:
+        return candidates
+
+    candidate_1, candidate_2, candidate_3 = candidates
+
+    if query_flags["visual_qa"]:
+        candidate_2.research_question = (
+            "Can an existing radiology VQA method family be adapted effectively under strict compute and annotation constraints?"
+        )
+
+    if query_flags["hallucination_eval"]:
+        candidate_3.open_questions = [
+            "What workflow support would make hallucination audits and grounding checks easier to reproduce?",
+            "What concrete reproducibility pain point should be prioritized first?",
+            "Which workflow improvement reduces compute or setup cost the most?",
+        ]
+
+    candidate_1.open_questions = _dedupe_open_questions(candidate_1.open_questions)
+    candidate_2.open_questions = _dedupe_open_questions(candidate_2.open_questions)
+    candidate_3.open_questions = _dedupe_open_questions(candidate_3.open_questions)
+    return [candidate_1, candidate_2, candidate_3]
+
+
 def generate_candidates(context: TopicAgentPipelineContext) -> list[TopicAgentCandidateTopic]:
     budget_bucket = _time_budget_bucket(context.request.constraints.time_budget_months)
     resource_bucket = _resource_bucket(context.request.constraints.resource_level)
@@ -628,6 +668,10 @@ def generate_candidates(context: TopicAgentPipelineContext) -> list[TopicAgentCa
         candidate_2,
         candidate_3,
     ]
+    result = _apply_query_specific_candidate_polish(
+        result,
+        query_flags=query_flags,
+    )
     context.candidate_topics = result
     return result
 
