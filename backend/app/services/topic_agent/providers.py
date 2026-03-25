@@ -197,14 +197,17 @@ class FallbackEvidenceProvider:
 
 
 def _build_arxiv_query(request: TopicAgentExploreRequest) -> str:
-    parts = [request.interest.strip()]
-    domain = _normalize_optional(request.problem_domain)
-    style = _normalize_optional(request.constraints.preferred_style)
-    if domain:
-        parts.append(domain)
-    if style:
-        parts.append(style)
-    return " ".join(parts)
+    interest = request.interest.strip()
+    query_terms = list(_build_query_terms(request))
+    core_terms = _core_query_terms(request)
+    ordered_terms: list[str] = []
+    for term in core_terms + query_terms:
+        if term not in ordered_terms:
+            ordered_terms.append(term)
+    if not ordered_terms:
+        return interest
+    focused_terms = ordered_terms[:6]
+    return " ".join([f"\"{interest}\"", *focused_terms])
 
 
 def _build_query_terms(request: TopicAgentExploreRequest) -> set[str]:
@@ -221,11 +224,25 @@ def _build_query_terms(request: TopicAgentExploreRequest) -> set[str]:
     return {
         term
         for term in re.findall(r"[a-z0-9]+", combined)
-        if len(term) >= 3 and term not in {"and", "the", "for", "with"}
+        if len(term) >= 3 and term not in {"and", "the", "for", "with", "using", "from"}
     }
 
 
-def _score_record(record: TopicAgentSourceRecord, query_terms: set[str]) -> int:
+def _core_query_terms(request: TopicAgentExploreRequest) -> list[str]:
+    phrase = request.interest.lower()
+    prioritized_terms = [
+        term
+        for term in ["trustworthy", "multimodal", "reasoning", "benchmark", "medical"]
+        if term in phrase
+    ]
+    return prioritized_terms
+
+
+def _score_record(
+    record: TopicAgentSourceRecord,
+    query_terms: set[str],
+    core_terms: list[str],
+) -> int:
     title_lower = record.title.lower()
     haystack = f"{title_lower} {record.summary.lower()}"
     score = 0
@@ -234,12 +251,19 @@ def _score_record(record: TopicAgentSourceRecord, query_terms: set[str]) -> int:
             score += 3
         elif term in haystack:
             score += 1
+    for term in core_terms:
+        if term in title_lower:
+            score += 8
+        elif term in haystack:
+            score += 4
     if "multimodal" in haystack:
-        score += 2
+        score += 3
     if "medical" in haystack:
         score += 1
     if "reason" in haystack or "reasoning" in haystack:
-        score += 2
+        score += 4
+    matched_core_terms = sum(1 for term in core_terms if term in haystack)
+    score += matched_core_terms * 3
     return score
 
 
@@ -260,9 +284,13 @@ def _rank_records(
     max_results: int,
 ) -> list[TopicAgentSourceRecord]:
     query_terms = _build_query_terms(request)
+    core_terms = _core_query_terms(request)
     scored_records = sorted(
         records,
-        key=lambda record: (_score_record(record, query_terms), record.year),
+        key=lambda record: (
+            _score_record(record, query_terms, core_terms),
+            record.year,
+        ),
         reverse=True,
     )
     return scored_records[:max_results]

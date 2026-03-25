@@ -5,6 +5,7 @@ from app.services.topic_agent.providers import (
     ArxivEvidenceProvider,
     FallbackEvidenceProvider,
     MockTopicAgentEvidenceProvider,
+    _build_arxiv_query,
     _parse_arxiv_response,
     _rank_records,
     build_topic_agent_provider_registry,
@@ -52,6 +53,21 @@ def test_parse_arxiv_response_maps_entries_to_topic_agent_records():
     assert records[0].url == "http://arxiv.org/abs/2501.12345v1"
 
 
+def test_build_arxiv_query_prioritizes_interest_phrase_and_core_terms():
+    request = TopicAgentExploreRequest(
+        interest="trustworthy multimodal reasoning in medical imaging",
+        problem_domain="medical AI",
+        constraints=TopicAgentConstraintSet(preferred_style="benchmark-driven"),
+    )
+
+    query = _build_arxiv_query(request)
+
+    assert '"trustworthy multimodal reasoning in medical imaging"' in query
+    assert "trustworthy" in query
+    assert "multimodal" in query
+    assert "reasoning" in query
+
+
 def test_arxiv_provider_ranking_prefers_records_with_query_term_overlap():
     request = TopicAgentExploreRequest(
         interest="trustworthy multimodal reasoning",
@@ -87,11 +103,26 @@ def test_arxiv_provider_ranking_prefers_records_with_query_term_overlap():
             </feed>
             """
         )[0],
+        _parse_arxiv_response(
+            """
+            <feed xmlns="http://www.w3.org/2005/Atom">
+              <entry>
+                <id>http://arxiv.org/abs/2501.00003v1</id>
+                <updated>2025-01-20T00:00:00Z</updated>
+                <published>2025-01-19T00:00:00Z</published>
+                <title>Trustworthy Multimodal Medical Reasoning</title>
+                <summary>Reasoning and trustworthiness analysis for multimodal medical models.</summary>
+                <author><name>Alice Kim</name></author>
+              </entry>
+            </feed>
+            """
+        )[0],
     ]
 
-    ranked_records = _rank_records(records, request, max_results=2)
+    ranked_records = _rank_records(records, request, max_results=3)
 
-    assert ranked_records[0].title == "Medical Multimodal Reasoning Benchmark"
+    assert ranked_records[0].title == "Trustworthy Multimodal Medical Reasoning"
+    assert ranked_records[1].title == "Medical Multimodal Reasoning Benchmark"
 
 
 def test_fallback_provider_returns_mock_records_when_primary_fails():
