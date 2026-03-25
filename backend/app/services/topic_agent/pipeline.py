@@ -271,6 +271,24 @@ def _query_context_text(request: TopicAgentExploreRequest) -> str:
     ).lower()
 
 
+def _query_intent_flags(request: TopicAgentExploreRequest) -> dict[str, bool]:
+    query_text = _query_context_text(request)
+    return {
+        "hallucination_eval": any(
+            term in query_text
+            for term in {"hallucination", "grounding evaluation", "faithfulness", "unsupported answers"}
+        ),
+        "visual_qa": any(
+            term in query_text
+            for term in {"visual question answering", "med-vqa", "medical vqa", "vqa-rad", "radiology question answering"}
+        ),
+        "document_qa": any(
+            term in query_text
+            for term in {"document question answering", "document qa", "medical report", "report-centric"}
+        ),
+    }
+
+
 def _detect_evidence_cues(
     evidence_records: list[TopicAgentSourceRecord],
     request: TopicAgentExploreRequest | None = None,
@@ -299,16 +317,17 @@ def _build_landscape_themes(
     request: TopicAgentExploreRequest,
 ) -> list[str]:
     cues = _detect_evidence_cues(evidence_records, request)
+    query_flags = _query_intent_flags(request)
     themes: list[str] = []
     if cues["benchmark"]:
         themes.append(f"benchmark design and stress-testing for {topic}")
     if cues["grounding"]:
         themes.append(f"cross-modal grounding and visual dependence in {topic}")
-    if cues["hallucination_eval"]:
+    if query_flags["hallucination_eval"]:
         themes.append(f"hallucination detection and failure analysis in {topic}")
-    if cues["visual_qa"]:
+    if query_flags["visual_qa"]:
         themes.append(f"radiology VQA and image-grounded answer reliability in {topic}")
-    if cues["document_qa"] and not cues["hallucination_eval"]:
+    if (query_flags["document_qa"] or cues["document_qa"]) and not query_flags["hallucination_eval"]:
         themes.append(f"document QA and report-centric reasoning in {topic}")
     if cues["trust"]:
         themes.append(f"trustworthy evaluation and failure analysis in {topic}")
@@ -332,16 +351,17 @@ def _build_active_methods(
     request: TopicAgentExploreRequest,
 ) -> list[str]:
     cues = _detect_evidence_cues(evidence_records, request)
+    query_flags = _query_intent_flags(request)
     methods: list[str] = []
     if cues["benchmark"]:
         methods.append("benchmark-centered experimental design")
     if cues["grounding"]:
         methods.append("grounding-aware evaluation and error analysis")
-    if cues["hallucination_eval"]:
+    if query_flags["hallucination_eval"]:
         methods.append("hallucination auditing and faithfulness checks")
     if cues["agentic"]:
         methods.append("agent-mediated problem decomposition")
-    if cues["document_qa"] and not cues["hallucination_eval"]:
+    if (query_flags["document_qa"] or cues["document_qa"]) and not query_flags["hallucination_eval"]:
         methods.append("document QA baseline comparison")
     if cues["radiology"]:
         methods.append("radiology task-specific benchmark slicing")
@@ -359,16 +379,17 @@ def _build_likely_gaps(
     request: TopicAgentExploreRequest,
 ) -> list[str]:
     cues = _detect_evidence_cues(evidence_records, request)
+    query_flags = _query_intent_flags(request)
     gaps: list[str] = []
     if cues["benchmark"]:
         gaps.append("benchmark protocols that distinguish real image use from shortcut exploitation")
     if cues["trust"] or cues["grounding"]:
         gaps.append("trustworthy evaluation signals beyond accuracy-only reporting")
-    if cues["hallucination_eval"]:
+    if query_flags["hallucination_eval"]:
         gaps.append("medical hallucination checks that separate unsupported answers from weak image grounding")
     if cues["radiology"]:
         gaps.append("narrower radiology task slices that remain feasible under student-scale resources")
-    if cues["document_qa"] and not cues["hallucination_eval"]:
+    if (query_flags["document_qa"] or cues["document_qa"]) and not query_flags["hallucination_eval"]:
         gaps.append("stronger evidence on reasoning over report layouts and image-text context")
     if not gaps:
         gaps = [
@@ -464,6 +485,7 @@ def generate_candidates(context: TopicAgentPipelineContext) -> list[TopicAgentCa
         topic=context.request.interest,
     )
     evidence_cues = _detect_evidence_cues(evidence_records, context.request)
+    query_flags = _query_intent_flags(context.request)
     benchmark_phrase = next((phrase for phrase in evidence_phrases if "benchmark" in phrase), None)
     grounding_phrase = next((phrase for phrase in evidence_phrases if "grounding" in phrase), None)
     reasoning_phrase = next((phrase for phrase in evidence_phrases if "reasoning" in phrase), None)
@@ -546,7 +568,7 @@ def generate_candidates(context: TopicAgentPipelineContext) -> list[TopicAgentCa
         candidate_2.research_question = (
             f"Can an existing method family be adapted effectively for {reasoning_phrase} under strict compute and annotation constraints?"
         )
-    if evidence_cues["hallucination_eval"]:
+    if query_flags["hallucination_eval"]:
         candidate_1.research_question = (
             "How can a narrower evaluation slice expose hallucination risk and weak image grounding in current systems?"
         )
@@ -557,7 +579,10 @@ def generate_candidates(context: TopicAgentPipelineContext) -> list[TopicAgentCa
             0,
             "What workflow support would make hallucination audits and grounding checks easier to reproduce?",
         )
-    if evidence_cues["visual_qa"]:
+    if query_flags["visual_qa"]:
+        candidate_1.research_question = (
+            "How can a narrower radiology VQA benchmark slice expose weak image-grounded answering in current systems?"
+        )
         candidate_1.open_questions.insert(
             0,
             "Which VQA-RAD or Med-VQA slice best isolates genuine image-grounded answering?",
