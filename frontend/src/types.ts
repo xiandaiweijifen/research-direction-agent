@@ -452,6 +452,20 @@ export type TopicAgentSessionResponse = {
   confidence_summary: TopicAgentConfidenceSummary;
 };
 
+export type TopicAgentSessionSummary = {
+  session_id: string;
+  created_at: string;
+  updated_at: string;
+  interest: string;
+  problem_domain?: string | null;
+  candidate_count: number;
+  recommended_candidate_id?: string | null;
+};
+
+export type TopicAgentSessionListResponse = {
+  sessions: TopicAgentSessionSummary[];
+};
+
 export type EvalReportResponse = {
   dataset_name: string;
   saved_at?: string | null;

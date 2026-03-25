@@ -18,6 +18,8 @@ import {
   fetchLatestAgentWorkflowEvaluation,
   fetchLatestEvaluation,
   fetchLatestToolExecutionEvaluation,
+  fetchTopicAgentSession,
+  fetchTopicAgentSessions,
   fetchPersistedChunks,
   fetchPersistedEmbeddings,
   fetchSystemHealth,
@@ -58,6 +60,7 @@ import type {
   EvaluationMetricsSummaryResponse,
   EvalReportResponse,
   ToolExecutionEvalReportResponse,
+  TopicAgentSessionSummary,
   TopicAgentSessionResponse,
   PersistedChunkDocument,
   PersistedEmbeddingDocument,
@@ -105,6 +108,7 @@ function App() {
   const [topicResourceLevel, setTopicResourceLevel] = useState("student");
   const [topicPreferredStyle, setTopicPreferredStyle] = useState("benchmark-driven");
   const [topicResult, setTopicResult] = useState<TopicAgentSessionResponse | null>(null);
+  const [topicSessions, setTopicSessions] = useState<TopicAgentSessionSummary[]>([]);
   const [topicBusy, setTopicBusy] = useState(false);
   const [topicError, setTopicError] = useState("");
 
@@ -244,6 +248,7 @@ function App() {
     void loadDocuments();
     void loadEvaluationDatasets();
     void loadAgentWorkflowRuns();
+    void loadTopicAgentSessions();
   }, []);
 
   useEffect(() => {
@@ -652,6 +657,15 @@ function App() {
     }
   }
 
+  async function loadTopicAgentSessions() {
+    try {
+      const payload = await fetchTopicAgentSessions(8);
+      setTopicSessions(payload.sessions);
+    } catch {
+      setTopicSessions([]);
+    }
+  }
+
   async function submitTopicExplore(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setTopicBusy(true);
@@ -670,8 +684,33 @@ function App() {
         },
       );
       setTopicResult(payload);
+      await loadTopicAgentSessions();
     } catch (error) {
       setTopicError(error instanceof Error ? error.message : "Failed to run Topic Agent");
+    } finally {
+      setTopicBusy(false);
+    }
+  }
+
+  async function loadTopicAgentSession(sessionId: string) {
+    setTopicBusy(true);
+    setTopicError("");
+
+    try {
+      const payload = await fetchTopicAgentSession(sessionId);
+      setTopicResult(payload);
+      setTopicInterest(payload.user_input.interest);
+      setTopicProblemDomain(payload.user_input.problem_domain ?? "");
+      setTopicSeedIdea(payload.user_input.seed_idea ?? "");
+      setTopicTimeBudgetMonths(
+        payload.user_input.constraints.time_budget_months != null
+          ? String(payload.user_input.constraints.time_budget_months)
+          : "",
+      );
+      setTopicResourceLevel(payload.user_input.constraints.resource_level ?? "");
+      setTopicPreferredStyle(payload.user_input.constraints.preferred_style ?? "");
+    } catch (error) {
+      setTopicError(error instanceof Error ? error.message : "Failed to load Topic Agent session");
     } finally {
       setTopicBusy(false);
     }
@@ -1007,6 +1046,7 @@ function App() {
           resourceLevel={topicResourceLevel}
           preferredStyle={topicPreferredStyle}
           topicResult={topicResult}
+          topicSessions={topicSessions}
           topicBusy={topicBusy}
           topicError={topicError}
           onChangeInterest={setTopicInterest}
@@ -1016,6 +1056,7 @@ function App() {
           onChangeResourceLevel={setTopicResourceLevel}
           onChangePreferredStyle={setTopicPreferredStyle}
           onSubmit={submitTopicExplore}
+          onLoadSession={(sessionId) => void loadTopicAgentSession(sessionId)}
         />
       )}
     </div>

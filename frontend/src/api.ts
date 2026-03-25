@@ -18,6 +18,7 @@ import type {
   PersistedEmbeddingDocument,
   QueryResponse,
   SystemHealthResponse,
+  TopicAgentSessionListResponse,
   TopicAgentSessionResponse,
   UploadDocumentResponse,
 } from "./types";
@@ -342,4 +343,14 @@ export function runTopicAgentExplore(
       constraints,
     }),
   });
+}
+
+export function fetchTopicAgentSessions(limit = 10) {
+  return apiFetch<TopicAgentSessionListResponse>(`/api/topic-agent/sessions?limit=${limit}`);
+}
+
+export function fetchTopicAgentSession(sessionId: string) {
+  return apiFetch<TopicAgentSessionResponse>(
+    `/api/topic-agent/sessions/${encodeURIComponent(sessionId)}`,
+  );
 }

@@ -20,6 +20,17 @@ describe("TopicWorkspace", () => {
         timeBudgetMonths="6"
         resourceLevel="student"
         preferredStyle="benchmark-driven"
+        topicSessions={[
+          {
+            session_id: "session_1",
+            created_at: "2026-03-25T00:00:00+00:00",
+            updated_at: "2026-03-25T00:00:00+00:00",
+            interest: "trustworthy multimodal reasoning in medical imaging",
+            problem_domain: "medical AI",
+            candidate_count: 1,
+            recommended_candidate_id: "candidate_1",
+          },
+        ]}
         topicBusy={false}
         topicError=""
         topicResult={{
@@ -123,14 +134,16 @@ describe("TopicWorkspace", () => {
         onChangeResourceLevel={vi.fn()}
         onChangePreferredStyle={vi.fn()}
         onSubmit={onSubmit}
+        onLoadSession={vi.fn()}
       />,
     );
 
     expect(screen.getByText("Research Topic Copilot")).toBeInTheDocument();
     expect(screen.getByText("Recent Survey")).toBeInTheDocument();
     expect(screen.getByText("Benchmark-Guided Narrow Task Definition")).toBeInTheDocument();
-    expect(screen.getByText("candidate_1")).toBeInTheDocument();
+    expect(screen.getAllByText("candidate_1")).toHaveLength(2);
     expect(screen.getByText("Evidence coverage is medium.")).toBeInTheDocument();
+    expect(screen.getByText("Recent Sessions")).toBeInTheDocument();
 
     await user.click(screen.getByRole("button", { name: "Run Topic Agent" }));
     expect(onSubmit).toHaveBeenCalledTimes(1);

@@ -1,6 +1,6 @@
 import type { FormEvent } from "react";
 
-import type { Locale, TopicAgentSessionResponse } from "../types";
+import type { Locale, TopicAgentSessionResponse, TopicAgentSessionSummary } from "../types";
 
 type TopicWorkspaceProps = {
   locale: Locale;
@@ -11,6 +11,7 @@ type TopicWorkspaceProps = {
   resourceLevel: string;
   preferredStyle: string;
   topicResult: TopicAgentSessionResponse | null;
+  topicSessions: TopicAgentSessionSummary[];
   topicBusy: boolean;
   topicError: string;
   onChangeInterest: (value: string) => void;
@@ -20,6 +21,7 @@ type TopicWorkspaceProps = {
   onChangeResourceLevel: (value: string) => void;
   onChangePreferredStyle: (value: string) => void;
   onSubmit: (event: FormEvent<HTMLFormElement>) => void;
+  onLoadSession: (sessionId: string) => void;
 };
 
 export function TopicWorkspace({
@@ -31,6 +33,7 @@ export function TopicWorkspace({
   resourceLevel,
   preferredStyle,
   topicResult,
+  topicSessions,
   topicBusy,
   topicError,
   onChangeInterest,
@@ -40,6 +43,7 @@ export function TopicWorkspace({
   onChangeResourceLevel,
   onChangePreferredStyle,
   onSubmit,
+  onLoadSession,
 }: TopicWorkspaceProps) {
   const copy =
     locale === "zh"
@@ -63,6 +67,8 @@ export function TopicWorkspace({
           comparison: "比较与收敛",
           trace: "执行轨迹",
           confidence: "可信度摘要",
+          recentSessions: "最近探索记录",
+          load: "加载",
           noResult: "还没有 Topic Agent 结果",
           noResultCopy: "填写研究兴趣并运行后，这里会展示结构化结果。",
           recommendation: "推荐方向",
@@ -91,6 +97,8 @@ export function TopicWorkspace({
           comparison: "Comparison And Convergence",
           trace: "Execution Trace",
           confidence: "Confidence Summary",
+          recentSessions: "Recent Sessions",
+          load: "Load",
           noResult: "No Topic Agent result yet",
           noResultCopy: "Submit a research interest to view structured Topic Agent output here.",
           recommendation: "Recommended",
@@ -163,6 +171,42 @@ export function TopicWorkspace({
           </div>
         </form>
         {topicError && <p className="error">{topicError}</p>}
+      </article>
+
+      <article className="panel">
+        <div className="panel-heading">
+          <div>
+            <h2>{copy.recentSessions}</h2>
+            <p className="panel-intro">{topicSessions.length} sessions</p>
+          </div>
+        </div>
+        {topicSessions.length === 0 ? (
+          <div className="empty-state">
+            <strong>{copy.noResult}</strong>
+            <p>{copy.noResultCopy}</p>
+          </div>
+        ) : (
+          <div className="trace-list">
+            {topicSessions.map((session) => (
+              <article key={session.session_id} className="trace-card">
+                <div className="trace-meta-row">
+                  <strong>{session.interest}</strong>
+                  <span className="status-chip">{session.candidate_count}</span>
+                </div>
+                <p className="trace-detail">{session.recommended_candidate_id ?? "-"}</p>
+                <div className="button-row">
+                  <button
+                    type="button"
+                    className="secondary-button"
+                    onClick={() => onLoadSession(session.session_id)}
+                  >
+                    {copy.load}
+                  </button>
+                </div>
+              </article>
+            ))}
+          </div>
+        )}
       </article>
 
       <article className="panel preview-panel">
