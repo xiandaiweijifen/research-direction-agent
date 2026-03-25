@@ -1,7 +1,11 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
+from datetime import datetime
+from xml.etree import ElementTree
 from typing import Protocol
+
+import httpx
 
 from app.schemas.topic_agent import TopicAgentExploreRequest, TopicAgentSourceRecord
 
@@ -29,6 +33,10 @@ class TopicAgentEvidenceProviderRegistry:
 
     def list_names(self) -> list[str]:
         return sorted(self.providers.keys())
+
+
+ARXIV_API_URL = "http://export.arxiv.org/api/query"
+ATOM_NAMESPACE = {"atom": "http://www.w3.org/2005/Atom"}
 
 
 def _normalize_optional(value: str | None) -> str | None:
@@ -82,7 +90,124 @@ class MockTopicAgentEvidenceProvider:
         ]
 
 
+class ArxivEvidenceProvider:
+    def __init__(
+        self,
+        *,
+        api_url: str = ARXIV_API_URL,
+        timeout_seconds: float = 10.0,
+        max_results: int = 3,
+    ) -> None:
+        self.api_url = api_url
+        self.timeout_seconds = timeout_seconds
+        self.max_results = max_results
+
+    def retrieve(self, request: TopicAgentExploreRequest) -> list[TopicAgentSourceRecord]:
+        query_text = _build_arxiv_query(request)
+        response = httpx.get(
+            self.api_url,
+            params={
+                "search_query": f"all:{query_text}",
+                "start": 0,
+                "max_results": self.max_results,
+                "sortBy": "relevance",
+                "sortOrder": "descending",
+            },
+            timeout=self.timeout_seconds,
+            headers={"User-Agent": "research-topic-copilot/0.1"},
+        )
+        response.raise_for_status()
+        return _parse_arxiv_response(response.text)
+
+
+class FallbackEvidenceProvider:
+    def __init__(
+        self,
+        primary: TopicAgentEvidenceProvider,
+        fallback: TopicAgentEvidenceProvider,
+    ) -> None:
+        self.primary = primary
+        self.fallback = fallback
+
+    def retrieve(self, request: TopicAgentExploreRequest) -> list[TopicAgentSourceRecord]:
+        try:
+            records = self.primary.retrieve(request)
+            return records or self.fallback.retrieve(request)
+        except Exception:
+            return self.fallback.retrieve(request)
+
+
+def _build_arxiv_query(request: TopicAgentExploreRequest) -> str:
+    parts = [request.interest.strip()]
+    domain = _normalize_optional(request.problem_domain)
+    style = _normalize_optional(request.constraints.preferred_style)
+    if domain:
+        parts.append(domain)
+    if style:
+        parts.append(style)
+    return " ".join(parts)
+
+
+def _parse_arxiv_response(xml_text: str) -> list[TopicAgentSourceRecord]:
+    root = ElementTree.fromstring(xml_text)
+    records: list[TopicAgentSourceRecord] = []
+    for index, entry in enumerate(root.findall("atom:entry", ATOM_NAMESPACE), start=1):
+        title = _clean_xml_text(entry.findtext("atom:title", default="", namespaces=ATOM_NAMESPACE))
+        summary = _clean_xml_text(entry.findtext("atom:summary", default="", namespaces=ATOM_NAMESPACE))
+        published = entry.findtext("atom:published", default="", namespaces=ATOM_NAMESPACE)
+        authors = [
+            _clean_xml_text(author.findtext("atom:name", default="", namespaces=ATOM_NAMESPACE))
+            for author in entry.findall("atom:author", ATOM_NAMESPACE)
+        ]
+        primary_id = _clean_xml_text(entry.findtext("atom:id", default="", namespaces=ATOM_NAMESPACE))
+        year = _parse_arxiv_year(published)
+        source_type = "paper"
+        source_tier = "B"
+        lower_title = title.lower()
+        lower_summary = summary.lower()
+        if "survey" in lower_title or "survey" in lower_summary:
+            source_type = "survey"
+            source_tier = "A"
+        elif "benchmark" in lower_title or "benchmark" in lower_summary:
+            source_type = "benchmark"
+            source_tier = "A"
+        records.append(
+            TopicAgentSourceRecord(
+                source_id=f"arxiv_{index}",
+                title=title or f"arXiv Result {index}",
+                source_type=source_type,
+                source_tier=source_tier,
+                year=year,
+                authors_or_publisher=", ".join(filter(None, authors[:4])) or "arXiv Authors",
+                identifier=primary_id or f"arxiv:{index}",
+                url=primary_id or "https://arxiv.org",
+                summary=summary or "No abstract available from arXiv.",
+                relevance_reason="Retrieved from arXiv as a public academic source for the current topic query.",
+            )
+        )
+    return records
+
+
+def _clean_xml_text(value: str) -> str:
+    return " ".join(value.split()).strip()
+
+
+def _parse_arxiv_year(value: str) -> int:
+    try:
+        return datetime.fromisoformat(value.replace("Z", "+00:00")).year
+    except ValueError:
+        return datetime.now().year
+
+
 def build_topic_agent_provider_registry() -> TopicAgentEvidenceProviderRegistry:
     registry = TopicAgentEvidenceProviderRegistry()
     registry.register("mock", MockTopicAgentEvidenceProvider())
+    registry.register("arxiv", ArxivEvidenceProvider())
+    registry.register(
+        "arxiv_or_mock",
+        FallbackEvidenceProvider(
+            primary=ArxivEvidenceProvider(),
+            fallback=MockTopicAgentEvidenceProvider(),
+        ),
+    )
     return registry

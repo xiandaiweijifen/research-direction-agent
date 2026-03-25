@@ -16,7 +16,7 @@ from app.services.topic_agent.providers import (
 )
 
 TOPIC_AGENT_STORE_PATH = DATA_ROOT / "tool_state" / "topic_agent_sessions.json"
-DEFAULT_TOPIC_AGENT_PROVIDER_NAME = "mock"
+DEFAULT_TOPIC_AGENT_PROVIDER_NAME = "arxiv_or_mock"
 
 
 def _load_sessions() -> list[dict]:
