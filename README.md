@@ -1,254 +1,73 @@
-# Agent Knowledge System
+# Research Topic Copilot
 
-An engineering-focused agent runtime for knowledge retrieval, tool execution, workflow orchestration, failure recovery, and evaluation.
+Research Topic Copilot is a local-first agent system for research topic exploration, evidence gathering, candidate direction comparison, and topic convergence support.
 
-## What This Project Is
+This repository currently contains a reusable agent runtime baseline:
 
-This repository builds a local-first agent runtime for engineering and operations scenarios.
-
-It is not just a RAG demo and not just a chat endpoint with a few prompts. The target shape is a system with:
-
-- a document-backed knowledge layer
-- an agent routing layer
-- tool execution through adapter-style interfaces
-- multi-step workflow orchestration
-- planner fallback and debugability
-- persisted runs, recovery behavior, and runtime diagnostics
-- evaluation reports and benchmark dashboards
-
-Today, the project already has a working backend, frontend console, local tool adapters, persisted workflow lineage, recoverable multi-step runs, and an evaluation dashboard with locally saved reports.
-
-## Current State
-
-The repository is in a late build phase.
-
-Implemented and usable today:
-
-- document ingestion for local text-style documents
-- persisted chunks and embeddings
+- document ingestion and local artifact persistence
 - retrieval with diagnostics and lightweight reranking
-- knowledge query and fallback answer paths
-- request routing for retrieval, tool execution, and clarification
-- local tool adapters for `document_search`, `system_status`, and `ticketing`
-- LLM-backed `tool planner`, `clarification planner`, and `workflow planner`
-- fallback behavior when planner calls fail or are unavailable
-- multi-step workflows for:
-  - `search_then_ticket`
-  - `search_then_summarize`
-  - `status_then_ticket`
-  - `status_then_summarize`
-- retry semantics and retry-exhausted handling
-- clarification-driven continuation
-- failed-step resume for selected workflow shapes
-- unified recovery entrypoint and recovery action semantics
-- persisted workflow runs with trace events, lineage metadata, and maintenance endpoints
-- retrieval, route, workflow, and tool-execution evaluation datasets with a frontend evaluation console
-- locally persisted evaluation reports, overview caching, and benchmark history
+- agent routing, tool planning, and workflow orchestration
+- persisted workflow runs, recovery semantics, and trace inspection
+- evaluation datasets, reports, and a frontend console
 
-Still intentionally unfinished:
+The next product direction is a focused sub-system: `Topic Agent`.
+It is intended to help a researcher start from a broad interest, problem domain, or rough idea, then move through:
 
-- richer runtime recovery such as more general rerun-from-step-N behavior
-- real external system adapters
-- a more formal database-backed state layer
-- broader workflow branching and policy logic
-- deeper cost and latency analytics
+1. literature retrieval
+2. landscape synthesis
+3. candidate topic generation
+4. candidate comparison
+5. convergence and decision support
 
-## Core Capabilities
+This project is not intended to become a general-purpose academic platform. The scope is intentionally narrower: a decision-support copilot for research topic selection with explicit evidence chains and human checkpoints.
 
-### 1. Knowledge Layer
+## Current Repository Status
 
-- upload and preview local documents
-- persist chunk artifacts
-- persist embedding artifacts
-- retrieve relevant chunks for a question
-- inspect retrieval diagnostics and ranked candidates
-- run fallback answering when no live model answer path is configured
+The current codebase is a strong runtime baseline, not yet a finished research-topic product.
 
-### 2. Agent Layer
+Implemented today:
 
-- route incoming requests into retrieval, tool execution, or clarification
-- plan tool execution with either LLM or heuristic fallback
-- plan clarification requests with either LLM or heuristic fallback
-- plan workflow decomposition with either LLM or heuristic fallback
+- FastAPI backend and React frontend
+- local document upload, preview, chunking, and embeddings
+- retrieval-backed question answering
+- tool-style execution through local adapters
+- workflow planning with fallback paths
+- persisted workflow runs and recovery lineage
+- benchmark datasets and evaluation dashboards
 
-### 3. Tool Layer
+Still to be added for the new direction:
 
-Local adapter-style tools currently include:
+- academic-source connectors and retrieval adapters
+- evidence model for citation-grade outputs
+- research-landscape synthesis workflows
+- candidate topic comparison and convergence logic
+- user-facing verification and confidence surfaces
+- topic-selection evaluation methodology
 
-- `document_search`
-- `system_status`
-- `ticketing`
+## Initial Design Direction
 
-The ticketing tool currently supports:
+The planned `Topic Agent` should focus on a small number of user tasks:
 
-- `create`
-- `update`
-- `close`
-- `query`
-- `list`
+- turn a vague interest into a researchable problem framing
+- collect and organize supporting evidence from high-value sources
+- compare several candidate research directions with explicit tradeoffs
+- help the user converge while keeping the final decision human-owned
 
-### 4. Workflow Runtime
+Planned system modules:
 
-The agent runtime already supports:
+- `Problem Framing`: normalize user intent, constraints, and research goals
+- `Evidence Retrieval`: search papers, surveys, datasets, benchmarks, and code artifacts
+- `Landscape Synthesis`: identify main themes, active methods, open gaps, and saturated areas
+- `Candidate Generation`: produce several candidate topic paths rather than one answer
+- `Comparison And Convergence`: compare novelty, feasibility, evidence support, and risk
+- `Verification Layer`: expose citations, source grades, conflicts, and manual confirmation steps
 
-- single-step execution
-- multi-step workflow traces
-- workflow persistence
-- resume metadata
-- recovery lineage metadata
-- previous/root/source run navigation
-- terminal reasons and failure stages
-- planner mode, planner count, and planner latency diagnostics
-- retry state and recovery action semantics
-- run listing, lookup, stats, pruning, reset, and schema migration
+## Documentation
 
-### 5. Evaluation and Observability
-
-- retrieval evaluation datasets and reports
-- agent route evaluation datasets and reports
-- agent workflow evaluation datasets and reports
-- tool execution evaluation datasets and reports
-- evaluation overview, highlights, latest-result loading, and history
-- workflow planner debug capture
-- persisted workflow run inspection through API and frontend
-
-## Architecture Snapshot
-
-High-level backend flow:
-
-1. Documents are uploaded and stored locally.
-2. Text is chunked and embedding artifacts are persisted.
-3. Retrieval services score and rerank candidate chunks.
-4. Requests are routed into retrieval, clarification, or tool/workflow execution.
-5. Planner services decide tool or workflow behavior, with fallback paths if model planning fails.
-6. Workflow runs are persisted with trace events, lineage metadata, and planner diagnostics.
-7. Evaluation services aggregate benchmark results and persist latest/history reports for the dashboard.
-
-## Recovery Model
-
-The runtime distinguishes between:
-
-- retryable tool failures
-- recoverable workflow failures
-- clarification-required pauses
-- terminal failures
-
-Supported recovery behavior today includes:
-
-- retry with retry-exhausted semantics
-- failed-step resume for selected workflow shapes
-- clarification-based continuation
-- manual retrigger recovery
-- persisted recovery lineage with `root_run_id`, `source_run_id`, `recovery_depth`, and `recovered_via_action`
-
-The frontend exposes these semantics through:
-
-- recover actions on workflow runs
-- recovery chain visualization
-- chain focus and chain navigation
-- root/source run loading shortcuts
-
-## Evaluation Model
-
-The evaluation layer currently has four benchmark modes:
-
-- retrieval
-- agent route
-- agent workflow
-- tool execution
-
-For each supported benchmark mode, the system can:
-
-- load local evaluation datasets
-- run evaluation against the current runtime
-- persist the latest report locally
-- persist timestamped history snapshots
-- surface deltas versus the previous run
-- aggregate overview and highlight metrics for the dashboard
-
-Stored evaluation artifacts live under:
-
-- `data/eval/`
-- `data/tool_state/evaluation_reports/`
-- `data/tool_state/evaluation_overview_cache.json`
-- `data/tool_state/evaluation_metrics_summary.json`
-
-Main implementation areas:
-
-- `backend/app/services/ingestion/`
-- `backend/app/services/retrieval/`
-- `backend/app/services/agent/`
-- `backend/app/services/llm/`
-- `backend/app/services/evaluation/`
-- `frontend/src/`
-
-## API Surface
-
-### Health and System
-
-- `GET /api/health`
-- `GET /api/health/system`
-
-### Documents and Pipeline
-
-- `GET /api/documents`
-- `GET /api/documents/{filename}`
-- `POST /api/documents/upload`
-- `DELETE /api/documents/{filename}`
-- `GET /api/documents/{filename}/chunks`
-- `POST /api/documents/{filename}/chunks/persist`
-- `GET /api/documents/{filename}/chunks/persisted`
-- `POST /api/documents/{filename}/embeddings/persist`
-- `GET /api/documents/{filename}/embeddings/persisted`
-
-### Query and Agent Runtime
-
-- `POST /api/query`
-- `POST /api/query/diagnostics`
-- `POST /api/query/route`
-- `POST /api/query/agent`
-- `POST /api/query/agent/resume`
-- `GET /api/query/agent/runs`
-- `GET /api/query/agent/runs/{run_id}`
-- `POST /api/query/agent/runs/migrate`
-- `GET /api/query/agent/runs/stats`
-- `POST /api/query/agent/runs/prune`
-- `POST /api/query/agent/runs/reset`
-
-### Tools
-
-- `GET /api/query/tools`
-- `POST /api/query/tools/plan`
-- `POST /api/query/tools/execute`
-
-### Evaluation
-
-- `GET /api/evaluation/retrieval/datasets`
-- `POST /api/evaluation/retrieval`
-- `GET /api/evaluation/retrieval/latest`
-- `GET /api/evaluation/retrieval/history`
-- `GET /api/evaluation/agent-route/datasets`
-- `POST /api/evaluation/agent-route`
-- `GET /api/evaluation/agent-route/latest`
-- `GET /api/evaluation/agent-route/history`
-- `GET /api/evaluation/agent-workflow/datasets`
-- `POST /api/evaluation/agent-workflow`
-- `GET /api/evaluation/agent-workflow/latest`
-- `GET /api/evaluation/agent-workflow/history`
-- `GET /api/evaluation/agent-tool-execution/datasets`
-- `POST /api/evaluation/agent-tool-execution`
-- `GET /api/evaluation/agent-tool-execution/latest`
-- `GET /api/evaluation/agent-tool-execution/history`
-- `GET /api/evaluation/overview`
-- `GET /api/evaluation/metrics-summary`
-
-## Tech Stack
-
-- Backend: FastAPI
-- Frontend: React + Vite
-- LLM access: Gemini and OpenAI APIs, with local fallback paths
-- Storage today: local files and JSON state
-- Optional infra hooks: PostgreSQL and Redis configuration fields exist, but they are not the primary runtime state path yet
+- Architecture baseline: [docs/architecture.md](/d:/project/research-topic-copilot/docs/architecture.md)
+- Roadmap: [docs/roadmap.md](/d:/project/research-topic-copilot/docs/roadmap.md)
+- Topic Agent initial design: [docs/topic_agent_design.md](/d:/project/research-topic-copilot/docs/topic_agent_design.md)
+- Topic Agent acceptance plan: [docs/topic_agent_acceptance.md](/d:/project/research-topic-copilot/docs/topic_agent_acceptance.md)
 
 ## Local Setup
 
@@ -280,13 +99,11 @@ Frontend URL:
 
 - Console: `http://127.0.0.1:5173`
 
-The frontend proxies `/api` requests to the local FastAPI backend by default.
-
-## Environment Configuration
+## Environment
 
 Create a repo-root `.env` file based on `.env.example`.
 
-Minimal local fallback setup:
+Minimal fallback setup:
 
 ```env
 APP_ENV=development
@@ -297,100 +114,127 @@ CLARIFICATION_PLANNER_PROVIDER=fallback
 WORKFLOW_PLANNER_PROVIDER=fallback
 ```
 
-Example Gemini/OpenAI setup:
-
-```env
-EMBEDDING_PROVIDER=gemini
-CHAT_PROVIDER=gemini
-TOOL_PLANNER_PROVIDER=gemini
-CLARIFICATION_PLANNER_PROVIDER=gemini
-WORKFLOW_PLANNER_PROVIDER=gemini
-
-GEMINI_API_KEY=your_key
-GEMINI_EMBEDDING_MODEL=gemini-embedding-001
-GEMINI_CHAT_MODEL=gemini-2.5-flash-lite
-GEMINI_TOOL_PLANNER_MODEL=
-GEMINI_CLARIFICATION_PLANNER_MODEL=
-GEMINI_WORKFLOW_PLANNER_MODEL=
-
-OPENAI_API_KEY=
-OPENAI_EMBEDDING_MODEL=text-embedding-3-small
-OPENAI_CHAT_MODEL=gpt-4o-mini
-OPENAI_TOOL_PLANNER_MODEL=
-OPENAI_CLARIFICATION_PLANNER_MODEL=
-OPENAI_WORKFLOW_PLANNER_MODEL=
-```
-
-Useful runtime flags:
-
-- `WORKFLOW_PLANNER_DEBUG_CAPTURE=true`
-- `PLANNER_CACHE_TTL_SECONDS=120`
-- `PLANNER_CACHE_MAX_ENTRIES=256`
-
-## Typical Local Workflow
-
-1. Upload a document in the `Documents` view.
-2. Persist chunks and embeddings, or use one-click pipeline generation.
-3. Run a retrieval query in the `Query` view.
-4. Run an agent request and inspect the workflow trace.
-5. Force a recoverable workflow failure and recover it from the query console.
-6. Inspect recovery lineage and chain navigation in recent workflow runs.
-7. Run retrieval, route, workflow, or tool-execution evaluation datasets from the `Evaluation` view.
-8. Review the persisted latest report, history deltas, and dashboard overview.
-
-## Demo Path
-
-The strongest end-to-end demo path today is:
-
-1. Submit a multi-step agent request such as `Search docs for RAG and create a high severity ticket for payment-service`.
-2. Inject a persistent failure into the ticketing step.
-3. Observe the run fail with `retry_exhausted` and a structured recovery action.
-4. Recover the run through the unified recovery entrypoint or the Query UI.
-5. Inspect:
-   - the recovered run
-   - reused steps
-   - recovery lineage
-   - recovery chain navigation
-6. Open `Evaluation` and review benchmark highlights, overview metrics, and saved report history.
-
-For a repeatable walkthrough, use:
-
-- [demo_playbook.md](/d:/project/agent-knowledge-system/docs/demo_playbook.md)
-- [demo_recovery_flow.ps1](/d:/project/agent-knowledge-system/scripts/demo_recovery_flow.ps1)
-
-## Testing
-
-### Backend
-
-```powershell
-cd backend
-.\.venv\Scripts\activate
-$env:PYTHONPATH='.'
-pytest
-```
-
-### Frontend
-
-```powershell
-cd frontend
-npm test
-npm run build
-```
-
 ## Project Structure
 
 - `backend/`: FastAPI backend and agent runtime
 - `frontend/`: React console
-- `data/`: local raw documents, chunks, embeddings, eval datasets, and tool state
-- `docs/`: architecture and planning notes
-- `scripts/`: helper scripts for local development and evaluation
+- `data/`: local raw documents, chunks, embeddings, eval datasets, and persisted runtime state
+- `docs/`: architecture, roadmap, and design notes
+- `scripts/`: local development and evaluation helpers
 
-## Current Focus
+## 中文说明
 
-The next iteration focus is runtime maturity and project hardening rather than feature sprawl:
+# Research Topic Copilot
 
-- tighter benchmark and metrics packaging
-- stronger project documentation and demo clarity
-- more realistic adapter boundaries
-- broader evaluation coverage
-- deeper runtime policy and analytics over time
+Research Topic Copilot 是一个本地优先的科研选题副驾系统，目标是支持研究兴趣探索、证据收集、候选方向比较，以及选题收敛判断。
+
+当前仓库已经具备一套可复用的 agent runtime 基线：
+
+- 文档摄取与本地产物持久化
+- 带诊断能力的检索与轻量 rerank
+- agent 路由、工具规划与工作流编排
+- 工作流运行记录、恢复语义与轨迹追踪
+- 评测数据集、报告和前端控制台
+
+接下来的产品方向会收敛到一个明确子系统：`Topic Agent`。
+它希望帮助研究者从“研究兴趣 / 问题域 / 初步想法”出发，逐步完成：
+
+1. 文献检索
+2. 方向全景梳理
+3. 候选选题生成
+4. 候选路径比较
+5. 收敛与判断支持
+
+这个项目不会被设计成“大而全”的科研平台。范围会刻意收敛为：一个强调证据链、引用、人工确认和可信度表达的科研选题决策副驾。
+
+## 当前仓库状态
+
+现有代码库更像一个扎实的 runtime 基座，还不是完整的科研选题产品。
+
+已经具备：
+
+- FastAPI 后端与 React 前端
+- 本地文档上传、预览、切块与 embedding
+- 基于检索的问答链路
+- 本地 adapter 风格的工具执行
+- 带 fallback 的工作流规划
+- 持久化 workflow run 与恢复链路
+- benchmark 数据集与评测看板
+
+面向新方向仍需新增：
+
+- 学术数据源连接器与检索适配器
+- 面向引用输出的 evidence 数据模型
+- 方向全景梳理 workflow
+- 候选选题比较与收敛逻辑
+- 用户验证入口与可信度展示
+- “是否真的帮助科研选题”的评测方法
+
+## 初步设计方向
+
+规划中的 `Topic Agent` 只聚焦少数几个核心任务：
+
+- 把模糊兴趣转化为可研究的问题 framing
+- 从高价值来源中收集并组织证据
+- 生成多个候选选题路径，而不是只给一个答案
+- 用显式 tradeoff 帮助用户收敛，但最终判断仍由人完成
+
+建议的系统模块：
+
+- `Problem Framing`：整理用户意图、约束和研究目标
+- `Evidence Retrieval`：检索论文、综述、数据集、benchmark 和代码资源
+- `Landscape Synthesis`：梳理主题、主流方法、空白点和已饱和方向
+- `Candidate Generation`：生成多个候选选题路径
+- `Comparison And Convergence`：比较新颖性、可行性、证据强度和风险
+- `Verification Layer`：展示引用、来源分级、冲突信息与人工确认点
+
+## 文档入口
+
+- 架构基线：[docs/architecture.md](/d:/project/research-topic-copilot/docs/architecture.md)
+- 规划路线：[docs/roadmap.md](/d:/project/research-topic-copilot/docs/roadmap.md)
+- Topic Agent 初步设计：[docs/topic_agent_design.md](/d:/project/research-topic-copilot/docs/topic_agent_design.md)
+- Topic Agent 验收规划：[docs/topic_agent_acceptance.md](/d:/project/research-topic-copilot/docs/topic_agent_acceptance.md)
+
+## 本地启动
+
+### 后端
+
+```powershell
+cd backend
+python -m venv .venv
+.\.venv\Scripts\activate
+pip install -r requirements.txt
+$env:PYTHONPATH='.'
+uvicorn app.main:app --reload
+```
+
+### 前端
+
+```powershell
+cd frontend
+npm install
+npm run dev
+```
+
+## 环境配置
+
+在仓库根目录基于 `.env.example` 创建 `.env`。
+
+最小 fallback 配置：
+
+```env
+APP_ENV=development
+EMBEDDING_PROVIDER=mock
+CHAT_PROVIDER=fallback
+TOOL_PLANNER_PROVIDER=fallback
+CLARIFICATION_PLANNER_PROVIDER=fallback
+WORKFLOW_PLANNER_PROVIDER=fallback
+```
+
+## 目录结构
+
+- `backend/`：FastAPI 后端与 agent runtime
+- `frontend/`：React 控制台
+- `data/`：本地文档、chunks、embeddings、评测数据和运行状态
+- `docs/`：架构、路线图与设计文档
+- `scripts/`：本地开发与评测辅助脚本

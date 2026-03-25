@@ -139,3 +139,22 @@ The next set of iterations should stay focused on runtime maturity:
 - improve resume toward failed-step continuation
 - expand workflow coverage carefully, not broadly
 - prepare cleaner boundaries for future real adapters and storage backends
+
+## New Direction: Research Topic Copilot
+
+The next product direction for this repository is a focused research-topic copilot rather than a general engineering runtime demo.
+
+Planned first-phase work:
+
+- define the `Topic Agent` scope narrowly around topic exploration and convergence
+- add academic-source retrieval and evidence packaging
+- design source grading, citation rules, and conflict handling
+- support candidate-topic generation and comparison workflows
+- expose explicit human confirmation checkpoints
+- define evaluation tasks that measure whether the system improves topic selection quality
+
+Not the goal for the first phase:
+
+- becoming a full academic platform
+- supporting end-to-end paper writing
+- building a large multi-agent system before the workflow and evidence model are clear

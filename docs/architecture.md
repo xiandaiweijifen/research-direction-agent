@@ -2,261 +2,336 @@
 
 ## Goal
 
-Build an engineering-oriented agent runtime for internal knowledge retrieval, tool execution, workflow orchestration, recovery, and evaluation.
+Build a focused `Topic Agent` on top of the current local-first agent runtime so that a researcher can move from a vague interest or seed idea to a smaller set of evidence-backed candidate topics.
 
-The intended end state is not a simple chat interface. The system is being shaped as a runtime with:
+The goal is not to build a full academic platform. The system should stay narrow:
 
-- a knowledge layer
-- a routing and planning layer
-- a tool execution layer
-- a workflow orchestration layer
-- a recovery and lineage layer
-- persisted run state
+- frame the research problem
+- retrieve evidence
+- synthesize the landscape
+- compare candidate directions
+- support convergence
+- preserve evidence chains and human checkpoints
+
+## Product Position
+
+The repository already contains a reusable runtime baseline:
+
+- ingestion and local persistence
+- retrieval with diagnostics
+- planning and workflow orchestration
+- persisted workflow runs
 - evaluation and observability surfaces
 
-## Current System Shape
+The new architecture should reuse that baseline rather than replacing it.
 
-The current implementation is a local-first runtime composed of a FastAPI backend, a React console, local file-backed state, and optional model providers.
+## System Shape
 
-At a high level:
+The planned system shape is:
 
-1. Documents are uploaded and stored locally.
-2. Text is chunked and embeddings are persisted.
-3. Retrieval services score and rerank candidate chunks.
-4. A request is routed into retrieval, tool execution, or clarification.
-5. Planner services may decompose the request into a tool action or supported workflow.
-6. Tool adapters execute local actions.
-7. Workflow runs are persisted with step records, planner metadata, trace events, and recovery lineage.
-8. Evaluation services aggregate benchmark metrics and persist latest/history reports for dashboard reuse.
+1. user submits a research interest, problem domain, or rough idea
+2. the system extracts intent, constraints, and missing assumptions
+3. retrieval workflows collect evidence from academic and supporting sources
+4. synthesis workflows organize the evidence into a research landscape
+5. the agent generates multiple candidate topic paths
+6. comparison workflows score and explain tradeoffs
+7. convergence support recommends next-best options and required manual checks
+8. all intermediate reasoning remains attached to evidence, trace records, and confidence signals
 
-## Core Modules
+## Architecture Layers
 
-### 1. Ingestion
-
-Responsible for:
-
-- document upload
-- local file management
-- text extraction
-- chunk generation
-- document preview support
-
-Current notes:
-
-- the active implementation is local-first
-- supported document handling is sufficient for development and evaluation, not yet broad enterprise ingestion
-
-### 2. Indexing
+### 1. Input And Framing Layer
 
 Responsible for:
 
-- embedding generation
-- persisted embedding artifacts
-- chunk-to-embedding linkage
-- local indexing metadata
+- parsing free-form research intent
+- extracting constraints such as time, compute, data access, and preferred style
+- identifying missing clarifications
+- normalizing the input into structured exploration goals
 
-Current notes:
+Typical output:
 
-- the current implementation persists embeddings as local artifacts
-- a formal vector index or database-backed storage layer is not yet the primary path
+- framed problem statement
+- search sub-questions
+- explicit assumptions
+- clarification-needed fields
 
-### 3. Retrieval
-
-Responsible for:
-
-- retrieval over persisted embeddings
-- retrieval diagnostics
-- candidate scoring
-- lightweight reranking
-- context assembly for answer generation
-
-Current notes:
-
-- retrieval is already a stable base capability
-- hybrid retrieval is still future work
-
-### 4. LLM and Planner Layer
+### 2. Evidence Retrieval Layer
 
 Responsible for:
 
-- provider integration for Gemini and OpenAI
-- answer generation
-- tool planning
-- clarification planning
-- workflow planning
-- fallback behavior when planner calls fail or are disabled
+- searching external academic and supporting sources
+- retrieving source metadata and short evidence payloads
+- ranking evidence by relevance and source tier
+- exposing retrieval diagnostics and coverage gaps
 
-Current notes:
+Likely source categories:
 
-- planners can run with real model calls or local fallback logic
-- workflow planner debug capture and planner caching already exist
+- papers
+- surveys
+- benchmark pages
+- dataset pages
+- code repositories
 
-### 5. Routing and Orchestration
+This layer should inherit the existing retrieval discipline from the current project:
 
-Responsible for:
+- keep diagnostics visible
+- keep retrieval traceable
+- avoid hidden unsupported claims
 
-- request routing
-- selecting retrieval, tool execution, clarification, or workflow behavior
-- orchestrating step-by-step workflow execution
-- applying guardrails and clarification rules
-- recording workflow traces and terminal semantics
-
-Current notes:
-
-- this is the current center of gravity of the project
-- supported multi-step flows are intentionally constrained to a small set of known workflow shapes
-- retry and recovery semantics are now part of the runtime contract rather than ad hoc UI behavior
-
-### 6. Tool Layer
+### 3. Evidence Store And Citation Layer
 
 Responsible for:
 
-- adapter-style tool execution
-- structured tool outputs
-- action-specific argument handling
-- local operational simulations for workflow testing
+- normalizing source metadata
+- attaching source tier and confidence metadata
+- keeping claim-to-evidence links
+- storing snapshots of explored evidence for later review
 
-Current tools:
+Each important output should map back to evidence records with:
 
-- `document_search`
-- `system_status`
-- `ticketing`
+- title
+- source type
+- year
+- identifier or URL
+- source tier
+- supporting rationale
 
-Current notes:
-
-- these are local adapters, not real external integrations
-- the architecture is moving toward clearer local-vs-real adapter boundaries
-
-### 7. Recovery and Lineage
+### 4. Landscape Synthesis Layer
 
 Responsible for:
 
-- retry handling
-- retry exhaustion semantics
-- clarification-driven continuation
-- failed-step resume for supported workflows
-- manual retrigger recovery
-- recovery lineage metadata and navigation
+- grouping the evidence into themes
+- summarizing major methods and problem formulations
+- identifying active areas, saturated areas, and possible gaps
+- surfacing uncertainty and disagreement
 
-Current notes:
+This layer should not output final topic recommendations directly. Its role is to create a reliable map of the search space first.
 
-- recovery is now a first-class runtime behavior
-- the current implementation supports a bounded set of recovery strategies rather than arbitrary rerun-from-step-N
-
-### 8. State and Persistence
+### 5. Candidate Generation Layer
 
 Responsible for:
 
-- local workflow run persistence
-- local ticket persistence
-- artifact persistence for chunks and embeddings
-- planner debug payload persistence
-- evaluation overview cache persistence
-- evaluation report persistence
-- legacy workflow run migration support
+- producing several candidate topic directions
+- tying each candidate to evidence bundles
+- making explicit what assumptions each candidate depends on
 
-Current notes:
+Candidate categories may include:
 
-- JSON-backed state is sufficient for iterative development
-- a more formal repository or database-backed state layer is still ahead
+- gap-driven topics
+- transfer or adaptation topics
+- application-focused topics
+- systems or tooling topics
 
-### 9. Evaluation and Observability
+The system should prefer 3 to 5 candidates rather than one single answer.
+
+### 6. Comparison And Convergence Layer
 
 Responsible for:
 
-- retrieval evaluation
-- route evaluation
-- workflow evaluation
-- tool execution evaluation
-- overview and highlight metric aggregation
-- latest and historical report persistence
-- workflow trace inspection
-- planner diagnostics and debug capture
+- comparing candidate directions across explicit dimensions
+- recommending next-best options instead of pretending certainty
+- showing reasons for deprioritized paths
 
-Current notes:
+Core comparison dimensions:
 
-- observability is already useful for development
-- cost tracking and deeper analytics remain future work
-- local benchmark persistence is already part of the day-to-day workflow
+- novelty
+- feasibility
+- evidence strength
+- data and benchmark availability
+- implementation cost
+- risk
+- alignment with user constraints
 
-## Request Flow
+### 7. Verification And Human Confirmation Layer
 
-### Knowledge Query Flow
+Responsible for:
 
-1. Client sends a retrieval query.
-2. Retrieval service loads persisted embeddings and scores candidate chunks.
-3. The system reranks and returns matched chunks.
-4. The answer layer returns either a model-backed answer or a fallback answer.
+- exposing evidence chains
+- surfacing source conflicts
+- marking unsupported inference
+- requiring manual confirmation at high-risk decision points
 
-### Agent Request Flow
+Human confirmation should remain mandatory for:
 
-1. Client sends an agent request.
-2. Router classifies the request.
-3. Orchestrator either:
-   - runs retrieval directly,
-   - plans and executes a single tool action,
-   - asks for clarification,
-   - or decomposes the request into a supported workflow.
-4. Planner layers may use LLM-backed planning or heuristic fallback.
-5. Tool steps execute through local adapters.
-6. The run is persisted with:
-   - route information
-   - workflow trace events
-   - step records
-   - planner modes and latencies
-   - final terminal reason
+- problem framing correctness
+- whether constraints are complete
+- whether a supposed gap is real
+- whether a final candidate is feasible for the user
+- final topic convergence
 
-### Recovery Flow
+## Workflow Model
 
-1. A workflow run may fail, require clarification, or exhaust retry.
-2. The runtime assigns:
-   - outcome category
-   - retry state
-   - recommended recovery action
-   - available recovery actions
-3. A client may recover by:
-   - clarification continuation
-   - failed-step resume
-   - manual retrigger
-4. Recovery executes as a new workflow run.
-5. Recovery lineage metadata is attached so the relationship between runs remains inspectable and navigable.
+The recommended shape is workflow-based orchestration rather than a single-shot answer.
 
-### Evaluation Flow
+Core workflow:
 
-1. A client selects an evaluation mode and dataset.
-2. The evaluation service executes the benchmark against the current runtime.
-3. The result is persisted as:
-   - latest report
-   - timestamped history snapshot
-4. Overview and highlight services aggregate benchmark and runtime metrics.
-5. The frontend dashboard loads:
-   - overview metrics
-   - highlight metrics
-   - latest saved reports
-   - recent history and previous-run deltas
+1. `frame_problem`
+2. `retrieve_evidence`
+3. `synthesize_landscape`
+4. `generate_candidates`
+5. `compare_candidates`
+6. `converge_recommendation`
+7. `human_confirm`
 
-## Design Principles
+Optional recovery loops:
 
-### Local-First Development
+- refine the search query
+- narrow the scope
+- replace low-quality evidence
+- rerun comparison with updated constraints
 
-The system is optimized for local development and iterative agent engineering:
+## Evidence And Trust Rules
 
-- local backend
-- local frontend
-- local file-backed state
-- optional live model providers
-- fallback behavior when providers are unavailable
+### Source Tiers
 
-### Explicit Fallbacks
+Tier A:
 
-The runtime should degrade rather than collapse:
+- peer-reviewed papers
+- authoritative surveys
+- official benchmark or dataset documentation
 
-- planner calls can fall back to heuristics
-- answer generation can fall back to local responses
-- workflow traces should explain which path was taken
-- recovery guidance should remain explicit even when execution fails
+Tier B:
 
-### Observable Behavior
+- arXiv preprints
+- lab pages
+- course notes
+- credible technical blogs
+
+Tier C:
+
+- forums
+- personal blogs
+- unsupported model-only inference
+
+### Conflict Rules
+
+- prefer Tier A over Tier B and C when the same claim conflicts
+- surface disagreement explicitly when strong sources disagree
+- do not merge unsupported inference into factual output
+- preserve recent versus classic-source distinctions
+
+### Claim Rules
+
+- every important recommendation should carry evidence
+- weakly supported claims should be labeled as tentative
+- unsupported synthesis must be visible as inference, not fact
+
+## Reuse Of The Existing Repository
+
+### Existing Parts To Reuse
+
+- `backend/app/services/retrieval/`
+  Retrieval logic, diagnostics patterns, and ranking interfaces
+
+- `backend/app/services/agent/`
+  Workflow orchestration, run persistence, trace recording, and recovery semantics
+
+- `backend/app/services/llm/`
+  Planner and synthesis support with fallback behavior
+
+- `backend/app/services/evaluation/`
+  Benchmark and report persistence patterns
+
+- `frontend/src/components/`
+  Console-oriented interaction model and inspection surfaces
+
+### New Parts To Add
+
+- `backend/app/api/routes/topic_agent.py`
+- `backend/app/schemas/topic_agent.py`
+- `backend/app/services/topic_agent/`
+- `backend/app/services/topic_agent/source_adapters/`
+- `frontend/src/components/TopicWorkspace.tsx`
+
+Suggested service split:
+
+- `framing_service.py`
+- `evidence_retrieval_service.py`
+- `citation_service.py`
+- `landscape_service.py`
+- `candidate_service.py`
+- `comparison_service.py`
+- `convergence_service.py`
+
+## Runtime Session Model
+
+Each topic-exploration session should be persisted similarly to current workflow runs.
+
+Recommended session record fields:
+
+- `session_id`
+- `user_input`
+- `structured_constraints`
+- `evidence_records`
+- `landscape_summary`
+- `candidate_topics`
+- `comparison_result`
+- `convergence_result`
+- `human_confirmations`
+- `trace`
+- `confidence_summary`
+
+This keeps the system inspectable and makes evaluation easier.
+
+## Frontend Direction
+
+A narrow first UI is preferable.
+
+Suggested workspace sections:
+
+- `Explore`
+  Input, framing result, clarifications, and retrieval status
+
+- `Evidence`
+  Retrieved sources, source tiers, citations, and conflicts
+
+- `Compare`
+  Candidate topics, tradeoffs, and convergence support
+
+The UI should optimize for:
+
+- evidence drill-down
+- explicit uncertainty
+- manual confirmation
+- rerun after scope adjustment
+
+## Evaluation Direction
+
+The architecture should support evaluation at two levels.
+
+### System-Level Quality
+
+- retrieval quality
+- citation completeness
+- evidence-to-claim consistency
+- comparison usefulness
+
+### User-Level Outcome
+
+- time to produce credible candidate topics
+- quality of final topic shortlist
+- expert judgment of evidence support
+- user confidence in final selection
+
+## Non-Goals For The First Phase
+
+- full paper drafting
+- autonomous topic selection without user review
+- complete academic knowledge graph infrastructure
+- large multi-agent orchestration before the evidence model is stable
+
+## Practical First Milestone
+
+The first milestone should prove that the system can do one thing well:
+
+- accept a research interest
+- retrieve evidence from a small number of source types
+- produce 3 candidate topics
+- compare them with explicit evidence
+- recommend a next-best option with visible uncertainty
+
+If that milestone is not convincing, the architecture should not expand yet.
 
 The system is designed to make agent behavior inspectable:
 
