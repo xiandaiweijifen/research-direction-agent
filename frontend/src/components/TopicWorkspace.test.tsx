@@ -154,6 +154,8 @@ describe("TopicWorkspace", () => {
     expect(
       screen.getByText("Data: medium | Cost: medium | Risk: medium"),
     ).toBeInTheDocument();
+    expect(screen.getByText("Supporting Evidence")).toBeInTheDocument();
+    expect(screen.getByText("source_1: Recent Survey")).toBeInTheDocument();
 
     await user.click(screen.getByRole("button", { name: "Run Topic Agent" }));
     expect(onSubmit).toHaveBeenCalledTimes(1);

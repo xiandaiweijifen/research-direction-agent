@@ -47,6 +47,9 @@ export function TopicWorkspace({
   onRefine,
   onLoadSession,
 }: TopicWorkspaceProps) {
+  const evidenceTitleById = new Map(
+    (topicResult?.evidence_records ?? []).map((record) => [record.source_id, record.title]),
+  );
   const copy =
     locale === "zh"
       ? {
@@ -67,6 +70,7 @@ export function TopicWorkspace({
           framing: "问题 Framing",
           evidence: "证据记录",
           candidates: "候选选题",
+          supportingEvidence: "支撑证据",
           comparison: "比较与收敛",
           candidateScores: "候选比较",
           trace: "执行轨迹",
@@ -99,6 +103,7 @@ export function TopicWorkspace({
           framing: "Problem Framing",
           evidence: "Evidence Records",
           candidates: "Candidate Topics",
+          supportingEvidence: "Supporting Evidence",
           comparison: "Comparison And Convergence",
           candidateScores: "Candidate Comparison",
           trace: "Execution Trace",
@@ -286,6 +291,12 @@ export function TopicWorkspace({
                     <span className="status-chip">{candidate.positioning}</span>
                   </div>
                   <p className="trace-detail">{candidate.research_question}</p>
+                  <span className="trace-label">{copy.supportingEvidence}</span>
+                  {candidate.supporting_source_ids.map((sourceId) => (
+                    <p key={`${candidate.candidate_id}-${sourceId}`} className="trace-detail">
+                      {sourceId}: {evidenceTitleById.get(sourceId) ?? sourceId}
+                    </p>
+                  ))}
                 </article>
               ))}
             </div>
