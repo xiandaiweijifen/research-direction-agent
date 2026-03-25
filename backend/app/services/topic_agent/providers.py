@@ -45,7 +45,7 @@ class TopicAgentEvidenceProviderRegistry:
         return sorted(self.providers.keys())
 
 
-ARXIV_API_URL = "http://export.arxiv.org/api/query"
+ARXIV_API_URL = "https://export.arxiv.org/api/query"
 ATOM_NAMESPACE = {"atom": "http://www.w3.org/2005/Atom"}
 
 
@@ -138,6 +138,7 @@ class ArxivEvidenceProvider:
                 "sortOrder": "descending",
             },
             timeout=self.timeout_seconds,
+            follow_redirects=True,
             headers={"User-Agent": "research-topic-copilot/0.1"},
         )
         response.raise_for_status()
