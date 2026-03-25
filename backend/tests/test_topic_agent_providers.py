@@ -1,11 +1,15 @@
+import json
+
 import pytest
 
 from app.schemas.topic_agent import TopicAgentConstraintSet, TopicAgentExploreRequest
 from app.services.topic_agent.providers import (
+    OPENALEX_CACHE_SCHEMA_VERSION,
     ArxivEvidenceProvider,
     FallbackEvidenceProvider,
     MockTopicAgentEvidenceProvider,
     OpenAlexEvidenceProvider,
+    _build_cache_key,
     _build_arxiv_query,
     _core_query_terms,
     _filter_ranked_records,
@@ -331,45 +335,46 @@ def test_openalex_provider_normalizes_legacy_cached_source_ids(workspace_tmp_pat
     cache_path = workspace_tmp_path / "topic_agent_openalex_cache.json"
     provider = OpenAlexEvidenceProvider(cache_path=cache_path, cache_ttl_seconds=3600)
     cache_key = (
+        f"{OPENALEX_CACHE_SCHEMA_VERSION}::"
         "trustworthy multimodal reasoning medical imaging applied||"
         "trustworthy multimodal reasoning medical||"
         "multimodal reasoning medical benchmark||"
         "trustworthy reasoning medical evaluation::max=5"
     )
     cache_path.write_text(
-        """
-        {
-          "trustworthy multimodal reasoning medical imaging applied||trustworthy multimodal reasoning medical||multimodal reasoning medical benchmark||trustworthy reasoning medical evaluation::max=5": {
-            "saved_at": "2026-03-25T20:48:24.956512+08:00",
-            "records": [
-              {
-                "source_id": "openalex_2",
-                "title": "Building an Ethical and Trustworthy Biomedical AI Ecosystem",
-                "source_type": "paper",
-                "source_tier": "B",
-                "year": 2024,
-                "authors_or_publisher": "Author A",
-                "identifier": "https://openalex.org/W4402987506",
-                "url": "https://doi.org/10.3390/example",
-                "summary": "Summary A",
-                "relevance_reason": "Test"
-              },
-              {
-                "source_id": "openalex_2",
-                "title": "Benchmarking GPT-5 for Zero-Shot Multimodal Medical Reasoning in Radiology and Radiation Oncology",
-                "source_type": "benchmark",
-                "source_tier": "A",
-                "year": 2025,
-                "authors_or_publisher": "Author B",
-                "identifier": "https://openalex.org/W4414530509",
-                "url": "https://arxiv.org/abs/2508.13192",
-                "summary": "Summary B",
-                "relevance_reason": "Test"
-              }
-            ]
-          }
-        }
-        """.strip(),
+        json.dumps(
+            {
+                cache_key: {
+                    "saved_at": "2026-03-25T20:48:24.956512+08:00",
+                    "records": [
+                        {
+                            "source_id": "openalex_2",
+                            "title": "Building an Ethical and Trustworthy Biomedical AI Ecosystem",
+                            "source_type": "paper",
+                            "source_tier": "B",
+                            "year": 2024,
+                            "authors_or_publisher": "Author A",
+                            "identifier": "https://openalex.org/W4402987506",
+                            "url": "https://doi.org/10.3390/example",
+                            "summary": "Summary A",
+                            "relevance_reason": "Test",
+                        },
+                        {
+                            "source_id": "openalex_2",
+                            "title": "Benchmarking GPT-5 for Zero-Shot Multimodal Medical Reasoning in Radiology and Radiation Oncology",
+                            "source_type": "benchmark",
+                            "source_tier": "A",
+                            "year": 2025,
+                            "authors_or_publisher": "Author B",
+                            "identifier": "https://openalex.org/W4414530509",
+                            "url": "https://arxiv.org/abs/2508.13192",
+                            "summary": "Summary B",
+                            "relevance_reason": "Test",
+                        },
+                    ],
+                }
+            }
+        ),
         encoding="utf-8",
     )
 
@@ -377,13 +382,99 @@ def test_openalex_provider_normalizes_legacy_cached_source_ids(workspace_tmp_pat
 
     assert result.diagnostics.cache_hit is True
     assert [record.source_id for record in result.records] == [
-        "openalex_w4402987506",
         "openalex_w4414530509",
     ]
     normalized_cache = cache_path.read_text(encoding="utf-8")
-    assert "openalex_w4402987506" in normalized_cache
     assert "openalex_w4414530509" in normalized_cache
     assert cache_key in normalized_cache
+
+
+def test_openalex_cache_key_is_versioned():
+    key = _build_cache_key(
+        "trustworthy multimodal reasoning medical imaging applied",
+        5,
+        version=OPENALEX_CACHE_SCHEMA_VERSION,
+    )
+
+    assert key.startswith(f"{OPENALEX_CACHE_SCHEMA_VERSION}::")
+
+
+def test_openalex_provider_ignores_legacy_unversioned_cache_key(workspace_tmp_path, monkeypatch):
+    request = TopicAgentExploreRequest(
+        interest="trustworthy multimodal reasoning in medical imaging",
+        problem_domain="medical AI",
+        constraints=TopicAgentConstraintSet(preferred_style="applied"),
+    )
+    cache_path = workspace_tmp_path / "topic_agent_openalex_cache.json"
+    provider = OpenAlexEvidenceProvider(cache_path=cache_path, cache_ttl_seconds=3600)
+    legacy_key = (
+        "trustworthy multimodal reasoning medical imaging applied||"
+        "trustworthy multimodal reasoning medical||"
+        "multimodal reasoning medical benchmark||"
+        "trustworthy reasoning medical evaluation::max=5"
+    )
+    cache_path.write_text(
+        f"""
+        {{
+          "{legacy_key}": {{
+            "saved_at": "2026-03-25T20:48:24.956512+08:00",
+            "records": [
+              {{
+                "source_id": "openalex_2",
+                "title": "Legacy Cached Result",
+                "source_type": "paper",
+                "source_tier": "B",
+                "year": 2024,
+                "authors_or_publisher": "Author A",
+                "identifier": "https://openalex.org/W4402987506",
+                "url": "https://doi.org/10.3390/example",
+                "summary": "Legacy summary",
+                "relevance_reason": "Test"
+              }}
+            ]
+          }}
+        }}
+        """.strip(),
+        encoding="utf-8",
+    )
+
+    class FakeResponse:
+        def json(self):
+            return {
+                "results": [
+                    {
+                        "id": "https://openalex.org/W4414530509",
+                        "display_name": "Benchmarking GPT-5 for Zero-Shot Multimodal Medical Reasoning in Radiology and Radiation Oncology",
+                        "publication_year": 2025,
+                        "abstract_inverted_index": {
+                            "Benchmarking": [0],
+                            "multimodal": [1],
+                            "medical": [2],
+                            "reasoning": [3],
+                            "radiology": [4],
+                        },
+                        "authorships": [{"author": {"display_name": "Author B"}}],
+                        "primary_location": {"landing_page_url": "https://example.org/benchmark"},
+                    }
+                ]
+            }
+
+        def raise_for_status(self):
+            return None
+
+    call_count = {"value": 0}
+
+    def fake_http_get(*args, **kwargs):
+        call_count["value"] += 1
+        return FakeResponse()
+
+    monkeypatch.setattr("app.services.topic_agent.providers.httpx.get", fake_http_get)
+
+    result = provider.retrieve(request)
+
+    assert call_count["value"] >= 1
+    assert result.diagnostics.cache_hit is False
+    assert result.records[0].source_id == "openalex_w4414530509"
 
 
 def test_openalex_provider_merges_multi_query_results_and_dedupes(workspace_tmp_path, monkeypatch):

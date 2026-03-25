@@ -54,6 +54,7 @@ OPENALEX_API_URL = "https://api.openalex.org/works"
 ATOM_NAMESPACE = {"atom": "http://www.w3.org/2005/Atom"}
 TOPIC_AGENT_ARXIV_CACHE_PATH = DATA_ROOT / "tool_state" / "topic_agent_arxiv_cache.json"
 TOPIC_AGENT_OPENALEX_CACHE_PATH = DATA_ROOT / "tool_state" / "topic_agent_openalex_cache.json"
+OPENALEX_CACHE_SCHEMA_VERSION = "v2"
 
 
 def _normalize_optional(value: str | None) -> str | None:
@@ -156,14 +157,18 @@ class OpenAlexEvidenceProvider:
 
     def retrieve(self, request: TopicAgentExploreRequest) -> TopicAgentEvidenceRetrievalResult:
         query_texts = _build_openalex_queries(request)
-        cache_key = _build_cache_key("||".join(query_texts), self.max_results)
+        cache_key = _build_cache_key(
+            "||".join(query_texts),
+            self.max_results,
+            version=OPENALEX_CACHE_SCHEMA_VERSION,
+        )
         cached_records = _load_cached_records(
             self.cache_path,
             cache_key,
             self.cache_ttl_seconds,
         )
         if cached_records:
-            cached_records, changed = _normalize_openalex_cached_records(cached_records)
+            cached_records, changed = _normalize_openalex_cached_records(cached_records, request, self.max_results)
             if changed:
                 _save_cached_records(self.cache_path, cache_key, cached_records)
             return TopicAgentEvidenceRetrievalResult(
@@ -376,8 +381,9 @@ def _build_openalex_queries(request: TopicAgentExploreRequest) -> list[str]:
     return deduped_queries
 
 
-def _build_cache_key(query_text: str, max_results: int) -> str:
-    return f"{query_text.strip().lower()}::max={max_results}"
+def _build_cache_key(query_text: str, max_results: int, *, version: str | None = None) -> str:
+    version_prefix = f"{version}::" if version else ""
+    return f"{version_prefix}{query_text.strip().lower()}::max={max_results}"
 
 
 def _dedupe_records(records: list[TopicAgentSourceRecord]) -> list[TopicAgentSourceRecord]:
@@ -570,6 +576,8 @@ def _normalize_record(record: TopicAgentSourceRecord) -> TopicAgentSourceRecord:
 
 def _normalize_openalex_cached_records(
     records: list[TopicAgentSourceRecord],
+    request: TopicAgentExploreRequest,
+    max_results: int,
 ) -> tuple[list[TopicAgentSourceRecord], bool]:
     normalized_records: list[TopicAgentSourceRecord] = []
     changed = False
@@ -581,10 +589,13 @@ def _normalize_openalex_cached_records(
             changed = True
         else:
             normalized_records.append(record)
-    deduped_records = _dedupe_records(normalized_records)
-    if len(deduped_records) != len(normalized_records):
+    reranked_records = _rank_records(_dedupe_records(normalized_records), request, max_results)
+    reranked_records = _filter_ranked_records(reranked_records, request, max_results)
+    if len(reranked_records) != len(normalized_records):
         changed = True
-    return deduped_records, changed
+    elif [record.identifier for record in reranked_records] != [record.identifier for record in normalized_records[: len(reranked_records)]]:
+        changed = True
+    return reranked_records, changed
 
 
 def _rank_records(
