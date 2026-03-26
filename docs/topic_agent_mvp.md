@@ -411,3 +411,10 @@ Do not expand to broader features until the MVP proves:
 - evidence links are trustworthy enough
 - candidate diversity is real
 - users understand why one candidate is recommended over another
+
+## 15. Demo And Acceptance References
+
+Use these documents when validating the current MVP slice:
+
+- [topic_agent_demo_scenarios.md](/d:/project/research-topic-copilot/docs/topic_agent_demo_scenarios.md)
+- [topic_agent_acceptance_walkthrough.md](/d:/project/research-topic-copilot/docs/topic_agent_acceptance_walkthrough.md)

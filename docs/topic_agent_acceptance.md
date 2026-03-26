@@ -146,3 +146,10 @@ Do not expand scope if the first milestone still cannot reliably do these:
 - attach evidence to claims
 - expose uncertainty clearly
 - help users narrow rather than drift
+
+## 9. Walkthrough Reference
+
+For reviewer-facing acceptance discussion, pair this file with:
+
+- [topic_agent_demo_scenarios.md](/d:/project/research-topic-copilot/docs/topic_agent_demo_scenarios.md)
+- [topic_agent_acceptance_walkthrough.md](/d:/project/research-topic-copilot/docs/topic_agent_acceptance_walkthrough.md)
