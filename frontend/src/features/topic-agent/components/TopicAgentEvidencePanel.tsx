@@ -72,8 +72,8 @@ export function TopicAgentEvidencePanel({
             <span className="trace-label">{copy.evidenceFilters}</span>
             <div className="evidence-filter-stack">
               <div className="evidence-filter-group">
-                <span className="trace-label">{uiCopy.tierFilter}</span>
-                <div className="filter-row">
+                <span className="trace-label evidence-filter-label">{uiCopy.tierFilter}</span>
+                <div className="filter-row evidence-filter-options">
                   <button
                     type="button"
                     className={`filter-chip${evidenceTierFilter === "all" ? " active" : ""}`}
@@ -95,8 +95,8 @@ export function TopicAgentEvidencePanel({
               </div>
 
               <div className="evidence-filter-group">
-                <span className="trace-label">{uiCopy.typeFilter}</span>
-                <div className="filter-row">
+                <span className="trace-label evidence-filter-label">{uiCopy.typeFilter}</span>
+                <div className="filter-row evidence-filter-options">
                   <button
                     type="button"
                     className={`filter-chip${evidenceTypeFilter === "all" ? " active" : ""}`}

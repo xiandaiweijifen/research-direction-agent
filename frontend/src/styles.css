@@ -907,16 +907,29 @@ textarea {
 
 .evidence-filter-stack {
   display: grid;
-  gap: 14px;
+  gap: 10px;
 }
 
 .evidence-filter-group {
-  display: grid;
-  gap: 8px;
-  padding: 12px 14px;
-  border: 1px solid rgba(31, 41, 51, 0.08);
-  border-radius: 16px;
-  background: rgba(255, 255, 255, 0.72);
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 10px 0 0;
+  border-top: 1px solid rgba(31, 41, 51, 0.08);
+}
+
+.evidence-filter-group:first-of-type {
+  padding-top: 0;
+  border-top: none;
+}
+
+.evidence-filter-label {
+  flex: 0 0 180px;
+  padding-top: 6px;
+}
+
+.evidence-filter-options {
+  flex: 1 1 auto;
 }
 
 .filter-chip {
@@ -937,6 +950,10 @@ textarea {
   border-color: rgba(159, 58, 29, 0.35);
   background: var(--accent-soft);
   color: var(--accent-strong);
+}
+
+.filter-chip {
+  min-height: 34px;
 }
 
 .status,
@@ -1661,5 +1678,15 @@ textarea {
   .button-row > button {
     width: 100%;
     justify-content: center;
+  }
+
+  .evidence-filter-group {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .evidence-filter-label {
+    flex: 0 0 auto;
+    padding-top: 0;
   }
 }
