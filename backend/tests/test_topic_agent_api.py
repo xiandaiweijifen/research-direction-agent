@@ -40,6 +40,7 @@ def test_topic_agent_explore_creates_session_with_mock_outputs(workspace_tmp_pat
     assert isinstance(payload["evidence_diagnostics"]["cache_hit"], bool)
     assert payload["confidence_summary"]["rationale"]
     assert payload["trace"]
+    assert payload["human_confirmations"]
     assert [event["stage"] for event in payload["trace"]] == [
         "frame_problem",
         "retrieve_evidence",
@@ -132,6 +133,10 @@ def test_topic_agent_refine_updates_existing_session(workspace_tmp_path, monkeyp
     assert refined_payload["comparison_result"]["summary"].startswith(
         "Candidate 2 is strongest for applied feasibility"
     )
+    joined_confirmations = " ".join(refined_payload["human_confirmations"]).lower()
+    assert "project timeline" not in joined_confirmations
+    assert "resource level" not in joined_confirmations
+    assert "leading direction" in joined_confirmations
 
 
 def test_topic_agent_explore_rejects_empty_interest(workspace_tmp_path, monkeypatch):

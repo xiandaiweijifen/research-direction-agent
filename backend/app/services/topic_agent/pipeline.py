@@ -904,6 +904,48 @@ def build_trace(context: TopicAgentPipelineContext) -> list[TopicAgentTraceEvent
     return result
 
 
+def build_human_confirmations(context: TopicAgentPipelineContext) -> list[str]:
+    framing_result = context.framing_result
+    convergence_result = context.convergence_result
+    confirmations: list[str] = []
+
+    missing_clarification_map = {
+        "time_budget": "Confirm the expected project timeline before accepting the recommendation.",
+        "resource_level": "Confirm the available resource level so feasibility judgments are grounded.",
+        "preferred_style": "Confirm whether the project should prioritize theory, systems work, or applied execution.",
+    }
+
+    for missing_field in (framing_result.missing_clarifications if framing_result else []):
+        confirmation = missing_clarification_map.get(
+            missing_field,
+            f"Confirm the missing framing detail for {missing_field} before moving forward.",
+        )
+        if confirmation not in confirmations:
+            confirmations.append(confirmation)
+
+    if framing_result:
+        framing_confirmation = (
+            f"Confirm that the system correctly interpreted the topic as "
+            f"'{framing_result.normalized_topic}'."
+        )
+        if framing_confirmation not in confirmations:
+            confirmations.append(framing_confirmation)
+
+    if convergence_result:
+        recommendation_confirmation = (
+            f"Confirm that {convergence_result.recommended_candidate_id} should remain the leading direction "
+            f"after reviewing the supporting evidence and risks."
+        )
+        if recommendation_confirmation not in confirmations:
+            confirmations.append(recommendation_confirmation)
+        for manual_check in convergence_result.manual_checks[:2]:
+            normalized = f"Manual check: {manual_check}"
+            if normalized not in confirmations:
+                confirmations.append(normalized)
+
+    return confirmations
+
+
 def run_topic_agent_pipeline(
     request: TopicAgentExploreRequest,
     *,
@@ -921,6 +963,7 @@ def run_topic_agent_pipeline(
     converge_recommendation(context)
     build_confidence_summary(context)
     build_trace(context)
+    human_confirmations = build_human_confirmations(context)
     return TopicAgentSessionResponse(
         session_id=session_id or uuid.uuid4().hex,
         created_at=created_at or timestamp,
@@ -932,7 +975,7 @@ def run_topic_agent_pipeline(
         candidate_topics=context.candidate_topics or [],
         comparison_result=context.comparison_result,
         convergence_result=context.convergence_result,
-        human_confirmations=[],
+        human_confirmations=human_confirmations,
         trace=context.trace or [],
         confidence_summary=context.confidence_summary,
         evidence_diagnostics=context.evidence_diagnostics

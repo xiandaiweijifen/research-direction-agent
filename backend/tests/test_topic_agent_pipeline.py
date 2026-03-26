@@ -577,3 +577,48 @@ def test_topic_agent_pipeline_dedupes_hallucination_workflow_questions():
         "What concrete reproducibility pain point should be prioritized first?",
         "Which workflow improvement reduces compute or setup cost the most?",
     ]
+
+
+def test_topic_agent_pipeline_builds_human_confirmations_for_missing_constraints():
+    class SparseProvider:
+        provider_name = "static"
+
+        def retrieve(self, request: TopicAgentExploreRequest):
+            records = [
+                TopicAgentSourceRecord(
+                    source_id="openalex_a",
+                    title="Benchmarking Medical VQA Grounding",
+                    source_type="benchmark",
+                    source_tier="A",
+                    year=2025,
+                    authors_or_publisher="Author A",
+                    identifier="https://example.org/a",
+                    url="https://example.org/a",
+                    summary="Benchmark evidence for trustworthy multimodal medical reasoning.",
+                    relevance_reason="Test record",
+                )
+            ]
+            return TopicAgentEvidenceRetrievalResult(
+                records=records,
+                diagnostics=TopicAgentEvidenceDiagnostics(
+                    requested_provider="static",
+                    used_provider="static",
+                    fallback_used=False,
+                    fallback_reason=None,
+                    record_count=1,
+                ),
+            )
+
+    request = TopicAgentExploreRequest(
+        interest="medical reasoning",
+        constraints=TopicAgentConstraintSet(),
+    )
+
+    response = run_topic_agent_pipeline(request, provider=SparseProvider())
+    joined_confirmations = " ".join(response.human_confirmations).lower()
+
+    assert "project timeline" in joined_confirmations
+    assert "resource level" in joined_confirmations
+    assert "prioritize theory" in joined_confirmations
+    assert "correctly interpreted the topic" in joined_confirmations
+    assert "leading direction" in joined_confirmations
