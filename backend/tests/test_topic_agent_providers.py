@@ -1481,6 +1481,92 @@ def test_rank_records_penalizes_software_library_neighbors_for_modern_agent_quer
     assert "Array programming with NumPy" not in filtered_titles
 
 
+def test_rank_records_penalizes_generic_autonomous_maintenance_neighbors_for_code_repair_queries():
+    request = TopicAgentExploreRequest(
+        interest="autonomous code repair agents",
+        problem_domain="software maintenance",
+        constraints=TopicAgentConstraintSet(preferred_style="applied"),
+    )
+    records = [
+        _parse_openalex_response(
+            {
+                "results": [
+                    {
+                        "id": "https://openalex.org/W1",
+                        "display_name": "AutoCodeRover: Autonomous Program Improvement",
+                        "publication_year": 2024,
+                        "abstract_inverted_index": {
+                            "autonomous": [0],
+                            "program": [1],
+                            "improvement": [2],
+                            "program": [3],
+                            "repair": [4],
+                            "github": [5],
+                            "issues": [6],
+                        },
+                        "authorships": [{"author": {"display_name": "Author A"}}],
+                        "primary_location": {"landing_page_url": "https://example.org/autocoderover"},
+                    }
+                ]
+            }
+        )[0],
+        _parse_openalex_response(
+            {
+                "results": [
+                    {
+                        "id": "https://openalex.org/W2",
+                        "display_name": "Semi-autonomous visual inspection of vessels assisted by an unmanned Micro Aerial Vehicle",
+                        "publication_year": 2012,
+                        "abstract_inverted_index": {
+                            "vessel": [0],
+                            "maintenance": [1],
+                            "inspection": [2],
+                            "autonomous": [3],
+                            "agent": [4],
+                        },
+                        "authorships": [{"author": {"display_name": "Author B"}}],
+                        "primary_location": {"landing_page_url": "https://example.org/vessel"},
+                    }
+                ]
+            }
+        )[0],
+        _parse_openalex_response(
+            {
+                "results": [
+                    {
+                        "id": "https://openalex.org/W3",
+                        "display_name": "Automating human based negotiation processes for autonomic logistics",
+                        "publication_year": 2002,
+                        "abstract_inverted_index": {
+                            "autonomous": [0],
+                            "maintenance": [1],
+                            "logistics": [2],
+                            "negotiation": [3],
+                            "agent": [4],
+                        },
+                        "authorships": [{"author": {"display_name": "Author C"}}],
+                        "primary_location": {"landing_page_url": "https://example.org/logistics"},
+                    }
+                ]
+            }
+        )[0],
+    ]
+
+    ranked_titles = [record.title for record in _rank_records(records, request, max_results=3)]
+    filtered_titles = [
+        record.title
+        for record in _filter_ranked_records(
+            _rank_records(records, request, max_results=3),
+            request,
+            max_results=3,
+        )
+    ]
+
+    assert ranked_titles[0] == "AutoCodeRover: Autonomous Program Improvement"
+    assert ranked_titles[-1] == "Automating human based negotiation processes for autonomic logistics"
+    assert "AutoCodeRover: Autonomous Program Improvement" in filtered_titles
+
+
 def test_fallback_provider_returns_mock_records_when_primary_fails():
     class FailingProvider:
         provider_name = "primary"

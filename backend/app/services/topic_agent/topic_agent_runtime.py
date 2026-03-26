@@ -19,7 +19,7 @@ from app.services.topic_agent.providers import (
 
 TOPIC_AGENT_STORE_PATH = DATA_ROOT / "tool_state" / "topic_agent_sessions.json"
 DEFAULT_TOPIC_AGENT_PROVIDER_NAME = "openalex_or_arxiv_or_mock"
-TOPIC_AGENT_SESSION_HISTORY_LIMIT = 120
+TOPIC_AGENT_SESSION_HISTORY_LIMIT = 60
 
 
 def _load_sessions() -> list[dict]:

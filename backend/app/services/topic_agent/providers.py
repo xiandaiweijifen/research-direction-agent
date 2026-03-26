@@ -688,6 +688,21 @@ def _is_modern_software_agent_query(query_text: str) -> bool:
     )
 
 
+def _is_code_repair_query(query_text: str) -> bool:
+    return _contains_any(
+        query_text,
+        {
+            "code repair",
+            "program repair",
+            "bug fixing",
+            "bug fix",
+            "automated program repair",
+            "software maintenance",
+            "program improvement",
+        },
+    )
+
+
 def _software_agent_target_terms() -> set[str]:
     return {
         "agent",
@@ -723,6 +738,48 @@ def _software_library_neighbor_terms() -> set[str]:
         "matrices",
         "numerical computing",
         "numerical python",
+    }
+
+
+def _code_repair_target_terms() -> set[str]:
+    return {
+        "program repair",
+        "automated program repair",
+        "bug fixing",
+        "bug fix",
+        "github issues",
+        "swe-bench",
+        "program improvement",
+        "patch",
+        "fault localization",
+        "issue summarization",
+        "code intent extraction",
+        "specification inference",
+        "software vulnerabilities",
+        "vulnerability repair",
+        "developer workflow",
+        "repository",
+        "codebase",
+    }
+
+
+def _code_repair_neighbor_terms() -> set[str]:
+    return {
+        "vessel",
+        "micro aerial vehicle",
+        "mav",
+        "hull",
+        "ship",
+        "spacecraft",
+        "autonomic logistics",
+        "aircraft support systems",
+        "supply chain",
+        "enterprise supply chain",
+        "sap r/3",
+        "business blueprint",
+        "recruiting a new employee",
+        "procurement logistics",
+        "treasury management",
     }
 
 
@@ -807,6 +864,18 @@ def _infer_evidence_roles(
             _software_agent_target_terms(),
         ):
             roles.add("off_target_neighbor")
+    if _is_code_repair_query(query_text):
+        if _contains_any(haystack, _code_repair_neighbor_terms()) and not _contains_any(
+            haystack,
+            _code_repair_target_terms(),
+        ):
+            roles.add("off_target_neighbor")
+        if (
+            "autonomous" in haystack
+            and not _contains_any(haystack, _code_repair_target_terms())
+            and _contains_any(haystack, {"maintenance", "inspection", "negotiation", "logistics", "spacecraft"})
+        ):
+            roles.add("off_target_neighbor")
 
     if not roles:
         roles.add("domain_background")
@@ -871,6 +940,20 @@ def _topic_fit_score(
             score -= 12
         if _contains_any(haystack, legacy_agent_terms):
             score -= 14
+
+    if _is_code_repair_query(query_text):
+        preferred_terms = _code_repair_target_terms()
+        neighbor_terms = _code_repair_neighbor_terms()
+        if _contains_any(haystack, preferred_terms):
+            score += 12
+        if _contains_any(haystack, neighbor_terms) and not _contains_any(haystack, preferred_terms):
+            score -= 18
+        if (
+            "autonomous" in haystack
+            and _contains_any(haystack, {"maintenance", "inspection", "negotiation", "logistics", "spacecraft"})
+            and not _contains_any(haystack, preferred_terms)
+        ):
+            score -= 10
 
     return score
 
