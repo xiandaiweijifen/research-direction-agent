@@ -87,6 +87,7 @@ Planned system modules:
 - Topic Agent initial design: [docs/topic_agent_design.md](/d:/project/research-topic-copilot/docs/topic_agent_design.md)
 - Topic Agent acceptance plan: [docs/topic_agent_acceptance.md](/d:/project/research-topic-copilot/docs/topic_agent_acceptance.md)
 - Topic Agent MVP plan: [docs/topic_agent_mvp.md](/d:/project/research-topic-copilot/docs/topic_agent_mvp.md)
+- Topic Agent solution summary (ZH): [docs/topic_agent_solution_summary_zh.md](/d:/project/research-topic-copilot/docs/topic_agent_solution_summary_zh.md)
 
 ## Local Setup
 
