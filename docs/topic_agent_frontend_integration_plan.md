@@ -323,3 +323,49 @@ The next implementation step should be:
 4. rewire `App.tsx` to render the new page for the Topic Agent tab
 
 Only after that should the Topic Agent page be split into smaller presentation components.
+
+## 11. Frontend Implication Of The Next Backend Upgrade
+
+The current frontend comparison and convergence area is built around a stable three-candidate product shape.
+
+This matches the current backend well enough, but the backend is now planned to move toward:
+
+- evidence-grounded candidate generation
+
+rather than:
+
+- filling fixed benchmark / transfer / systems template slots
+
+This has two frontend implications.
+
+### Near-Term
+
+Do not immediately redesign the whole Topic Agent page.
+
+For the next backend migration step, the frontend should assume:
+
+- the public response still returns 3 candidate cards
+- the comparison area still exists
+- current panels stay usable
+
+This keeps the demo stable while backend draft-generation logic evolves.
+
+### Medium-Term
+
+Once backend candidate generation is no longer template-first, the frontend should be prepared to show:
+
+- more topic-native candidate titles
+- less repetitive candidate positioning labels
+- a lighter explanation of how candidates were generated from evidence
+
+Likely future UI additions:
+
+- a short `How These Directions Were Formed` panel
+- candidate role summaries derived from evidence-role mix
+- a less rigid comparison header than the current fixed recommendation framing
+
+The important product rule is:
+
+- do not let the frontend hard-code the assumption that the same three direction families always exist
+
+The current UI can tolerate that assumption temporarily, but the next backend architecture should be treated as loosening it.

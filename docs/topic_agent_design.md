@@ -277,6 +277,117 @@ It is preferable to improve:
 
 instead of repeatedly adding one-off ranking fixes for individual topics.
 
+### 6.5 Candidate Generation Architecture Upgrade
+
+The current implementation still uses a mostly fixed candidate frame:
+
+- one benchmark or gap-driven direction
+- one applied-transfer direction
+- one systems or workflow-support direction
+
+This has been useful for MVP stability, but it creates two limitations:
+
+- broad topic exploration can feel repetitive because many sessions converge to the same three candidate families
+- weak or skewed evidence can be forced into the nearest template rather than generating the most natural candidate set for the topic
+
+The next architecture step should therefore move from:
+
+- fixed candidate templates with evidence binding
+
+to:
+
+- evidence-grounded candidate generation with later convergence and clustering
+
+#### Why Not Use Retrieval Alone
+
+Retrieval alone is insufficient because word-level relevance does not guarantee research-decision value.
+
+A record can be:
+
+- lexically related
+- historically related
+- domain-adjacent
+
+while still being a poor support source for:
+
+- feasibility judgment
+- novelty judgment
+- candidate comparison
+- recommendation convergence
+
+Therefore retrieval should provide candidate evidence, not final topic decisions.
+
+#### Why Not Let The Model Freely Decide Without Evidence
+
+Pure model generation is also insufficient for this product goal.
+
+Without evidence grounding, the system becomes:
+
+- less auditable
+- less reproducible
+- harder to verify
+- more vulnerable to plausible but unsupported topic recommendations
+
+The correct balance is:
+
+- retrieval proposes evidence candidates
+- the model judges, organizes, and synthesizes evidence-backed directions
+- the final recommendation remains traceable to sources
+
+#### Target Two-Stage Candidate Flow
+
+The next generation flow should be:
+
+1. retrieve and rank candidate evidence
+2. build a small evidence bundle with role diversity
+3. generate 5 to 8 provisional candidate-direction drafts from the evidence bundle
+4. score drafts for distinctiveness, feasibility, evidence support, and user-constraint fit
+5. cluster or merge near-duplicate drafts
+6. return the strongest 3 to 4 candidate directions
+7. run comparison and convergence over these generated candidates
+
+This keeps the final UX compact while making the candidate space less repetitive and more topic-native.
+
+#### Draft Candidate Representation
+
+Before final candidate convergence, the system should maintain an internal draft structure such as:
+
+```json
+{
+  "draft_id": "string",
+  "working_title": "string",
+  "direction_type": "evaluation|method|systems|application|other",
+  "seed_claim": "string",
+  "evidence_role_mix": ["benchmark_evaluation", "method_framework"],
+  "supporting_source_ids": ["source_1", "source_2"],
+  "constraint_fit": "low|medium|high",
+  "distinctiveness_score": 0.0,
+  "feasibility_score": 0.0,
+  "risk_flags": ["string"]
+}
+```
+
+This representation is not necessarily a public API field yet, but it is useful internally for:
+
+- deduplication
+- clustering
+- candidate pruning
+- more transparent convergence
+
+#### Migration Strategy
+
+This should not be rewritten in one step.
+
+Recommended implementation order:
+
+1. keep the current 3-candidate public response shape for compatibility
+2. introduce internal draft generation before current candidate filling
+3. let current candidate slots be populated from the strongest generated drafts
+4. once stable, replace fixed slot names with evidence-grounded candidate titles and role summaries
+5. only then revisit frontend comparison copy and panel labels
+
+This allows the system to become more flexible without breaking the current demo UI immediately.
+
 ## 7. Human Verification Points
 
 The system should require user confirmation for:

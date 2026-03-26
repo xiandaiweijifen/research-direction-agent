@@ -390,6 +390,8 @@ Rough breakdown:
 - The current implementation is a focused workflow slice, not a full standalone Topic Agent platform.
 - Broad topic queries are better than before, but still need occasional manual review because generic medical terms can retrieve historically relevant but strategically weak literature.
 - Broad topic synthesis is improved, but wording on very general topics still benefits from manual review because top evidence can legitimately mix benchmarks, clinical reasoning, and QA settings.
+- Candidate generation is still mostly organized around a fixed three-direction frame, so broad topic exploration can feel repetitive even when retrieval improves.
+- The current convergence layer still behaves more like template filling than open candidate generation, especially on non-medical modern topics such as coding agents.
 
 ### Generic Quality-Control Slice
 
@@ -425,6 +427,44 @@ Next planned backend quality steps:
 - add explicit `era_fit` instead of only a lightweight modern-topic penalty
 - add candidate-aware evidence selection so different candidate types bind to different evidence roles more consistently
 - add evidence-bundle balancing so the final top evidence set is not overly repetitive or skewed toward one weakly aligned sub-area
+
+### Next Architecture Upgrade
+
+The next major backend direction should no longer focus only on retrieval and ranking patches.
+
+The system should evolve from:
+
+- fixed candidate templates with evidence binding
+
+to:
+
+- evidence-grounded candidate generation
+
+Planned upgrade path:
+
+- generate 5 to 8 provisional candidate drafts from the current evidence bundle
+- score drafts for:
+  - evidence support
+  - distinctiveness
+  - feasibility under user constraints
+  - risk
+- merge near-duplicate drafts
+- select the strongest 3 to 4 final candidates for comparison and convergence
+
+Why this shift is needed:
+
+- retrieval quality alone cannot solve the repetitive-candidate problem
+- broad modern topics such as `llm agents for software engineering` still reveal that the current candidate layer is too template-driven
+- the product needs the model to play a stronger evidence-judgment role, not only a ranking-consumer role
+
+The public API should remain stable during the first migration step.
+
+Near-term implementation strategy:
+
+- keep the current response schema
+- add an internal draft-candidate phase behind the existing pipeline
+- let current final candidates be populated from the strongest generated drafts
+- delay frontend structural changes until draft quality stabilizes
 
 ### Frontend Productization Slice
 
