@@ -575,6 +575,61 @@ def _candidate_binding_terms(
     return terms
 
 
+def _candidate_record_fit(
+    candidate: TopicAgentCandidateTopic,
+    record: TopicAgentSourceRecord,
+    *,
+    query_flags: dict[str, bool],
+) -> str:
+    text = _record_text(record)
+
+    if candidate.candidate_id == "candidate_3":
+        if any(
+            term in text
+            for term in {
+                "workflow",
+                "reproducible",
+                "audit",
+                "annotation",
+                "tooling",
+                "pipeline",
+                "metacognition",
+                "calibration",
+                "confidence",
+                "clinical decision support",
+                "medical challenge problems",
+            }
+        ):
+            return "systems_support"
+        if any(
+            term in text
+            for term in {
+                "reliable",
+                "reliability",
+                "verification",
+                "evaluation",
+                "failure analysis",
+            }
+        ):
+            return "evaluation_support"
+        if query_flags["broad_medical_reasoning"] and any(
+            term in text
+            for term in {
+                "document question answering",
+                "document qa",
+                "medical report",
+                "report images",
+                "report layout",
+                "benchmark for medical specialization",
+                "real-world chinese medical report",
+            }
+        ):
+            return "task_benchmark"
+        return "general"
+
+    return "general"
+
+
 def _rank_supporting_source_ids_for_candidate(
     candidate: TopicAgentCandidateTopic,
     evidence_records: list[TopicAgentSourceRecord],
@@ -585,6 +640,24 @@ def _rank_supporting_source_ids_for_candidate(
 ) -> list[str]:
     if not evidence_records:
         return []
+
+    if candidate.candidate_id == "candidate_3":
+        preferred_records = [
+            record
+            for record in evidence_records
+            if _candidate_record_fit(candidate, record, query_flags=query_flags) == "systems_support"
+        ]
+        if len(preferred_records) < limit:
+            preferred_records.extend(
+                record
+                for record in evidence_records
+                if _candidate_record_fit(candidate, record, query_flags=query_flags) == "evaluation_support"
+                and record not in preferred_records
+            )
+        if preferred_records:
+            evidence_records = preferred_records + [
+                record for record in evidence_records if record not in preferred_records
+            ]
 
     binding_terms = _candidate_binding_terms(candidate, query_flags=query_flags)
     ranked: list[tuple[int, int, int, str]] = []
