@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from "react";
+import { useState, type FormEvent, type ReactNode } from "react";
 
 import type {
   Locale,
@@ -39,6 +39,33 @@ type TopicWorkspaceProps = {
   onLoadSession: (sessionId: string) => void;
   onCompareSession: (sessionId: string) => void;
 };
+
+type TopicSectionShellProps = {
+  label: string;
+  title: string;
+  description: string;
+  emphasis?: boolean;
+  children: ReactNode;
+};
+
+function TopicSectionShell({
+  label,
+  title,
+  description,
+  emphasis = false,
+  children,
+}: TopicSectionShellProps) {
+  return (
+    <section className={`topic-section-shell panel-span${emphasis ? " topic-section-shell-emphasis" : ""}`}>
+      <div className={`topic-section-heading${emphasis ? " topic-section-heading-emphasis" : ""}`}>
+        <span className="section-label">{label}</span>
+        <h3>{title}</h3>
+        <p>{description}</p>
+      </div>
+      <div className="topic-section-content">{children}</div>
+    </section>
+  );
+}
 
 export function TopicWorkspaceV2({
   locale,
@@ -349,10 +376,32 @@ export function TopicWorkspaceV2({
         onCompareSession={onCompareSession}
       />
 
+      <div className="topic-section-heading panel-span">
+        <span className="section-label">
+          {locale === "zh" ? "输入与 framing" : "Input And Framing"}
+        </span>
+        <h3>{locale === "zh" ? "先定义问题，再进入方向判断" : "Define The Problem Before Judging Directions"}</h3>
+        <p>
+          {locale === "zh"
+            ? "先确认研究兴趣、约束条件和问题 framing 是否合理，这决定后续 evidence 和推荐是否可信。"
+            : "Confirm the research interest, constraints, and framing first because they shape the evidence bundle and recommendation quality."}
+        </p>
+      </div>
       <TopicAgentFramingPanel copy={copy} topicResult={topicResult} />
 
       {topicResult && (
         <>
+          <div className="topic-section-heading panel-span topic-section-heading-emphasis">
+            <span className="section-label">
+              {locale === "zh" ? "推荐与比较" : "Recommendation And Comparison"}
+            </span>
+            <h3>{locale === "zh" ? "先看系统建议，再看为何这样建议" : "Read The Recommendation First, Then The Why"}</h3>
+            <p>
+              {locale === "zh"
+                ? "这一部分应该最快回答：系统推荐哪条方向、备选是什么、依据是什么、和上一轮相比变化了什么。"
+                : "This section should answer the core demo question fastest: what the system recommends, the backup option, the reasoning, and what changed from a previous run."}
+            </p>
+          </div>
           <TopicAgentRecommendationSummary
             topicResult={topicResult}
             copy={copy}
@@ -369,6 +418,17 @@ export function TopicWorkspaceV2({
             resolveCandidateLabel={resolveCandidateLabel}
           />
 
+          <div className="topic-section-heading panel-span">
+            <span className="section-label">
+              {locale === "zh" ? "候选与证据" : "Candidates And Evidence"}
+            </span>
+            <h3>{locale === "zh" ? "把候选方向和真实支持来源放在一起读" : "Read Candidate Directions Alongside Their Real Support"}</h3>
+            <p>
+              {locale === "zh"
+                ? "先看候选方向，再展开对应 evidence，判断这些 support 是否真的贴题，而不是只停留在 top benchmark。"
+                : "Review candidate directions alongside the evidence list so you can judge whether the support is genuinely topic-specific instead of just coming from the top-ranked benchmark."}
+            </p>
+          </div>
           <TopicAgentEvidencePanel
             locale={locale}
             copy={copy}
@@ -439,6 +499,17 @@ export function TopicWorkspaceV2({
             </div>
           </article>
 
+          <div className="topic-section-heading panel-span">
+            <span className="section-label">
+              {locale === "zh" ? "信任与诊断" : "Trust And Diagnostics"}
+            </span>
+            <h3>{locale === "zh" ? "最后展示可追溯性、不确定性和人工确认点" : "Close With Traceability, Uncertainty, And Human Checks"}</h3>
+            <p>
+              {locale === "zh"
+                ? "最后一层不是再给更多内容，而是解释哪些结论是事实、哪些是系统综合、哪些仍然需要人工确认。"
+                : "The final layer is not about adding more content. It explains which claims are facts, which are system syntheses, and which still require human validation."}
+            </p>
+          </div>
           <TopicAgentTrustPanel
             topicResult={topicResult}
             copy={copy}
