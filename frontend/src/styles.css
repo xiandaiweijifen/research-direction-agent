@@ -913,6 +913,10 @@ textarea {
 .evidence-filter-group {
   display: grid;
   gap: 8px;
+  padding: 12px 14px;
+  border: 1px solid rgba(31, 41, 51, 0.08);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.72);
 }
 
 .filter-chip {
@@ -1154,6 +1158,12 @@ textarea {
   overflow: hidden;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 5;
+}
+
+.evidence-record-summary.expanded {
+  display: block;
+  overflow: visible;
+  -webkit-line-clamp: unset;
 }
 
 .evidence-record-identifier {

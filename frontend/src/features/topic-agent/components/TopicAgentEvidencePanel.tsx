@@ -128,12 +128,18 @@ export function TopicAgentEvidencePanel({
                 <p className="trace-detail">
                   {record.source_type} | {record.year} | {record.authors_or_publisher}
                 </p>
-                <p className="trace-detail evidence-record-summary">{record.summary}</p>
+                <p
+                  className={`trace-detail evidence-record-summary${
+                    expandedEvidenceIds.includes(record.source_id) ? " expanded" : ""
+                  }`}
+                >
+                  {record.summary}
+                </p>
+                <p className="trace-detail">
+                  {copy.relevance}: {record.relevance_reason}
+                </p>
                 {expandedEvidenceIds.includes(record.source_id) && (
                   <>
-                    <p className="trace-detail">
-                      {copy.relevance}: {record.relevance_reason}
-                    </p>
                     <p className="trace-detail evidence-record-identifier">{record.identifier}</p>
                   </>
                 )}
