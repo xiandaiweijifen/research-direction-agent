@@ -783,6 +783,26 @@ def _code_repair_neighbor_terms() -> set[str]:
     }
 
 
+def _setting_match_terms(request: TopicAgentExploreRequest) -> set[str]:
+    query_text = f"{request.interest} {request.problem_domain or ''}".lower()
+    if _is_code_repair_query(query_text):
+        return _code_repair_target_terms() | {
+            "software engineering",
+            "bug",
+            "bugs",
+            "repair",
+            "fix",
+            "fixes",
+        }
+    if _is_modern_software_agent_query(query_text):
+        return _software_agent_target_terms() | {
+            "software engineering",
+            "developer tools",
+            "developer workflows",
+        }
+    return set(_core_query_terms(request))
+
+
 def _infer_evidence_roles(
     record: TopicAgentSourceRecord,
     request: TopicAgentExploreRequest,
@@ -880,6 +900,94 @@ def _infer_evidence_roles(
     if not roles:
         roles.add("domain_background")
     return roles
+
+
+def _anchor_match_score(record: TopicAgentSourceRecord, request: TopicAgentExploreRequest) -> int:
+    haystack = f"{record.title.lower()} {record.summary.lower()}"
+    core_terms = _core_query_terms(request)
+    matched_core_terms = sum(1 for term in core_terms if term in haystack)
+    score = matched_core_terms * 2
+    if len(core_terms) >= 2 and matched_core_terms >= 2:
+        score += 2
+    return score
+
+
+def _problem_setting_match_score(record: TopicAgentSourceRecord, request: TopicAgentExploreRequest) -> int:
+    haystack = f"{record.title.lower()} {record.summary.lower()}"
+    query_text = f"{request.interest} {request.problem_domain or ''}".lower()
+    score = 0
+    if _is_code_repair_query(query_text):
+        if _contains_any(haystack, _code_repair_target_terms()):
+            score += 4
+        if _contains_any(haystack, _code_repair_neighbor_terms()):
+            score -= 4
+    elif _is_modern_software_agent_query(query_text):
+        if _contains_any(haystack, _software_agent_target_terms()):
+            score += 4
+        if _contains_any(haystack, _software_library_neighbor_terms()):
+            score -= 4
+    else:
+        setting_terms = _setting_match_terms(request)
+        score += sum(1 for term in setting_terms if term in haystack)
+    return score
+
+
+def _role_match_score(record: TopicAgentSourceRecord, request: TopicAgentExploreRequest) -> int:
+    roles = _infer_evidence_roles(record, request)
+    score = 0
+    if "benchmark_evaluation" in roles:
+        score += 2
+    if "method_framework" in roles:
+        score += 2
+    if "systems_tooling" in roles:
+        score += 1
+    if "failure_analysis" in roles:
+        score += 1
+    if "off_target_neighbor" in roles:
+        score -= 4
+    return score
+
+
+def _decision_utility_score(record: TopicAgentSourceRecord, request: TopicAgentExploreRequest) -> int:
+    haystack = f"{record.title.lower()} {record.summary.lower()}"
+    query_text = f"{request.interest} {request.problem_domain or ''}".lower()
+    utility_terms = {
+        "benchmark",
+        "evaluation",
+        "reproducibility",
+        "workflow",
+        "baseline",
+        "cost",
+        "patch",
+        "github issues",
+        "fault localization",
+        "repair",
+    }
+    score = sum(1 for term in utility_terms if term in haystack)
+    if _is_code_repair_query(query_text) and _contains_any(
+        haystack, {"classroom", "students", "teachers", "education"}
+    ):
+        score -= 4
+    return score
+
+
+def _topic_relevance_label(
+    record: TopicAgentSourceRecord,
+    request: TopicAgentExploreRequest,
+) -> str:
+    total_score = (
+        _anchor_match_score(record, request)
+        + _problem_setting_match_score(record, request)
+        + _role_match_score(record, request)
+        + _decision_utility_score(record, request)
+    )
+    if "off_target_neighbor" in _infer_evidence_roles(record, request):
+        return "lexical_match"
+    if total_score >= 8:
+        return "topic_relevant"
+    if total_score >= 3:
+        return "domain_neighbor"
+    return "lexical_match"
 
 
 def _topic_fit_score(
@@ -1320,6 +1428,16 @@ def _filter_ranked_records(
     if not filtered:
         filtered = records
 
+    topic_relevant_records = [
+        record for record in filtered if _topic_relevance_label(record, request) == "topic_relevant"
+    ]
+    domain_neighbor_records = [
+        record for record in filtered if _topic_relevance_label(record, request) == "domain_neighbor"
+    ]
+    lexical_match_records = [
+        record for record in filtered if _topic_relevance_label(record, request) == "lexical_match"
+    ]
+
     non_overview_records = [record for record in filtered if not _is_generic_overview_record(record)]
     overview_backfill_records = [record for record in filtered if _is_generic_overview_record(record)]
 
@@ -1336,12 +1454,32 @@ def _filter_ranked_records(
             if "off_target_neighbor" in _infer_evidence_roles(record, request)
         ]
         if _is_modern_software_agent_query(query_text) and len(preferred_records) >= 2:
-            ranked_filtered = preferred_records + overview_backfill_records
+            ranked_filtered = topic_relevant_records + preferred_records + domain_neighbor_records + overview_backfill_records
         else:
-            ranked_filtered = preferred_records + off_target_backfill_records + overview_backfill_records
+            ranked_filtered = (
+                topic_relevant_records
+                + preferred_records
+                + domain_neighbor_records
+                + off_target_backfill_records
+                + overview_backfill_records
+                + lexical_match_records
+            )
     else:
-        ranked_filtered = non_overview_records + overview_backfill_records
-    return ranked_filtered[:max_results]
+        ranked_filtered = (
+            topic_relevant_records
+            + domain_neighbor_records
+            + non_overview_records
+            + overview_backfill_records
+            + lexical_match_records
+        )
+    deduped_ranked_filtered: list[TopicAgentSourceRecord] = []
+    seen_ids: set[str] = set()
+    for record in ranked_filtered:
+        if record.source_id in seen_ids:
+            continue
+        seen_ids.add(record.source_id)
+        deduped_ranked_filtered.append(record)
+    return deduped_ranked_filtered[:max_results]
 
 
 def _load_cached_records(

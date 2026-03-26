@@ -22,6 +22,7 @@ from app.services.topic_agent.providers import (
     _parse_openalex_response,
     _parse_arxiv_response,
     _rank_records,
+    _topic_relevance_label,
     _topic_fit_score,
     build_topic_agent_provider_registry,
 )
@@ -240,6 +241,79 @@ def test_topic_fit_score_prefers_modern_agent_software_records_over_legacy_agent
     )[0]
 
     assert _topic_fit_score(modern_record, request) > _topic_fit_score(legacy_record, request)
+
+
+def test_topic_relevance_label_distinguishes_topic_relevant_neighbor_and_lexical_match():
+    request = TopicAgentExploreRequest(
+        interest="program repair with llm agents",
+        problem_domain="software engineering",
+        constraints=TopicAgentConstraintSet(preferred_style="applied"),
+    )
+    relevant_record = _parse_openalex_response(
+        {
+            "results": [
+                {
+                    "id": "https://openalex.org/W1",
+                    "display_name": "RepairAgent: An Autonomous, LLM-Based Agent for Program Repair",
+                    "publication_year": 2025,
+                    "abstract_inverted_index": {
+                        "program": [0],
+                        "repair": [1],
+                        "agent": [2],
+                        "github": [3],
+                        "issues": [4],
+                        "evaluation": [5],
+                    },
+                    "authorships": [{"author": {"display_name": "Author A"}}],
+                    "primary_location": {"landing_page_url": "https://example.org/repairagent"},
+                }
+            ]
+        }
+    )[0]
+    neighbor_record = _parse_openalex_response(
+        {
+            "results": [
+                {
+                    "id": "https://openalex.org/W2",
+                    "display_name": "How to design a program repair bot?",
+                    "publication_year": 2018,
+                    "abstract_inverted_index": {
+                        "program": [0],
+                        "repair": [1],
+                        "bot": [2],
+                        "github": [3],
+                        "projects": [4],
+                    },
+                    "authorships": [{"author": {"display_name": "Author B"}}],
+                    "primary_location": {"landing_page_url": "https://example.org/repairnator"},
+                }
+            ]
+        }
+    )[0]
+    lexical_record = _parse_openalex_response(
+        {
+            "results": [
+                {
+                    "id": "https://openalex.org/W3",
+                    "display_name": "Technological Structure for Technology Integration in the Classroom, Inspired by the Maker Culture",
+                    "publication_year": 2020,
+                    "abstract_inverted_index": {
+                        "technology": [0],
+                        "integration": [1],
+                        "classroom": [2],
+                        "maker": [3],
+                        "repair": [4],
+                    },
+                    "authorships": [{"author": {"display_name": "Author C"}}],
+                    "primary_location": {"landing_page_url": "https://example.org/classroom"},
+                }
+            ]
+        }
+    )[0]
+
+    assert _topic_relevance_label(relevant_record, request) == "topic_relevant"
+    assert _topic_relevance_label(neighbor_record, request) in {"topic_relevant", "domain_neighbor"}
+    assert _topic_relevance_label(lexical_record, request) == "lexical_match"
 
 
 def test_arxiv_provider_ranking_prefers_records_with_query_term_overlap():
