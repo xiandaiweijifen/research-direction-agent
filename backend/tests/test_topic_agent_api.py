@@ -31,12 +31,12 @@ def test_topic_agent_explore_creates_session_with_mock_outputs(workspace_tmp_pat
     assert payload["session_id"]
     assert payload["user_input"]["interest"] == "trustworthy multimodal reasoning in medical imaging"
     assert payload["framing_result"]["normalized_topic"] == "trustworthy multimodal reasoning in medical imaging"
-    assert len(payload["evidence_records"]) == 3
+    assert len(payload["evidence_records"]) >= 3
     assert len(payload["candidate_topics"]) == 3
     assert payload["comparison_result"]["candidate_assessments"]
     assert payload["convergence_result"]["recommended_candidate_id"] == "candidate_1"
     assert payload["confidence_summary"]["candidate_separation"] == "high"
-    assert payload["evidence_diagnostics"]["used_provider"] in {"mock", "arxiv"}
+    assert payload["evidence_diagnostics"]["used_provider"] in {"mock", "arxiv", "openalex"}
     assert payload["evidence_diagnostics"]["record_count"] == len(payload["evidence_records"])
     assert isinstance(payload["evidence_diagnostics"]["cache_hit"], bool)
     assert payload["confidence_summary"]["rationale"]

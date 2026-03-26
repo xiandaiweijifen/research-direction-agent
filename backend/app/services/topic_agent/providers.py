@@ -592,7 +592,23 @@ def _core_query_terms(request: TopicAgentExploreRequest) -> list[str]:
 
 
 def _interest_signal_terms(request: TopicAgentExploreRequest) -> list[str]:
-    generic_domain_terms = {"medical", "imaging", "clinical", "healthcare"}
+    generic_domain_terms = {
+        "medical",
+        "imaging",
+        "clinical",
+        "healthcare",
+        "study",
+        "based",
+        "approach",
+        "system",
+        "systems",
+        "model",
+        "models",
+        "method",
+        "methods",
+        "domain",
+        "field",
+    }
     return [
         term
         for term in _core_query_terms(request)
@@ -602,6 +618,165 @@ def _interest_signal_terms(request: TopicAgentExploreRequest) -> list[str]:
 
 def _contains_any(text: str, terms: set[str]) -> bool:
     return any(term in text for term in terms)
+
+
+def _query_has_modern_ai_topic(query_text: str) -> bool:
+    return _contains_any(
+        query_text,
+        {"llm", "large language model", "large language models", "agent", "agents", "multimodal"},
+    )
+
+
+def _infer_evidence_roles(
+    record: TopicAgentSourceRecord,
+    request: TopicAgentExploreRequest,
+) -> set[str]:
+    title_lower = record.title.lower()
+    haystack = f"{title_lower} {record.summary.lower()}"
+    query_text = f"{request.interest} {request.problem_domain or ''}".lower()
+    roles: set[str] = set()
+
+    if record.source_type == "benchmark" or _contains_any(
+        haystack,
+        {"benchmark", "evaluation", "exam", "leaderboard", "stress test"},
+    ):
+        roles.add("benchmark_evaluation")
+    if _contains_any(
+        haystack,
+        {"framework", "methodology", "method", "approach", "algorithm", "workflow"},
+    ):
+        roles.add("method_framework")
+    if _contains_any(
+        haystack,
+        {"tooling", "tool", "pipeline", "workflow", "reproducibility", "audit", "annotation"},
+    ):
+        roles.add("systems_tooling")
+    if record.source_type == "survey" or "survey" in haystack or "systematic review" in haystack:
+        roles.add("survey_background")
+    if record.source_type == "code" or _contains_any(
+        haystack,
+        {"github", "repository", "codebase", "implementation", "baseline"},
+    ):
+        roles.add("code_resource")
+    if record.source_type == "dataset" or "dataset" in haystack:
+        roles.add("dataset_resource")
+    if _contains_any(
+        haystack,
+        {"failure analysis", "hallucination", "calibration", "confidence", "metacognition", "reliability"},
+    ):
+        roles.add("failure_analysis")
+    if _contains_any(
+        haystack,
+        {"overview", "broad review", "ecosystem", "integration", "applications of", "application of"},
+    ):
+        roles.add("domain_background")
+
+    if (
+        "llm" in query_text
+        or "large language model" in query_text
+        or "agents" in query_text
+        or "agent" in query_text
+    ):
+        if _contains_any(
+            haystack,
+            {
+                "software engineering",
+                "developer",
+                "coding",
+                "code generation",
+                "swe-bench",
+                "program repair",
+                "devsecops",
+                "repository-level",
+            },
+        ):
+            roles.add("method_framework")
+        if _contains_any(
+            haystack,
+            {
+                "multi-agent systems",
+                "intelligent agent systems",
+                "agent autonomy",
+                "roles and xml",
+                "methodology for engineering intelligent agents",
+            },
+        ):
+            roles.add("off_target_neighbor")
+
+    if not roles:
+        roles.add("domain_background")
+    return roles
+
+
+def _topic_fit_score(
+    record: TopicAgentSourceRecord,
+    request: TopicAgentExploreRequest,
+) -> int:
+    title_lower = record.title.lower()
+    haystack = f"{title_lower} {record.summary.lower()}"
+    core_terms = _core_query_terms(request)
+    query_text = f"{request.interest} {request.problem_domain or ''}".lower()
+    roles = _infer_evidence_roles(record, request)
+    score = 0
+
+    matched_core_terms = sum(1 for term in core_terms if term in haystack)
+    score += matched_core_terms * 4
+
+    if len(core_terms) >= 2 and all(term in haystack for term in core_terms[:2]):
+        score += 6
+    if request.problem_domain and any(
+        term in haystack for term in re.findall(r"[a-z0-9]+", request.problem_domain.lower()) if len(term) >= 4
+    ):
+        score += 4
+    if _preferred_style_hint := (request.constraints.preferred_style or "").lower():
+        if _preferred_style_hint in {"applied", "benchmark-driven", "systems"} and _preferred_style_hint.split("-")[0] in haystack:
+            score += 2
+
+    if "benchmark_evaluation" in roles:
+        score += 4
+    if "method_framework" in roles:
+        score += 3
+    if "systems_tooling" in roles:
+        score += 2
+    if "failure_analysis" in roles:
+        score += 3
+    if "off_target_neighbor" in roles:
+        score -= 10
+
+    modern_topic_query = _query_has_modern_ai_topic(query_text)
+    if modern_topic_query and record.year < 2018 and "off_target_neighbor" in roles:
+        score -= 8
+
+    if "llm agents" in query_text or (
+        ("agent" in query_text or "agents" in query_text)
+        and _contains_any(query_text, {"software engineering", "developer tools", "coding"})
+    ):
+        preferred_terms = {
+            "software engineering",
+            "developer",
+            "coding",
+            "code generation",
+            "program repair",
+            "repository-level",
+            "swe-bench",
+            "devsecops",
+            "evaluation",
+            "benchmark",
+            "reproducibility",
+        }
+        legacy_agent_terms = {
+            "multi-agent systems",
+            "intelligent agent systems",
+            "agent autonomy",
+            "roles and xml",
+            "engineering intelligent agents",
+        }
+        if _contains_any(haystack, preferred_terms):
+            score += 10
+        if _contains_any(haystack, legacy_agent_terms):
+            score -= 14
+
+    return score
 
 
 def _task_specificity_score(
@@ -846,6 +1021,7 @@ def _score_record(
             score -= 12
     matched_core_terms = sum(1 for term in core_terms if term in haystack)
     score += matched_core_terms * 3
+    score += _topic_fit_score(record, request)
     score += _task_specificity_score(record, request)
     return score
 
@@ -967,7 +1143,21 @@ def _filter_ranked_records(
 
     non_overview_records = [record for record in filtered if not _is_generic_overview_record(record)]
     overview_backfill_records = [record for record in filtered if _is_generic_overview_record(record)]
-    ranked_filtered = non_overview_records + overview_backfill_records
+
+    if _query_has_modern_ai_topic(f"{request.interest} {request.problem_domain or ''}".lower()):
+        preferred_records = [
+            record
+            for record in non_overview_records
+            if "off_target_neighbor" not in _infer_evidence_roles(record, request)
+        ]
+        off_target_backfill_records = [
+            record
+            for record in non_overview_records
+            if "off_target_neighbor" in _infer_evidence_roles(record, request)
+        ]
+        ranked_filtered = preferred_records + off_target_backfill_records + overview_backfill_records
+    else:
+        ranked_filtered = non_overview_records + overview_backfill_records
     return ranked_filtered[:max_results]
 
 

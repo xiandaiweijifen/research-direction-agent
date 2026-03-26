@@ -391,23 +391,25 @@ Rough breakdown:
 - Broad topic queries are better than before, but still need occasional manual review because generic medical terms can retrieve historically relevant but strategically weak literature.
 - Broad topic synthesis is improved, but wording on very general topics still benefits from manual review because top evidence can legitimately mix benchmarks, clinical reasoning, and QA settings.
 
-### Next Generic Quality-Control Slice
+### Generic Quality-Control Slice
 
-The next backend quality-improvement slice should remain domain-general rather than topic-specific.
+The first backend generalization slice is now implemented at the provider-ranking layer.
 
-Planned direction:
+Completed in this slice:
 
-- add reusable evidence role tags such as:
+- introduced reusable evidence-role inference in `providers.py`, including:
   - `benchmark_evaluation`
   - `method_framework`
   - `systems_tooling`
   - `survey_background`
+  - `code_resource`
+  - `dataset_resource`
   - `failure_analysis`
+  - `domain_background`
   - `off_target_neighbor`
-- add a stricter `topic_fit_score` so records that are merely adjacent do not outrank records that are directly about the user's topic
-- add `era_fit` handling so clearly modern topics are less likely to be dominated by historically related but outdated literature
-- add candidate-aware evidence selection so different candidate types bind to different evidence roles more consistently
-- add evidence-bundle balancing so the final top evidence set is not overly repetitive or skewed toward one weakly aligned sub-area
+- added `topic_fit_score` as a separate scoring component so directly on-topic evidence can outrank merely adjacent literature
+- added a modern-topic guard in ranked filtering so legacy neighboring records are backfilled after more on-topic evidence for modern AI / agent queries
+- kept this slice provider-local so ranking can improve without rewriting the whole pipeline
 
 This is intended to improve:
 
@@ -417,6 +419,12 @@ This is intended to improve:
 - and other broad modern topics
 
 without requiring one-off ranking patches for each topic family.
+
+Next planned backend quality steps:
+
+- add explicit `era_fit` instead of only a lightweight modern-topic penalty
+- add candidate-aware evidence selection so different candidate types bind to different evidence roles more consistently
+- add evidence-bundle balancing so the final top evidence set is not overly repetitive or skewed toward one weakly aligned sub-area
 
 ### Frontend Productization Slice
 
@@ -455,4 +463,4 @@ backend\.venv\Scripts\python.exe -m pytest backend\tests\test_topic_agent_api.py
 
 Latest result:
 
-- `48 passed`
+- `54 passed`

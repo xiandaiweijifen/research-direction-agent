@@ -17,9 +17,11 @@ from app.services.topic_agent.providers import (
     _core_query_terms,
     _filter_ranked_records,
     _http_get_with_retries,
+    _infer_evidence_roles,
     _parse_openalex_response,
     _parse_arxiv_response,
     _rank_records,
+    _topic_fit_score,
     build_topic_agent_provider_registry,
 )
 from app.services.topic_agent.topic_agent_runtime import _pipeline_provider
@@ -137,6 +139,106 @@ def test_core_query_terms_are_derived_from_request_instead_of_fixed_keywords():
     assert "representation" in terms
     assert "clinical" in terms
     assert "series" in terms
+
+
+def test_infer_evidence_roles_distinguishes_method_and_off_target_neighbor_for_modern_agent_queries():
+    request = TopicAgentExploreRequest(
+        interest="llm agents for software engineering",
+        problem_domain="developer tools",
+        constraints=TopicAgentConstraintSet(preferred_style="applied"),
+    )
+    method_record = _parse_openalex_response(
+        {
+            "results": [
+                {
+                    "id": "https://openalex.org/W1",
+                    "display_name": "SWE-bench: Can Language Models Resolve Real-World GitHub Issues?",
+                    "publication_year": 2024,
+                    "abstract_inverted_index": {
+                        "software": [0],
+                        "engineering": [1],
+                        "benchmark": [2],
+                        "coding": [3],
+                        "evaluation": [4],
+                    },
+                    "authorships": [{"author": {"display_name": "Author A"}}],
+                    "primary_location": {"landing_page_url": "https://example.org/swebench"},
+                }
+            ]
+        }
+    )[0]
+    legacy_record = _parse_openalex_response(
+        {
+            "results": [
+                {
+                    "id": "https://openalex.org/W2",
+                    "display_name": "Capturing agent autonomy in roles and XML",
+                    "publication_year": 2003,
+                    "abstract_inverted_index": {
+                        "agent": [0],
+                        "autonomy": [1],
+                        "roles": [2],
+                        "xml": [3],
+                    },
+                    "authorships": [{"author": {"display_name": "Author B"}}],
+                    "primary_location": {"landing_page_url": "https://example.org/xml"},
+                }
+            ]
+        }
+    )[0]
+
+    assert "benchmark_evaluation" in _infer_evidence_roles(method_record, request)
+    assert "method_framework" in _infer_evidence_roles(method_record, request)
+    assert "off_target_neighbor" in _infer_evidence_roles(legacy_record, request)
+
+
+def test_topic_fit_score_prefers_modern_agent_software_records_over_legacy_agent_neighbors():
+    request = TopicAgentExploreRequest(
+        interest="llm agents for software engineering",
+        problem_domain="developer tools",
+        constraints=TopicAgentConstraintSet(preferred_style="applied"),
+    )
+    modern_record = _parse_openalex_response(
+        {
+            "results": [
+                {
+                    "id": "https://openalex.org/W1",
+                    "display_name": "SWE-bench: Can Language Models Resolve Real-World GitHub Issues?",
+                    "publication_year": 2024,
+                    "abstract_inverted_index": {
+                        "software": [0],
+                        "engineering": [1],
+                        "benchmark": [2],
+                        "coding": [3],
+                        "evaluation": [4],
+                        "developer": [5],
+                    },
+                    "authorships": [{"author": {"display_name": "Author A"}}],
+                    "primary_location": {"landing_page_url": "https://example.org/swebench"},
+                }
+            ]
+        }
+    )[0]
+    legacy_record = _parse_openalex_response(
+        {
+            "results": [
+                {
+                    "id": "https://openalex.org/W2",
+                    "display_name": "Multi-Agent Systems",
+                    "publication_year": 2010,
+                    "abstract_inverted_index": {
+                        "multi-agent": [0],
+                        "systems": [1],
+                        "autonomy": [2],
+                    },
+                    "authorships": [{"author": {"display_name": "Author B"}}],
+                    "primary_location": {"landing_page_url": "https://example.org/legacy"},
+                }
+            ]
+        }
+    )[0]
+
+    assert _topic_fit_score(modern_record, request) > _topic_fit_score(legacy_record, request)
 
 
 def test_arxiv_provider_ranking_prefers_records_with_query_term_overlap():
@@ -1171,6 +1273,81 @@ def test_openalex_reranking_reduces_vqa_and_document_bias_for_clinical_medical_r
     }
     assert "Medical Visual Question Answering via Conditional Reasoning" not in ranked_titles[:2]
     assert "RJUA-MedDQA: A Multimodal Benchmark for Medical Document Question Answering and Clinical Reasoning" not in ranked_titles[:2]
+
+
+def test_rank_records_prefers_modern_software_agent_evidence_over_legacy_agent_neighbors():
+    request = TopicAgentExploreRequest(
+        interest="llm agents for software engineering",
+        problem_domain="developer tools",
+        constraints=TopicAgentConstraintSet(preferred_style="applied"),
+    )
+    records = [
+        _parse_openalex_response(
+            {
+                "results": [
+                    {
+                        "id": "https://openalex.org/W1",
+                        "display_name": "Prometheus: A Pragmatic Methodology for Engineering Intelligent Agents",
+                        "publication_year": 2002,
+                        "abstract_inverted_index": {
+                            "methodology": [0],
+                            "engineering": [1],
+                            "intelligent": [2],
+                            "agents": [3],
+                        },
+                        "authorships": [{"author": {"display_name": "Author A"}}],
+                        "primary_location": {"landing_page_url": "https://example.org/prometheus"},
+                    }
+                ]
+            }
+        )[0],
+        _parse_openalex_response(
+            {
+                "results": [
+                    {
+                        "id": "https://openalex.org/W2",
+                        "display_name": "SWE-bench: Can Language Models Resolve Real-World GitHub Issues?",
+                        "publication_year": 2024,
+                        "abstract_inverted_index": {
+                            "software": [0],
+                            "engineering": [1],
+                            "benchmark": [2],
+                            "coding": [3],
+                            "evaluation": [4],
+                            "developer": [5],
+                        },
+                        "authorships": [{"author": {"display_name": "Author B"}}],
+                        "primary_location": {"landing_page_url": "https://example.org/swebench"},
+                    }
+                ]
+            }
+        )[0],
+        _parse_openalex_response(
+            {
+                "results": [
+                    {
+                        "id": "https://openalex.org/W3",
+                        "display_name": "An Empirical Study on Culture, Automation, Measurement, and Sharing of DevSecOps",
+                        "publication_year": 2019,
+                        "abstract_inverted_index": {
+                            "developer": [0],
+                            "tools": [1],
+                            "automation": [2],
+                            "devsecops": [3],
+                            "software": [4],
+                        },
+                        "authorships": [{"author": {"display_name": "Author C"}}],
+                        "primary_location": {"landing_page_url": "https://example.org/devsecops"},
+                    }
+                ]
+            }
+        )[0],
+    ]
+
+    ranked_titles = [record.title for record in _rank_records(records, request, max_results=3)]
+
+    assert ranked_titles[0] == "SWE-bench: Can Language Models Resolve Real-World GitHub Issues?"
+    assert ranked_titles[-1] == "Prometheus: A Pragmatic Methodology for Engineering Intelligent Agents"
 
 
 def test_fallback_provider_returns_mock_records_when_primary_fails():
