@@ -1,6 +1,228 @@
-# Topic Agent Demo Scenarios
+# Topic Agent 演示场景 / Topic Agent Demo Scenarios
 
-## Purpose
+## 中文版
+
+### 目的
+
+本文档定义了一组稳定的 demo 场景，用于手测、验收评审和项目 walkthrough。
+
+目标不是覆盖所有科研选题请求，而是证明当前 Topic Agent 可以：
+
+- 对 topic 请求做 framing
+- 检索可检查的 evidence
+- 组织 research landscape
+- 比较 candidate directions
+- 收敛出 recommendation
+- 暴露人工确认点
+
+### 使用方式
+
+对于每个场景：
+
+1. 调用 `POST /api/topic-agent/explore`
+2. 检查文档中列出的关键字段
+3. 对照预期行为判断是否通过
+4. 如有需要，再调用 `POST /api/topic-agent/sessions/{session_id}/refine`
+
+推荐使用的接口：
+
+- `POST /api/topic-agent/explore`
+- `POST /api/topic-agent/sessions/{session_id}/refine`
+- `GET /api/topic-agent/sessions/{session_id}`
+
+### 场景 1：宽泛 medical reasoning
+
+#### 请求体
+
+```json
+{
+  "interest": "medical reasoning",
+  "constraints": {
+    "time_budget_months": 6,
+    "resource_level": "student",
+    "preferred_style": "applied"
+  }
+}
+```
+
+#### 为什么重要
+
+这是最核心的 broad-query 压力测试。它检查系统能否保持在现代 medical AI reasoning 语境里，而不是漂移到：
+
+- 过老的 reasoning literature
+- document-QA overfitting
+- 用户没有要求的 multimodal 或 image-grounded wording
+
+#### 需要检查什么
+
+- `evidence_records`
+  - 应优先现代 medical AI benchmark、LLM reasoning evaluation 或 reasoning verification 论文
+- `landscape_summary.themes`
+  - 不应默认变成 `document QA and report-centric reasoning`
+- `candidate_topics[0].research_question`
+  - 应提到 reasoning verification 或 benchmark validity
+  - 不应提到 `image-grounded`
+- `candidate_topics[1].research_question`
+  - 不应提到 `document-centric clinical reasoning`
+- `likely_gaps`
+  - 应优先使用如下表述：
+    - reasoning gains
+    - answer-pattern shortcuts
+    - trustworthy evaluation
+
+#### 预期输出形态
+
+- 一条 benchmark-driven 候选路线
+- 一条 applied transfer 候选路线
+- 一条 tooling / reproducibility 候选路线
+- 在 student-scale applied 约束下，`candidate_2` 往往是推荐路线
+
+### 场景 2：Radiology VQA
+
+#### 请求体
+
+```json
+{
+  "interest": "trustworthy visual question answering in radiology",
+  "problem_domain": "medical AI",
+  "seed_idea": "I want a narrow and feasible benchmark-oriented topic.",
+  "constraints": {
+    "time_budget_months": 6,
+    "resource_level": "student",
+    "preferred_style": "applied"
+  }
+}
+```
+
+#### 为什么重要
+
+这个场景用来检查系统能否在一个具体的 multimodal topic 上保持足够窄、足够 benchmark-oriented。
+
+#### 需要检查什么
+
+- `evidence_records`
+  - 应优先 `Med-VQA`、`VQA-RAD`、radiology VQA 或 radiology benchmark evidence
+- `landscape_summary.themes`
+  - 应包含 radiology VQA 或 image-grounded answer reliability
+  - 不应被 generic hallucination wording 主导
+- `candidate_topics[0].research_question`
+  - 应提到 radiology VQA benchmark slicing
+- `candidate_topics[1].research_question`
+  - 应保持 radiology VQA method transfer wording
+
+#### 预期输出形态
+
+- candidate 1 强调 benchmark slicing 和 image-grounded answering
+- candidate 2 强调在 compute 或 annotation 约束下的 practical transfer
+
+### 场景 3：Hallucination And Grounding Evaluation
+
+#### 请求体
+
+```json
+{
+  "interest": "hallucination detection and grounding evaluation for multimodal medical reasoning",
+  "problem_domain": "medical AI",
+  "seed_idea": "I want a narrow evaluation-focused research topic.",
+  "constraints": {
+    "time_budget_months": 5,
+    "resource_level": "student",
+    "preferred_style": "applied"
+  }
+}
+```
+
+#### 为什么重要
+
+这个场景用来检查 evaluation-centric query 是否仍然聚焦在：
+
+- unsupported answers
+- grounding faithfulness
+- hallucination auditing
+
+而不是漂移到 generic document QA 或宽泛 overview。
+
+#### 需要检查什么
+
+- `evidence_records`
+  - 应包含 grounding、hallucination、evaluation 或 benchmark evidence
+- `landscape_summary.themes`
+  - 应包含 hallucination 或 grounding
+- `candidate_topics[1].research_question`
+  - 应提到 unsupported 或 weakly grounded answers
+- `candidate_topics[2].open_questions`
+  - 应聚焦 audit workflow 和 reproducibility
+
+#### 预期输出形态
+
+- candidate 1 收窄 evaluation slice
+- candidate 2 提出实用的 evaluation method transfer
+- candidate 3 聚焦 audit tooling 或 reproducibility workflow
+
+### 场景 4：Clarification 与 Refine 闭环
+
+#### 请求体
+
+```json
+{
+  "interest": "medical reasoning",
+  "constraints": {}
+}
+```
+
+#### 为什么重要
+
+这个场景用来检查系统是否能把缺失信息明确暴露出来，让用户知道如何继续做 `refine`。
+
+#### 需要检查什么
+
+- `framing_result.missing_clarifications`
+  - 应包含：
+    - `time_budget`
+    - `resource_level`
+    - `preferred_style`
+- `human_confirmations`
+  - 应明确提示缺失的 scope 和 feasibility 假设
+- `clarification_suggestions`
+  - 应包含：
+    - `field_key`
+    - `prompt`
+    - `reason`
+    - `suggested_values`
+    - `refine_patch`
+
+#### Refine 请求
+
+```json
+{
+  "constraints": {
+    "time_budget_months": 6,
+    "resource_level": "student",
+    "preferred_style": "applied"
+  }
+}
+```
+
+#### Refine 后的预期行为
+
+- `missing_clarifications` 变成 `[]`
+- `clarification_suggestions` 变成 `[]`
+- `human_confirmations` 从补信息提示收缩成最终 recommendation checks
+
+### 快速验收清单
+
+如果评审能确认以下几点成立，说明当前 Topic Agent 行为基本符合预期：
+
+- broad query 保持在 modern medical-AI reasoning 语境
+- radiology VQA query 保持窄且 benchmark-oriented
+- hallucination / grounding query 保持 evaluation-centric
+- 缺失约束会触发 clarification suggestions
+- 补完约束后 clarification suggestions 会消失
+- candidate directions 有 source linkage，且确实可比较
+
+## English Version
+
+### Purpose
 
 This document defines a small set of stable demo scenarios for manual validation, acceptance review, and project walkthroughs.
 
@@ -13,7 +235,7 @@ The goal is not to prove full coverage of all research-topic requests. The goal 
 - converge to a recommendation
 - surface human confirmation points
 
-## How To Use This Document
+### How To Use This Document
 
 For each scenario:
 
@@ -28,9 +250,9 @@ Recommended API surface:
 - `POST /api/topic-agent/sessions/{session_id}/refine`
 - `GET /api/topic-agent/sessions/{session_id}`
 
-## Scenario 1: Broad Medical Reasoning
+### Scenario 1: Broad Medical Reasoning
 
-### Request
+#### Request
 
 ```json
 {
@@ -43,7 +265,7 @@ Recommended API surface:
 }
 ```
 
-### Why This Scenario Matters
+#### Why This Scenario Matters
 
 This is the main broad-query stress case. It checks whether the system can stay in the modern medical-AI reasoning space without drifting into:
 
@@ -51,7 +273,7 @@ This is the main broad-query stress case. It checks whether the system can stay 
 - document-QA overfitting
 - multimodal or image-grounded wording that the user never asked for
 
-### What To Check
+#### What To Check
 
 - `evidence_records`
   - should prefer modern medical AI benchmarks, LLM reasoning evaluations, or reasoning verification papers
@@ -68,16 +290,16 @@ This is the main broad-query stress case. It checks whether the system can stay 
     - answer-pattern shortcuts
     - trustworthy evaluation
 
-### Expected Outcome Shape
+#### Expected Outcome Shape
 
 - a benchmark-driven candidate
 - an applied transfer candidate
 - a tooling / reproducibility candidate
 - `candidate_2` is often the recommended path under student-scale applied constraints
 
-## Scenario 2: Radiology VQA
+### Scenario 2: Radiology VQA
 
-### Request
+#### Request
 
 ```json
 {
@@ -92,11 +314,11 @@ This is the main broad-query stress case. It checks whether the system can stay 
 }
 ```
 
-### Why This Scenario Matters
+#### Why This Scenario Matters
 
 This checks that the system can stay narrow and benchmark-oriented for a specific multimodal topic.
 
-### What To Check
+#### What To Check
 
 - `evidence_records`
   - should prefer `Med-VQA`, `VQA-RAD`, radiology VQA, or radiology benchmark evidence
@@ -108,14 +330,14 @@ This checks that the system can stay narrow and benchmark-oriented for a specifi
 - `candidate_topics[1].research_question`
   - should stay in radiology VQA method transfer wording
 
-### Expected Outcome Shape
+#### Expected Outcome Shape
 
 - candidate 1 emphasizes benchmark slicing and image-grounded answering
 - candidate 2 emphasizes practical transfer under compute or annotation constraints
 
-## Scenario 3: Hallucination And Grounding Evaluation
+### Scenario 3: Hallucination And Grounding Evaluation
 
-### Request
+#### Request
 
 ```json
 {
@@ -130,7 +352,7 @@ This checks that the system can stay narrow and benchmark-oriented for a specifi
 }
 ```
 
-### Why This Scenario Matters
+#### Why This Scenario Matters
 
 This checks whether evaluation-centric queries stay centered on:
 
@@ -140,7 +362,7 @@ This checks whether evaluation-centric queries stay centered on:
 
 instead of drifting into generic document QA or broad overview wording.
 
-### What To Check
+#### What To Check
 
 - `evidence_records`
   - should include grounding, hallucination, evaluation, or benchmark evidence
@@ -151,15 +373,15 @@ instead of drifting into generic document QA or broad overview wording.
 - `candidate_topics[2].open_questions`
   - should focus on audit workflow and reproducibility
 
-### Expected Outcome Shape
+#### Expected Outcome Shape
 
 - candidate 1 narrows the evaluation slice
 - candidate 2 adapts an evaluation method under practical constraints
 - candidate 3 focuses on audit tooling or reproducibility workflow
 
-## Scenario 4: Clarification And Refine Loop
+### Scenario 4: Clarification And Refine Loop
 
-### Request
+#### Request
 
 ```json
 {
@@ -168,11 +390,11 @@ instead of drifting into generic document QA or broad overview wording.
 }
 ```
 
-### Why This Scenario Matters
+#### Why This Scenario Matters
 
 This checks whether the system surfaces missing information clearly enough for a user to continue with `refine`.
 
-### What To Check
+#### What To Check
 
 - `framing_result.missing_clarifications`
   - should include:
@@ -189,7 +411,7 @@ This checks whether the system surfaces missing information clearly enough for a
     - `suggested_values`
     - `refine_patch`
 
-### Refine Request
+#### Refine Request
 
 ```json
 {
@@ -201,13 +423,13 @@ This checks whether the system surfaces missing information clearly enough for a
 }
 ```
 
-### Expected Refine Behavior
+#### Expected Refine Behavior
 
 - `missing_clarifications` becomes `[]`
 - `clarification_suggestions` becomes `[]`
 - `human_confirmations` shrinks to final recommendation checks instead of missing-input prompts
 
-## Quick Acceptance Checklist
+### Quick Acceptance Checklist
 
 The current Topic Agent slice is behaving as intended if the reviewer can verify all of the following:
 

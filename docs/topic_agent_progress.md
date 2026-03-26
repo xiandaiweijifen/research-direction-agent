@@ -1,12 +1,206 @@
-# Topic Agent Progress
+# Topic Agent 开发进度 / Topic Agent Progress
 
-## Scope
+## 中文版
+
+### 范围
+
+本文档跟踪 Topic Agent 后端检索与综合工作流的最新开发进度。
+
+### 已完成里程碑
+
+#### 检索与 Provider 稳定性
+
+- 增加了 `arxiv` provider 及 fallback wiring
+- 增加了 `openalex` provider，并将其设为主要学术来源
+- 在 API 响应中增加 provider diagnostics：
+  - `requested_provider`
+  - `used_provider`
+  - `fallback_used`
+  - `fallback_reason`
+  - `record_count`
+  - `cache_hit`
+- 将 `arxiv` 访问改为 `https`
+- 增加 provider retry 与更宽松的外部请求 timeout
+
+#### OpenAlex 质量改进
+
+- 增加多 query 的 OpenAlex retrieval
+- 增加带版本的 OpenAlex cache key
+- 在 cache read 阶段增加 reranking 与 refiltering，避免旧缓存顺序固化
+- 将旧缓存中的 `source_id` 规范为稳定的 OpenAlex work id，例如 `openalex_w4414530509`
+- 用 title normalization 和 preference rules 折叠 DOI / arXiv / alternate version 的近重复记录
+- 下调 generic overview paper 的权重，并限制其只作为 backfill
+- 增加 query alias expansion：
+  - `med-vqa`
+  - `medical vqa`
+  - `vqa-rad`
+  - `radiology question answering`
+  - `medical hallucination grounding evaluation`
+
+#### Synthesis 改进
+
+- 将 landscape synthesis 改成 evidence-driven，而不是 broad template
+- 增加 query-aware cue detection：
+  - `visual_qa`
+  - `hallucination_eval`
+  - `document_qa`
+- 调整 synthesis wording：
+  - radiology VQA query 保持 benchmark slicing 和 image-grounded answering
+  - hallucination / grounding query 保持 unsupported answers、faithfulness 和 audit workflow
+- 增加 candidate wording polish 与 open-question deduplication
+
+#### Confirmation 与 Clarification 改进
+
+- 在 Topic Agent 响应中增加 `human_confirmations`，把缺失约束和最终 recommendation check 显式化
+- 增加结构化 `clarification_suggestions`，包含：
+  - `field_key`
+  - `prompt`
+  - `reason`
+  - `suggested_values`
+  - `refine_patch`
+- 当前已经支持轻量 clarification loop：
+  - `explore`
+  - 查看 missing clarifications 和 suggestion patches
+  - `refine`
+  - 确认 clarification prompt 在补全约束后消失
+
+#### Session 兼容性改进
+
+- 在读取旧 session 时自动补齐缺失字段：
+  - `evidence_diagnostics`
+  - `human_confirmations`
+  - `clarification_suggestions`
+- 这解决了历史 session schema-read failure 的问题
+
+#### Broad Query Retrieval 改进
+
+- 为宽泛 `medical reasoning` query 增加偏现代 medical AI 的 query expansion：
+  - `medical reasoning benchmark`
+  - `medical reasoning large language models`
+  - `clinical reasoning benchmark medical ai`
+  - `medical question answering reasoning benchmark`
+- 对宽泛且 modern-AI-oriented 的 medical reasoning query，下调 legacy reasoning records
+- 对 benchmark / verification / question answering / LLM 相关 evidence 增加排序加权
+
+#### Broad Query Synthesis 改进
+
+- 降低宽泛 `medical reasoning` query 对 `document QA` 的过拟合
+- 宽泛 medical reasoning topic 不再因为一篇 `MedDQA` 类 evidence 就默认掉到：
+  - `document QA and report-centric reasoning`
+  - `document-centric clinical reasoning`
+- document-centric synthesis 只保留给：
+  - 明确的 document/report query
+  - broad-query 之外、document-specific signal 足够强的情形
+- 进一步归一化宽泛 query wording，使 `medical reasoning` 不再默认落到：
+  - `weak multimodal dependence`
+  - `image-grounded reasoning`
+  - `real image use`
+- 现在更偏：
+  - reasoning verification
+  - reasoning quality
+  - answer-pattern shortcuts
+  - benchmark validity
+
+### 当前状态
+
+#### 阶段判断
+
+当前最准确的阶段描述是：
+
+- 基础底座已就位
+- topic-agent 语义和 workflow 已建立
+- 后端最小可用闭环基本完成
+- 产品层的 validation 与 confirmation loop 仍未完全完成
+
+更直白地说：
+
+- 项目已经不是纯设计阶段
+- 后端 Topic Agent 已经可以完成端到端 exploratory run
+- 剩余工作主要是产品化、显式 confirmation flow 和更强的 trust surface
+
+#### 对照原始计划的完成度
+
+当前 design-and-MVP slice 的估计完成度为：`85% to 90%`
+
+粗略拆分如下：
+
+- target user 和 core task definition：`done`
+- system boundary 和 capability structure：`done`
+- input / output organization：`done`
+- retrieval / synthesis / comparison / convergence workflow：`done`
+- source diagnostics / citation metadata / source grading：`mostly done`
+- human confirmation 和 verification flow：`partially done`
+- acceptance logic 和 evaluation plan：`done in docs, partial in product flow`
+- disagreeing sources 的完整 conflict modeling：`not done`
+- polished end-user validation UX 和显式 human-confirm checkpoint：`not done`
+
+#### Demo 就绪度
+
+- 稳定手测场景文档位于：
+  - [topic_agent_demo_scenarios.md](/d:/project/research-topic-copilot/docs/topic_agent_demo_scenarios.md)
+- 面向评审的演示叙述文档位于：
+  - [topic_agent_acceptance_walkthrough.md](/d:/project/research-topic-copilot/docs/topic_agent_acceptance_walkthrough.md)
+- 当前 demo 已覆盖：
+  - broad `medical reasoning`
+  - radiology VQA
+  - hallucination / grounding evaluation
+  - clarification 与 refine loop
+
+#### 当前比较稳定的部分
+
+- 近几轮手测中，OpenAlex 已是默认成功路径
+- cache response 可以保持当前 ranking 行为
+- 稳定 OpenAlex source id 已可工作
+- duplicate evidence version 不再长期占多个 top slot
+- generic overview evidence 已不再主导 evidence list 顶部
+
+#### 当前表现较好的 query 类型
+
+- `trustworthy multimodal reasoning in medical imaging`
+- `document-centric clinical reasoning with multimodal medical reports`
+- `hallucination detection and grounding evaluation for multimodal medical reasoning`
+- `trustworthy visual question answering in radiology`
+
+### 剩余限制
+
+- 某些 landscape summary 仍可能在 survey 与 task-specific benchmark 混合时带出偏宽的 secondary theme
+- candidate wording 已比之前好很多，但面向特定 venue 时仍建议人工润色
+- 当前没有显式建模 source disagreement / controversy，只靠 basic confidence summary
+- human confirmation 已进入 schema 与 response，但产品流里还没有强制型 confirmation UX
+- 当前实现仍是 focused workflow slice，而不是完整 standalone Topic Agent platform
+- 宽泛 topic query 虽然已经改进，但仍需要偶尔人工复核，因为 generic medical term 依然可能召回策略价值较低的文献
+- 宽泛 topic synthesis 虽已改进，但极泛 query 的 wording 仍建议人工 review，因为顶层 evidence 可能混合 benchmark、clinical reasoning 和 QA 场景
+
+### 手测关注点
+
+手测 `/api/topic-agent/explore` 时，建议优先检查：
+
+- `evidence_diagnostics.used_provider` 一般应为 `openalex`
+- `fallback_used` 一般应为 `false`
+- `evidence_records` 顶部应优先 benchmark / VQA / grounding / document QA / radiology task-specific paper，而不是 generic overview
+- `candidate_topics[*].supporting_source_ids` 应指向 evidence bundle 顶部附近的 task-specific evidence
+
+### 测试状态
+
+最近一次后端回归命令：
+
+```powershell
+backend\.venv\Scripts\python.exe -m pytest backend\tests\test_topic_agent_api.py backend\tests\test_topic_agent_pipeline.py backend\tests\test_topic_agent_providers.py backend\tests\test_health_api.py
+```
+
+最近结果：
+
+- `45 passed`
+
+## English Version
+
+### Scope
 
 This file tracks the recent development progress for the backend Topic Agent retrieval and synthesis workflow.
 
-## Completed Milestones
+### Completed Milestones
 
-### Retrieval And Provider Stability
+#### Retrieval And Provider Stability
 
 - Added `arxiv` provider with fallback wiring.
 - Added `openalex` provider and made it the primary scholarly source in the fallback chain.
@@ -20,7 +214,7 @@ This file tracks the recent development progress for the backend Topic Agent ret
 - Switched `arxiv` access to `https`.
 - Added provider retries and relaxed external request timeouts.
 
-### OpenAlex Quality Improvements
+#### OpenAlex Quality Improvements
 
 - Added multi-query OpenAlex retrieval.
 - Added versioned OpenAlex cache keys.
@@ -35,7 +229,7 @@ This file tracks the recent development progress for the backend Topic Agent ret
   - `radiology question answering`
   - `medical hallucination grounding evaluation`
 
-### Synthesis Improvements
+#### Synthesis Improvements
 
 - Made landscape synthesis evidence-driven instead of relying on broad templates.
 - Added query-aware cue detection for:
@@ -47,7 +241,7 @@ This file tracks the recent development progress for the backend Topic Agent ret
   - hallucination / grounding queries stay centered on unsupported answers, faithfulness, and audit workflows
 - Added candidate wording polish and open-question deduplication.
 
-### Confirmation And Clarification Improvements
+#### Confirmation And Clarification Improvements
 
 - Added `human_confirmations` to Topic Agent responses so missing constraints and final recommendation checks are explicit in the API output.
 - Added structured `clarification_suggestions` with:
@@ -62,7 +256,7 @@ This file tracks the recent development progress for the backend Topic Agent ret
   - `refine`
   - confirm that clarification prompts disappear once constraints are filled
 
-### Session Compatibility Improvements
+#### Session Compatibility Improvements
 
 - Backfilled legacy session payloads on load when older records are missing:
   - `evidence_diagnostics`
@@ -70,7 +264,7 @@ This file tracks the recent development progress for the backend Topic Agent ret
   - `clarification_suggestions`
 - This removed schema-read failures on historical session data.
 
-### Broad Query Retrieval Improvements
+#### Broad Query Retrieval Improvements
 
 - Added generic `medical reasoning` query expansion aimed at modern medical AI evidence:
   - `medical reasoning benchmark`
@@ -80,7 +274,7 @@ This file tracks the recent development progress for the backend Topic Agent ret
 - Added ranking penalties for legacy, non-modern medical reasoning records when the query is broad and modern-AI-oriented.
 - Added ranking boosts for benchmark / verification / question answering / LLM style evidence under broad `medical reasoning` queries.
 
-### Broad Query Synthesis Improvements
+#### Broad Query Synthesis Improvements
 
 - Reduced `document QA` overfitting for broad `medical reasoning` queries.
 - Broad medical reasoning topics no longer default to:
@@ -101,9 +295,9 @@ This file tracks the recent development progress for the backend Topic Agent ret
   - answer-pattern shortcuts
   - benchmark validity
 
-## Current Status
+### Current Status
 
-### Stage Assessment
+#### Stage Assessment
 
 The current best-fit stage description is:
 
@@ -118,7 +312,7 @@ In short:
 - the backend Topic Agent slice is already capable of end-to-end exploratory runs
 - the remaining work is mainly productization, explicit confirmation flow, and richer trust surfaces
 
-### Completion Against The Original Topic Agent Plan
+#### Completion Against The Original Topic Agent Plan
 
 Estimated completion for the current design-and-MVP slice: `85% to 90%`.
 
@@ -134,7 +328,7 @@ Rough breakdown:
 - full conflict modeling across disagreeing sources: `not done`
 - polished end-user validation UX and explicit human-confirm checkpoints: `not done`
 
-### Demo Readiness
+#### Demo Readiness
 
 - Stable manual demo scenarios are now documented in:
   - [topic_agent_demo_scenarios.md](/d:/project/research-topic-copilot/docs/topic_agent_demo_scenarios.md)
@@ -146,7 +340,7 @@ Rough breakdown:
   - hallucination / grounding evaluation
   - clarification and refine loop behavior
 
-### Stable
+#### Stable
 
 - OpenAlex is the normal successful path in recent manual tests.
 - Cached responses preserve current ranking behavior.
@@ -154,14 +348,14 @@ Rough breakdown:
 - Duplicate evidence versions are no longer taking multiple top slots.
 - Generic overview evidence is no longer dominating the top of the evidence list.
 
-### Good Query Classes
+#### Good Query Classes
 
 - `trustworthy multimodal reasoning in medical imaging`
 - `document-centric clinical reasoning with multimodal medical reports`
 - `hallucination detection and grounding evaluation for multimodal medical reasoning`
 - `trustworthy visual question answering in radiology`
 
-## Remaining Limitations
+### Remaining Limitations
 
 - Some landscape summaries can still surface a secondary theme that is broader than ideal when evidence mixes surveys with task-specific benchmarks.
 - Candidate wording is much better, but final research-question phrasing still benefits from manual review for venue-specific positioning.
@@ -171,7 +365,7 @@ Rough breakdown:
 - Broad topic queries are better than before, but still need occasional manual review because generic medical terms can retrieve historically relevant but strategically weak literature.
 - Broad topic synthesis is improved, but wording on very general topics still benefits from manual review because top evidence can legitimately mix benchmarks, clinical reasoning, and QA settings.
 
-## Manual Validation Notes
+### Manual Validation Notes
 
 When manually checking `/api/topic-agent/explore`, prioritize:
 
@@ -180,7 +374,7 @@ When manually checking `/api/topic-agent/explore`, prioritize:
 - `evidence_records` top positions should prefer benchmark / VQA / grounding / document QA / radiology task-specific papers over generic overview papers
 - `candidate_topics[*].supporting_source_ids` should point to the task-specific evidence near the top of the retrieved bundle
 
-## Test Status
+### Test Status
 
 Latest backend regression command:
 
