@@ -391,6 +391,51 @@ Rough breakdown:
 - Broad topic queries are better than before, but still need occasional manual review because generic medical terms can retrieve historically relevant but strategically weak literature.
 - Broad topic synthesis is improved, but wording on very general topics still benefits from manual review because top evidence can legitimately mix benchmarks, clinical reasoning, and QA settings.
 
+### Next Generic Quality-Control Slice
+
+The next backend quality-improvement slice should remain domain-general rather than topic-specific.
+
+Planned direction:
+
+- add reusable evidence role tags such as:
+  - `benchmark_evaluation`
+  - `method_framework`
+  - `systems_tooling`
+  - `survey_background`
+  - `failure_analysis`
+  - `off_target_neighbor`
+- add a stricter `topic_fit_score` so records that are merely adjacent do not outrank records that are directly about the user's topic
+- add `era_fit` handling so clearly modern topics are less likely to be dominated by historically related but outdated literature
+- add candidate-aware evidence selection so different candidate types bind to different evidence roles more consistently
+- add evidence-bundle balancing so the final top evidence set is not overly repetitive or skewed toward one weakly aligned sub-area
+
+This is intended to improve:
+
+- `medical reasoning`
+- `clinical medical reasoning`
+- `llm agents for software engineering`
+- and other broad modern topics
+
+without requiring one-off ranking patches for each topic family.
+
+### Frontend Productization Slice
+
+The frontend Topic Agent page is now structurally functional and demo-usable, but further productization is still useful.
+
+Recently completed frontend improvements include:
+
+- extraction into feature-level Topic Agent components
+- clearer demo reading order
+- evidence-card collapsing and focused evidence drill-down
+- recent-session collapsing
+- more human-readable labels for source types, candidate positioning, and comparison dimensions
+
+The next likely frontend polish areas are:
+
+- more consistent Chinese/English localization
+- softer presentation of internal identifiers and debugging-style fields
+- lighter-weight trust-panel summaries before detailed drill-down
+
 ### Manual Validation Notes
 
 When manually checking `/api/topic-agent/explore`, prioritize:

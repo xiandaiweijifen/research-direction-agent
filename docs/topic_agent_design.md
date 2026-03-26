@@ -165,6 +165,118 @@ Each important claim should carry:
 - do not collapse unsupported inference into fact
 - mark stale but influential sources differently from recent evidence
 
+### 6.4 Generic Evidence Quality Control
+
+The system should not rely on raw retrieval relevance alone.
+
+For topic exploration, a paper can be:
+
+- relevant but too broad
+- relevant but historically stale for the user's intended topic
+- relevant but poorly matched to the candidate being supported
+- individually strong but collectively repetitive inside the top evidence bundle
+
+To improve generalization across domains, Topic Agent should separate four distinct judgments:
+
+- topical relevance
+- topic fit
+- candidate fit
+- bundle value
+
+#### Evidence Role Tags
+
+Each retrieved record should receive one or more lightweight role tags, inferred from title, abstract or summary, and source metadata.
+
+Suggested role families:
+
+- `benchmark_evaluation`
+- `method_framework`
+- `systems_tooling`
+- `survey_background`
+- `dataset_resource`
+- `code_resource`
+- `domain_background`
+- `failure_analysis`
+- `off_target_neighbor`
+
+These role tags should be reusable across domains such as medical AI, LLM agents, multimodal systems, and scientific tooling.
+
+#### Topic Fit Score
+
+The system should compute a `topic_fit_score` that is stricter than ordinary relevance.
+
+This score should reward records that directly match:
+
+- the core topic phrase
+- the problem domain
+- the requested research style
+- the intended task or workflow surface
+
+This score should penalize records that are only loosely adjacent, for example:
+
+- old agent-systems literature for a modern `llm agents` query
+- generic NLP papers for a focused evaluation query
+- broad surveys when the user is asking for a narrow, feasible topic
+
+#### Era Fit
+
+The system should account for temporal fit rather than applying hard year filters.
+
+For clearly modern topic clusters such as:
+
+- LLMs
+- foundation models
+- AI agents
+- multimodal reasoning
+- coding agents
+
+older records should be downweighted unless they are:
+
+- canonical methodology papers
+- foundational benchmark papers
+- still directly aligned with the user topic
+
+This allows the system to remain general without overfitting to one field.
+
+#### Candidate Fit
+
+The same evidence record should not be treated as equally suitable for every candidate.
+
+Examples:
+
+- `benchmark_evaluation` evidence is usually a strong fit for gap-driven candidates
+- `method_framework` evidence is usually a strong fit for applied-transfer candidates
+- `systems_tooling` and `failure_analysis` evidence are usually a strong fit for systems or workflow-support candidates
+
+This is more general than hand-written topic-specific rules because it works through reusable evidence roles.
+
+#### Bundle Balancing
+
+The final top evidence bundle should be judged as a set, not only as a ranked list of individual records.
+
+Desired properties:
+
+- at least one evaluation-facing record when evaluation is central
+- at least one method or framework record when transfer is central
+- controlled diversity across role types
+- reduced duplication of near-identical records
+- reduced domination by one weakly aligned sub-area
+
+This is especially important for broad topic exploration, where the top five individually relevant records can still produce a poor candidate set if they all represent the same narrow slice.
+
+#### Product Implication
+
+This quality-control layer should be implemented before topic-specific retrieval patches whenever possible.
+
+It is preferable to improve:
+
+- role tagging
+- topic-fit scoring
+- era-fit scoring
+- bundle balancing
+
+instead of repeatedly adding one-off ranking fixes for individual topics.
+
 ## 7. Human Verification Points
 
 The system should require user confirmation for:
