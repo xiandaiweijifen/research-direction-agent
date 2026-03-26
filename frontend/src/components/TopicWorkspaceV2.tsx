@@ -8,8 +8,10 @@ import type {
 } from "../types";
 import { TopicAgentCandidatesPanel } from "../features/topic-agent/components/TopicAgentCandidatesPanel";
 import { TopicAgentEvidencePanel } from "../features/topic-agent/components/TopicAgentEvidencePanel";
+import { TopicAgentFramingPanel } from "../features/topic-agent/components/TopicAgentFramingPanel";
 import { TopicAgentInputPanel } from "../features/topic-agent/components/TopicAgentInputPanel";
 import { TopicAgentRecommendationSummary } from "../features/topic-agent/components/TopicAgentRecommendationSummary";
+import { TopicAgentSessionDiffPanel } from "../features/topic-agent/components/TopicAgentSessionDiffPanel";
 import { TopicAgentSessionHistory } from "../features/topic-agent/components/TopicAgentSessionHistory";
 import { TopicAgentTrustPanel } from "../features/topic-agent/components/TopicAgentTrustPanel";
 
@@ -347,136 +349,48 @@ export function TopicWorkspaceV2({
         onCompareSession={onCompareSession}
       />
 
-      <article className="panel panel-span preview-panel">
-        <div className="panel-heading">
-          <div>
-            <h2>{copy.framing}</h2>
-            <p className="panel-intro">
-              {topicResult ? topicResult.framing_result.normalized_topic : copy.noResult}
-            </p>
-          </div>
-        </div>
-        {!topicResult ? (
-          <div className="empty-state">
-            <strong>{copy.noResult}</strong>
-            <p>{copy.noResultCopy}</p>
-          </div>
-        ) : (
-          <div className="result-stack">
-            <article className="subsection-card">
-              <span className="trace-label">{copy.searchQuestions}</span>
-              <div className="list-block">
-                {topicResult.framing_result.search_questions.map((question) => (
-                  <p key={question}>{question}</p>
-                ))}
-              </div>
-            </article>
-            <article className="subsection-card">
-              <span className="trace-label">{copy.manualChecks}</span>
-              <div className="pill-strip">
-                {Object.entries(topicResult.framing_result.extracted_constraints).map(
-                  ([key, value]) => (
-                    <span key={key} className="meta-pill muted-pill">
-                      {key}: {value}
-                    </span>
-                  ),
-                )}
-              </div>
-            </article>
-          </div>
-        )}
-      </article>
+      <TopicAgentFramingPanel copy={copy} topicResult={topicResult} />
 
       {topicResult && (
         <>
-          <article className="panel panel-span">
-            <div className="panel-heading">
-              <div>
-                <h2>{copy.sessionDiff}</h2>
-                <p className="panel-intro">
-                  {topicComparisonResult ? topicComparisonResult.user_input.interest : copy.noDiff}
-                </p>
-              </div>
-            </div>
-            {!topicComparisonResult ? (
-              <div className="empty-state">
-                <strong>{copy.sessionDiff}</strong>
-                <p>{copy.noDiff}</p>
-              </div>
-            ) : (
-              <div className="result-stack">
-                <div className="summary-strip">
-                  <div className="summary-card summary-card-emphasis">
-                    <span>{copy.currentSession}</span>
-                    <strong>
-                      {resolveCandidateLabel(topicResult.convergence_result.recommended_candidate_id)}
-                    </strong>
-                  </div>
-                  <div className="summary-card">
-                    <span>{copy.compareSession}</span>
-                    <strong>
-                      {topicComparisonResult.candidate_topics.find(
-                        (item) =>
-                          item.candidate_id ===
-                          topicComparisonResult.convergence_result.recommended_candidate_id,
-                      )?.title ??
-                        topicComparisonResult.convergence_result.recommended_candidate_id}
-                    </strong>
-                  </div>
-                  <div className="summary-card">
-                    <span>{copy.evidenceDelta}</span>
-                    <strong>
-                      {topicResult.evidence_records.length} vs{" "}
-                      {topicComparisonResult.evidence_records.length}
-                    </strong>
-                  </div>
-                </div>
-                <article className="subsection-card">
-                  <span className="trace-label">{copy.candidateDelta}</span>
-                  <div className="comparison-diff-grid">
-                    <div className="comparison-diff-card">
-                      <span className="trace-label">{copy.addedInCurrent}</span>
-                      <div className="list-block">
-                        {(addedCandidateTitles.length > 0
-                          ? addedCandidateTitles
-                          : [copy.noNewCandidates]).map(
-                          (title) => (
-                            <p key={title}>{title}</p>
-                          ),
-                        )}
-                      </div>
-                    </div>
-                    <div className="comparison-diff-card">
-                      <span className="trace-label">{copy.onlyInCompared}</span>
-                      <div className="list-block">
-                        {(removedCandidateTitles.length > 0
-                          ? removedCandidateTitles
-                          : [copy.noRemovedCandidates]).map(
-                          (title) => (
-                            <p key={title}>{title}</p>
-                          ),
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                </article>
-                <div className="comparison-diff-grid">
-                  <article className="subsection-card">
-                    <span className="trace-label">{copy.rationale}</span>
-                    <p className="subsection-copy">{topicResult.convergence_result.rationale}</p>
-                  </article>
-                  <article className="subsection-card">
-                    <span className="trace-label">{copy.compareSession}</span>
-                    <p className="subsection-copy">
-                      {topicComparisonResult.convergence_result.rationale}
-                    </p>
-                  </article>
-                </div>
-              </div>
-            )}
-          </article>
+          <TopicAgentRecommendationSummary
+            topicResult={topicResult}
+            copy={copy}
+            resolveCandidateLabel={resolveCandidateLabel}
+            resolveAssessmentTitle={resolveAssessmentTitle}
+          />
 
-          <article className="panel">
+          <TopicAgentSessionDiffPanel
+            copy={copy}
+            topicResult={topicResult}
+            topicComparisonResult={topicComparisonResult}
+            addedCandidateTitles={addedCandidateTitles}
+            removedCandidateTitles={removedCandidateTitles}
+            resolveCandidateLabel={resolveCandidateLabel}
+          />
+
+          <TopicAgentEvidencePanel
+            copy={copy}
+            filteredEvidenceRecords={filteredEvidenceRecords}
+            totalEvidenceCount={topicResult.evidence_records.length}
+            evidenceTierFilter={evidenceTierFilter}
+            evidenceTypeFilter={evidenceTypeFilter}
+            evidenceTierOptions={evidenceTierOptions}
+            evidenceTypeOptions={evidenceTypeOptions}
+            focusedEvidence={focusedEvidence}
+            onSetEvidenceTierFilter={setEvidenceTierFilter}
+            onSetEvidenceTypeFilter={setEvidenceTypeFilter}
+            onFocusEvidence={(record) => setFocusedEvidenceId(record.source_id)}
+          />
+
+          <TopicAgentCandidatesPanel
+            copy={copy}
+            candidates={topicResult.candidate_topics}
+            evidenceTitleById={evidenceTitleById}
+            onFocusSourceId={setFocusedEvidenceId}
+          />
+
+          <article className="panel panel-span">
             <div className="panel-heading">
               <div>
                 <h2>{copy.landscape}</h2>
@@ -523,34 +437,6 @@ export function TopicWorkspaceV2({
               </article>
             </div>
           </article>
-
-          <TopicAgentEvidencePanel
-            copy={copy}
-            filteredEvidenceRecords={filteredEvidenceRecords}
-            totalEvidenceCount={topicResult.evidence_records.length}
-            evidenceTierFilter={evidenceTierFilter}
-            evidenceTypeFilter={evidenceTypeFilter}
-            evidenceTierOptions={evidenceTierOptions}
-            evidenceTypeOptions={evidenceTypeOptions}
-            focusedEvidence={focusedEvidence}
-            onSetEvidenceTierFilter={setEvidenceTierFilter}
-            onSetEvidenceTypeFilter={setEvidenceTypeFilter}
-            onFocusEvidence={(record) => setFocusedEvidenceId(record.source_id)}
-          />
-
-          <TopicAgentCandidatesPanel
-            copy={copy}
-            candidates={topicResult.candidate_topics}
-            evidenceTitleById={evidenceTitleById}
-            onFocusSourceId={setFocusedEvidenceId}
-          />
-
-          <TopicAgentRecommendationSummary
-            topicResult={topicResult}
-            copy={copy}
-            resolveCandidateLabel={resolveCandidateLabel}
-            resolveAssessmentTitle={resolveAssessmentTitle}
-          />
 
           <TopicAgentTrustPanel
             topicResult={topicResult}
