@@ -624,6 +624,18 @@ def test_topic_agent_pipeline_keeps_broad_medical_reasoning_queries_from_overfit
                     summary="Reliable medical reasoning benchmark with metacognition checks.",
                     relevance_reason="Test record",
                 ),
+                TopicAgentSourceRecord(
+                    source_id="openalex_d",
+                    title="MedAgents: Large Language Models as Collaborators for Zero-shot Medical Reasoning",
+                    source_type="paper",
+                    source_tier="B",
+                    year=2024,
+                    authors_or_publisher="Author D",
+                    identifier="https://example.org/d",
+                    url="https://example.org/d",
+                    summary="Agent framework for zero-shot medical reasoning with collaborative method transfer signals.",
+                    relevance_reason="Test record",
+                ),
             ]
             return TopicAgentEvidenceRetrievalResult(
                 records=records,
@@ -632,7 +644,7 @@ def test_topic_agent_pipeline_keeps_broad_medical_reasoning_queries_from_overfit
                     used_provider="static",
                     fallback_used=False,
                     fallback_reason=None,
-                    record_count=3,
+                    record_count=4,
                 ),
             )
 
@@ -654,6 +666,8 @@ def test_topic_agent_pipeline_keeps_broad_medical_reasoning_queries_from_overfit
     assert "image-grounded" not in response.candidate_topics[0].research_question.lower()
     assert "reasoning quality" in response.candidate_topics[0].open_questions[0].lower()
     assert "answer-pattern shortcuts" in " ".join(response.landscape_summary.likely_gaps).lower()
+    assert "openalex_d" in response.candidate_topics[1].supporting_source_ids
+    assert "openalex_d" in response.evidence_presentation.tentative_inferences[0].supporting_source_ids
 
 
 def test_topic_agent_pipeline_builds_human_confirmations_for_missing_constraints():

@@ -295,6 +295,17 @@ This file tracks the recent development progress for the backend Topic Agent ret
   - answer-pattern shortcuts
   - benchmark validity
 
+#### Evidence Presentation Refinements
+
+- Added structured `evidence_presentation` layers to separate:
+  - `source_facts`
+  - `system_synthesis`
+  - `tentative_inferences`
+- Added `supporting_source_ids` to each evidence-presentation statement so users can trace claims back to retrieved evidence records.
+- Added `uncertainty_reason` and `missing_evidence` for tentative inferences so recommendation-level statements explicitly show why they remain provisional.
+- Tightened `system_synthesis` source binding by matching synthesis statements against source titles and summaries instead of always reusing the top retrieved records.
+- Tightened `candidate_topics[*].supporting_source_ids` so method-transfer recommendations are more likely to bind to method / framework evidence rather than defaulting to the top benchmark record.
+
 ### Current Status
 
 #### Stage Assessment
@@ -384,4 +395,4 @@ backend\.venv\Scripts\python.exe -m pytest backend\tests\test_topic_agent_api.py
 
 Latest result:
 
-- `45 passed`
+- `48 passed`

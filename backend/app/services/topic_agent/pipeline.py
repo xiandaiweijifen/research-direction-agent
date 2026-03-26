@@ -524,6 +524,114 @@ def _dedupe_open_questions(questions: list[str]) -> list[str]:
     return deduped
 
 
+def _record_text(record: TopicAgentSourceRecord) -> str:
+    return f"{record.title} {record.summary}".lower()
+
+
+def _candidate_binding_terms(
+    candidate: TopicAgentCandidateTopic,
+    *,
+    query_flags: dict[str, bool],
+) -> set[str]:
+    terms = set(_tokenize_text(" ".join([
+        candidate.title,
+        candidate.research_question,
+        candidate.novelty_note,
+        candidate.feasibility_note,
+        candidate.risk_note,
+        " ".join(candidate.open_questions),
+    ])))
+
+    if candidate.candidate_id == "candidate_1":
+        terms.update({"benchmark", "evaluation", "verification", "reliability", "stress"})
+        if query_flags["visual_qa"]:
+            terms.update({"radiology", "vqa", "grounding"})
+        if query_flags["hallucination_eval"]:
+            terms.update({"hallucination", "grounding", "faithfulness"})
+    elif candidate.candidate_id == "candidate_2":
+        terms.update({"method", "methods", "framework", "baseline", "adapt", "adapted", "transfer"})
+        if "agent" in candidate.novelty_note.lower():
+            terms.update({"agent", "collaborative", "zero", "shot"})
+        if query_flags["broad_medical_reasoning"]:
+            terms.update({"agent", "framework", "collaborators", "zero", "shot"})
+    elif candidate.candidate_id == "candidate_3":
+        terms.update({"workflow", "reproducible", "tooling", "audit", "pipeline", "annotation"})
+        if query_flags["hallucination_eval"]:
+            terms.update({"hallucination", "grounding", "audit"})
+
+    return terms
+
+
+def _rank_supporting_source_ids_for_candidate(
+    candidate: TopicAgentCandidateTopic,
+    evidence_records: list[TopicAgentSourceRecord],
+    *,
+    query_flags: dict[str, bool],
+    fallback_ids: list[str],
+    limit: int = 2,
+) -> list[str]:
+    if not evidence_records:
+        return []
+
+    binding_terms = _candidate_binding_terms(candidate, query_flags=query_flags)
+    ranked: list[tuple[int, int, int, str]] = []
+    for index, record in enumerate(evidence_records):
+        text = _record_text(record)
+        overlap = sum(1 for term in binding_terms if term in text)
+        if candidate.candidate_id == "candidate_1":
+            if "benchmark" in text:
+                overlap += 3
+            if any(term in text for term in {"verification", "reliable", "reliability", "metacognition"}):
+                overlap += 1
+        elif candidate.candidate_id == "candidate_2":
+            if any(term in text for term in {"agent", "framework", "collaborative", "zero-shot", "zero shot"}):
+                overlap += 3
+            if any(term in text for term in {"method", "baseline", "adapt"}):
+                overlap += 1
+            if query_flags["broad_medical_reasoning"] and "document question answering" in text:
+                overlap -= 1
+        elif candidate.candidate_id == "candidate_3":
+            if any(term in text for term in {"workflow", "reproducible", "audit", "annotation"}):
+                overlap += 3
+            if any(term in text for term in {"tool", "tooling", "pipeline"}):
+                overlap += 1
+
+        fallback_bonus = 1 if record.source_id in fallback_ids else 0
+        tier_bonus = 1 if record.source_tier == "A" else 0
+        ranked.append((overlap, fallback_bonus, tier_bonus, record.source_id))
+
+    ranked.sort(reverse=True)
+    if not ranked or ranked[0][0] <= 0:
+        return fallback_ids[:limit]
+
+    selected: list[str] = []
+    for overlap, _fallback_bonus, _tier_bonus, source_id in ranked:
+        if source_id not in selected:
+            selected.append(source_id)
+        if len(selected) == limit:
+            break
+
+    if selected:
+        return selected
+    return fallback_ids[:limit]
+
+
+def _rebind_candidate_supporting_sources(
+    candidates: list[TopicAgentCandidateTopic],
+    evidence_records: list[TopicAgentSourceRecord],
+    *,
+    query_flags: dict[str, bool],
+) -> list[TopicAgentCandidateTopic]:
+    for candidate in candidates:
+        candidate.supporting_source_ids = _rank_supporting_source_ids_for_candidate(
+            candidate,
+            evidence_records,
+            query_flags=query_flags,
+            fallback_ids=candidate.supporting_source_ids,
+        )
+    return candidates
+
+
 def _apply_query_specific_candidate_polish(
     candidates: list[TopicAgentCandidateTopic],
     *,
@@ -721,6 +829,11 @@ def generate_candidates(context: TopicAgentPipelineContext) -> list[TopicAgentCa
     ]
     result = _apply_query_specific_candidate_polish(
         result,
+        query_flags=query_flags,
+    )
+    result = _rebind_candidate_supporting_sources(
+        result,
+        evidence_records,
         query_flags=query_flags,
     )
     context.candidate_topics = result
