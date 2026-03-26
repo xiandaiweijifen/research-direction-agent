@@ -228,6 +228,11 @@ This file tracks the recent development progress for the backend Topic Agent ret
   - `vqa-rad`
   - `radiology question answering`
   - `medical hallucination grounding evaluation`
+  - `clinical reasoning benchmark`
+  - `clinical decision support reasoning evaluation`
+  - `medical reasoning metacognition benchmark`
+  - `free-response clinical reasoning evaluation`
+- Bumped the OpenAlex cache schema version to invalidate stale retrieval caches after ranking changes.
 
 #### Synthesis Improvements
 
@@ -273,6 +278,16 @@ This file tracks the recent development progress for the backend Topic Agent ret
   - `medical question answering reasoning benchmark`
 - Added ranking penalties for legacy, non-modern medical reasoning records when the query is broad and modern-AI-oriented.
 - Added ranking boosts for benchmark / verification / question answering / LLM style evidence under broad `medical reasoning` queries.
+
+#### Clinical Reasoning Retrieval Improvements
+
+- Added a dedicated retrieval case for broad `clinical medical reasoning` queries under the OpenAlex path.
+- Reduced VQA / document-QA / report-image bias for `clinical medical reasoning` when the user did not ask for multimodal, radiology, or document-centric work.
+- Increased ranking preference for:
+  - clinical reasoning benchmarks
+  - metacognition and calibration
+  - decision-support evaluation
+  - free-response clinical reasoning examinations
 
 #### Broad Query Synthesis Improvements
 

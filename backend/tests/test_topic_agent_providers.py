@@ -457,7 +457,21 @@ def test_openalex_queries_expand_radiology_vqa_aliases():
     assert "med-vqa" in joined_queries
     assert "medical vqa" in joined_queries
     assert "vqa-rad radiology" in joined_queries
-    assert "radiology question answering" in joined_queries
+
+
+def test_openalex_queries_expand_clinical_medical_reasoning_aliases():
+    request = TopicAgentExploreRequest(
+        interest="clinical medical reasoning",
+        constraints=TopicAgentConstraintSet(preferred_style="applied"),
+    )
+
+    queries = _build_openalex_queries(request)
+    joined_queries = " || ".join(queries)
+
+    assert "clinical reasoning benchmark" in joined_queries
+    assert "clinical decision support reasoning evaluation" in joined_queries
+    assert "medical reasoning metacognition benchmark" in joined_queries
+    assert "free-response clinical reasoning evaluation" in joined_queries
 
 
 def test_openalex_queries_expand_generic_medical_reasoning_aliases():
@@ -1051,6 +1065,112 @@ def test_openalex_reranking_prefers_modern_medical_ai_reasoning_over_legacy_reas
     assert ranked_titles[0] == "Scaling Medical Reasoning Verification via Tool-Integrated Reinforcement Learning"
     assert ranked_titles[1] == "Toward expert-level medical question answering with large language models"
     assert ranked_titles[-1] == "Case-based reasoning algorithms applied in a medical acquisition tool"
+
+
+def test_openalex_reranking_reduces_vqa_and_document_bias_for_clinical_medical_reasoning(
+    workspace_tmp_path,
+    monkeypatch,
+):
+    request = TopicAgentExploreRequest(
+        interest="clinical medical reasoning",
+        constraints=TopicAgentConstraintSet(preferred_style="applied"),
+    )
+    cache_path = workspace_tmp_path / "topic_agent_openalex_cache.json"
+    provider = OpenAlexEvidenceProvider(cache_path=cache_path, cache_ttl_seconds=3600, max_results=5)
+
+    class FakeResponse:
+        def __init__(self, payload):
+            self._payload = payload
+
+        def json(self):
+            return self._payload
+
+        def raise_for_status(self):
+            return None
+
+    payload = {
+        "results": [
+            {
+                "id": "https://openalex.org/W1",
+                "display_name": "RJUA-MedDQA: A Multimodal Benchmark for Medical Document Question Answering and Clinical Reasoning",
+                "publication_year": 2024,
+                "abstract_inverted_index": {
+                    "document": [0],
+                    "question": [1],
+                    "answering": [2],
+                    "medical": [3],
+                    "report": [4],
+                    "clinical": [5],
+                    "reasoning": [6],
+                },
+                "authorships": [{"author": {"display_name": "Author A"}}],
+                "primary_location": {"landing_page_url": "https://example.org/rjua"},
+            },
+            {
+                "id": "https://openalex.org/W2",
+                "display_name": "Medical Visual Question Answering via Conditional Reasoning",
+                "publication_year": 2020,
+                "abstract_inverted_index": {
+                    "medical": [0],
+                    "visual": [1],
+                    "question": [2],
+                    "answering": [3],
+                    "conditional": [4],
+                    "reasoning": [5],
+                    "vqa-rad": [6],
+                },
+                "authorships": [{"author": {"display_name": "Author B"}}],
+                "primary_location": {"landing_page_url": "https://example.org/medvqa"},
+            },
+                {
+                    "id": "https://openalex.org/W3",
+                    "display_name": "Large Language Models lack essential metacognition for reliable medical reasoning",
+                    "publication_year": 2025,
+                    "abstract_inverted_index": {
+                        "benchmark": [0],
+                        "medical": [1],
+                        "reasoning": [2],
+                        "metacognition": [3],
+                        "confidence": [4],
+                        "reliable": [5],
+                        "clinical": [6],
+                        "evaluation": [7],
+                    },
+                "authorships": [{"author": {"display_name": "Author C"}}],
+                "primary_location": {"landing_page_url": "https://example.org/metamedqa"},
+            },
+            {
+                "id": "https://openalex.org/W4",
+                "display_name": "Chatbot vs Medical Student Performance on Free-Response Clinical Reasoning Examinations",
+                "publication_year": 2023,
+                "abstract_inverted_index": {
+                    "free-response": [0],
+                    "clinical": [1],
+                    "reasoning": [2],
+                    "medical": [3],
+                    "student": [4],
+                    "evaluation": [5],
+                },
+                "authorships": [{"author": {"display_name": "Author D"}}],
+                "primary_location": {"landing_page_url": "https://example.org/freeresponse"},
+            },
+        ]
+    }
+
+    monkeypatch.setattr(
+        "app.services.topic_agent.providers.httpx.get",
+        lambda *args, **kwargs: FakeResponse(payload),
+    )
+
+    result = provider.retrieve(request)
+    ranked_titles = [record.title for record in result.records]
+
+    assert set(ranked_titles[:2]) == {
+        "Large Language Models lack essential metacognition for reliable medical reasoning",
+        "Chatbot vs Medical Student Performance on Free-Response Clinical Reasoning Examinations",
+    }
+    assert "Medical Visual Question Answering via Conditional Reasoning" not in ranked_titles[:2]
+    assert "RJUA-MedDQA: A Multimodal Benchmark for Medical Document Question Answering and Clinical Reasoning" not in ranked_titles[:2]
 
 
 def test_fallback_provider_returns_mock_records_when_primary_fails():

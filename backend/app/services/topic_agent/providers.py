@@ -54,7 +54,7 @@ OPENALEX_API_URL = "https://api.openalex.org/works"
 ATOM_NAMESPACE = {"atom": "http://www.w3.org/2005/Atom"}
 TOPIC_AGENT_ARXIV_CACHE_PATH = DATA_ROOT / "tool_state" / "topic_agent_arxiv_cache.json"
 TOPIC_AGENT_OPENALEX_CACHE_PATH = DATA_ROOT / "tool_state" / "topic_agent_openalex_cache.json"
-OPENALEX_CACHE_SCHEMA_VERSION = "v2"
+OPENALEX_CACHE_SCHEMA_VERSION = "v3"
 
 
 def _normalize_optional(value: str | None) -> str | None:
@@ -406,6 +406,26 @@ def _openalex_query_aliases(request: TopicAgentExploreRequest) -> list[str]:
                 "medical question answering reasoning benchmark",
             ]
         )
+    if "clinical medical reasoning" in topic_text and not any(
+        term in topic_text
+        for term in {
+            "radiology",
+            "visual question answering",
+            "vqa",
+            "multimodal",
+            "document question answering",
+            "hallucination",
+            "grounding",
+        }
+    ):
+        aliases.extend(
+            [
+                "clinical reasoning benchmark",
+                "clinical decision support reasoning evaluation",
+                "medical reasoning metacognition benchmark",
+                "free-response clinical reasoning evaluation",
+            ]
+        )
 
     deduped_aliases: list[str] = []
     for alias in aliases:
@@ -607,6 +627,22 @@ def _task_specificity_score(
             },
         )
     )
+    generic_clinical_reasoning_query = (
+        "clinical medical reasoning" in query_text
+        and not _contains_any(
+            query_text,
+            {
+                "multimodal",
+                "radiology",
+                "vqa",
+                "visual question answering",
+                "hallucination",
+                "grounding",
+                "document question answering",
+                "report",
+            },
+        )
+    )
     score = 0
 
     benchmark_terms = {
@@ -712,6 +748,33 @@ def _task_specificity_score(
             score -= 10
         if _contains_any(haystack, legacy_reasoning_terms):
             score -= 12
+    if generic_clinical_reasoning_query:
+        preferred_clinical_terms = {
+            "clinical reasoning",
+            "decision support",
+            "free-response",
+            "free response",
+            "metacognition",
+            "confidence",
+            "calibration",
+            "clinical evaluation",
+            "expert-level medical reasoning",
+            "medical reasoning",
+        }
+        discouraged_terms = {
+            "vqa",
+            "med-vqa",
+            "vqa-rad",
+            "visual question answering",
+            "document question answering",
+            "medical report",
+            "report image",
+            "report layout",
+        }
+        if _contains_any(haystack, preferred_clinical_terms):
+            score += 10
+        if _contains_any(haystack, discouraged_terms):
+            score -= 10
     return score
 
 
@@ -740,6 +803,47 @@ def _score_record(
         score += 1
     if "reason" in haystack or "reasoning" in haystack:
         score += 4
+    query_text = f"{request.interest} {request.problem_domain or ''}".lower()
+    clinical_medical_reasoning_query = (
+        "clinical medical reasoning" in query_text
+        and not _contains_any(
+            query_text,
+            {
+                "multimodal",
+                "radiology",
+                "vqa",
+                "visual question answering",
+                "hallucination",
+                "grounding",
+                "document question answering",
+                "report",
+            },
+        )
+    )
+    if clinical_medical_reasoning_query:
+        preferred_clinical_title_terms = {
+            "clinical reasoning",
+            "metacognition",
+            "free-response",
+            "free response",
+            "decision support",
+            "medical student performance",
+        }
+        discouraged_title_terms = {
+            "visual question answering",
+            "vqa",
+            "document question answering",
+            "medical report",
+            "multimodal benchmark",
+        }
+        if _contains_any(title_lower, preferred_clinical_title_terms):
+            score += 14
+        elif _contains_any(haystack, preferred_clinical_title_terms):
+            score += 8
+        if _contains_any(title_lower, discouraged_title_terms):
+            score -= 24
+        elif _contains_any(haystack, discouraged_title_terms):
+            score -= 12
     matched_core_terms = sum(1 for term in core_terms if term in haystack)
     score += matched_core_terms * 3
     score += _task_specificity_score(record, request)

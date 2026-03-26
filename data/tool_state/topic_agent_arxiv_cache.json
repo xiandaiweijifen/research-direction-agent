@@ -203,5 +203,46 @@
         "relevance_reason": "Retrieved from arXiv as a public academic source for the current topic query."
       }
     ]
+  },
+  "\"clinical medical reasoning\" clinical medical reasoning applied::max=3": {
+    "saved_at": "2026-03-27T00:55:02.643060+08:00",
+    "records": [
+      {
+        "source_id": "arxiv_3",
+        "title": "Exploring Text Specific and Blackbox Fairness Algorithms in Multimodal Clinical NLP",
+        "source_type": "paper",
+        "source_tier": "B",
+        "year": 2020,
+        "authors_or_publisher": "John Chen, Ian Berlot-Attwell, Safwan Hossain, Xindi Wang",
+        "identifier": "https://arxiv.org/abs/2011.09625v2",
+        "url": "https://arxiv.org/abs/2011.09625v2",
+        "summary": "Clinical machine learning is increasingly multimodal, collected in both structured tabular formats and unstructured forms such as freetext. We propose a novel task of exploring fairness on a multimodal clinical dataset, adopting equalized odds for the downstream medical prediction tasks. To this end, we investigate a modality-agnostic fairness algorithm - equalized odds post processing - and compare it to a text-specific fairness algorithm: debiased clinical word embeddings. Despite the fact that debiased word embeddings do not explicitly address equalized odds of protected groups, we show that a text-specific approach to fairness may simultaneously achieve a good balance of performance and classical notions of fairness. We hope that our paper inspires future contributions at the critical intersection of clinical NLP and fairness. The full source code is available here: https://github.com/johntiger1/multimodal_fairness",
+        "relevance_reason": "Retrieved from arXiv as a public academic source for the current topic query."
+      },
+      {
+        "source_id": "arxiv_2",
+        "title": "Lightweight Transformers for Clinical Natural Language Processing",
+        "source_type": "paper",
+        "source_tier": "B",
+        "year": 2023,
+        "authors_or_publisher": "Omid Rohanian, Mohammadmahdi Nouriborji, Hannah Jauncey, Samaneh Kouchaki",
+        "identifier": "https://arxiv.org/abs/2302.04725v1",
+        "url": "https://arxiv.org/abs/2302.04725v1",
+        "summary": "Specialised pre-trained language models are becoming more frequent in NLP since they can potentially outperform models trained on generic texts. BioBERT and BioClinicalBERT are two examples of such models that have shown promise in medical NLP tasks. Many of these models are overparametrised and resource-intensive, but thanks to techniques like Knowledge Distillation (KD), it is possible to create smaller versions that perform almost as well as their larger counterparts. In this work, we specifically focus on development of compact language models for processing clinical texts (i.e. progress notes, discharge summaries etc). We developed a number of efficient lightweight clinical transformers using knowledge distillation and continual learning, with the number of parameters ranging from 15 million to 65 million. These models performed comparably to larger models such as BioBERT and ClinicalBioBERT and significantly outperformed other compact models trained on general or biomedical data. Our extensive evaluation was done across several standard datasets and covered a wide range of clinical text-mining tasks, including Natural Language Inference, Relation Extraction, Named Entity Recognition, and Sequence Classification. To our knowledge, this is the first comprehensive study specifically focused on creating efficient and compact transformers for clinical NLP tasks. The models and code used in this study can be found on our Huggingface profile at https://huggingface.co/nlpie and Github page at https://github.com/nlpie-research/Lightweight-Clinical-Transformers, respectively, promoting reproducibility of our results.",
+        "relevance_reason": "Retrieved from arXiv as a public academic source for the current topic query."
+      },
+      {
+        "source_id": "arxiv_1",
+        "title": "Navigating the State of Cognitive Flow: Context-Aware AI Interventions for Effective Reasoning Support",
+        "source_type": "paper",
+        "source_tier": "B",
+        "year": 2025,
+        "authors_or_publisher": "Dinithi Dissanayake, Suranga Nanayakkara",
+        "identifier": "https://arxiv.org/abs/2504.16021v1",
+        "url": "https://arxiv.org/abs/2504.16021v1",
+        "summary": "Flow theory describes an optimal cognitive state where individuals experience deep focus and intrinsic motivation when a task's difficulty aligns with their skill level. In AI-augmented reasoning, interventions that disrupt the state of cognitive flow can hinder rather than enhance decision-making. This paper proposes a context-aware cognitive augmentation framework that adapts interventions based on three key contextual factors: type, timing, and scale. By leveraging multimodal behavioral cues (e.g., gaze behavior, typing hesitation, interaction speed), AI can dynamically adjust cognitive support to maintain or restore flow. We introduce the concept of cognitive flow, an extension of flow theory in AI-augmented reasoning, where interventions are personalized, adaptive, and minimally intrusive. By shifting from static interventions to context-aware augmentation, our approach ensures that AI systems support deep engagement in complex decision-making and reasoning without disrupting cognitive immersion.",
+        "relevance_reason": "Retrieved from arXiv as a public academic source for the current topic query."
+      }
+    ]
   }
 }

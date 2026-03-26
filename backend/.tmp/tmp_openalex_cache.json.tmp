@@ -1,0 +1,55 @@
+{
+  "v3::clinical medical reasoning applied||clinical medical reasoning||medical reasoning benchmark||medical reasoning large language models||clinical reasoning benchmark medical ai||medical question answering reasoning benchmark||clinical reasoning benchmark||clinical decision support reasoning evaluation||medical reasoning metacognition benchmark||free-response clinical reasoning evaluation::max=5": {
+    "saved_at": "2026-03-27T01:06:45.301767+08:00",
+    "records": [
+      {
+        "source_id": "openalex_w4",
+        "title": "Chatbot vs Medical Student Performance on Free-Response Clinical Reasoning Examinations",
+        "source_type": "paper",
+        "source_tier": "B",
+        "year": 2023,
+        "authors_or_publisher": "D",
+        "identifier": "https://openalex.org/W4",
+        "url": "https://example.org/freeresponse",
+        "summary": "free-response clinical reasoning medical student evaluation",
+        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
+      },
+      {
+        "source_id": "openalex_w1",
+        "title": "RJUA-MedDQA: A Multimodal Benchmark for Medical Document Question Answering and Clinical Reasoning",
+        "source_type": "benchmark",
+        "source_tier": "A",
+        "year": 2024,
+        "authors_or_publisher": "A",
+        "identifier": "https://openalex.org/W1",
+        "url": "https://example.org/rjua",
+        "summary": "document question answering medical report clinical reasoning",
+        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
+      },
+      {
+        "source_id": "openalex_w3",
+        "title": "Large Language Models lack essential metacognition for reliable medical reasoning",
+        "source_type": "paper",
+        "source_tier": "B",
+        "year": 2025,
+        "authors_or_publisher": "C",
+        "identifier": "https://openalex.org/W3",
+        "url": "https://example.org/metamedqa",
+        "summary": "medical reasoning metacognition confidence reliable clinical evaluation",
+        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
+      },
+      {
+        "source_id": "openalex_w2",
+        "title": "Medical Visual Question Answering via Conditional Reasoning",
+        "source_type": "paper",
+        "source_tier": "B",
+        "year": 2020,
+        "authors_or_publisher": "B",
+        "identifier": "https://openalex.org/W2",
+        "url": "https://example.org/medvqa",
+        "summary": "medical visual question answering conditional reasoning vqa-rad",
+        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
+      }
+    ]
+  }
+}
