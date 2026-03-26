@@ -12,7 +12,6 @@ import { TopicAgentEvidencePanel } from "../features/topic-agent/components/Topi
 import { TopicAgentFramingPanel } from "../features/topic-agent/components/TopicAgentFramingPanel";
 import { TopicAgentInputPanel } from "../features/topic-agent/components/TopicAgentInputPanel";
 import { TopicAgentRecommendationSummary } from "../features/topic-agent/components/TopicAgentRecommendationSummary";
-import { TopicAgentSessionDiffPanel } from "../features/topic-agent/components/TopicAgentSessionDiffPanel";
 import { TopicAgentSessionHistory } from "../features/topic-agent/components/TopicAgentSessionHistory";
 import { TopicAgentTrustPanel } from "../features/topic-agent/components/TopicAgentTrustPanel";
 
@@ -328,17 +327,6 @@ export function TopicWorkspaceV2({
   const resolveCandidateLabel = (candidateId?: string | null) =>
     (candidateId ? candidateTitleById.get(candidateId) : null) ?? candidateId ?? "-";
 
-  const currentCandidateTitles = new Set((topicResult?.candidate_topics ?? []).map((item) => item.title));
-  const comparisonCandidateTitles = new Set(
-    (topicComparisonResult?.candidate_topics ?? []).map((item) => item.title),
-  );
-  const addedCandidateTitles = [...currentCandidateTitles].filter(
-    (title) => !comparisonCandidateTitles.has(title),
-  );
-  const removedCandidateTitles = [...comparisonCandidateTitles].filter(
-    (title) => !currentCandidateTitles.has(title),
-  );
-
   return (
     <section className="panel-grid">
       <article className="panel panel-span view-banner">
@@ -418,15 +406,6 @@ export function TopicWorkspaceV2({
               resolveCandidateLabel={resolveCandidateLabel}
               resolveAssessmentTitle={resolveAssessmentTitle}
             />
-
-          <TopicAgentSessionDiffPanel
-            copy={copy}
-            topicResult={topicResult}
-            topicComparisonResult={topicComparisonResult}
-            addedCandidateTitles={addedCandidateTitles}
-            removedCandidateTitles={removedCandidateTitles}
-            resolveCandidateLabel={resolveCandidateLabel}
-          />
 
           <div className="topic-section-heading panel-span">
             <span className="section-label">
