@@ -1,6 +1,7 @@
 import { useState } from "react";
 
 import type { Locale, TopicAgentSourceRecord } from "../../../types";
+import { getTopicAgentSourceTypeLabel } from "../display";
 
 type TopicAgentEvidencePanelProps = {
   locale: Locale;
@@ -111,7 +112,7 @@ export function TopicAgentEvidencePanel({
                       className={`filter-chip${evidenceTypeFilter === type ? " active" : ""}`}
                       onClick={() => onSetEvidenceTypeFilter(type)}
                     >
-                      {type}
+                      {getTopicAgentSourceTypeLabel(type, locale)}
                     </button>
                   ))}
                 </div>
@@ -126,7 +127,8 @@ export function TopicAgentEvidencePanel({
                   <span className="status-chip">{record.source_tier}</span>
                 </div>
                 <p className="trace-detail">
-                  {record.source_type} | {record.year} | {record.authors_or_publisher}
+                  {getTopicAgentSourceTypeLabel(record.source_type, locale)} | {record.year} |{" "}
+                  {record.authors_or_publisher}
                 </p>
                 <p
                   className={`trace-detail evidence-record-summary${
@@ -183,7 +185,8 @@ export function TopicAgentEvidencePanel({
               <div className="trace-meta-row">
                 <strong>{focusedEvidence.title}</strong>
                 <span className="status-chip">
-                  {focusedEvidence.source_tier} / {focusedEvidence.source_type}
+                  {focusedEvidence.source_tier} /{" "}
+                  {getTopicAgentSourceTypeLabel(focusedEvidence.source_type, locale)}
                 </span>
               </div>
               <p className="trace-detail">

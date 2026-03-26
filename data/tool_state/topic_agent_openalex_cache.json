@@ -776,5 +776,70 @@
         "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
       }
     ]
+  },
+  "v3::agents software engineering developer tools applied||agents software engineering developer tools::max=5": {
+    "saved_at": "2026-03-27T02:59:38.770908+08:00",
+    "records": [
+      {
+        "source_id": "openalex_w1512603479",
+        "title": "Prometheus: A Pragmatic Methodology for Engineering Intelligent Agents",
+        "source_type": "paper",
+        "source_tier": "B",
+        "year": 2002,
+        "authors_or_publisher": "Lin Padgham, Michael Winikoff",
+        "identifier": "https://openalex.org/W1512603479",
+        "url": "http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.19.9128",
+        "summary": "Agents are a powerful technology with many significant applications. A key issue in getting the technology into mainstream software development is the development of appropriate methodologies for engineering agent-oriented software. This paper presents the Prometheus methodology, which has been developed over several years in collaboration with Agent Oriented Software. The methodology has been taught at industry workshops and university courses. It has proven effective in assisting developers to design, document, and build agent systems. Prometheus is a detailed and complete (start to end) methodology for developing intelligent agents which has evolved out of industrial and pedagogical experience, and which is supported by tools. This paper gives a brief overview of the design process as a whole and then discusses envisaged tool support as well as the implemented tool prototypes we have been using.",
+        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
+      },
+      {
+        "source_id": "openalex_w2982485630",
+        "title": "An Empirical Study on Culture, Automation, Measurement, and Sharing of DevSecOps",
+        "source_type": "paper",
+        "source_tier": "B",
+        "year": 2019,
+        "authors_or_publisher": "Nora Tomas, Jingyue Li, Huang Huang",
+        "identifier": "https://openalex.org/W2982485630",
+        "url": "https://doi.org/10.1109/cybersecpods.2019.8884935",
+        "summary": "Programmers are central agents in creating secure applications. However, software engineering and software security have historically worked in separate silos. DevSecOps is the practice of breaking down silos between development, operations, and quality assurance of security. To understand the state of art and challenges of DevSecOps, we interviewed six developers about their DevSecOps practices. We asked interview subjects about their security practices rooted in the four pillars of DevOps, namely culture, automation, sharing, and measurement. Results were analyzed by using qualitative methods. The results of the study show that it is necessary first to create a security culture. Several interviewees identified the importance of caring about security and issues in existing culture, such as how developers feel attacked by security engineers if they create vulnerable code. After establishing a security culture in the organization, development and operations need the necessary training and knowledge so that security automation tools can be utilized effectively. Measurements need to be applied continuously to keep track of identified vulnerabilities, the amount of training staff has received, and staffs general opinions regarding security.",
+        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
+      },
+      {
+        "source_id": "openalex_w1869215669",
+        "title": "Developing Intelligent Agent Systems: A Practical Guide",
+        "source_type": "paper",
+        "source_tier": "B",
+        "year": 2004,
+        "authors_or_publisher": "Lin Padgham, Michael Winikoff",
+        "identifier": "https://openalex.org/W1869215669",
+        "url": "http://dl.acm.org/citation.cfm?id=975254&amp;coll=DL&amp;dl=GUIDE&amp;CFID=100179854&amp;CFTOKEN=11601505",
+        "summary": "Build your own intelligent agent system. Intelligent agent technology is a tool of modern computer science that can be used to engineer complex computer programmes that behave rationally in dynamic and changing environments. Applications range from small programmes that intelligently search the Web buying and selling goods via electronic commerce, to autonomous space probes. This powerful technology is not widely used, however, as developing intelligent agent software requires high levels of training and skill. The authors of this book have developed and tested a methodology and tools for developing intelligent agent systems. With this methodology (Prometheus) developers can start agent-oriented designs and implementations easily from scratch saving valuable time and resources. Developing Intelligent Agent Systems not only answers the questions 'what are agents?' and 'why are they useful?' but also the crucial question: 'how do I design and build intelligent agent systems?' The book covers everything a practitioner needs to know to begin to effectively use this technology - including an introduction to the notion of agents, a description of the concepts involved, and a software engineering methodology.",
+        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
+      },
+      {
+        "source_id": "openalex_w2150937768",
+        "title": "Capturing agent autonomy in roles and XML",
+        "source_type": "paper",
+        "source_tier": "B",
+        "year": 2003,
+        "authors_or_publisher": "Gerhard Weiß, Michael Rovatsos, Matthias Nickles",
+        "identifier": "https://openalex.org/W2150937768",
+        "url": "https://doi.org/10.1145/860575.860593",
+        "summary": "A key question in the field of agent-oriented software engineering is how the kind and extent of autonomy owned by computational agents can be appropriately captured. As long as this question is not answered convincingly, it is very unlikely that agent-oriented software (having \"autonomy\" as a real property rather than just a catchy label) gets broadly accepted in industry and commerce. In particular, in order to be of practical value an answer to this question has to come in form of concrete techniques which enable developers of agent-oriented software to precisely capture the scope of behavioral freedom and self-control they want to concede to a computational agent. This paper describes two such techniques. First, a formal schema called RNS for specifying the boundaries of autonomous agent behavior. This schema is conceptually grounded in sociological role theory, and employs the concepts of role, norm and sanction to capture agent autonomy. What makes RNS particularly valuable and distinct from related autonomy specification approaches is, among other things, its strong expressiveness and high precision. Second, a software tool called XRNS which enables developers to easily generate RNS-based autonomy specifications in XML format. Encoded in XML, these specifications are easily accessible to all stakeholders in an agent-oriented software under development, and can be even processed directly by XML enabled computational agents.",
+        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
+      },
+      {
+        "source_id": "openalex_w1576195516",
+        "title": "Multi-Agent Systems",
+        "source_type": "paper",
+        "source_tier": "B",
+        "year": 2010,
+        "authors_or_publisher": "Adelinde M. Uhrmacher",
+        "identifier": "https://openalex.org/W1576195516",
+        "url": "https://doi.org/10.1201/9781420070248",
+        "summary": "Methodological Guidelines for Modeling and Developing MAS-Based Simulations The intersection of agents, modeling, simulation, and application domains has been the subject of active research for over two decades. Although agents and simulation have been used effectively in a variety of application domains, much of the supporting research remains scattered in the literature, too often leaving scientists to develop multi-agent system (MAS) models and simulations from scratch. Multi-Agent Systems: Simulation and Applications provides an overdue review of the wide ranging facets of MAS simulation, including methodological and application-oriented guidelines. This comprehensive resource reviews two decades of research in the intersection of MAS, simulation, and different application domains. It provides scientists and developers with disciplined engineering approaches to modeling and developing MAS-based simulations. After providing an overview of the fields history and its basic principles, as well as cataloging the various simulation engines for MAS, the book devotes three sections to current and emerging approaches and applications. Simulation for MAS explains simulation support for agent decision making, the use of simulation for the design of self-organizing systems, the role of software architecture in simulating MAS, and the use of simulation for studying learning and stigmergic interaction. MAS for Simulation discusses an agent-based framework for symbiotic simulation, the use of country databases and expert systems for agent-based modeling of social systems, crowd-behavior modeling, agent-based modeling and simulation of adult stem cells, and agents for traffic simulation. Tools presents a number of representative platforms and tools for MAS and simulation, including Jason, James II, SeSAm, and RoboCup Rescue. Complete with over 200 figures and formulas, this reference book provides the necessary overview of experiences with MAS simulation and the tools needed to exploit simulation in MAS for future research in a vast array of applications including home security, computational systems biology, and traffic management.",
+        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
+      }
+    ]
   }
 }

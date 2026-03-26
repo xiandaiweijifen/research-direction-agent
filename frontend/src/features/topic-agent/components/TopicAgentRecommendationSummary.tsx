@@ -1,9 +1,12 @@
 import type {
+  Locale,
   TopicAgentComparisonAssessment,
   TopicAgentSessionResponse,
 } from "../../../types";
+import { getTopicAgentDimensionLabel } from "../display";
 
 type TopicAgentRecommendationSummaryProps = {
+  locale: Locale;
   topicResult: TopicAgentSessionResponse;
   copy: Record<string, string>;
   resolveCandidateLabel: (candidateId?: string | null) => string;
@@ -11,6 +14,7 @@ type TopicAgentRecommendationSummaryProps = {
 };
 
 export function TopicAgentRecommendationSummary({
+  locale,
   topicResult,
   copy,
   resolveCandidateLabel,
@@ -49,7 +53,7 @@ export function TopicAgentRecommendationSummary({
         <div className="pill-strip">
           {topicResult.comparison_result.dimensions.map((dimension) => (
             <span key={dimension} className="meta-pill">
-              {dimension}
+              {getTopicAgentDimensionLabel(dimension, locale)}
             </span>
           ))}
         </div>

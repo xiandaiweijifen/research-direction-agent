@@ -325,19 +325,21 @@ describe("TopicWorkspaceV2", () => {
     expect(screen.getByText("Candidate Comparison")).toBeInTheDocument();
     expect(screen.getAllByText("Best balance.").length).toBeGreaterThan(0);
     expect(screen.getByText("Check benchmark availability.")).toBeInTheDocument();
-    expect(screen.getAllByText("medium_high").length).toBeGreaterThan(0);
     expect(screen.getAllByText("Supporting Evidence").length).toBeGreaterThan(0);
-    expect(screen.getByText("source_1: Recent Survey")).toBeInTheDocument();
-    expect(screen.getByText("source_2: Open Repo")).toBeInTheDocument();
+    expect(screen.getByText("Survey")).toBeInTheDocument();
+    expect(screen.getByText("Code / Repo")).toBeInTheDocument();
+    expect(screen.getAllByText("Recent Survey").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("Open Repo").length).toBeGreaterThan(0);
+    expect(screen.queryByText("source_1: Recent Survey")).not.toBeInTheDocument();
+    expect(screen.queryByText("source_2: Open Repo")).not.toBeInTheDocument();
 
     await user.click(screen.getByRole("button", { name: "A" }));
     expect(screen.getAllByText("Recent Survey").length).toBeGreaterThan(0);
-    expect(screen.queryByText("Open Repo")).not.toBeInTheDocument();
 
     await user.click(screen.getAllByRole("button", { name: "All" })[0]);
     expect(screen.getAllByText("Open Repo").length).toBeGreaterThan(0);
 
-    await user.click(screen.getByRole("button", { name: "source_2: Open Repo" }));
+    await user.click(screen.getByRole("button", { name: "Open Repo" }));
     expect(screen.getByText("repo:2")).toBeInTheDocument();
 
     await user.click(screen.getByRole("button", { name: "Compare" }));

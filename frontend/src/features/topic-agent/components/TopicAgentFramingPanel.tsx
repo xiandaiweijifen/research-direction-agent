@@ -1,11 +1,14 @@
 import type { TopicAgentSessionResponse } from "../../../types";
+import type { Locale } from "../../../types";
+import { getTopicAgentConstraintLabel } from "../display";
 
 type TopicAgentFramingPanelProps = {
+  locale: Locale;
   copy: Record<string, string>;
   topicResult: TopicAgentSessionResponse | null;
 };
 
-export function TopicAgentFramingPanel({ copy, topicResult }: TopicAgentFramingPanelProps) {
+export function TopicAgentFramingPanel({ locale, copy, topicResult }: TopicAgentFramingPanelProps) {
   return (
     <article className="panel panel-span preview-panel">
       <div className="panel-heading">
@@ -36,7 +39,7 @@ export function TopicAgentFramingPanel({ copy, topicResult }: TopicAgentFramingP
             <div className="pill-strip">
               {Object.entries(topicResult.framing_result.extracted_constraints).map(([key, value]) => (
                 <span key={key} className="meta-pill muted-pill">
-                  {key}: {value}
+                  {getTopicAgentConstraintLabel(key, locale)}: {value}
                 </span>
               ))}
             </div>

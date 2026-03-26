@@ -388,7 +388,7 @@ export function TopicWorkspaceV2({
             : "Confirm the research interest, constraints, and framing first because they shape the evidence bundle and recommendation quality."}
         </p>
       </div>
-      <TopicAgentFramingPanel copy={copy} topicResult={topicResult} />
+        <TopicAgentFramingPanel locale={locale} copy={copy} topicResult={topicResult} />
 
       {topicResult && (
         <>
@@ -403,12 +403,13 @@ export function TopicWorkspaceV2({
                 : "This section should answer the core demo question fastest: what the system recommends, the backup option, the reasoning, and what changed from a previous run."}
             </p>
           </div>
-          <TopicAgentRecommendationSummary
-            topicResult={topicResult}
-            copy={copy}
-            resolveCandidateLabel={resolveCandidateLabel}
-            resolveAssessmentTitle={resolveAssessmentTitle}
-          />
+            <TopicAgentRecommendationSummary
+              locale={locale}
+              topicResult={topicResult}
+              copy={copy}
+              resolveCandidateLabel={resolveCandidateLabel}
+              resolveAssessmentTitle={resolveAssessmentTitle}
+            />
 
           <TopicAgentSessionDiffPanel
             copy={copy}
@@ -445,11 +446,12 @@ export function TopicWorkspaceV2({
             onFocusEvidence={(record) => setFocusedEvidenceId(record.source_id)}
           />
 
-          <TopicAgentCandidatesPanel
-            copy={copy}
-            candidates={topicResult.candidate_topics}
-            evidenceTitleById={evidenceTitleById}
-            onFocusSourceId={setFocusedEvidenceId}
+            <TopicAgentCandidatesPanel
+              locale={locale}
+              copy={copy}
+              candidates={topicResult.candidate_topics}
+              evidenceTitleById={evidenceTitleById}
+              onFocusSourceId={setFocusedEvidenceId}
           />
 
           <article className="panel panel-span">

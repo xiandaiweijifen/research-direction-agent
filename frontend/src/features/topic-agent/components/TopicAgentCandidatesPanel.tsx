@@ -1,6 +1,8 @@
-import type { TopicAgentCandidateTopic } from "../../../types";
+import type { Locale, TopicAgentCandidateTopic } from "../../../types";
+import { getTopicAgentPositioningLabel } from "../display";
 
 type TopicAgentCandidatesPanelProps = {
+  locale: Locale;
   copy: Record<string, string>;
   candidates: TopicAgentCandidateTopic[];
   evidenceTitleById: Map<string, string>;
@@ -8,6 +10,7 @@ type TopicAgentCandidatesPanelProps = {
 };
 
 export function TopicAgentCandidatesPanel({
+  locale,
   copy,
   candidates,
   evidenceTitleById,
@@ -28,7 +31,9 @@ export function TopicAgentCandidatesPanel({
           <article key={candidate.candidate_id} className="trace-card">
             <div className="trace-meta-row">
               <strong>{candidate.title}</strong>
-              <span className="status-chip">{candidate.positioning}</span>
+              <span className="status-chip">
+                {getTopicAgentPositioningLabel(candidate.positioning, locale)}
+              </span>
             </div>
             <p className="trace-detail">{candidate.research_question}</p>
             <div className="pill-strip">
@@ -45,7 +50,7 @@ export function TopicAgentCandidatesPanel({
                     className="inline-link-button"
                     onClick={() => onFocusSourceId(sourceId)}
                   >
-                    {sourceId}: {evidenceTitleById.get(sourceId) ?? sourceId}
+                    {evidenceTitleById.get(sourceId) ?? sourceId}
                   </button>
                 </p>
               ))}
