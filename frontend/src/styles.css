@@ -1033,6 +1033,12 @@ textarea {
   min-height: 34px;
 }
 
+.session-history-actions {
+  display: flex;
+  justify-content: center;
+  padding-top: 4px;
+}
+
 .status,
 .muted,
 .error {

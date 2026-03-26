@@ -369,6 +369,7 @@ export function TopicWorkspaceV2({
 
       <TopicAgentSessionHistory
         copy={copy}
+        locale={locale}
         topicSessions={topicSessions}
         currentSessionId={topicResult?.session_id}
         resolveCandidateLabel={resolveCandidateLabel}

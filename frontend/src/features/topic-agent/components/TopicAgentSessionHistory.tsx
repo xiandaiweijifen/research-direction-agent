@@ -1,7 +1,10 @@
+import { useMemo, useState } from "react";
+
 import type { TopicAgentSessionSummary } from "../../../types";
 
 type TopicAgentSessionHistoryProps = {
   copy: Record<string, string>;
+  locale?: "en" | "zh";
   topicSessions: TopicAgentSessionSummary[];
   currentSessionId?: string | null;
   resolveCandidateLabel: (candidateId?: string | null) => string;
@@ -11,12 +14,31 @@ type TopicAgentSessionHistoryProps = {
 
 export function TopicAgentSessionHistory({
   copy,
+  locale = "en",
   topicSessions,
   currentSessionId,
   resolveCandidateLabel,
   onLoadSession,
   onCompareSession,
 }: TopicAgentSessionHistoryProps) {
+  const [expanded, setExpanded] = useState(false);
+  const visibleSessions = useMemo(
+    () => (expanded ? topicSessions : topicSessions.slice(0, 4)),
+    [expanded, topicSessions],
+  );
+  const hiddenCount = Math.max(topicSessions.length - visibleSessions.length, 0);
+
+  const uiCopy =
+    locale === "zh"
+      ? {
+          showMore: `灞曞紑鍓?${hiddenCount} 鏉¤褰?`,
+          showLess: "鏀惰捣鍘嗗彶璁板綍",
+        }
+      : {
+          showMore: `Show ${hiddenCount} more`,
+          showLess: "Show less",
+        };
+
   return (
     <article className="panel">
       <div className="panel-heading">
@@ -34,7 +56,7 @@ export function TopicAgentSessionHistory({
         </div>
       ) : (
         <div className="trace-list">
-          {topicSessions.map((session) => (
+          {visibleSessions.map((session) => (
             <article key={session.session_id} className="trace-card">
               <div className="trace-meta-row">
                 <strong>{session.interest}</strong>
@@ -63,6 +85,17 @@ export function TopicAgentSessionHistory({
               </div>
             </article>
           ))}
+          {topicSessions.length > 4 && (
+            <div className="session-history-actions">
+              <button
+                type="button"
+                className="ghost-button"
+                onClick={() => setExpanded((current) => !current)}
+              >
+                {expanded ? uiCopy.showLess : uiCopy.showMore}
+              </button>
+            </div>
+          )}
         </div>
       )}
     </article>
