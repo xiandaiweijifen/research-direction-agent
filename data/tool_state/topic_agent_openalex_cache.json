@@ -82,7 +82,7 @@
     ]
   },
   "v2::trustworthy multimodal reasoning medical imaging applied||trustworthy multimodal reasoning medical||multimodal reasoning medical benchmark||trustworthy reasoning medical evaluation::max=5": {
-    "saved_at": "2026-03-25T21:37:49.136556+08:00",
+    "saved_at": "2026-03-26T22:43:10.718041+08:00",
     "records": [
       {
         "source_id": "openalex_w4414530509",
@@ -118,6 +118,18 @@
         "identifier": "https://openalex.org/W3094950914",
         "url": "https://doi.org/10.1145/3394171.3413761",
         "summary": "Medical visual question answering (Med-VQA) aims to accurately answer a clinical question presented with a medical image. Despite its enormous potential in healthcare industry and services, the technology is still in its infancy and is far from practical use. Med-VQA tasks are highly challenging due to the massive diversity of clinical questions and the disparity of required visual reasoning skills for different types of questions. In this paper, we propose a novel conditional reasoning framework for Med-VQA, aiming to automatically learn effective reasoning skills for various Med-VQA tasks. Particularly, we develop a question-conditioned reasoning module to guide the importance selection over multimodal fusion features. Considering the different nature of closed-ended and open-ended Med-VQA tasks, we further propose a type-conditioned reasoning module to learn a different set of reasoning skills for the two types of tasks separately. Our conditional reasoning framework can be easily applied to existing Med-VQA systems to bring performance gains. In the experiments, we build our system on top of a recent state-of-the-art Med-VQA model and evaluate it on the VQA-RAD benchmark [23]. Remarkably, our system achieves significantly increased accuracy in predicting answers to both closed-ended and open-ended questions, especially for open-ended questions, where a 10.8% increase in absolute accuracy is obtained. The source code can be downloaded from https://github.com/awenbocc/med-vqa.",
+        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
+      },
+      {
+        "source_id": "openalex_w4407153981",
+        "title": "A Proactive Agent Collaborative Framework for Zero‐Shot Multimodal Medical Reasoning",
+        "source_type": "paper",
+        "source_tier": "B",
+        "year": 2025,
+        "authors_or_publisher": "Zishan Gu, Fenglin Liu, Jiayuan Chen, Changchang Yin",
+        "identifier": "https://openalex.org/W4407153981",
+        "url": "https://doi.org/10.1002/aisy.202400840",
+        "summary": "The adoption of large language models (LLMs) in healthcare has garnered significant research interest, yet their performance remains limited due to a lack of domain-specific knowledge, medical reasoning skills, and their unimodal nature, which restricts them to text-only inputs. To address these limitations, we propose MultiMedRes, a multimodal medical collaborative reasoning framework that simulates human physicians' communication by incorporating a learner agent to proactively acquire information from domain-specific expert models. MultiMedRes addresses medical multimodal reasoning problems through three steps i) Inquire: The learner agent decomposes complex medical reasoning problems into multiple domain-specific sub-problems; ii) Interact: The agent engages in iterative \"ask-answer\" interactions with expert models to obtain domain-specific knowledge; and iii) Integrate: The agent integrates all the acquired domain-specific knowledge to address the medical reasoning problems (e.g., identifying the difference of disease levels and abnormality sizes between medical images). We validate the effectiveness of our method on the task of difference visual question answering for X-ray images. The experiments show that our zero-shot prediction achieves state-of-the-art performance, surpassing fully supervised methods, which demonstrates that MultiMedRes could offer trustworthy and interpretable assistance to physicians in monitoring the treatment progression of patients, paving the way for effective human-AI interaction and collaboration.",
         "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
       },
       {

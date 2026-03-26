@@ -2,6 +2,7 @@ from pathlib import Path
 
 from app.core.config import DATA_ROOT
 from app.schemas.topic_agent import (
+    TopicAgentEvidenceDiagnostics,
     TopicAgentExploreRequest,
     TopicAgentRefineRequest,
     TopicAgentSessionListResponse,
@@ -55,6 +56,36 @@ def _pipeline_provider(provider_name: str = DEFAULT_TOPIC_AGENT_PROVIDER_NAME) -
         raise ValueError(f"unknown_topic_agent_provider:{provider_name}") from exc
 
 
+def _backfill_session_payload(payload: dict) -> dict:
+    normalized = dict(payload)
+    evidence_records = normalized.get("evidence_records")
+    if not isinstance(evidence_records, list):
+        evidence_records = []
+        normalized["evidence_records"] = evidence_records
+
+    if "evidence_diagnostics" not in normalized or not isinstance(normalized.get("evidence_diagnostics"), dict):
+        normalized["evidence_diagnostics"] = TopicAgentEvidenceDiagnostics(
+            requested_provider="unknown",
+            used_provider="unknown",
+            fallback_used=False,
+            fallback_reason=None,
+            record_count=len(evidence_records),
+            cache_hit=False,
+        ).model_dump()
+
+    if "human_confirmations" not in normalized or not isinstance(normalized.get("human_confirmations"), list):
+        normalized["human_confirmations"] = []
+
+    return normalized
+
+
+def _load_validated_sessions() -> list[TopicAgentSessionResponse]:
+    return [
+        TopicAgentSessionResponse.model_validate(_backfill_session_payload(item))
+        for item in _load_sessions()
+    ]
+
+
 def create_topic_agent_session(request: TopicAgentExploreRequest) -> TopicAgentSessionResponse:
     normalized_request = _normalize_request(request)
     response = run_topic_agent_pipeline(
@@ -71,9 +102,7 @@ def list_topic_agent_sessions(limit: int = 20) -> TopicAgentSessionListResponse:
     if limit <= 0:
         raise ValueError("limit_must_be_positive")
 
-    sessions = [TopicAgentSessionResponse.model_validate(item) for item in reversed(_load_sessions())][
-        :limit
-    ]
+    sessions = list(reversed(_load_validated_sessions()))[:limit]
     return TopicAgentSessionListResponse(
         sessions=[
             TopicAgentSessionSummary(
@@ -95,9 +124,9 @@ def get_topic_agent_session(session_id: str) -> TopicAgentSessionResponse:
     if not normalized_session_id:
         raise ValueError("session_id_must_not_be_empty")
 
-    for item in reversed(_load_sessions()):
-        if item.get("session_id") == normalized_session_id:
-            return TopicAgentSessionResponse.model_validate(item)
+    for session in reversed(_load_validated_sessions()):
+        if session.session_id == normalized_session_id:
+            return session
     raise FileNotFoundError(session_id)
 
 

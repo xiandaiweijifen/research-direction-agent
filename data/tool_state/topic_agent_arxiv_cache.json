@@ -121,5 +121,87 @@
         "relevance_reason": "Retrieved from arXiv as a public academic source for the current topic query."
       }
     ]
+  },
+  "\"medical reasoning\" medical reasoning::max=3": {
+    "saved_at": "2026-03-26T22:42:32.368729+08:00",
+    "records": [
+      {
+        "source_id": "arxiv_3",
+        "title": "Scaling Medical Reasoning Verification via Tool-Integrated Reinforcement Learning",
+        "source_type": "benchmark",
+        "source_tier": "A",
+        "year": 2026,
+        "authors_or_publisher": "Hang Zhang, Ruheng Wang, Yuelyu Ji, Mingu Kwak",
+        "identifier": "https://arxiv.org/abs/2601.20221v1",
+        "url": "https://arxiv.org/abs/2601.20221v1",
+        "summary": "Large language models have achieved strong performance on medical reasoning benchmarks, yet their deployment in clinical settings demands rigorous verification to ensure factual accuracy. While reward models offer a scalable approach for reasoning trace verification, existing methods face two limitations: they produce only scalar reward values without explicit justification, and they rely on single-pass retrieval that precludes adaptive knowledge access as verification unfolds. We introduce $\\method$, an agentic framework that addresses these limitations by training medical reasoning verifiers to iteratively query external medical corpora during evaluation. Our approach combines tool-augmented verification with an iterative reinforcement learning paradigm that requires only trace-level supervision, alongside an adaptive curriculum mechanism that dynamically adjusts training data distribution. Across four medical reasoning benchmarks, $\\method$ achieves substantial gains over existing methods, improving MedQA accuracy by 23.5% and MedXpertQA by 32.0% relative to the base generator in particular. Crucially, $\\method$ demonstrates an $\\mathbf{8\\times}$ reduction in sampling budget requirement compared to prior reward model baselines. These findings establish that grounding verification in dynamically retrieved evidence offers a principled path toward more reliable medical reasoning systems.",
+        "relevance_reason": "Retrieved from arXiv as a public academic source for the current topic query."
+      },
+      {
+        "source_id": "arxiv_2",
+        "title": "MedReason: Eliciting Factual Medical Reasoning Steps in LLMs via Knowledge Graphs",
+        "source_type": "benchmark",
+        "source_tier": "A",
+        "year": 2025,
+        "authors_or_publisher": "Juncheng Wu, Wenlong Deng, Xingxuan Li, Sheng Liu",
+        "identifier": "https://arxiv.org/abs/2504.00993v2",
+        "url": "https://arxiv.org/abs/2504.00993v2",
+        "summary": "Medical tasks such as diagnosis and treatment planning require precise and complex reasoning, particularly in life-critical domains. Unlike mathematical reasoning, medical reasoning demands meticulous, verifiable thought processes to ensure reliability and accuracy. However, there is a notable lack of datasets that provide transparent, step-by-step reasoning to validate and enhance the medical reasoning ability of AI models. To bridge this gap, we introduce MedReason, a large-scale high-quality medical reasoning dataset designed to enable faithful and explainable medical problem-solving in large language models (LLMs). We utilize a structured medical knowledge graph (KG) to convert clinical QA pairs into logical chains of reasoning, or ``thinking paths'', which trace connections from question elements to answers via relevant KG entities. Each path is validated for consistency with clinical logic and evidence-based medicine. Our pipeline generates detailed reasoning for various medical questions from 7 medical datasets, resulting in a dataset of 32,682 question-answer pairs, each with detailed, step-by-step explanations. Experiments demonstrate that fine-tuning with our dataset consistently boosts medical problem-solving capabilities, achieving significant gains of up to 7.7% for DeepSeek-Ditill-8B. Our top-performing model, MedReason-8B, outperforms the Huatuo-o1-8B, a state-of-the-art medical reasoning model, by up to 4.2% on the clinical benchmark MedBullets. We also engage medical professionals from diverse specialties to assess our dataset's quality, ensuring MedReason offers accurate and coherent medical reasoning. Our data, models, and code is available at https://github.com/UCSC-VLAA/MedReason.",
+        "relevance_reason": "Retrieved from arXiv as a public academic source for the current topic query."
+      },
+      {
+        "source_id": "arxiv_1",
+        "title": "Navigating the State of Cognitive Flow: Context-Aware AI Interventions for Effective Reasoning Support",
+        "source_type": "paper",
+        "source_tier": "B",
+        "year": 2025,
+        "authors_or_publisher": "Dinithi Dissanayake, Suranga Nanayakkara",
+        "identifier": "https://arxiv.org/abs/2504.16021v1",
+        "url": "https://arxiv.org/abs/2504.16021v1",
+        "summary": "Flow theory describes an optimal cognitive state where individuals experience deep focus and intrinsic motivation when a task's difficulty aligns with their skill level. In AI-augmented reasoning, interventions that disrupt the state of cognitive flow can hinder rather than enhance decision-making. This paper proposes a context-aware cognitive augmentation framework that adapts interventions based on three key contextual factors: type, timing, and scale. By leveraging multimodal behavioral cues (e.g., gaze behavior, typing hesitation, interaction speed), AI can dynamically adjust cognitive support to maintain or restore flow. We introduce the concept of cognitive flow, an extension of flow theory in AI-augmented reasoning, where interventions are personalized, adaptive, and minimally intrusive. By shifting from static interventions to context-aware augmentation, our approach ensures that AI systems support deep engagement in complex decision-making and reasoning without disrupting cognitive immersion.",
+        "relevance_reason": "Retrieved from arXiv as a public academic source for the current topic query."
+      }
+    ]
+  },
+  "\"medical reasoning\" medical reasoning applied::max=3": {
+    "saved_at": "2026-03-26T22:44:02.189480+08:00",
+    "records": [
+      {
+        "source_id": "arxiv_3",
+        "title": "Scaling Medical Reasoning Verification via Tool-Integrated Reinforcement Learning",
+        "source_type": "benchmark",
+        "source_tier": "A",
+        "year": 2026,
+        "authors_or_publisher": "Hang Zhang, Ruheng Wang, Yuelyu Ji, Mingu Kwak",
+        "identifier": "https://arxiv.org/abs/2601.20221v1",
+        "url": "https://arxiv.org/abs/2601.20221v1",
+        "summary": "Large language models have achieved strong performance on medical reasoning benchmarks, yet their deployment in clinical settings demands rigorous verification to ensure factual accuracy. While reward models offer a scalable approach for reasoning trace verification, existing methods face two limitations: they produce only scalar reward values without explicit justification, and they rely on single-pass retrieval that precludes adaptive knowledge access as verification unfolds. We introduce $\\method$, an agentic framework that addresses these limitations by training medical reasoning verifiers to iteratively query external medical corpora during evaluation. Our approach combines tool-augmented verification with an iterative reinforcement learning paradigm that requires only trace-level supervision, alongside an adaptive curriculum mechanism that dynamically adjusts training data distribution. Across four medical reasoning benchmarks, $\\method$ achieves substantial gains over existing methods, improving MedQA accuracy by 23.5% and MedXpertQA by 32.0% relative to the base generator in particular. Crucially, $\\method$ demonstrates an $\\mathbf{8\\times}$ reduction in sampling budget requirement compared to prior reward model baselines. These findings establish that grounding verification in dynamically retrieved evidence offers a principled path toward more reliable medical reasoning systems.",
+        "relevance_reason": "Retrieved from arXiv as a public academic source for the current topic query."
+      },
+      {
+        "source_id": "arxiv_2",
+        "title": "MedReason: Eliciting Factual Medical Reasoning Steps in LLMs via Knowledge Graphs",
+        "source_type": "benchmark",
+        "source_tier": "A",
+        "year": 2025,
+        "authors_or_publisher": "Juncheng Wu, Wenlong Deng, Xingxuan Li, Sheng Liu",
+        "identifier": "https://arxiv.org/abs/2504.00993v2",
+        "url": "https://arxiv.org/abs/2504.00993v2",
+        "summary": "Medical tasks such as diagnosis and treatment planning require precise and complex reasoning, particularly in life-critical domains. Unlike mathematical reasoning, medical reasoning demands meticulous, verifiable thought processes to ensure reliability and accuracy. However, there is a notable lack of datasets that provide transparent, step-by-step reasoning to validate and enhance the medical reasoning ability of AI models. To bridge this gap, we introduce MedReason, a large-scale high-quality medical reasoning dataset designed to enable faithful and explainable medical problem-solving in large language models (LLMs). We utilize a structured medical knowledge graph (KG) to convert clinical QA pairs into logical chains of reasoning, or ``thinking paths'', which trace connections from question elements to answers via relevant KG entities. Each path is validated for consistency with clinical logic and evidence-based medicine. Our pipeline generates detailed reasoning for various medical questions from 7 medical datasets, resulting in a dataset of 32,682 question-answer pairs, each with detailed, step-by-step explanations. Experiments demonstrate that fine-tuning with our dataset consistently boosts medical problem-solving capabilities, achieving significant gains of up to 7.7% for DeepSeek-Ditill-8B. Our top-performing model, MedReason-8B, outperforms the Huatuo-o1-8B, a state-of-the-art medical reasoning model, by up to 4.2% on the clinical benchmark MedBullets. We also engage medical professionals from diverse specialties to assess our dataset's quality, ensuring MedReason offers accurate and coherent medical reasoning. Our data, models, and code is available at https://github.com/UCSC-VLAA/MedReason.",
+        "relevance_reason": "Retrieved from arXiv as a public academic source for the current topic query."
+      },
+      {
+        "source_id": "arxiv_1",
+        "title": "Navigating the State of Cognitive Flow: Context-Aware AI Interventions for Effective Reasoning Support",
+        "source_type": "paper",
+        "source_tier": "B",
+        "year": 2025,
+        "authors_or_publisher": "Dinithi Dissanayake, Suranga Nanayakkara",
+        "identifier": "https://arxiv.org/abs/2504.16021v1",
+        "url": "https://arxiv.org/abs/2504.16021v1",
+        "summary": "Flow theory describes an optimal cognitive state where individuals experience deep focus and intrinsic motivation when a task's difficulty aligns with their skill level. In AI-augmented reasoning, interventions that disrupt the state of cognitive flow can hinder rather than enhance decision-making. This paper proposes a context-aware cognitive augmentation framework that adapts interventions based on three key contextual factors: type, timing, and scale. By leveraging multimodal behavioral cues (e.g., gaze behavior, typing hesitation, interaction speed), AI can dynamically adjust cognitive support to maintain or restore flow. We introduce the concept of cognitive flow, an extension of flow theory in AI-augmented reasoning, where interventions are personalized, adaptive, and minimally intrusive. By shifting from static interventions to context-aware augmentation, our approach ensures that AI systems support deep engagement in complex decision-making and reasoning without disrupting cognitive immersion.",
+        "relevance_reason": "Retrieved from arXiv as a public academic source for the current topic query."
+      }
+    ]
   }
 }
