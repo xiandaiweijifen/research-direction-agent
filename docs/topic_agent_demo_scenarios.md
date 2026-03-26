@@ -429,6 +429,50 @@ This checks whether the system surfaces missing information clearly enough for a
 - `clarification_suggestions` becomes `[]`
 - `human_confirmations` shrinks to final recommendation checks instead of missing-input prompts
 
+### Scenario 5: Non-Medical Bug-Fixing Agent Topic
+
+#### Request
+
+```json
+{
+  "interest": "llm agents for automated bug fixing",
+  "problem_domain": "software engineering",
+  "seed_idea": "I want a feasible applied topic on reproducible evaluation for low-cost bug-fixing agents.",
+  "constraints": {
+    "time_budget_months": 6,
+    "resource_level": "student",
+    "preferred_style": "applied"
+  }
+}
+```
+
+#### Why This Scenario Matters
+
+This is the main non-medical generalization check for the current demo slice.
+
+It checks whether the system can:
+
+- stay on software-engineering evidence instead of drifting into generic `agent`, `repair`, or `maintenance` neighbors
+- produce usable bug-fixing candidates without image- or radiology-specific wording leaks
+- keep the systems candidate focused on reproducible bug-fixing evaluation rather than generic software-engineering wording
+
+#### What To Check
+
+- `evidence_records`
+  - should prefer bug-fixing, program-repair, or software-agent evidence
+  - should not drift into classroom, logistics, spacecraft, or generic maintenance literature
+- `candidate_topics[2].research_question`
+  - should mention reproducible bug-fixing agent evaluation
+  - should not fall back to generic `software engineering`
+- `candidate_topics[*].supporting_source_ids`
+  - should reflect at least some role separation between evaluation, method, and systems support
+
+#### Expected Outcome Shape
+
+- candidate 1 reads like an evaluation-narrowing direction
+- candidate 2 reads like an applied method-transfer direction
+- candidate 3 reads like workflow or reproducibility support for bug-fixing agent evaluation
+
 ### Quick Acceptance Checklist
 
 The current Topic Agent slice is behaving as intended if the reviewer can verify all of the following:
@@ -439,3 +483,4 @@ The current Topic Agent slice is behaving as intended if the reviewer can verify
 - missing constraints trigger clarification suggestions
 - completed constraints remove clarification suggestions
 - candidate directions remain source-linked and comparable
+- at least one non-medical software-agent topic also produces a credible, inspectable result

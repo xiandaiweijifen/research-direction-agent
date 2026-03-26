@@ -361,6 +361,8 @@ Rough breakdown:
   - [topic_agent_demo_scenarios.md](/d:/project/research-topic-copilot/docs/topic_agent_demo_scenarios.md)
 - Reviewer-facing acceptance narration is now documented in:
   - [topic_agent_acceptance_walkthrough.md](/d:/project/research-topic-copilot/docs/topic_agent_acceptance_walkthrough.md)
+- Demo-completion execution guidance is now documented in:
+  - [topic_agent_demo_completion_plan.md](/d:/project/research-topic-copilot/docs/topic_agent_demo_completion_plan.md)
 - The current demo coverage includes:
   - broad `medical reasoning`
   - radiology VQA

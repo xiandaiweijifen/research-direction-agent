@@ -197,6 +197,14 @@ The acceptance focus is:
 
 For the current design-and-MVP scope, the original requirement is approximately `85% to 90%` covered.
 
+### Current Execution Mode
+
+The project has now reached a practical handoff point:
+
+- the backend Topic Agent slice is good enough for demo use
+- backend quality iteration is intentionally paused unless a demo-blocking issue appears
+- the next implementation focus is frontend demo completion rather than another backend retrieval or synthesis pass
+
 #### Already Covered Well
 
 - target users and core tasks are clearly defined
@@ -279,3 +287,5 @@ If the current Topic Agent slice is judged against the original requirement, the
 - the system already demonstrates scope-control and engineering decomposition
 - the backend minimum viable closed loop is already largely in place
 - the remaining work is mainly around explicit human confirmation, conflict handling, and product-layer acceptance polish rather than basic retrieval workflow viability
+
+For the current project phase, that means the most important next milestone is not stronger backend breadth. It is a tighter user-facing demo that makes the existing workflow legible and convincing.

@@ -390,6 +390,38 @@ The important point is that the system does not silently continue as if missing 
 
 This walkthrough is successful if the reviewer can see a real clarification loop rather than a one-shot answer generator.
 
+### Walkthrough E: Non-Medical Bug-Fixing Topic
+
+#### Input
+
+```json
+{
+  "interest": "llm agents for automated bug fixing",
+  "problem_domain": "software engineering",
+  "seed_idea": "I want a feasible applied topic on reproducible evaluation for low-cost bug-fixing agents.",
+  "constraints": {
+    "time_budget_months": 6,
+    "resource_level": "student",
+    "preferred_style": "applied"
+  }
+}
+```
+
+#### What To Highlight
+
+- evidence should stay inside software-engineering / bug-fixing territory rather than generic `agent` or `maintenance` neighbors
+- the recommendation surface should still look structurally the same as the medical demo cases
+- candidate 3 should clearly read as reproducible bug-fixing agent evaluation support rather than broad software-engineering workflow support
+- this walkthrough is useful because it shows that the current backend slice is not only a medical-topic demo
+
+#### Acceptance Signal
+
+This walkthrough is successful if the reviewer can see:
+
+- a usable non-medical evidence bundle
+- a recommendation that still respects student-scale applied constraints
+- visible trust and supporting evidence on a modern software-agent topic
+
 ### What Reviewers Should Be Told Explicitly
 
 #### What Is Already Strong
@@ -399,6 +431,7 @@ This walkthrough is successful if the reviewer can see a real clarification loop
 - evidence-linked candidates
 - stable query-specific behavior on key demo classes
 - explicit confidence and diagnostics surfaces
+- at least one non-medical software-agent path is now demo-usable
 
 #### What Is Still Partial
 
@@ -423,3 +456,4 @@ Use these documents alongside the walkthrough:
 3. [topic_agent_acceptance.md](/d:/project/research-topic-copilot/docs/topic_agent_acceptance.md)
 4. [topic_agent_demo_scenarios.md](/d:/project/research-topic-copilot/docs/topic_agent_demo_scenarios.md)
 5. [topic_agent_progress.md](/d:/project/research-topic-copilot/docs/topic_agent_progress.md)
+6. [topic_agent_demo_completion_plan.md](/d:/project/research-topic-copilot/docs/topic_agent_demo_completion_plan.md)
