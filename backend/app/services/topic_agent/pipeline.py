@@ -911,6 +911,39 @@ def _candidate_by_id(
     return None
 
 
+def _record_keyword_overlap(
+    record: TopicAgentSourceRecord,
+    statement: str,
+) -> int:
+    statement_tokens = set(_tokenize_text(statement))
+    if not statement_tokens:
+        return 0
+    record_tokens = set(_tokenize_text(f"{record.title} {record.summary}"))
+    return len(statement_tokens.intersection(record_tokens))
+
+
+def _rank_supporting_source_ids_for_statement(
+    statement: str,
+    evidence_records: list[TopicAgentSourceRecord],
+    *,
+    fallback_ids: list[str],
+    limit: int = 3,
+) -> list[str]:
+    ranked: list[tuple[int, int, str]] = []
+    for index, record in enumerate(evidence_records):
+        overlap = _record_keyword_overlap(record, statement)
+        if overlap <= 0:
+            continue
+        tier_bonus = 1 if record.source_tier == "A" else 0
+        ranked.append((overlap, tier_bonus, record.source_id))
+
+    ranked.sort(reverse=True)
+    selected = [source_id for _overlap, _tier_bonus, source_id in ranked[:limit]]
+    if selected:
+        return selected
+    return fallback_ids[:limit]
+
+
 def build_evidence_presentation(context: TopicAgentPipelineContext) -> TopicAgentEvidencePresentation:
     evidence_records = context.evidence_records or []
     candidate_topics = context.candidate_topics or []
@@ -936,19 +969,27 @@ def build_evidence_presentation(context: TopicAgentPipelineContext) -> TopicAgen
     ]
     system_synthesis: list[TopicAgentEvidenceStatement] = []
     if landscape_summary and landscape_summary.themes:
+        theme_statement = (
+            "Current evidence clusters most strongly around "
+            + ", ".join(landscape_summary.themes[:2])
+            + "."
+        )
         system_synthesis.append(
             TopicAgentEvidenceStatement(
-                statement=(
-                    "Current evidence clusters most strongly around "
-                    + ", ".join(landscape_summary.themes[:2])
-                    + "."
-                ),
+                statement=theme_statement,
                 statement_type="system_synthesis",
-                supporting_source_ids=synthesis_support_ids,
-                note="Agent synthesis over multiple retrieved sources.",
+                supporting_source_ids=_rank_supporting_source_ids_for_statement(
+                    theme_statement,
+                    evidence_records,
+                    fallback_ids=synthesis_support_ids,
+                ),
+                note="Agent synthesis over multiple retrieved sources with theme-level evidence matching.",
             )
         )
     if candidate_topics:
+        candidate_support_ids = _merge_supporting_source_ids(
+            *[candidate.supporting_source_ids for candidate in candidate_topics]
+        )
         system_synthesis.append(
             TopicAgentEvidenceStatement(
                 statement=(
@@ -956,8 +997,8 @@ def build_evidence_presentation(context: TopicAgentPipelineContext) -> TopicAgen
                     "with distinct positioning and comparison scores."
                 ),
                 statement_type="system_synthesis",
-                supporting_source_ids=synthesis_support_ids,
-                note="Agent synthesis over candidate generation and comparison outputs.",
+                supporting_source_ids=(candidate_support_ids or synthesis_support_ids)[:4],
+                note="Agent synthesis over candidate generation and comparison outputs, anchored to candidate support sets.",
             )
         )
 
@@ -980,6 +1021,11 @@ def build_evidence_presentation(context: TopicAgentPipelineContext) -> TopicAgen
                     else synthesis_support_ids
                 ),
                 note="Recommendation-level inference that still requires human validation.",
+                uncertainty_reason=(
+                    "This recommendation remains constraint-sensitive and depends on the current evidence bundle, "
+                    "not on a settled benchmark choice or direct experimental validation."
+                ),
+                missing_evidence=convergence_result.manual_checks[:2],
             )
         )
         if convergence_result.manual_checks:
@@ -988,13 +1034,17 @@ def build_evidence_presentation(context: TopicAgentPipelineContext) -> TopicAgen
                     statement=convergence_result.manual_checks[0],
                     statement_type="tentative_inference",
                     supporting_source_ids=(
-                        recommended_candidate.supporting_source_ids
-                        if recommended_candidate
-                        else synthesis_support_ids
-                    ),
-                    note="Open validation requirement rather than a settled fact.",
-                )
+                    recommended_candidate.supporting_source_ids
+                    if recommended_candidate
+                    else synthesis_support_ids
+                ),
+                note="Open validation requirement rather than a settled fact.",
+                uncertainty_reason=(
+                    "The recommendation should not be treated as final until this validation step is checked."
+                ),
+                missing_evidence=[convergence_result.manual_checks[0]],
             )
+        )
 
     result = TopicAgentEvidencePresentation(
         source_facts=source_facts,

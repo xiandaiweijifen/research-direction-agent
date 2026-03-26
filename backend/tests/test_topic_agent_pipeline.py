@@ -811,3 +811,76 @@ def test_topic_agent_pipeline_builds_evidence_presentation_layers():
     assert response.evidence_presentation.tentative_inferences[0].statement_type == "tentative_inference"
     assert response.evidence_presentation.source_facts[0].supporting_source_ids == ["openalex_a"]
     assert "human validation" in response.evidence_presentation.tentative_inferences[0].note.lower()
+    assert "constraint-sensitive" in response.evidence_presentation.tentative_inferences[0].uncertainty_reason.lower()
+    assert response.evidence_presentation.tentative_inferences[0].missing_evidence
+
+
+def test_topic_agent_pipeline_matches_system_synthesis_sources_to_statement_content():
+    class EvidenceProvider:
+        provider_name = "static"
+
+        def retrieve(self, request: TopicAgentExploreRequest):
+            records = [
+                TopicAgentSourceRecord(
+                    source_id="openalex_a",
+                    title="MedXpertQA: Benchmarking Expert-Level Medical Reasoning and Understanding",
+                    source_type="benchmark",
+                    source_tier="A",
+                    year=2025,
+                    authors_or_publisher="Author A",
+                    identifier="https://example.org/a",
+                    url="https://example.org/a",
+                    summary="Benchmark for expert-level medical reasoning and trustworthy evaluation.",
+                    relevance_reason="Test record",
+                ),
+                TopicAgentSourceRecord(
+                    source_id="openalex_b",
+                    title="Large Language Models lack essential metacognition for reliable medical reasoning",
+                    source_type="benchmark",
+                    source_tier="A",
+                    year=2025,
+                    authors_or_publisher="Author B",
+                    identifier="https://example.org/b",
+                    url="https://example.org/b",
+                    summary="Reliable medical reasoning benchmark with metacognition checks and failure analysis.",
+                    relevance_reason="Test record",
+                ),
+                TopicAgentSourceRecord(
+                    source_id="openalex_c",
+                    title="Clinical workflow support for reproducible annotation",
+                    source_type="paper",
+                    source_tier="B",
+                    year=2024,
+                    authors_or_publisher="Author C",
+                    identifier="https://example.org/c",
+                    url="https://example.org/c",
+                    summary="Workflow tooling for annotation efficiency.",
+                    relevance_reason="Test record",
+                ),
+            ]
+            return TopicAgentEvidenceRetrievalResult(
+                records=records,
+                diagnostics=TopicAgentEvidenceDiagnostics(
+                    requested_provider="static",
+                    used_provider="static",
+                    fallback_used=False,
+                    fallback_reason=None,
+                    record_count=3,
+                ),
+            )
+
+    request = TopicAgentExploreRequest(
+        interest="medical reasoning",
+        constraints=TopicAgentConstraintSet(
+            time_budget_months=6,
+            resource_level="student",
+            preferred_style="applied",
+        ),
+    )
+
+    response = run_topic_agent_pipeline(request, provider=EvidenceProvider())
+
+    theme_statement = response.evidence_presentation.system_synthesis[0]
+    assert "theme-level evidence matching" in theme_statement.note.lower()
+    assert "openalex_a" in theme_statement.supporting_source_ids
+    assert "openalex_b" in theme_statement.supporting_source_ids

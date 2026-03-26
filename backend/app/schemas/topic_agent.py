@@ -111,6 +111,8 @@ class TopicAgentEvidenceStatement(BaseModel):
     statement_type: str
     supporting_source_ids: list[str] = Field(default_factory=list)
     note: str | None = None
+    uncertainty_reason: str | None = None
+    missing_evidence: list[str] = Field(default_factory=list)
 
 
 class TopicAgentEvidencePresentation(BaseModel):

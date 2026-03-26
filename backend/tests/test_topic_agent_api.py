@@ -44,6 +44,11 @@ def test_topic_agent_explore_creates_session_with_mock_outputs(workspace_tmp_pat
     assert payload["evidence_presentation"]["source_facts"]
     assert payload["evidence_presentation"]["system_synthesis"]
     assert payload["evidence_presentation"]["tentative_inferences"]
+    assert payload["evidence_presentation"]["tentative_inferences"][0]["uncertainty_reason"]
+    assert isinstance(
+        payload["evidence_presentation"]["tentative_inferences"][0]["missing_evidence"],
+        list,
+    )
     assert payload["human_confirmations"]
     assert isinstance(payload["clarification_suggestions"], list)
     assert [event["stage"] for event in payload["trace"]] == [
