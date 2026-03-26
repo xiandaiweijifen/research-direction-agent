@@ -6,15 +6,13 @@ Topic Agent demo video location:
 
 - Local demo folder: [docs/demo](d:/project/research-topic-copilot/docs/demo)
 - Recommended video file: [docs/demo/topic-agent-demo.mp4](d:/project/research-topic-copilot/docs/demo/topic-agent-demo.mp4)
+- Demo cover image: [docs/demo/topic-agent-demo-cover.png](d:/project/research-topic-copilot/docs/demo/topic-agent-demo-cover.png)
 
 If the video is hosted externally later, replace the local file reference above with the final public link.
 
-### Embedded Preview
+Click the cover image below to open the demo video:
 
-<video controls width="960" preload="metadata">
-  <source src="./docs/demo/topic-agent-demo.mp4" type="video/mp4" />
-  Your Markdown viewer does not support embedded video playback.
-</video>
+[![Topic Agent Demo Cover](./docs/demo/topic-agent-demo-cover.png)](./docs/demo/topic-agent-demo.mp4)
 
 Direct video link:
 
