@@ -18,6 +18,7 @@ from app.services.topic_agent.providers import (
     _filter_ranked_records,
     _http_get_with_retries,
     _infer_evidence_roles,
+    _openalex_raw_pool_size,
     _parse_openalex_response,
     _parse_arxiv_response,
     _rank_records,
@@ -607,6 +608,11 @@ def test_openalex_queries_add_general_research_role_expansions_for_modern_topics
     assert "coding agents for software engineering developer workflows practical baseline adaptation" in joined_queries
 
 
+def test_openalex_raw_pool_size_fetches_more_than_final_max_results():
+    assert _openalex_raw_pool_size(5) == 20
+    assert _openalex_raw_pool_size(3) == 15
+
+
 def test_openalex_provider_ignores_legacy_unversioned_cache_key(workspace_tmp_path, monkeypatch):
     request = TopicAgentExploreRequest(
         interest="trustworthy multimodal reasoning in medical imaging",
@@ -768,6 +774,38 @@ def test_openalex_provider_merges_multi_query_results_and_dedupes(workspace_tmp_
     assert call_count["value"] >= 2
     assert len(result.records) == 2
     assert {record.source_id for record in result.records} == {"openalex_w123", "openalex_w456"}
+
+
+def test_openalex_provider_fetches_larger_raw_pool_than_final_result_limit(workspace_tmp_path, monkeypatch):
+    request = TopicAgentExploreRequest(
+        interest="coding agents for software engineering",
+        problem_domain="developer workflows",
+        constraints=TopicAgentConstraintSet(preferred_style="applied"),
+    )
+    cache_path = workspace_tmp_path / "topic_agent_openalex_cache.json"
+    provider = OpenAlexEvidenceProvider(cache_path=cache_path, cache_ttl_seconds=3600, max_results=5)
+    observed_per_page: list[int] = []
+
+    class FakeResponse:
+        def __init__(self, payload):
+            self._payload = payload
+
+        def json(self):
+            return self._payload
+
+        def raise_for_status(self):
+            return None
+
+    def fake_http_get(*args, **kwargs):
+        observed_per_page.append(kwargs["params"]["per-page"])
+        return FakeResponse({"results": []})
+
+    monkeypatch.setattr("app.services.topic_agent.providers.httpx.get", fake_http_get)
+
+    provider.retrieve(request)
+
+    assert observed_per_page
+    assert all(value > provider.max_results for value in observed_per_page)
 
 
 def test_openalex_provider_collapses_near_duplicate_title_versions(workspace_tmp_path, monkeypatch):

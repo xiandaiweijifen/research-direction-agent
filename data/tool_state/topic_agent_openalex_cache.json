@@ -964,5 +964,111 @@
         "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
       }
     ]
+  },
+  "v4::software engineering coding agents developer tooling applied||software engineering coding developer tooling||software engineering coding agents developer tooling benchmark evaluation||software engineering coding agents developer tooling method framework||software engineering coding agents developer tooling workflow reproducibility||software engineering coding agents developer tooling reliability failure analysis||software engineering coding agents developer tooling practical baseline adaptation||software engineering coding agents developer tooling benchmark software engineering evaluation||software engineering coding agents developer tooling developer workflow audit::max=5": {
+    "saved_at": "2026-03-27T04:20:29.513524+08:00",
+    "records": [
+      {
+        "source_id": "openalex_w4403885061",
+        "title": "OpenHands: An Open Platform for AI Software Developers as Generalist Agents",
+        "source_type": "benchmark",
+        "source_tier": "A",
+        "year": 2024,
+        "authors_or_publisher": "Xingyao Wang, Boxuan Li, Yufan Song, Frank F. Xu",
+        "identifier": "https://openalex.org/W4403885061",
+        "url": "https://arxiv.org/abs/2407.16741",
+        "summary": "Software is one of the most powerful tools that we humans have at our disposal; it allows a skilled programmer to interact with the world in complex and profound ways. At the same time, thanks to improvements in large language models (LLMs), there has also been a rapid development in AI agents that interact with and affect change in their surrounding environments. In this paper, we introduce OpenHands (f.k.a. OpenDevin), a platform for the development of powerful and flexible AI agents that interact with the world in similar ways to those of a human developer: by writing code, interacting with a command line, and browsing the web. We describe how the platform allows for the implementation of new agents, safe interaction with sandboxed environments for code execution, coordination between multiple agents, and incorporation of evaluation benchmarks. Based on our currently incorporated benchmarks, we perform an evaluation of agents over 15 challenging tasks, including software engineering (e.g., SWE-BENCH) and web browsing (e.g., WEBARENA), among others. Released under the permissive MIT license, OpenHands is a community project spanning academia and industry with more than 2.1K contributions from over 188 contributors.",
+        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
+      },
+      {
+        "source_id": "openalex_w4407719442",
+        "title": "LLM Agents Making Agent Tools",
+        "source_type": "benchmark",
+        "source_tier": "A",
+        "year": 2025,
+        "authors_or_publisher": "Georg Wölflein, Dyke Ferber, Daniel Truhn, Ognjen Arandjelović",
+        "identifier": "https://openalex.org/W4407719442",
+        "url": "https://arxiv.org/abs/2502.11705",
+        "summary": "Tool use has turned large language models (LLMs) into powerful agents that can perform complex multi-step tasks by dynamically utilising external software components. However, these tools must be implemented in advance by human developers, hindering the applicability of LLM agents in domains demanding large numbers of highly specialised tools, like in life sciences and medicine. Motivated by the growing trend of scientific studies accompanied by public code repositories, we propose ToolMaker, an agentic framework that autonomously transforms papers with code into LLM-compatible tools. Given a GitHub URL and short task description, ToolMaker autonomously installs dependencies and generates code to perform the task, using a closed-loop self-correction mechanism for debugging. To evaluate our approach, we introduce a benchmark comprising 15 complex computational tasks spanning various domains with over 100 unit tests to assess correctness and robustness. Our method correctly implements 80% of the tasks, substantially outperforming current state-of-the-art software engineering agents. ToolMaker therefore is a step towards fully autonomous agent-based scientific workflows. Our code and benchmark are publicly available at https://github.com/KatherLab/ToolMaker.",
+        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
+      },
+      {
+        "source_id": "openalex_w4411915058",
+        "title": "Explainable AI In Software Engineering: Enhancing Developer-AI Collaboration",
+        "source_type": "paper",
+        "source_tier": "B",
+        "year": 2024,
+        "authors_or_publisher": "Jami J. Shah, Jyoti Kunal Shah",
+        "identifier": "https://openalex.org/W4411915058",
+        "url": "https://doi.org/10.37547/tajet/volume06issue07-11",
+        "summary": "Artificial Intelligence (AI) tools are increasingly integrated into software engineering tasks such as code generation, defect prediction, and project planning. However, widespread adoption is hindered by developers’ skepticism toward opaque AI models that lack transparency. This paper explores the integration of Explainable AI (XAI) into software engineering to foster a “developer-in-the-loop” paradigm that enhances trust, understanding, and collaboration between developers and AI agents. We review existing research on XAI techniques applied to feature planning, debugging, and refactoring, and identify the challenges of embedding XAI in real-world development workflows. A modular framework and system architecture are proposed to integrate explanation engines with AI models, IDEs, dashboards, and CI tools. A case study on explainable code review demonstrates how transparent AI suggestions can improve developer trust and team learning. We conclude by highlighting future directions, including personalization of explanations, cross-SDLC integration, and human-AI dialogue mechanisms, positioning XAI as essential to the next generation of intelligent development environments.",
+        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
+      },
+      {
+        "source_id": "openalex_w2982485630",
+        "title": "An Empirical Study on Culture, Automation, Measurement, and Sharing of DevSecOps",
+        "source_type": "paper",
+        "source_tier": "B",
+        "year": 2019,
+        "authors_or_publisher": "Nora Tomas, Jingyue Li, Huang Huang",
+        "identifier": "https://openalex.org/W2982485630",
+        "url": "https://doi.org/10.1109/cybersecpods.2019.8884935",
+        "summary": "Programmers are central agents in creating secure applications. However, software engineering and software security have historically worked in separate silos. DevSecOps is the practice of breaking down silos between development, operations, and quality assurance of security. To understand the state of art and challenges of DevSecOps, we interviewed six developers about their DevSecOps practices. We asked interview subjects about their security practices rooted in the four pillars of DevOps, namely culture, automation, sharing, and measurement. Results were analyzed by using qualitative methods. The results of the study show that it is necessary first to create a security culture. Several interviewees identified the importance of caring about security and issues in existing culture, such as how developers feel attacked by security engineers if they create vulnerable code. After establishing a security culture in the organization, development and operations need the necessary training and knowledge so that security automation tools can be utilized effectively. Measurements need to be applied continuously to keep track of identified vulnerabilities, the amount of training staff has received, and staffs general opinions regarding security.",
+        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
+      }
+    ]
+  },
+  "v4::coding agents software engineering developer workflows applied||coding agents software developer workflows||llm coding agents for software engineering developer workflows benchmark evaluation||llm coding agents for software engineering developer workflows method framework||llm coding agents for software engineering developer workflows workflow reproducibility||llm coding agents for software engineering developer workflows reliability failure analysis||llm coding agents for software engineering developer workflows practical baseline adaptation||llm coding agents for software engineering developer workflows benchmark software engineering evaluation||llm coding agents for software engineering developer workflows developer workflow audit::max=5": {
+    "saved_at": "2026-03-27T04:21:13.570026+08:00",
+    "records": [
+      {
+        "source_id": "openalex_w4407719442",
+        "title": "LLM Agents Making Agent Tools",
+        "source_type": "benchmark",
+        "source_tier": "A",
+        "year": 2025,
+        "authors_or_publisher": "Georg Wölflein, Dyke Ferber, Daniel Truhn, Ognjen Arandjelović",
+        "identifier": "https://openalex.org/W4407719442",
+        "url": "https://arxiv.org/abs/2502.11705",
+        "summary": "Tool use has turned large language models (LLMs) into powerful agents that can perform complex multi-step tasks by dynamically utilising external software components. However, these tools must be implemented in advance by human developers, hindering the applicability of LLM agents in domains demanding large numbers of highly specialised tools, like in life sciences and medicine. Motivated by the growing trend of scientific studies accompanied by public code repositories, we propose ToolMaker, an agentic framework that autonomously transforms papers with code into LLM-compatible tools. Given a GitHub URL and short task description, ToolMaker autonomously installs dependencies and generates code to perform the task, using a closed-loop self-correction mechanism for debugging. To evaluate our approach, we introduce a benchmark comprising 15 complex computational tasks spanning various domains with over 100 unit tests to assess correctness and robustness. Our method correctly implements 80% of the tasks, substantially outperforming current state-of-the-art software engineering agents. ToolMaker therefore is a step towards fully autonomous agent-based scientific workflows. Our code and benchmark are publicly available at https://github.com/KatherLab/ToolMaker.",
+        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
+      },
+      {
+        "source_id": "openalex_w4411915058",
+        "title": "Explainable AI In Software Engineering: Enhancing Developer-AI Collaboration",
+        "source_type": "paper",
+        "source_tier": "B",
+        "year": 2024,
+        "authors_or_publisher": "Jami J. Shah, Jyoti Kunal Shah",
+        "identifier": "https://openalex.org/W4411915058",
+        "url": "https://doi.org/10.37547/tajet/volume06issue07-11",
+        "summary": "Artificial Intelligence (AI) tools are increasingly integrated into software engineering tasks such as code generation, defect prediction, and project planning. However, widespread adoption is hindered by developers’ skepticism toward opaque AI models that lack transparency. This paper explores the integration of Explainable AI (XAI) into software engineering to foster a “developer-in-the-loop” paradigm that enhances trust, understanding, and collaboration between developers and AI agents. We review existing research on XAI techniques applied to feature planning, debugging, and refactoring, and identify the challenges of embedding XAI in real-world development workflows. A modular framework and system architecture are proposed to integrate explanation engines with AI models, IDEs, dashboards, and CI tools. A case study on explainable code review demonstrates how transparent AI suggestions can improve developer trust and team learning. We conclude by highlighting future directions, including personalization of explanations, cross-SDLC integration, and human-AI dialogue mechanisms, positioning XAI as essential to the next generation of intelligent development environments.",
+        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
+      },
+      {
+        "source_id": "openalex_w4415769872",
+        "title": "Empowering smart app development with SolidGPT: an edgecloud hybrid AI agent framework",
+        "source_type": "paper",
+        "source_tier": "B",
+        "year": 2025,
+        "authors_or_publisher": "Liao Hu, Qilin Wu, Ruogu Qi",
+        "identifier": "https://openalex.org/W4415769872",
+        "url": "https://doi.org/10.54254/2977-3903/2025.25283",
+        "summary": "The integration of Large Language Models (LLMs) into mobile and software development workflows faces a persistent tension among three demands: semantic awareness, developer productivity, and data privacy. Traditional cloud-based tools offer strong reasoning but risk data exposure and latency, while on-device solutions lack full-context understanding across codebase and developer tooling.We introduce SolidGPT, an open-source, edgecloud hybrid developer assistant built on GitHub, designed to enhance code and workspace semantic search. SolidGPTenables developers to below;Talk to your codebase: interactively query code and project structure, discovering the right methods and modules without manual searching.Automate software project workflows: generate PRDs, task breakdowns, Kanban boards, and even scaffold web app beginnings, with deep integration via VSCodeand Notion.Configure private, extensible agents: onboard private code folders (up to ~500 files), connect Notion, customize AI agent personas via embedding and in-context training, and deploy via Docker, CLI, or VSCodeextension.In practice, SolidGPTempowers developer productivity through;Semantic-rich code navigation: no more hunting through filesor wondering where a feature lives.Integrated documentation and task management: seamlessly sync generated PRD content and task boards into developer workflows.Privacy-first design: running locally via Docker or VSCode, with full control over code and data, while optionally reaching out to LLM APIs as needed.By combining interactive code querying, automated project scaffolding, and human-AI collaboration, SolidGPT provides a practical, privacy-respecting edge assistant that accelerates real-world development workflowsideal for intelligent mobile and software engineering contexts.",
+        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
+      },
+      {
+        "source_id": "openalex_w4411552133",
+        "title": "SpecRover: Code Intent Extraction via LLMs",
+        "source_type": "paper",
+        "source_tier": "B",
+        "year": 2025,
+        "authors_or_publisher": "Haifeng Ruan, Yuntong Zhang, Abhik Roychoudhury",
+        "identifier": "https://openalex.org/W4411552133",
+        "url": "https://doi.org/10.1109/icse55347.2025.00080",
+        "summary": "Autonomous program improvement typically involves automatically producing bug fixes and feature additions. Such program improvement can be accomplished by a combination of large language model (LLM) and program analysis capabilities, in the form of an LLM agent. Since program repair or program improvement typically requires a specification of intended behavior - specification inference can be useful for producing high quality program patches. In this work, we examine efficient and low-cost workflows for iterative specification inference within an LLM agent. Given a GitHub issue to be resolved in a software project, our goal is to conduct iterative code search accompanied by specification inference - thereby inferring intent from both the project structure and behavior. The intent thus captured is examined by a reviewer agent with the goal of vetting the patches as well as providing a measure of confidence in the vetted patches. Our approach SpecRover is built on the open-source LLM agent AutoCodeRover. In an evaluation on the full SWE-Bench consisting of 2294 GitHub issues, it shows more than 50% improvement in efficacy over AutoCodeRover. Compared to the open-source agents available, our work shows modest cost ($0.65 per issue) in resolving an average GitHub issue in SWE-Bench lite. The production of explanation by SpecRover allows for a better “signal” to be given to the developer, on when the suggested patches can be accepted with confidence. SpecRover also seeks to demonstrate the continued importance of specification inference in automated program repair, even as program repair technologies enter the LLM era.",
+        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
+      }
+    ]
   }
 }

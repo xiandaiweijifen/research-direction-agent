@@ -159,6 +159,7 @@ class OpenAlexEvidenceProvider:
 
     def retrieve(self, request: TopicAgentExploreRequest) -> TopicAgentEvidenceRetrievalResult:
         query_texts = _build_openalex_queries(request)
+        raw_pool_size = _openalex_raw_pool_size(self.max_results)
         cache_key = _build_cache_key(
             "||".join(query_texts),
             self.max_results,
@@ -191,7 +192,7 @@ class OpenAlexEvidenceProvider:
                 params={
                     "search": query_text,
                     "filter": "has_abstract:true",
-                    "per-page": self.max_results,
+                    "per-page": raw_pool_size,
                 },
                 timeout_seconds=self.timeout_seconds,
                 max_retries=self.max_retries,
@@ -358,6 +359,10 @@ def _build_openalex_query(request: TopicAgentExploreRequest) -> str:
         if term not in ordered_terms:
             ordered_terms.append(term)
     return " ".join(ordered_terms[:8]) or request.interest.strip()
+
+
+def _openalex_raw_pool_size(max_results: int) -> int:
+    return max(15, min(max_results * 4, 20))
 
 
 def _general_query_role_expansions(request: TopicAgentExploreRequest) -> list[str]:

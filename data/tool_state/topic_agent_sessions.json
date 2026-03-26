@@ -26063,5 +26063,1042 @@
       "record_count": 2,
       "cache_hit": false
     }
+  },
+  {
+    "session_id": "99d3fdadc49c4fe6b0c7389dda257f81",
+    "created_at": "2026-03-26T20:17:30.984587+00:00",
+    "updated_at": "2026-03-26T20:17:30.984587+00:00",
+    "user_input": {
+      "interest": "coding agents for software engineering",
+      "problem_domain": "developer workflows",
+      "seed_idea": "I want a feasible applied topic about reliable evaluation for coding agents under limited resources.",
+      "constraints": {
+        "time_budget_months": 6,
+        "resource_level": "student",
+        "preferred_style": "applied",
+        "notes": null
+      }
+    },
+    "framing_result": {
+      "normalized_topic": "coding agents for software engineering",
+      "extracted_constraints": {
+        "time_budget_months": "6",
+        "resource_level": "student",
+        "preferred_style": "applied"
+      },
+      "missing_clarifications": [],
+      "search_questions": [
+        "What are the main research themes in coding agents for software engineering?",
+        "What methods and benchmarks are commonly used in coding agents for software engineering?",
+        "What open problems or underexplored gaps exist in coding agents for software engineering?"
+      ]
+    },
+    "evidence_records": [
+      {
+        "source_id": "openalex_w4411915058",
+        "title": "Explainable AI In Software Engineering: Enhancing Developer-AI Collaboration",
+        "source_type": "paper",
+        "source_tier": "B",
+        "year": 2024,
+        "authors_or_publisher": "Jami J. Shah, Jyoti Kunal Shah",
+        "identifier": "https://openalex.org/W4411915058",
+        "url": "https://doi.org/10.37547/tajet/volume06issue07-11",
+        "summary": "Artificial Intelligence (AI) tools are increasingly integrated into software engineering tasks such as code generation, defect prediction, and project planning. However, widespread adoption is hindered by developers’ skepticism toward opaque AI models that lack transparency. This paper explores the integration of Explainable AI (XAI) into software engineering to foster a “developer-in-the-loop” paradigm that enhances trust, understanding, and collaboration between developers and AI agents. We review existing research on XAI techniques applied to feature planning, debugging, and refactoring, and identify the challenges of embedding XAI in real-world development workflows. A modular framework and system architecture are proposed to integrate explanation engines with AI models, IDEs, dashboards, and CI tools. A case study on explainable code review demonstrates how transparent AI suggestions can improve developer trust and team learning. We conclude by highlighting future directions, including personalization of explanations, cross-SDLC integration, and human-AI dialogue mechanisms, positioning XAI as essential to the next generation of intelligent development environments.",
+        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
+      },
+      {
+        "source_id": "openalex_w4402442868",
+        "title": "AutoCodeRover: Autonomous Program Improvement",
+        "source_type": "paper",
+        "source_tier": "B",
+        "year": 2024,
+        "authors_or_publisher": "Yuntong Zhang, Haifeng Ruan, Zhiyu Fan, Abhik Roychoudhury",
+        "identifier": "https://openalex.org/W4402442868",
+        "url": "https://doi.org/10.1145/3650212.3680384",
+        "summary": "Researchers have made significant progress in automating the software development process in the past decades. Automated techniques for issue summarization, bug reproduction, fault localization, and program repair have been built to ease the workload of developers. Recent progress in Large Language Models (LLMs) has significantly impacted the development process, where developers can use LLM-based programming assistants to achieve automated coding. Nevertheless, software engineering involves the process of program improvement apart from coding, specifically to enable software maintenance (e.g. program repair to fix bugs) and software evolution (e.g. feature additions). In this paper, we propose an automated approach for solving Github issues to autonomously achieve program improvement. In our approach called AutoCodeRover, LLMs are combined with sophisticated code search capabilities, ultimately leading to a program modification or patch. In contrast to recent LLM agent approaches from AI researchers and practitioners, our outlook is more software engineering oriented. We work on a program representation (abstract syntax tree) as opposed to viewing a software project as a mere collection of files. Our code search exploits the program structure in the form of classes/methods to enhance LLM’s understanding of the issue’s root cause, and effectively retrieve a context via iterative search. The use of spectrum-based fault localization using tests, further sharpens the context, as long as a test-suite is available. Experiments on the recently proposed SWE-bench-lite (300 real-life Github issues) show increased efficacy in solving Github issues (19% on SWE-bench-lite), which is higher than the efficacy of the recently reported Swe-agent. Interestingly, our approach resolved 57 GitHub issues in about 4 minutes each (pass@1), whereas developers spent more than 2.68 days on average. In addition, AutoCodeRover achieved this efficacy with significantly lower cost (on average, $0.43 USD), compared to other baselines. We posit that our workflow enables autonomous software engineering, where, in future, auto-generated code from LLMs can be autonomously improved.",
+        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
+      }
+    ],
+    "landscape_summary": {
+      "themes": [
+        "agent-based decomposition strategies for coding agents for software engineering",
+        "software as an emerging theme in coding agents for software engineering",
+        "engineering as an emerging theme in coding agents for software engineering"
+      ],
+      "active_methods": [
+        "agent-mediated problem decomposition"
+      ],
+      "likely_gaps": [
+        "clear task scoping for narrow research questions",
+        "stronger evidence on feasibility under limited resources"
+      ],
+      "saturated_areas": [
+        "broad generic summaries without a sharply defined question"
+      ]
+    },
+    "candidate_topics": [
+      {
+        "candidate_id": "candidate_1",
+        "title": "Benchmark-Guided Narrow Task Definition",
+        "research_question": "How can a narrower benchmark task reveal actionable limitations in current methods?",
+        "positioning": "gap-driven",
+        "novelty_note": "Focuses on under-specified evaluation boundaries rather than generic performance claims.",
+        "feasibility_note": "Moderate feasibility with public resources and modest compute.",
+        "risk_note": "May become incremental if the task boundary is not sharply differentiated.",
+        "supporting_source_ids": [
+          "openalex_w4402442868",
+          "openalex_w4411915058"
+        ],
+        "open_questions": [
+          "Which benchmark subset best represents the intended problem?"
+        ]
+      },
+      {
+        "candidate_id": "candidate_2",
+        "title": "Applied Method Transfer Under Practical Constraints",
+        "research_question": "Can an existing method family associated with explainable software engineering be adapted effectively under strict practical constraints?",
+        "positioning": "applied-transfer",
+        "novelty_note": "Frames novelty through constrained adaptation of an existing method family.",
+        "feasibility_note": "Strong fit for an applied project that can reuse a visible baseline.",
+        "risk_note": "Novelty may depend heavily on the chosen constraint and evaluation design.",
+        "supporting_source_ids": [
+          "openalex_w4411915058",
+          "openalex_w4402442868"
+        ],
+        "open_questions": [
+          "Which constraint creates the strongest research signal?"
+        ]
+      },
+      {
+        "candidate_id": "candidate_3",
+        "title": "Tooling And Evaluation Workflow Support",
+        "research_question": "What tooling or workflow support around autocoderover autonomous program would make research in this area more reproducible?",
+        "positioning": "systems",
+        "novelty_note": "Shifts value from model novelty toward reproducibility, workflow support, and evaluation reliability.",
+        "feasibility_note": "High feasibility for a short-cycle engineering-heavy project.",
+        "risk_note": "Applied impact may be clearer than publication novelty unless the workflow pain point is precisely chosen.",
+        "supporting_source_ids": [
+          "openalex_w4402442868",
+          "openalex_w4411915058"
+        ],
+        "open_questions": [
+          "What concrete reproducibility pain point should be prioritized first?",
+          "Which workflow improvement around autocoderover autonomous program reduces setup or audit cost the most?",
+          "Which workflow improvement reduces compute or setup cost the most?"
+        ]
+      }
+    ],
+    "comparison_result": {
+      "dimensions": [
+        "novelty",
+        "feasibility",
+        "evidence_strength",
+        "data_availability",
+        "implementation_cost",
+        "risk"
+      ],
+      "summary": "Candidate 2 is strongest for applied feasibility under the current constraints, candidate 1 remains strongest on research framing, and candidate 3 remains the fastest engineering path.",
+      "candidate_assessments": [
+        {
+          "candidate_id": "candidate_1",
+          "novelty": "high",
+          "feasibility": "medium",
+          "evidence_strength": "medium_high",
+          "data_availability": "medium",
+          "implementation_cost": "medium",
+          "risk": "medium"
+        },
+        {
+          "candidate_id": "candidate_2",
+          "novelty": "medium_high",
+          "feasibility": "high",
+          "evidence_strength": "medium_high",
+          "data_availability": "medium_high",
+          "implementation_cost": "medium_low",
+          "risk": "medium_low"
+        },
+        {
+          "candidate_id": "candidate_3",
+          "novelty": "medium",
+          "feasibility": "high",
+          "evidence_strength": "medium",
+          "data_availability": "high",
+          "implementation_cost": "low",
+          "risk": "medium_high"
+        }
+      ]
+    },
+    "convergence_result": {
+      "recommended_candidate_id": "candidate_2",
+      "backup_candidate_id": "candidate_1",
+      "rationale": "Candidate 2 is the best fit for the current constraints because it starts from reusable baselines, matches an applied project style, and is easier to execute within a tighter timeline.",
+      "manual_checks": [
+        "Confirm that the selected sub-problem is narrow enough for the available timeline.",
+        "Verify that at least one benchmark or dataset is realistically accessible.",
+        "Check whether the proposed gap is genuinely underexplored rather than a retrieval miss.",
+        "Verify that the topic still has enough novelty signal for the intended venue."
+      ]
+    },
+    "evidence_presentation": {
+      "source_facts": [
+        {
+          "statement": "Retrieved paper evidence 'Explainable AI In Software Engineering: Enhancing Developer-AI Collaboration' (2024) as tier B support for the current topic.",
+          "statement_type": "source_fact",
+          "supporting_source_ids": [
+            "openalex_w4411915058"
+          ],
+          "note": "Directly grounded in retrieved source metadata and source summary.",
+          "uncertainty_reason": null,
+          "missing_evidence": []
+        },
+        {
+          "statement": "Retrieved paper evidence 'AutoCodeRover: Autonomous Program Improvement' (2024) as tier B support for the current topic.",
+          "statement_type": "source_fact",
+          "supporting_source_ids": [
+            "openalex_w4402442868"
+          ],
+          "note": "Directly grounded in retrieved source metadata and source summary.",
+          "uncertainty_reason": null,
+          "missing_evidence": []
+        }
+      ],
+      "system_synthesis": [
+        {
+          "statement": "Current evidence clusters most strongly around agent-based decomposition strategies for coding agents for software engineering, software as an emerging theme in coding agents for software engineering.",
+          "statement_type": "system_synthesis",
+          "supporting_source_ids": [
+            "openalex_w4402442868",
+            "openalex_w4411915058"
+          ],
+          "note": "Agent synthesis over multiple retrieved sources with theme-level evidence matching.",
+          "uncertainty_reason": null,
+          "missing_evidence": []
+        },
+        {
+          "statement": "The current output separates into 3 candidate directions with distinct positioning and comparison scores.",
+          "statement_type": "system_synthesis",
+          "supporting_source_ids": [
+            "openalex_w4402442868",
+            "openalex_w4411915058"
+          ],
+          "note": "Agent synthesis over candidate generation and comparison outputs, anchored to candidate support sets.",
+          "uncertainty_reason": null,
+          "missing_evidence": []
+        }
+      ],
+      "tentative_inferences": [
+        {
+          "statement": "candidate_2 is currently the leading direction under the present constraints.",
+          "statement_type": "tentative_inference",
+          "supporting_source_ids": [
+            "openalex_w4411915058",
+            "openalex_w4402442868"
+          ],
+          "note": "Recommendation-level inference that still requires human validation.",
+          "uncertainty_reason": "This recommendation remains constraint-sensitive and depends on the current evidence bundle, not on a settled benchmark choice or direct experimental validation.",
+          "missing_evidence": [
+            "Confirm that the selected sub-problem is narrow enough for the available timeline.",
+            "Verify that at least one benchmark or dataset is realistically accessible."
+          ]
+        },
+        {
+          "statement": "Confirm that the selected sub-problem is narrow enough for the available timeline.",
+          "statement_type": "tentative_inference",
+          "supporting_source_ids": [
+            "openalex_w4411915058",
+            "openalex_w4402442868"
+          ],
+          "note": "Open validation requirement rather than a settled fact.",
+          "uncertainty_reason": "The recommendation should not be treated as final until this validation step is checked.",
+          "missing_evidence": [
+            "Confirm that the selected sub-problem is narrow enough for the available timeline."
+          ]
+        }
+      ]
+    },
+    "human_confirmations": [
+      "Confirm that the system correctly interpreted the topic as 'coding agents for software engineering'.",
+      "Confirm that candidate_2 should remain the leading direction after reviewing the supporting evidence and risks.",
+      "Manual check: Confirm that the selected sub-problem is narrow enough for the available timeline.",
+      "Manual check: Verify that at least one benchmark or dataset is realistically accessible."
+    ],
+    "clarification_suggestions": [],
+    "trace": [
+      {
+        "stage": "frame_problem",
+        "status": "completed",
+        "timestamp": "2026-03-26T20:17:30.992031+00:00",
+        "detail": "Structured the user input into a topic-exploration request."
+      },
+      {
+        "stage": "retrieve_evidence",
+        "status": "completed",
+        "timestamp": "2026-03-26T20:17:30.992067+00:00",
+        "detail": "Retrieved 2 evidence records using the openalex provider."
+      },
+      {
+        "stage": "synthesize_landscape",
+        "status": "completed",
+        "timestamp": "2026-03-26T20:17:30.992076+00:00",
+        "detail": "Organized the current evidence bundle into a lightweight research landscape summary."
+      },
+      {
+        "stage": "generate_candidates",
+        "status": "completed",
+        "timestamp": "2026-03-26T20:17:30.992083+00:00",
+        "detail": "Generated 3 candidate topic directions from the current evidence bundle."
+      },
+      {
+        "stage": "compare_candidates",
+        "status": "completed",
+        "timestamp": "2026-03-26T20:17:30.992090+00:00",
+        "detail": "Produced a structured candidate comparison across fixed MVP dimensions."
+      },
+      {
+        "stage": "converge_recommendation",
+        "status": "completed",
+        "timestamp": "2026-03-26T20:17:30.992097+00:00",
+        "detail": "Produced a recommended next-best option with manual verification checks."
+      }
+    ],
+    "confidence_summary": {
+      "evidence_coverage": "low",
+      "source_quality": "medium",
+      "candidate_separation": "high",
+      "conflict_level": "low",
+      "rationale": [
+        "Evidence coverage is low based on the current number of retrieved records.",
+        "Source quality is medium based on the current source-tier mix.",
+        "Candidate separation is high based on the diversity of candidate positioning.",
+        "Conflict level is low because this development slice does not yet model explicit source disagreement."
+      ]
+    },
+    "evidence_diagnostics": {
+      "requested_provider": "openalex",
+      "used_provider": "openalex",
+      "fallback_used": false,
+      "fallback_reason": null,
+      "record_count": 2,
+      "cache_hit": true
+    }
+  },
+  {
+    "session_id": "3e2c2e4badbe443f91e9a10a7677459b",
+    "created_at": "2026-03-26T20:19:59.708343+00:00",
+    "updated_at": "2026-03-26T20:19:59.708343+00:00",
+    "user_input": {
+      "interest": "software engineering coding agents",
+      "problem_domain": "developer tooling",
+      "seed_idea": "I want a feasible applied topic about reliable evaluation for coding agents under limited resources.",
+      "constraints": {
+        "time_budget_months": 6,
+        "resource_level": "student",
+        "preferred_style": "applied",
+        "notes": null
+      }
+    },
+    "framing_result": {
+      "normalized_topic": "software engineering coding agents",
+      "extracted_constraints": {
+        "time_budget_months": "6",
+        "resource_level": "student",
+        "preferred_style": "applied"
+      },
+      "missing_clarifications": [],
+      "search_questions": [
+        "What are the main research themes in software engineering coding agents?",
+        "What methods and benchmarks are commonly used in software engineering coding agents?",
+        "What open problems or underexplored gaps exist in software engineering coding agents?"
+      ]
+    },
+    "evidence_records": [
+      {
+        "source_id": "openalex_w4403885061",
+        "title": "OpenHands: An Open Platform for AI Software Developers as Generalist Agents",
+        "source_type": "benchmark",
+        "source_tier": "A",
+        "year": 2024,
+        "authors_or_publisher": "Xingyao Wang, Boxuan Li, Yufan Song, Frank F. Xu",
+        "identifier": "https://openalex.org/W4403885061",
+        "url": "https://arxiv.org/abs/2407.16741",
+        "summary": "Software is one of the most powerful tools that we humans have at our disposal; it allows a skilled programmer to interact with the world in complex and profound ways. At the same time, thanks to improvements in large language models (LLMs), there has also been a rapid development in AI agents that interact with and affect change in their surrounding environments. In this paper, we introduce OpenHands (f.k.a. OpenDevin), a platform for the development of powerful and flexible AI agents that interact with the world in similar ways to those of a human developer: by writing code, interacting with a command line, and browsing the web. We describe how the platform allows for the implementation of new agents, safe interaction with sandboxed environments for code execution, coordination between multiple agents, and incorporation of evaluation benchmarks. Based on our currently incorporated benchmarks, we perform an evaluation of agents over 15 challenging tasks, including software engineering (e.g., SWE-BENCH) and web browsing (e.g., WEBARENA), among others. Released under the permissive MIT license, OpenHands is a community project spanning academia and industry with more than 2.1K contributions from over 188 contributors.",
+        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
+      },
+      {
+        "source_id": "openalex_w4407719442",
+        "title": "LLM Agents Making Agent Tools",
+        "source_type": "benchmark",
+        "source_tier": "A",
+        "year": 2025,
+        "authors_or_publisher": "Georg Wölflein, Dyke Ferber, Daniel Truhn, Ognjen Arandjelović",
+        "identifier": "https://openalex.org/W4407719442",
+        "url": "https://arxiv.org/abs/2502.11705",
+        "summary": "Tool use has turned large language models (LLMs) into powerful agents that can perform complex multi-step tasks by dynamically utilising external software components. However, these tools must be implemented in advance by human developers, hindering the applicability of LLM agents in domains demanding large numbers of highly specialised tools, like in life sciences and medicine. Motivated by the growing trend of scientific studies accompanied by public code repositories, we propose ToolMaker, an agentic framework that autonomously transforms papers with code into LLM-compatible tools. Given a GitHub URL and short task description, ToolMaker autonomously installs dependencies and generates code to perform the task, using a closed-loop self-correction mechanism for debugging. To evaluate our approach, we introduce a benchmark comprising 15 complex computational tasks spanning various domains with over 100 unit tests to assess correctness and robustness. Our method correctly implements 80% of the tasks, substantially outperforming current state-of-the-art software engineering agents. ToolMaker therefore is a step towards fully autonomous agent-based scientific workflows. Our code and benchmark are publicly available at https://github.com/KatherLab/ToolMaker.",
+        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
+      },
+      {
+        "source_id": "openalex_w4411915058",
+        "title": "Explainable AI In Software Engineering: Enhancing Developer-AI Collaboration",
+        "source_type": "paper",
+        "source_tier": "B",
+        "year": 2024,
+        "authors_or_publisher": "Jami J. Shah, Jyoti Kunal Shah",
+        "identifier": "https://openalex.org/W4411915058",
+        "url": "https://doi.org/10.37547/tajet/volume06issue07-11",
+        "summary": "Artificial Intelligence (AI) tools are increasingly integrated into software engineering tasks such as code generation, defect prediction, and project planning. However, widespread adoption is hindered by developers’ skepticism toward opaque AI models that lack transparency. This paper explores the integration of Explainable AI (XAI) into software engineering to foster a “developer-in-the-loop” paradigm that enhances trust, understanding, and collaboration between developers and AI agents. We review existing research on XAI techniques applied to feature planning, debugging, and refactoring, and identify the challenges of embedding XAI in real-world development workflows. A modular framework and system architecture are proposed to integrate explanation engines with AI models, IDEs, dashboards, and CI tools. A case study on explainable code review demonstrates how transparent AI suggestions can improve developer trust and team learning. We conclude by highlighting future directions, including personalization of explanations, cross-SDLC integration, and human-AI dialogue mechanisms, positioning XAI as essential to the next generation of intelligent development environments.",
+        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
+      },
+      {
+        "source_id": "openalex_w2982485630",
+        "title": "An Empirical Study on Culture, Automation, Measurement, and Sharing of DevSecOps",
+        "source_type": "paper",
+        "source_tier": "B",
+        "year": 2019,
+        "authors_or_publisher": "Nora Tomas, Jingyue Li, Huang Huang",
+        "identifier": "https://openalex.org/W2982485630",
+        "url": "https://doi.org/10.1109/cybersecpods.2019.8884935",
+        "summary": "Programmers are central agents in creating secure applications. However, software engineering and software security have historically worked in separate silos. DevSecOps is the practice of breaking down silos between development, operations, and quality assurance of security. To understand the state of art and challenges of DevSecOps, we interviewed six developers about their DevSecOps practices. We asked interview subjects about their security practices rooted in the four pillars of DevOps, namely culture, automation, sharing, and measurement. Results were analyzed by using qualitative methods. The results of the study show that it is necessary first to create a security culture. Several interviewees identified the importance of caring about security and issues in existing culture, such as how developers feel attacked by security engineers if they create vulnerable code. After establishing a security culture in the organization, development and operations need the necessary training and knowledge so that security automation tools can be utilized effectively. Measurements need to be applied continuously to keep track of identified vulnerabilities, the amount of training staff has received, and staffs general opinions regarding security.",
+        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
+      }
+    ],
+    "landscape_summary": {
+      "themes": [
+        "benchmark design and stress-testing for software engineering coding agents",
+        "agent-based decomposition strategies for software engineering coding agents",
+        "agents as an emerging theme in software engineering coding agents"
+      ],
+      "active_methods": [
+        "benchmark-centered experimental design",
+        "agent-mediated problem decomposition",
+        "making agent"
+      ],
+      "likely_gaps": [
+        "benchmark protocols that distinguish real image use from shortcut exploitation",
+        "clear task scoping for narrow research questions"
+      ],
+      "saturated_areas": [
+        "broad generic summaries without a sharply defined question"
+      ]
+    },
+    "candidate_topics": [
+      {
+        "candidate_id": "candidate_1",
+        "title": "Benchmark-Guided Narrow Task Definition",
+        "research_question": "How can a narrower evaluation slice around agents making agent reveal actionable limitations in current systems?",
+        "positioning": "gap-driven",
+        "novelty_note": "Frames novelty through sharper evaluation boundaries rather than broader performance reporting.",
+        "feasibility_note": "Moderate feasibility with public evidence and a bounded evaluation target.",
+        "risk_note": "May become incremental if the evaluation slice is not sharply distinguished.",
+        "supporting_source_ids": [
+          "openalex_w4407719442",
+          "openalex_w4403885061"
+        ],
+        "open_questions": [
+          "Which agents making agent slice best isolates the intended failure mode or capability?",
+          "Which benchmark slice best isolates genuine image-grounded reasoning?"
+        ]
+      },
+      {
+        "candidate_id": "candidate_2",
+        "title": "Applied Method Transfer Under Practical Constraints",
+        "research_question": "Can an existing method family associated with explainable software engineering be adapted effectively under strict practical constraints?",
+        "positioning": "applied-transfer",
+        "novelty_note": "Frames novelty through constrained adaptation of an existing method family.",
+        "feasibility_note": "Strong fit for an applied project that can reuse a visible baseline.",
+        "risk_note": "Novelty may depend heavily on the chosen constraint and evaluation design.",
+        "supporting_source_ids": [
+          "openalex_w4411915058",
+          "openalex_w2982485630"
+        ],
+        "open_questions": [
+          "Which constraint creates the strongest research signal?"
+        ]
+      },
+      {
+        "candidate_id": "candidate_3",
+        "title": "Tooling And Evaluation Workflow Support",
+        "research_question": "What tooling or workflow support around openhands platform software would make research in this area more reproducible?",
+        "positioning": "systems",
+        "novelty_note": "Shifts value from model novelty toward reproducibility, workflow support, and evaluation reliability.",
+        "feasibility_note": "High feasibility for a short-cycle engineering-heavy project.",
+        "risk_note": "Applied impact may be clearer than publication novelty unless the workflow pain point is precisely chosen.",
+        "supporting_source_ids": [
+          "openalex_w4403885061",
+          "openalex_w4411915058"
+        ],
+        "open_questions": [
+          "What concrete reproducibility pain point should be prioritized first?",
+          "Which workflow improvement around openhands platform software reduces setup or audit cost the most?",
+          "Which workflow improvement reduces compute or setup cost the most?"
+        ]
+      }
+    ],
+    "comparison_result": {
+      "dimensions": [
+        "novelty",
+        "feasibility",
+        "evidence_strength",
+        "data_availability",
+        "implementation_cost",
+        "risk"
+      ],
+      "summary": "Candidate 2 is strongest for applied feasibility under the current constraints, candidate 1 remains strongest on research framing, and candidate 3 remains the fastest engineering path.",
+      "candidate_assessments": [
+        {
+          "candidate_id": "candidate_1",
+          "novelty": "high",
+          "feasibility": "medium",
+          "evidence_strength": "medium_high",
+          "data_availability": "medium",
+          "implementation_cost": "medium",
+          "risk": "medium"
+        },
+        {
+          "candidate_id": "candidate_2",
+          "novelty": "medium_high",
+          "feasibility": "high",
+          "evidence_strength": "medium_high",
+          "data_availability": "medium_high",
+          "implementation_cost": "medium_low",
+          "risk": "medium_low"
+        },
+        {
+          "candidate_id": "candidate_3",
+          "novelty": "medium",
+          "feasibility": "high",
+          "evidence_strength": "medium",
+          "data_availability": "high",
+          "implementation_cost": "low",
+          "risk": "medium_high"
+        }
+      ]
+    },
+    "convergence_result": {
+      "recommended_candidate_id": "candidate_2",
+      "backup_candidate_id": "candidate_1",
+      "rationale": "Candidate 2 is the best fit for the current constraints because it starts from reusable baselines, matches an applied project style, and is easier to execute within a tighter timeline.",
+      "manual_checks": [
+        "Confirm that the selected sub-problem is narrow enough for the available timeline.",
+        "Verify that at least one benchmark or dataset is realistically accessible.",
+        "Check whether the proposed gap is genuinely underexplored rather than a retrieval miss.",
+        "Verify that the topic still has enough novelty signal for the intended venue."
+      ]
+    },
+    "evidence_presentation": {
+      "source_facts": [
+        {
+          "statement": "Retrieved benchmark evidence 'OpenHands: An Open Platform for AI Software Developers as Generalist Agents' (2024) as tier A support for the current topic.",
+          "statement_type": "source_fact",
+          "supporting_source_ids": [
+            "openalex_w4403885061"
+          ],
+          "note": "Directly grounded in retrieved source metadata and source summary.",
+          "uncertainty_reason": null,
+          "missing_evidence": []
+        },
+        {
+          "statement": "Retrieved benchmark evidence 'LLM Agents Making Agent Tools' (2025) as tier A support for the current topic.",
+          "statement_type": "source_fact",
+          "supporting_source_ids": [
+            "openalex_w4407719442"
+          ],
+          "note": "Directly grounded in retrieved source metadata and source summary.",
+          "uncertainty_reason": null,
+          "missing_evidence": []
+        },
+        {
+          "statement": "Retrieved paper evidence 'Explainable AI In Software Engineering: Enhancing Developer-AI Collaboration' (2024) as tier B support for the current topic.",
+          "statement_type": "source_fact",
+          "supporting_source_ids": [
+            "openalex_w4411915058"
+          ],
+          "note": "Directly grounded in retrieved source metadata and source summary.",
+          "uncertainty_reason": null,
+          "missing_evidence": []
+        }
+      ],
+      "system_synthesis": [
+        {
+          "statement": "Current evidence clusters most strongly around benchmark design and stress-testing for software engineering coding agents, agent-based decomposition strategies for software engineering coding agents.",
+          "statement_type": "system_synthesis",
+          "supporting_source_ids": [
+            "openalex_w4407719442",
+            "openalex_w4403885061",
+            "openalex_w4411915058"
+          ],
+          "note": "Agent synthesis over multiple retrieved sources with theme-level evidence matching.",
+          "uncertainty_reason": null,
+          "missing_evidence": []
+        },
+        {
+          "statement": "The current output separates into 3 candidate directions with distinct positioning and comparison scores.",
+          "statement_type": "system_synthesis",
+          "supporting_source_ids": [
+            "openalex_w4407719442",
+            "openalex_w4403885061",
+            "openalex_w4411915058",
+            "openalex_w2982485630"
+          ],
+          "note": "Agent synthesis over candidate generation and comparison outputs, anchored to candidate support sets.",
+          "uncertainty_reason": null,
+          "missing_evidence": []
+        }
+      ],
+      "tentative_inferences": [
+        {
+          "statement": "candidate_2 is currently the leading direction under the present constraints.",
+          "statement_type": "tentative_inference",
+          "supporting_source_ids": [
+            "openalex_w4411915058",
+            "openalex_w2982485630"
+          ],
+          "note": "Recommendation-level inference that still requires human validation.",
+          "uncertainty_reason": "This recommendation remains constraint-sensitive and depends on the current evidence bundle, not on a settled benchmark choice or direct experimental validation.",
+          "missing_evidence": [
+            "Confirm that the selected sub-problem is narrow enough for the available timeline.",
+            "Verify that at least one benchmark or dataset is realistically accessible."
+          ]
+        },
+        {
+          "statement": "Confirm that the selected sub-problem is narrow enough for the available timeline.",
+          "statement_type": "tentative_inference",
+          "supporting_source_ids": [
+            "openalex_w4411915058",
+            "openalex_w2982485630"
+          ],
+          "note": "Open validation requirement rather than a settled fact.",
+          "uncertainty_reason": "The recommendation should not be treated as final until this validation step is checked.",
+          "missing_evidence": [
+            "Confirm that the selected sub-problem is narrow enough for the available timeline."
+          ]
+        }
+      ]
+    },
+    "human_confirmations": [
+      "Confirm that the system correctly interpreted the topic as 'software engineering coding agents'.",
+      "Confirm that candidate_2 should remain the leading direction after reviewing the supporting evidence and risks.",
+      "Manual check: Confirm that the selected sub-problem is narrow enough for the available timeline.",
+      "Manual check: Verify that at least one benchmark or dataset is realistically accessible."
+    ],
+    "clarification_suggestions": [],
+    "trace": [
+      {
+        "stage": "frame_problem",
+        "status": "completed",
+        "timestamp": "2026-03-26T20:20:29.523699+00:00",
+        "detail": "Structured the user input into a topic-exploration request."
+      },
+      {
+        "stage": "retrieve_evidence",
+        "status": "completed",
+        "timestamp": "2026-03-26T20:20:29.523719+00:00",
+        "detail": "Retrieved 4 evidence records using the openalex provider."
+      },
+      {
+        "stage": "synthesize_landscape",
+        "status": "completed",
+        "timestamp": "2026-03-26T20:20:29.523727+00:00",
+        "detail": "Organized the current evidence bundle into a lightweight research landscape summary."
+      },
+      {
+        "stage": "generate_candidates",
+        "status": "completed",
+        "timestamp": "2026-03-26T20:20:29.523734+00:00",
+        "detail": "Generated 3 candidate topic directions from the current evidence bundle."
+      },
+      {
+        "stage": "compare_candidates",
+        "status": "completed",
+        "timestamp": "2026-03-26T20:20:29.523741+00:00",
+        "detail": "Produced a structured candidate comparison across fixed MVP dimensions."
+      },
+      {
+        "stage": "converge_recommendation",
+        "status": "completed",
+        "timestamp": "2026-03-26T20:20:29.523746+00:00",
+        "detail": "Produced a recommended next-best option with manual verification checks."
+      }
+    ],
+    "confidence_summary": {
+      "evidence_coverage": "medium",
+      "source_quality": "medium_high",
+      "candidate_separation": "high",
+      "conflict_level": "low",
+      "rationale": [
+        "Evidence coverage is medium based on the current number of retrieved records.",
+        "Source quality is medium_high based on the current source-tier mix.",
+        "Candidate separation is high based on the diversity of candidate positioning.",
+        "Conflict level is low because this development slice does not yet model explicit source disagreement."
+      ]
+    },
+    "evidence_diagnostics": {
+      "requested_provider": "openalex",
+      "used_provider": "openalex",
+      "fallback_used": false,
+      "fallback_reason": null,
+      "record_count": 4,
+      "cache_hit": false
+    }
+  },
+  {
+    "session_id": "6f91cd6ddfb1455a9e82177758e19258",
+    "created_at": "2026-03-26T20:20:47.685626+00:00",
+    "updated_at": "2026-03-26T20:20:47.685626+00:00",
+    "user_input": {
+      "interest": "llm coding agents for software engineering",
+      "problem_domain": "developer workflows",
+      "seed_idea": "I want a feasible applied topic about reliable evaluation for coding agents under limited resources.",
+      "constraints": {
+        "time_budget_months": 6,
+        "resource_level": "student",
+        "preferred_style": "applied",
+        "notes": null
+      }
+    },
+    "framing_result": {
+      "normalized_topic": "llm coding agents for software engineering",
+      "extracted_constraints": {
+        "time_budget_months": "6",
+        "resource_level": "student",
+        "preferred_style": "applied"
+      },
+      "missing_clarifications": [],
+      "search_questions": [
+        "What are the main research themes in llm coding agents for software engineering?",
+        "What methods and benchmarks are commonly used in llm coding agents for software engineering?",
+        "What open problems or underexplored gaps exist in llm coding agents for software engineering?"
+      ]
+    },
+    "evidence_records": [
+      {
+        "source_id": "openalex_w4407719442",
+        "title": "LLM Agents Making Agent Tools",
+        "source_type": "benchmark",
+        "source_tier": "A",
+        "year": 2025,
+        "authors_or_publisher": "Georg Wölflein, Dyke Ferber, Daniel Truhn, Ognjen Arandjelović",
+        "identifier": "https://openalex.org/W4407719442",
+        "url": "https://arxiv.org/abs/2502.11705",
+        "summary": "Tool use has turned large language models (LLMs) into powerful agents that can perform complex multi-step tasks by dynamically utilising external software components. However, these tools must be implemented in advance by human developers, hindering the applicability of LLM agents in domains demanding large numbers of highly specialised tools, like in life sciences and medicine. Motivated by the growing trend of scientific studies accompanied by public code repositories, we propose ToolMaker, an agentic framework that autonomously transforms papers with code into LLM-compatible tools. Given a GitHub URL and short task description, ToolMaker autonomously installs dependencies and generates code to perform the task, using a closed-loop self-correction mechanism for debugging. To evaluate our approach, we introduce a benchmark comprising 15 complex computational tasks spanning various domains with over 100 unit tests to assess correctness and robustness. Our method correctly implements 80% of the tasks, substantially outperforming current state-of-the-art software engineering agents. ToolMaker therefore is a step towards fully autonomous agent-based scientific workflows. Our code and benchmark are publicly available at https://github.com/KatherLab/ToolMaker.",
+        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
+      },
+      {
+        "source_id": "openalex_w4411915058",
+        "title": "Explainable AI In Software Engineering: Enhancing Developer-AI Collaboration",
+        "source_type": "paper",
+        "source_tier": "B",
+        "year": 2024,
+        "authors_or_publisher": "Jami J. Shah, Jyoti Kunal Shah",
+        "identifier": "https://openalex.org/W4411915058",
+        "url": "https://doi.org/10.37547/tajet/volume06issue07-11",
+        "summary": "Artificial Intelligence (AI) tools are increasingly integrated into software engineering tasks such as code generation, defect prediction, and project planning. However, widespread adoption is hindered by developers’ skepticism toward opaque AI models that lack transparency. This paper explores the integration of Explainable AI (XAI) into software engineering to foster a “developer-in-the-loop” paradigm that enhances trust, understanding, and collaboration between developers and AI agents. We review existing research on XAI techniques applied to feature planning, debugging, and refactoring, and identify the challenges of embedding XAI in real-world development workflows. A modular framework and system architecture are proposed to integrate explanation engines with AI models, IDEs, dashboards, and CI tools. A case study on explainable code review demonstrates how transparent AI suggestions can improve developer trust and team learning. We conclude by highlighting future directions, including personalization of explanations, cross-SDLC integration, and human-AI dialogue mechanisms, positioning XAI as essential to the next generation of intelligent development environments.",
+        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
+      },
+      {
+        "source_id": "openalex_w4415769872",
+        "title": "Empowering smart app development with SolidGPT: an edgecloud hybrid AI agent framework",
+        "source_type": "paper",
+        "source_tier": "B",
+        "year": 2025,
+        "authors_or_publisher": "Liao Hu, Qilin Wu, Ruogu Qi",
+        "identifier": "https://openalex.org/W4415769872",
+        "url": "https://doi.org/10.54254/2977-3903/2025.25283",
+        "summary": "The integration of Large Language Models (LLMs) into mobile and software development workflows faces a persistent tension among three demands: semantic awareness, developer productivity, and data privacy. Traditional cloud-based tools offer strong reasoning but risk data exposure and latency, while on-device solutions lack full-context understanding across codebase and developer tooling.We introduce SolidGPT, an open-source, edgecloud hybrid developer assistant built on GitHub, designed to enhance code and workspace semantic search. SolidGPTenables developers to below;Talk to your codebase: interactively query code and project structure, discovering the right methods and modules without manual searching.Automate software project workflows: generate PRDs, task breakdowns, Kanban boards, and even scaffold web app beginnings, with deep integration via VSCodeand Notion.Configure private, extensible agents: onboard private code folders (up to ~500 files), connect Notion, customize AI agent personas via embedding and in-context training, and deploy via Docker, CLI, or VSCodeextension.In practice, SolidGPTempowers developer productivity through;Semantic-rich code navigation: no more hunting through filesor wondering where a feature lives.Integrated documentation and task management: seamlessly sync generated PRD content and task boards into developer workflows.Privacy-first design: running locally via Docker or VSCode, with full control over code and data, while optionally reaching out to LLM APIs as needed.By combining interactive code querying, automated project scaffolding, and human-AI collaboration, SolidGPT provides a practical, privacy-respecting edge assistant that accelerates real-world development workflowsideal for intelligent mobile and software engineering contexts.",
+        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
+      },
+      {
+        "source_id": "openalex_w4411552133",
+        "title": "SpecRover: Code Intent Extraction via LLMs",
+        "source_type": "paper",
+        "source_tier": "B",
+        "year": 2025,
+        "authors_or_publisher": "Haifeng Ruan, Yuntong Zhang, Abhik Roychoudhury",
+        "identifier": "https://openalex.org/W4411552133",
+        "url": "https://doi.org/10.1109/icse55347.2025.00080",
+        "summary": "Autonomous program improvement typically involves automatically producing bug fixes and feature additions. Such program improvement can be accomplished by a combination of large language model (LLM) and program analysis capabilities, in the form of an LLM agent. Since program repair or program improvement typically requires a specification of intended behavior - specification inference can be useful for producing high quality program patches. In this work, we examine efficient and low-cost workflows for iterative specification inference within an LLM agent. Given a GitHub issue to be resolved in a software project, our goal is to conduct iterative code search accompanied by specification inference - thereby inferring intent from both the project structure and behavior. The intent thus captured is examined by a reviewer agent with the goal of vetting the patches as well as providing a measure of confidence in the vetted patches. Our approach SpecRover is built on the open-source LLM agent AutoCodeRover. In an evaluation on the full SWE-Bench consisting of 2294 GitHub issues, it shows more than 50% improvement in efficacy over AutoCodeRover. Compared to the open-source agents available, our work shows modest cost ($0.65 per issue) in resolving an average GitHub issue in SWE-Bench lite. The production of explanation by SpecRover allows for a better “signal” to be given to the developer, on when the suggested patches can be accepted with confidence. SpecRover also seeks to demonstrate the continued importance of specification inference in automated program repair, even as program repair technologies enter the LLM era.",
+        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
+      }
+    ],
+    "landscape_summary": {
+      "themes": [
+        "benchmark design and stress-testing for llm coding agents for software engineering",
+        "agent-based decomposition strategies for llm coding agents for software engineering",
+        "agents as an emerging theme in llm coding agents for software engineering"
+      ],
+      "active_methods": [
+        "benchmark-centered experimental design",
+        "agent-mediated problem decomposition",
+        "making agent"
+      ],
+      "likely_gaps": [
+        "benchmark protocols that distinguish real image use from shortcut exploitation",
+        "clear task scoping for narrow research questions"
+      ],
+      "saturated_areas": [
+        "broad generic summaries without a sharply defined question"
+      ]
+    },
+    "candidate_topics": [
+      {
+        "candidate_id": "candidate_1",
+        "title": "Benchmark-Guided Narrow Task Definition",
+        "research_question": "How can a narrower evaluation slice around specrover code intent reveal actionable limitations in current systems?",
+        "positioning": "gap-driven",
+        "novelty_note": "Frames novelty through sharper evaluation boundaries rather than broader performance reporting.",
+        "feasibility_note": "Moderate feasibility with public evidence and a bounded evaluation target.",
+        "risk_note": "May become incremental if the evaluation slice is not sharply distinguished.",
+        "supporting_source_ids": [
+          "openalex_w4411552133",
+          "openalex_w4407719442"
+        ],
+        "open_questions": [
+          "Which specrover code intent slice best isolates the intended failure mode or capability?",
+          "Which benchmark slice best isolates genuine image-grounded reasoning?"
+        ]
+      },
+      {
+        "candidate_id": "candidate_2",
+        "title": "Applied Method Transfer Under Practical Constraints",
+        "research_question": "Can an existing method family associated with agents making agent be adapted effectively under strict practical constraints?",
+        "positioning": "applied-transfer",
+        "novelty_note": "Frames novelty through constrained adaptation of an existing method family.",
+        "feasibility_note": "Strong fit for an applied project that can reuse a visible baseline.",
+        "risk_note": "Novelty may depend heavily on the chosen constraint and evaluation design.",
+        "supporting_source_ids": [
+          "openalex_w4407719442",
+          "openalex_w4415769872",
+          "openalex_w4411915058"
+        ],
+        "open_questions": [
+          "Which constraint creates the strongest research signal?"
+        ]
+      },
+      {
+        "candidate_id": "candidate_3",
+        "title": "Tooling And Evaluation Workflow Support",
+        "research_question": "What tooling or workflow support around empowering smart development would make research in this area more reproducible?",
+        "positioning": "systems",
+        "novelty_note": "Shifts value from model novelty toward reproducibility, workflow support, and evaluation reliability.",
+        "feasibility_note": "High feasibility for a short-cycle engineering-heavy project.",
+        "risk_note": "Applied impact may be clearer than publication novelty unless the workflow pain point is precisely chosen.",
+        "supporting_source_ids": [
+          "openalex_w4415769872",
+          "openalex_w4411552133"
+        ],
+        "open_questions": [
+          "What concrete reproducibility pain point should be prioritized first?",
+          "Which workflow improvement around empowering smart development reduces setup or audit cost the most?",
+          "Which workflow improvement reduces compute or setup cost the most?"
+        ]
+      }
+    ],
+    "comparison_result": {
+      "dimensions": [
+        "novelty",
+        "feasibility",
+        "evidence_strength",
+        "data_availability",
+        "implementation_cost",
+        "risk"
+      ],
+      "summary": "Candidate 2 is strongest for applied feasibility under the current constraints, candidate 1 remains strongest on research framing, and candidate 3 remains the fastest engineering path.",
+      "candidate_assessments": [
+        {
+          "candidate_id": "candidate_1",
+          "novelty": "high",
+          "feasibility": "medium",
+          "evidence_strength": "medium_high",
+          "data_availability": "medium",
+          "implementation_cost": "medium",
+          "risk": "medium"
+        },
+        {
+          "candidate_id": "candidate_2",
+          "novelty": "medium_high",
+          "feasibility": "high",
+          "evidence_strength": "medium_high",
+          "data_availability": "medium_high",
+          "implementation_cost": "medium_low",
+          "risk": "medium_low"
+        },
+        {
+          "candidate_id": "candidate_3",
+          "novelty": "medium",
+          "feasibility": "high",
+          "evidence_strength": "medium",
+          "data_availability": "high",
+          "implementation_cost": "low",
+          "risk": "medium_high"
+        }
+      ]
+    },
+    "convergence_result": {
+      "recommended_candidate_id": "candidate_2",
+      "backup_candidate_id": "candidate_1",
+      "rationale": "Candidate 2 is the best fit for the current constraints because it starts from reusable baselines, matches an applied project style, and is easier to execute within a tighter timeline.",
+      "manual_checks": [
+        "Confirm that the selected sub-problem is narrow enough for the available timeline.",
+        "Verify that at least one benchmark or dataset is realistically accessible.",
+        "Check whether the proposed gap is genuinely underexplored rather than a retrieval miss.",
+        "Verify that the topic still has enough novelty signal for the intended venue."
+      ]
+    },
+    "evidence_presentation": {
+      "source_facts": [
+        {
+          "statement": "Retrieved benchmark evidence 'LLM Agents Making Agent Tools' (2025) as tier A support for the current topic.",
+          "statement_type": "source_fact",
+          "supporting_source_ids": [
+            "openalex_w4407719442"
+          ],
+          "note": "Directly grounded in retrieved source metadata and source summary.",
+          "uncertainty_reason": null,
+          "missing_evidence": []
+        },
+        {
+          "statement": "Retrieved paper evidence 'Explainable AI In Software Engineering: Enhancing Developer-AI Collaboration' (2024) as tier B support for the current topic.",
+          "statement_type": "source_fact",
+          "supporting_source_ids": [
+            "openalex_w4411915058"
+          ],
+          "note": "Directly grounded in retrieved source metadata and source summary.",
+          "uncertainty_reason": null,
+          "missing_evidence": []
+        },
+        {
+          "statement": "Retrieved paper evidence 'Empowering smart app development with SolidGPT: an edgecloud hybrid AI agent framework' (2025) as tier B support for the current topic.",
+          "statement_type": "source_fact",
+          "supporting_source_ids": [
+            "openalex_w4415769872"
+          ],
+          "note": "Directly grounded in retrieved source metadata and source summary.",
+          "uncertainty_reason": null,
+          "missing_evidence": []
+        }
+      ],
+      "system_synthesis": [
+        {
+          "statement": "Current evidence clusters most strongly around benchmark design and stress-testing for llm coding agents for software engineering, agent-based decomposition strategies for llm coding agents for software engineering.",
+          "statement_type": "system_synthesis",
+          "supporting_source_ids": [
+            "openalex_w4407719442",
+            "openalex_w4415769872",
+            "openalex_w4411915058"
+          ],
+          "note": "Agent synthesis over multiple retrieved sources with theme-level evidence matching.",
+          "uncertainty_reason": null,
+          "missing_evidence": []
+        },
+        {
+          "statement": "The current output separates into 3 candidate directions with distinct positioning and comparison scores.",
+          "statement_type": "system_synthesis",
+          "supporting_source_ids": [
+            "openalex_w4411552133",
+            "openalex_w4407719442",
+            "openalex_w4415769872",
+            "openalex_w4411915058"
+          ],
+          "note": "Agent synthesis over candidate generation and comparison outputs, anchored to candidate support sets.",
+          "uncertainty_reason": null,
+          "missing_evidence": []
+        }
+      ],
+      "tentative_inferences": [
+        {
+          "statement": "candidate_2 is currently the leading direction under the present constraints.",
+          "statement_type": "tentative_inference",
+          "supporting_source_ids": [
+            "openalex_w4407719442",
+            "openalex_w4415769872",
+            "openalex_w4411915058"
+          ],
+          "note": "Recommendation-level inference that still requires human validation.",
+          "uncertainty_reason": "This recommendation remains constraint-sensitive and depends on the current evidence bundle, not on a settled benchmark choice or direct experimental validation.",
+          "missing_evidence": [
+            "Confirm that the selected sub-problem is narrow enough for the available timeline.",
+            "Verify that at least one benchmark or dataset is realistically accessible."
+          ]
+        },
+        {
+          "statement": "Confirm that the selected sub-problem is narrow enough for the available timeline.",
+          "statement_type": "tentative_inference",
+          "supporting_source_ids": [
+            "openalex_w4407719442",
+            "openalex_w4415769872",
+            "openalex_w4411915058"
+          ],
+          "note": "Open validation requirement rather than a settled fact.",
+          "uncertainty_reason": "The recommendation should not be treated as final until this validation step is checked.",
+          "missing_evidence": [
+            "Confirm that the selected sub-problem is narrow enough for the available timeline."
+          ]
+        }
+      ]
+    },
+    "human_confirmations": [
+      "Confirm that the system correctly interpreted the topic as 'llm coding agents for software engineering'.",
+      "Confirm that candidate_2 should remain the leading direction after reviewing the supporting evidence and risks.",
+      "Manual check: Confirm that the selected sub-problem is narrow enough for the available timeline.",
+      "Manual check: Verify that at least one benchmark or dataset is realistically accessible."
+    ],
+    "clarification_suggestions": [],
+    "trace": [
+      {
+        "stage": "frame_problem",
+        "status": "completed",
+        "timestamp": "2026-03-26T20:21:13.579315+00:00",
+        "detail": "Structured the user input into a topic-exploration request."
+      },
+      {
+        "stage": "retrieve_evidence",
+        "status": "completed",
+        "timestamp": "2026-03-26T20:21:13.579331+00:00",
+        "detail": "Retrieved 4 evidence records using the openalex provider."
+      },
+      {
+        "stage": "synthesize_landscape",
+        "status": "completed",
+        "timestamp": "2026-03-26T20:21:13.579336+00:00",
+        "detail": "Organized the current evidence bundle into a lightweight research landscape summary."
+      },
+      {
+        "stage": "generate_candidates",
+        "status": "completed",
+        "timestamp": "2026-03-26T20:21:13.579340+00:00",
+        "detail": "Generated 3 candidate topic directions from the current evidence bundle."
+      },
+      {
+        "stage": "compare_candidates",
+        "status": "completed",
+        "timestamp": "2026-03-26T20:21:13.579345+00:00",
+        "detail": "Produced a structured candidate comparison across fixed MVP dimensions."
+      },
+      {
+        "stage": "converge_recommendation",
+        "status": "completed",
+        "timestamp": "2026-03-26T20:21:13.579348+00:00",
+        "detail": "Produced a recommended next-best option with manual verification checks."
+      }
+    ],
+    "confidence_summary": {
+      "evidence_coverage": "medium",
+      "source_quality": "medium_high",
+      "candidate_separation": "high",
+      "conflict_level": "low",
+      "rationale": [
+        "Evidence coverage is medium based on the current number of retrieved records.",
+        "Source quality is medium_high based on the current source-tier mix.",
+        "Candidate separation is high based on the diversity of candidate positioning.",
+        "Conflict level is low because this development slice does not yet model explicit source disagreement."
+      ]
+    },
+    "evidence_diagnostics": {
+      "requested_provider": "openalex",
+      "used_provider": "openalex",
+      "fallback_used": false,
+      "fallback_reason": null,
+      "record_count": 4,
+      "cache_hit": false
+    }
   }
 ]
