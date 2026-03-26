@@ -19,6 +19,7 @@ from app.services.topic_agent.providers import (
 
 TOPIC_AGENT_STORE_PATH = DATA_ROOT / "tool_state" / "topic_agent_sessions.json"
 DEFAULT_TOPIC_AGENT_PROVIDER_NAME = "openalex_or_arxiv_or_mock"
+TOPIC_AGENT_SESSION_HISTORY_LIMIT = 120
 
 
 def _load_sessions() -> list[dict]:
@@ -27,6 +28,12 @@ def _load_sessions() -> list[dict]:
 
 def _save_sessions(records: list[dict]) -> None:
     JsonListRepository(Path(TOPIC_AGENT_STORE_PATH)).save(records)
+
+
+def _trim_session_history(records: list[dict]) -> list[dict]:
+    if TOPIC_AGENT_SESSION_HISTORY_LIMIT <= 0:
+        return records
+    return records[-TOPIC_AGENT_SESSION_HISTORY_LIMIT:]
 
 
 def _normalize_optional(value: str | None) -> str | None:
@@ -107,7 +114,7 @@ def create_topic_agent_session(request: TopicAgentExploreRequest) -> TopicAgentS
     )
     sessions = _load_sessions()
     sessions.append(response.model_dump())
-    _save_sessions(sessions)
+    _save_sessions(_trim_session_history(sessions))
     return response
 
 
@@ -181,5 +188,5 @@ def refine_topic_agent_session(
             replaced_sessions.append(updated.model_dump())
         else:
             replaced_sessions.append(item)
-    _save_sessions(replaced_sessions)
+    _save_sessions(_trim_session_history(replaced_sessions))
     return updated

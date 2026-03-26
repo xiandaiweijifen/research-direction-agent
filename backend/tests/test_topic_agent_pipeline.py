@@ -1070,7 +1070,7 @@ def test_topic_agent_pipeline_generates_internal_drafts_before_final_candidate_m
     assert response.candidate_topics[0].supporting_source_ids[0] == "openalex_eval"
     assert response.candidate_topics[1].supporting_source_ids[0] == "openalex_transfer"
     assert response.candidate_topics[2].supporting_source_ids[0] == "openalex_systems"
-    assert "evaluation slice" in response.candidate_topics[0].research_question.lower()
+    assert "benchmark slice" in response.candidate_topics[0].research_question.lower()
     assert (
         "code intent extraction" in response.candidate_topics[1].research_question.lower()
         or "program improvement" in response.candidate_topics[1].research_question.lower()
@@ -1144,3 +1144,82 @@ def test_topic_agent_pipeline_uses_non_visual_gap_wording_for_software_agent_top
         or "program improvement" in response.candidate_topics[1].research_question.lower()
     )
     assert "agent-based decomposition" in joined_themes or "benchmark" in joined_themes
+
+
+def test_topic_agent_pipeline_avoids_generic_candidate_fallback_wording_for_software_agent_topics():
+    class SoftwareAgentProvider:
+        provider_name = "static"
+
+        def retrieve(self, request: TopicAgentExploreRequest):
+            records = [
+                TopicAgentSourceRecord(
+                    source_id="openalex_a",
+                    title="LLM Agents Making Agent Tools",
+                    source_type="benchmark",
+                    source_tier="A",
+                    year=2025,
+                    authors_or_publisher="Author A",
+                    identifier="https://example.org/a",
+                    url="https://example.org/a",
+                    summary="Tool-building agents with benchmark evaluation and reproducible developer workflows.",
+                    relevance_reason="Test record",
+                ),
+                TopicAgentSourceRecord(
+                    source_id="openalex_b",
+                    title="OpenHands: An Open Platform for AI Software Developers as Generalist Agents",
+                    source_type="benchmark",
+                    source_tier="A",
+                    year=2024,
+                    authors_or_publisher="Author B",
+                    identifier="https://example.org/b",
+                    url="https://example.org/b",
+                    summary="Developer workflow support and reproducible coding-agent evaluation.",
+                    relevance_reason="Test record",
+                ),
+                TopicAgentSourceRecord(
+                    source_id="openalex_c",
+                    title="Generative AI and Empirical Software Engineering: A Paradigm Shift",
+                    source_type="paper",
+                    source_tier="B",
+                    year=2025,
+                    authors_or_publisher="Author C",
+                    identifier="https://example.org/c",
+                    url="https://example.org/c",
+                    summary="Empirical software engineering methods for reproducibility and evaluation.",
+                    relevance_reason="Test record",
+                ),
+            ]
+            return TopicAgentEvidenceRetrievalResult(
+                records=records,
+                diagnostics=TopicAgentEvidenceDiagnostics(
+                    requested_provider="static",
+                    used_provider="static",
+                    fallback_used=False,
+                    fallback_reason=None,
+                    record_count=3,
+                ),
+            )
+
+    request = TopicAgentExploreRequest(
+        interest="llm software engineering agents",
+        problem_domain="developer tooling",
+        constraints=TopicAgentConstraintSet(
+            preferred_style="applied",
+            time_budget_months=6,
+            resource_level="student",
+        ),
+    )
+
+    response = run_topic_agent_pipeline(request, provider=SoftwareAgentProvider())
+    candidate_1 = response.candidate_topics[0]
+    candidate_2 = response.candidate_topics[1]
+    candidate_3 = response.candidate_topics[2]
+    joined_open_questions = " ".join(candidate_1.open_questions).lower()
+
+    assert "current evidence" not in candidate_1.research_question.lower()
+    assert "current evidence" not in joined_open_questions
+    assert "image-grounded reasoning" not in joined_open_questions
+    assert "workflow or prompt shortcuts" in joined_open_questions or "failure mode" in joined_open_questions
+    assert "current evidence" not in candidate_2.research_question.lower()
+    assert "coding-agent method family" in candidate_2.research_question.lower() or "tool-building agents" in candidate_2.research_question.lower()
+    assert "openhands platform developers" not in candidate_3.research_question.lower()

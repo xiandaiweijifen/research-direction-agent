@@ -107,3 +107,33 @@ def test_persist_and_load_latest_tool_execution_report(workspace_tmp_path, monke
     assert report_store_service.list_tool_execution_report_history("agent_tool_execution_eval.json")[0][
         "primary_metric_name"
     ] == "tool_accuracy"
+
+
+def test_report_store_prunes_history_files_beyond_retention_limit(workspace_tmp_path, monkeypatch):
+    monkeypatch.setattr(report_store_service, "REPORT_STORE_DIR", workspace_tmp_path)
+    monkeypatch.setattr(report_store_service, "REPORT_HISTORY_RETENTION_LIMIT", 2)
+
+    for total_cases in [1, 2, 3]:
+        report_store_service.persist_retrieval_report(
+            dataset_name="rag_overview_retrieval_eval.json",
+            top_k=3,
+            report={
+                "top_k": 3,
+                "summary": {
+                    "total_cases": total_cases,
+                    "hit_rate_at_k": 1.0,
+                    "mean_reciprocal_rank": 1.0,
+                },
+                "cases": [],
+            },
+        )
+
+    history = report_store_service.list_retrieval_report_history(
+        dataset_name="rag_overview_retrieval_eval.json",
+        top_k=3,
+        limit=10,
+    )
+
+    assert len(history) == 2
+    assert history[0]["case_count"] == 3
+    assert history[1]["case_count"] == 2

@@ -94,6 +94,36 @@ def test_topic_agent_sessions_list_and_get_return_persisted_session(workspace_tm
     assert len(get_payload["comparison_result"]["candidate_assessments"]) == 3
 
 
+def test_topic_agent_session_store_prunes_old_sessions(workspace_tmp_path, monkeypatch):
+    session_store_path = workspace_tmp_path / "topic_agent_sessions.json"
+    monkeypatch.setattr(
+        "app.services.topic_agent.topic_agent_runtime.TOPIC_AGENT_STORE_PATH",
+        session_store_path,
+    )
+    monkeypatch.setattr(
+        "app.services.topic_agent.topic_agent_runtime.TOPIC_AGENT_SESSION_HISTORY_LIMIT",
+        2,
+    )
+
+    client = TestClient(app)
+    for interest in ["topic one", "topic two", "topic three"]:
+        response = client.post(
+            "/api/topic-agent/explore",
+            json={
+                "interest": interest,
+                "constraints": {},
+            },
+        )
+        assert response.status_code == 200
+
+    list_response = client.get("/api/topic-agent/sessions?limit=10")
+    assert list_response.status_code == 200
+    payload = list_response.json()
+    assert len(payload["sessions"]) == 2
+    assert payload["sessions"][0]["interest"] == "topic three"
+    assert payload["sessions"][1]["interest"] == "topic two"
+
+
 def test_topic_agent_refine_updates_existing_session(workspace_tmp_path, monkeypatch):
     session_store_path = workspace_tmp_path / "topic_agent_sessions.json"
     monkeypatch.setattr(

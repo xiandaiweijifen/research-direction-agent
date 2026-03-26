@@ -27828,5 +27828,712 @@
       "record_count": 5,
       "cache_hit": false
     }
+  },
+  {
+    "session_id": "9069d2608ced42a2b3bd9d268651b503",
+    "created_at": "2026-03-26T20:52:41.017371+00:00",
+    "updated_at": "2026-03-26T20:52:41.017371+00:00",
+    "user_input": {
+      "interest": "autonomous code repair agents",
+      "problem_domain": "software maintenance",
+      "seed_idea": "I want a feasible applied topic on reproducible evaluation for low-cost code repair agents.",
+      "constraints": {
+        "time_budget_months": 6,
+        "resource_level": "student",
+        "preferred_style": "applied",
+        "notes": null
+      }
+    },
+    "framing_result": {
+      "normalized_topic": "autonomous code repair agents",
+      "extracted_constraints": {
+        "time_budget_months": "6",
+        "resource_level": "student",
+        "preferred_style": "applied"
+      },
+      "missing_clarifications": [],
+      "search_questions": [
+        "What are the main research themes in autonomous code repair agents?",
+        "What methods and benchmarks are commonly used in autonomous code repair agents?",
+        "What open problems or underexplored gaps exist in autonomous code repair agents?"
+      ]
+    },
+    "evidence_records": [
+      {
+        "source_id": "arxiv_2",
+        "title": "Agent-Driven Automatic Software Improvement",
+        "source_type": "paper",
+        "source_tier": "B",
+        "year": 2024,
+        "authors_or_publisher": "Fernando Vallecillos Ruiz",
+        "identifier": "https://arxiv.org/abs/2406.16739v1",
+        "url": "https://arxiv.org/abs/2406.16739v1",
+        "summary": "With software maintenance accounting for 50% of the cost of developing software, enhancing code quality and reliability has become more critical than ever. In response to this challenge, this doctoral research proposal aims to explore innovative solutions by focusing on the deployment of agents powered by Large Language Models (LLMs) to perform software maintenance tasks. The iterative nature of agents, which allows for continuous learning and adaptation, can help surpass common challenges in code generation. One distinct challenge is the last-mile problems, errors at the final stage of producing functionally and contextually relevant code. Furthermore, this project aims to surpass the inherent limitations of current LLMs in source code through a collaborative framework where agents can correct and learn from each other's errors. We aim to use the iterative feedback in these systems to further fine-tune the LLMs underlying the agents, becoming better aligned to the task of automated software improvement. Our main goal is to achieve a leap forward in the field of automatic software improvement by developing new tools and frameworks that can enhance the efficiency and reliability of software development.",
+        "relevance_reason": "Retrieved from arXiv as a public academic source for the current topic query."
+      },
+      {
+        "source_id": "arxiv_3",
+        "title": "AIBugHunter: A Practical Tool for Predicting, Classifying and Repairing Software Vulnerabilities",
+        "source_type": "survey",
+        "source_tier": "A",
+        "year": 2023,
+        "authors_or_publisher": "Michael Fu, Chakkrit Tantithamthavorn, Trung Le, Yuki Kume",
+        "identifier": "https://arxiv.org/abs/2305.16615v1",
+        "url": "https://arxiv.org/abs/2305.16615v1",
+        "summary": "Many ML-based approaches have been proposed to automatically detect, localize, and repair software vulnerabilities. While ML-based methods are more effective than program analysis-based vulnerability analysis tools, few have been integrated into modern IDEs, hindering practical adoption. To bridge this critical gap, we propose AIBugHunter, a novel ML-based software vulnerability analysis tool for C/C++ languages that is integrated into Visual Studio Code. AIBugHunter helps software developers to achieve real-time vulnerability detection, explanation, and repairs during programming. In particular, AIBugHunter scans through developers' source code to (1) locate vulnerabilities, (2) identify vulnerability types, (3) estimate vulnerability severity, and (4) suggest vulnerability repairs. In this article, we propose a novel multi-objective optimization (MOO)-based vulnerability classification approach and a transformer-based estimation approach to help AIBugHunter accurately identify vulnerability types and estimate severity. Our empirical experiments on a large dataset consisting of 188K+ C/C++ functions confirm that our proposed approaches are more accurate than other state-of-the-art baseline methods for vulnerability classification and estimation. Furthermore, we conduct qualitative evaluations including a survey study and a user study to obtain software practitioners' perceptions of our AIBugHunter tool and assess the impact that AIBugHunter may have on developers' productivity in security aspects. Our survey study shows that our AIBugHunter is perceived as useful where 90% of the participants consider adopting our AIBugHunter. Last but not least, our user study shows that our AIBugHunter could possibly enhance developers' productivity in combating cybersecurity issues during software development.",
+        "relevance_reason": "Retrieved from arXiv as a public academic source for the current topic query."
+      },
+      {
+        "source_id": "arxiv_1",
+        "title": "Mining Software Repair Models for Reasoning on the Search Space of Automated Program Fixing",
+        "source_type": "paper",
+        "source_tier": "B",
+        "year": 2013,
+        "authors_or_publisher": "Matias Martinez, Martin Monperrus",
+        "identifier": "https://arxiv.org/abs/1311.3414v1",
+        "url": "https://arxiv.org/abs/1311.3414v1",
+        "summary": "This paper is about understanding the nature of bug fixing by analyzing thousands of bug fix transactions of software repositories. It then places this learned knowledge in the context of automated program repair. We give extensive empirical results on the nature of human bug fixes at a large scale and a fine granularity with abstract syntax tree differencing. We set up mathematical reasoning on the search space of automated repair and the time to navigate through it. By applying our method on 14 repositories of Java software and 89,993 versioning transactions, we show that not all probabilistic repair models are equivalent.",
+        "relevance_reason": "Retrieved from arXiv as a public academic source for the current topic query."
+      }
+    ],
+    "landscape_summary": {
+      "themes": [
+        "trustworthy evaluation and failure analysis in autonomous code repair agents",
+        "agent-based decomposition strategies for autonomous code repair agents"
+      ],
+      "active_methods": [
+        "agent-mediated problem decomposition"
+      ],
+      "likely_gaps": [
+        "trustworthy evaluation signals beyond accuracy-only reporting",
+        "clear task scoping for narrow research questions"
+      ],
+      "saturated_areas": [
+        "broad generic summaries without a sharply defined question"
+      ]
+    },
+    "candidate_topics": [
+      {
+        "candidate_id": "candidate_1",
+        "title": "Benchmark-Guided Narrow Task Definition",
+        "research_question": "How can a narrower evaluation slice around aibughunter tool reveal actionable limitations in current systems?",
+        "positioning": "gap-driven",
+        "novelty_note": "Frames novelty through sharper evaluation boundaries rather than broader performance reporting.",
+        "feasibility_note": "Moderate feasibility with public evidence and a bounded evaluation target.",
+        "risk_note": "May become incremental if the evaluation slice is not sharply distinguished.",
+        "supporting_source_ids": [
+          "arxiv_3",
+          "arxiv_2"
+        ],
+        "open_questions": [
+          "Which aibughunter tool slice best isolates the intended failure mode or capability?"
+        ]
+      },
+      {
+        "candidate_id": "candidate_2",
+        "title": "Applied Method Transfer Under Practical Constraints",
+        "research_question": "Can an existing method family associated with driven automatic be adapted effectively under strict practical constraints?",
+        "positioning": "applied-transfer",
+        "novelty_note": "Frames novelty through constrained adaptation of an existing method family.",
+        "feasibility_note": "Strong fit for an applied project that can reuse a visible baseline.",
+        "risk_note": "Novelty may depend heavily on the chosen constraint and evaluation design.",
+        "supporting_source_ids": [
+          "arxiv_2",
+          "arxiv_3"
+        ],
+        "open_questions": [
+          "Which constraint creates the strongest research signal?"
+        ]
+      },
+      {
+        "candidate_id": "candidate_3",
+        "title": "Tooling And Evaluation Workflow Support",
+        "research_question": "What tooling or workflow support around driven automatic would make research in this area more reproducible?",
+        "positioning": "systems",
+        "novelty_note": "Shifts value from model novelty toward reproducibility, workflow support, and evaluation reliability.",
+        "feasibility_note": "High feasibility for a short-cycle engineering-heavy project.",
+        "risk_note": "Applied impact may be clearer than publication novelty unless the workflow pain point is precisely chosen.",
+        "supporting_source_ids": [
+          "arxiv_2",
+          "arxiv_3"
+        ],
+        "open_questions": [
+          "What concrete reproducibility pain point should be prioritized first?",
+          "Which workflow improvement around driven automatic reduces setup or audit cost the most?",
+          "What workflow support would make trustworthy evaluation and audit trails easier to reproduce?",
+          "Which workflow improvement reduces compute or setup cost the most?"
+        ]
+      }
+    ],
+    "comparison_result": {
+      "dimensions": [
+        "novelty",
+        "feasibility",
+        "evidence_strength",
+        "data_availability",
+        "implementation_cost",
+        "risk"
+      ],
+      "summary": "Candidate 2 is strongest for applied feasibility under the current constraints, candidate 1 remains strongest on research framing, and candidate 3 remains the fastest engineering path.",
+      "candidate_assessments": [
+        {
+          "candidate_id": "candidate_1",
+          "novelty": "high",
+          "feasibility": "medium",
+          "evidence_strength": "medium_high",
+          "data_availability": "medium",
+          "implementation_cost": "medium",
+          "risk": "medium"
+        },
+        {
+          "candidate_id": "candidate_2",
+          "novelty": "medium_high",
+          "feasibility": "high",
+          "evidence_strength": "medium_high",
+          "data_availability": "medium_high",
+          "implementation_cost": "medium_low",
+          "risk": "medium_low"
+        },
+        {
+          "candidate_id": "candidate_3",
+          "novelty": "medium",
+          "feasibility": "high",
+          "evidence_strength": "medium",
+          "data_availability": "high",
+          "implementation_cost": "low",
+          "risk": "medium_high"
+        }
+      ]
+    },
+    "convergence_result": {
+      "recommended_candidate_id": "candidate_2",
+      "backup_candidate_id": "candidate_1",
+      "rationale": "Candidate 2 is the best fit for the current constraints because it starts from reusable baselines, matches an applied project style, and is easier to execute within a tighter timeline.",
+      "manual_checks": [
+        "Confirm that the selected sub-problem is narrow enough for the available timeline.",
+        "Verify that at least one benchmark or dataset is realistically accessible.",
+        "Check whether the proposed gap is genuinely underexplored rather than a retrieval miss.",
+        "Verify that the topic still has enough novelty signal for the intended venue."
+      ]
+    },
+    "evidence_presentation": {
+      "source_facts": [
+        {
+          "statement": "Retrieved paper evidence 'Agent-Driven Automatic Software Improvement' (2024) as tier B support for the current topic.",
+          "statement_type": "source_fact",
+          "supporting_source_ids": [
+            "arxiv_2"
+          ],
+          "note": "Directly grounded in retrieved source metadata and source summary.",
+          "uncertainty_reason": null,
+          "missing_evidence": []
+        },
+        {
+          "statement": "Retrieved survey evidence 'AIBugHunter: A Practical Tool for Predicting, Classifying and Repairing Software Vulnerabilities' (2023) as tier A support for the current topic.",
+          "statement_type": "source_fact",
+          "supporting_source_ids": [
+            "arxiv_3"
+          ],
+          "note": "Directly grounded in retrieved source metadata and source summary.",
+          "uncertainty_reason": null,
+          "missing_evidence": []
+        },
+        {
+          "statement": "Retrieved paper evidence 'Mining Software Repair Models for Reasoning on the Search Space of Automated Program Fixing' (2013) as tier B support for the current topic.",
+          "statement_type": "source_fact",
+          "supporting_source_ids": [
+            "arxiv_1"
+          ],
+          "note": "Directly grounded in retrieved source metadata and source summary.",
+          "uncertainty_reason": null,
+          "missing_evidence": []
+        }
+      ],
+      "system_synthesis": [
+        {
+          "statement": "Current evidence clusters most strongly around trustworthy evaluation and failure analysis in autonomous code repair agents, agent-based decomposition strategies for autonomous code repair agents.",
+          "statement_type": "system_synthesis",
+          "supporting_source_ids": [
+            "arxiv_3",
+            "arxiv_2",
+            "arxiv_1"
+          ],
+          "note": "Agent synthesis over multiple retrieved sources with theme-level evidence matching.",
+          "uncertainty_reason": null,
+          "missing_evidence": []
+        },
+        {
+          "statement": "The current output separates into 3 candidate directions with distinct positioning and comparison scores.",
+          "statement_type": "system_synthesis",
+          "supporting_source_ids": [
+            "arxiv_3",
+            "arxiv_2"
+          ],
+          "note": "Agent synthesis over candidate generation and comparison outputs, anchored to candidate support sets.",
+          "uncertainty_reason": null,
+          "missing_evidence": []
+        }
+      ],
+      "tentative_inferences": [
+        {
+          "statement": "candidate_2 is currently the leading direction under the present constraints.",
+          "statement_type": "tentative_inference",
+          "supporting_source_ids": [
+            "arxiv_2",
+            "arxiv_3"
+          ],
+          "note": "Recommendation-level inference that still requires human validation.",
+          "uncertainty_reason": "This recommendation remains constraint-sensitive and depends on the current evidence bundle, not on a settled benchmark choice or direct experimental validation.",
+          "missing_evidence": [
+            "Confirm that the selected sub-problem is narrow enough for the available timeline.",
+            "Verify that at least one benchmark or dataset is realistically accessible."
+          ]
+        },
+        {
+          "statement": "Confirm that the selected sub-problem is narrow enough for the available timeline.",
+          "statement_type": "tentative_inference",
+          "supporting_source_ids": [
+            "arxiv_2",
+            "arxiv_3"
+          ],
+          "note": "Open validation requirement rather than a settled fact.",
+          "uncertainty_reason": "The recommendation should not be treated as final until this validation step is checked.",
+          "missing_evidence": [
+            "Confirm that the selected sub-problem is narrow enough for the available timeline."
+          ]
+        }
+      ]
+    },
+    "human_confirmations": [
+      "Confirm that the system correctly interpreted the topic as 'autonomous code repair agents'.",
+      "Confirm that candidate_2 should remain the leading direction after reviewing the supporting evidence and risks.",
+      "Manual check: Confirm that the selected sub-problem is narrow enough for the available timeline.",
+      "Manual check: Verify that at least one benchmark or dataset is realistically accessible."
+    ],
+    "clarification_suggestions": [],
+    "trace": [
+      {
+        "stage": "frame_problem",
+        "status": "completed",
+        "timestamp": "2026-03-26T20:52:57.617150+00:00",
+        "detail": "Structured the user input into a topic-exploration request."
+      },
+      {
+        "stage": "retrieve_evidence",
+        "status": "completed",
+        "timestamp": "2026-03-26T20:52:57.617175+00:00",
+        "detail": "Retrieved 3 evidence records using the arxiv provider after fallback from openalex (ConnectTimeout:_ssl.c:1001: The handshake operation timed out)."
+      },
+      {
+        "stage": "synthesize_landscape",
+        "status": "completed",
+        "timestamp": "2026-03-26T20:52:57.617184+00:00",
+        "detail": "Organized the current evidence bundle into a lightweight research landscape summary."
+      },
+      {
+        "stage": "generate_candidates",
+        "status": "completed",
+        "timestamp": "2026-03-26T20:52:57.617191+00:00",
+        "detail": "Generated 3 candidate topic directions from the current evidence bundle."
+      },
+      {
+        "stage": "compare_candidates",
+        "status": "completed",
+        "timestamp": "2026-03-26T20:52:57.617198+00:00",
+        "detail": "Produced a structured candidate comparison across fixed MVP dimensions."
+      },
+      {
+        "stage": "converge_recommendation",
+        "status": "completed",
+        "timestamp": "2026-03-26T20:52:57.617204+00:00",
+        "detail": "Produced a recommended next-best option with manual verification checks."
+      }
+    ],
+    "confidence_summary": {
+      "evidence_coverage": "medium",
+      "source_quality": "medium_high",
+      "candidate_separation": "high",
+      "conflict_level": "low",
+      "rationale": [
+        "Evidence coverage is medium based on the current number of retrieved records.",
+        "Source quality is medium_high based on the current source-tier mix.",
+        "Candidate separation is high based on the diversity of candidate positioning.",
+        "Conflict level is low because this development slice does not yet model explicit source disagreement."
+      ]
+    },
+    "evidence_diagnostics": {
+      "requested_provider": "openalex",
+      "used_provider": "arxiv",
+      "fallback_used": true,
+      "fallback_reason": "ConnectTimeout:_ssl.c:1001: The handshake operation timed out",
+      "record_count": 3,
+      "cache_hit": false
+    }
+  },
+  {
+    "session_id": "9c1ebd5068444a9ab7fa0a7b7bfd5e77",
+    "created_at": "2026-03-26T20:53:52.148732+00:00",
+    "updated_at": "2026-03-26T20:53:52.148732+00:00",
+    "user_input": {
+      "interest": "autonomous code repair agents",
+      "problem_domain": "software maintenance",
+      "seed_idea": "I want a feasible applied topic on reproducible evaluation for low-cost code repair agents.",
+      "constraints": {
+        "time_budget_months": 6,
+        "resource_level": "student",
+        "preferred_style": "applied",
+        "notes": null
+      }
+    },
+    "framing_result": {
+      "normalized_topic": "autonomous code repair agents",
+      "extracted_constraints": {
+        "time_budget_months": "6",
+        "resource_level": "student",
+        "preferred_style": "applied"
+      },
+      "missing_clarifications": [],
+      "search_questions": [
+        "What are the main research themes in autonomous code repair agents?",
+        "What methods and benchmarks are commonly used in autonomous code repair agents?",
+        "What open problems or underexplored gaps exist in autonomous code repair agents?"
+      ]
+    },
+    "evidence_records": [
+      {
+        "source_id": "openalex_w1984552983",
+        "title": "Semi-autonomous visual inspection of vessels assisted by an unmanned Micro Aerial Vehicle",
+        "source_type": "survey",
+        "source_tier": "A",
+        "year": 2012,
+        "authors_or_publisher": "Francisco Bonnin‐Pascual, Emilio Garcia‐Fidalgo, Alberto Ortiz",
+        "identifier": "https://openalex.org/W1984552983",
+        "url": "https://doi.org/10.1109/iros.2012.6385891",
+        "summary": "Vessel maintenance entails periodic visual inspections of internal and external parts of the hull in order to detect the typical defective situations affecting metallic structures, such as cracks, coating breakdown, corrosion, etc. The main goal of the EU-FP7 project MINOAS is the automation of the inspection process, currently undertaken by human surveyors, by means of a fleet of robotic agents. This paper overviews a semi-autonomous approach to the inspection problem consisting of an autonomous Micro Aerial Vehicle (MAV) to be used as part of this fleet and which is in charge of regularly supplying images that can effectively teleport the surveyor from a base station to the areas of the hull to be inspected. Specific image processing software to analyze those images and assist the surveyor during the repair/no repair decision making process is also contributed. The control software approach adopted for the MAV, including self-localization and obstacle avoidance, is described and discussed, and experimental results in this regard are as well reported.",
+        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
+      },
+      {
+        "source_id": "openalex_w4402442868",
+        "title": "AutoCodeRover: Autonomous Program Improvement",
+        "source_type": "paper",
+        "source_tier": "B",
+        "year": 2024,
+        "authors_or_publisher": "Yuntong Zhang, Haifeng Ruan, Zhiyu Fan, Abhik Roychoudhury",
+        "identifier": "https://openalex.org/W4402442868",
+        "url": "https://doi.org/10.1145/3650212.3680384",
+        "summary": "Researchers have made significant progress in automating the software development process in the past decades. Automated techniques for issue summarization, bug reproduction, fault localization, and program repair have been built to ease the workload of developers. Recent progress in Large Language Models (LLMs) has significantly impacted the development process, where developers can use LLM-based programming assistants to achieve automated coding. Nevertheless, software engineering involves the process of program improvement apart from coding, specifically to enable software maintenance (e.g. program repair to fix bugs) and software evolution (e.g. feature additions). In this paper, we propose an automated approach for solving Github issues to autonomously achieve program improvement. In our approach called AutoCodeRover, LLMs are combined with sophisticated code search capabilities, ultimately leading to a program modification or patch. In contrast to recent LLM agent approaches from AI researchers and practitioners, our outlook is more software engineering oriented. We work on a program representation (abstract syntax tree) as opposed to viewing a software project as a mere collection of files. Our code search exploits the program structure in the form of classes/methods to enhance LLM’s understanding of the issue’s root cause, and effectively retrieve a context via iterative search. The use of spectrum-based fault localization using tests, further sharpens the context, as long as a test-suite is available. Experiments on the recently proposed SWE-bench-lite (300 real-life Github issues) show increased efficacy in solving Github issues (19% on SWE-bench-lite), which is higher than the efficacy of the recently reported Swe-agent. Interestingly, our approach resolved 57 GitHub issues in about 4 minutes each (pass@1), whereas developers spent more than 2.68 days on average. In addition, AutoCodeRover achieved this efficacy with significantly lower cost (on average, $0.43 USD), compared to other baselines. We posit that our workflow enables autonomous software engineering, where, in future, auto-generated code from LLMs can be autonomously improved.",
+        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
+      },
+      {
+        "source_id": "openalex_w2164445617",
+        "title": "Automating human based negotiation processes for autonomic logistics",
+        "source_type": "paper",
+        "source_tier": "B",
+        "year": 2002,
+        "authors_or_publisher": "Gábor Karsai, Geoffrey Bloor, Joseph Doyle",
+        "identifier": "https://openalex.org/W2164445617",
+        "url": "https://doi.org/10.1109/aero.2000.877890",
+        "summary": "Affordability and responsiveness are two key requirements for the next generation of aircraft support systems. Aircraft have to be repaired with minimum downtime and the support process has to be economical and efficient. The vision of autonomic logistics (AL) entails a maintenance and support system that can autonomously respond to \"events\", e.g. problems detected on-board the aircraft. The response includes identifying the source of the problem, acquiring the correct parts and tools, locating and scheduling the right maintenance personnel. Currently, software tools and packages are available that can provide functional components for an AL system, but the integration of these does not exist yet. The paper discusses how agent technology in general and negotiation processes in particular can be applied to build an AL system. We envision a system where existing, \"legacy\" packages are integrated via an agent framework: a higher-level layer that ties together the packages. Agents represent tasks that need to be performed in an AL system, and they autonomously exist, navigate, and negotiate within the framework. This approach, while emphasizing automation, is not that different from existing, human processes. Even in existing maintenance organizations human negotiation is an accepted practice, which, in many cases, \"makes the system work\", in spite of rigid, formal rules. Thus, we envision that the autonomous, negotiation-based system will provide the required capabilities for an AL system to increase readiness and turn-around rates, and to decrease costs.",
+        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
+      },
+      {
+        "source_id": "openalex_w1556749464",
+        "title": "The hundred year spacecraft",
+        "source_type": "paper",
+        "source_tier": "B",
+        "year": 2003,
+        "authors_or_publisher": "A. Avižienis",
+        "identifier": "https://openalex.org/W1556749464",
+        "url": "https://doi.org/10.1109/eh.1999.785458",
+        "summary": "Two major steps in the evolution of autonomous, longlife spacecraft computing systems have been the demonstrations of systems with one-year and ten-year life expectancies in space. This paper discusses the design concept of a distributed, diversified self-testing and self-repairing computing system that is embedded in an autonomous spacecraft and serves as its agent for automatic maintenance. The attainment of a hundred-year life expectancy is founded on the extensive use of diversity in materials, technologies and design of hardware elements. Diversity of hardware and software designs also provides tolerance of design faults. A hierarchical system structure and a rigorous design paradigm for the fault-tolerance defenses also support the goals of autonomy and long system lifetime.",
+        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
+      },
+      {
+        "source_id": "openalex_w1497744507",
+        "title": "SAP R/3 business blueprint (2nd ed.): understanding enterprise supply chain management",
+        "source_type": "paper",
+        "source_tier": "B",
+        "year": 1999,
+        "authors_or_publisher": "Thomas A. Curran, Andrew Ladd",
+        "identifier": "https://openalex.org/W1497744507",
+        "url": "https://dl.acm.org/citation.cfm?id=316580",
+        "summary": "I. BUSINESS ENGINEERING. 1. Business Engineering and Enterprise Optimization. Significance of Business Engineering. Principles of Business Engineering. Elements of Business Engineering. Requirements for Successful Implementation of Business Engineering. IT Implementation Issues. Effects of Integration of Information Technology. Evolution of Information Technology. Client/Server Technology. Benefits of Client/Server Technology. SAP(TM) and Client/Server Technology. Beyond Business Engineering. Continuous Engineering. Supply Chain Management. Desktop ERP. Conclusion. 2. The Business Blueprint. Pros and Cons of Business Blueprints. General Design of the R/3(TM) Blueprint. Focus of the R/3(TM) Blueprint. Event-Driven Process Chain Methodology. Describing Complex Business Processes. Ordering Toner. Recruiting a New Employee. Planning a Seminar. EPC Methodology and Viewpoints in the R/3(TM) Reference Model. Reference Model Viewpoints-Car Dealership. The Component Model-What Happens? The Organizational Model-Who Does What? The Data Model-What Is Needed? The Interaction Model-How Do Company Models Interact? Summary. 3. Configure to Standard Software Implementation Issues. Mapping with the Business Blueprint. Redlining the Blueprint. Extending the Business-Process Design. Conclusion. II. PROCESS DESIGN. 4. Value Chain Thinking. The Value Chain Principle. R/3(TM) and the Value Chain. Overview of Part 2: Value Chain Thinking. 5. Sales Logistics. Standard Order Handling Scenario. Mailing Campaign Processing. Sales Activity Processing. Customer RFQ Processing. Customer Quotation Processing. Standard Order Processing. Delivery Processing. Goods Issue Processing for Stock Material. Billing. Contract Handling and Scheduling Agreements. Third-Party Order Handling. Customer Consignment Stock Handling. Cash Order Handling. Rush Order Handling. Make-to-Order Sales Order Handling. Assembly-to-Order Sales Order Handling. Empties and Returnable Packaging Handling. Returns Handling. Decentralized Shipping. R/3 Sales Logistics Summary. 6. Production Logistics. Production by Lot Size. Processing of Sales and Operation Planning. Demand Management. Material Requirements Planning (Single-Item MPS). Creation, Release, and Execution of Production Repetitive Manufacturing. Make-to-Order Production. Process Manufacturing. Project-Related to Order. Quality Management for Goods Receipt from Production. R/3 Production Logistics Summary. 7. Procurement Logistics. Procurement of Stock Material. Material Requirement Planning. Requisition Processing to Stock Material. Processing of RFQ Issued to Vendor. Vendor Quotation Processing. Purchase Order Processing for Stock Material. Goods Receipt Processing. Procurement of Consumable Materials. Procurement of Consignment Materials. Procurement of Subcontract Work. Stock Transfer Processing. External Services Management. R/3(TM) Procurement Logistics Summary. 8. External Accounting. Vendor Handling. Vendor Master Record Processing. Vendor Invoice Processing. Down Payment Release. Automatic Payment. Manual Payment. Customer Processing. OTA Vendor Processing. Creditor Subsidiary/Head-Office Processing. General Ledger Processing. Special-Purpose Ledger Handling. Consolidation. R/3(TM) External Accounting Overview. 9. Organization and Human Resource Management. Recruitment. Creating a Search. Tracking the Search Process. Job Description. Employee Application Processing. Confirming the Application Receipt. Preliminary Personnel Choice. Personnel Processing. Employment Agreement Offer Processing. Applicant Status Check. Preparation for Employing the Applicant. Rejection of Offer. Applicant Pool Administration. Putting an Application on Hold. Rejection of Application. Business Event Handling. Business Trip Management. Time Management Handling. International Payroll Processing. Salary Administration. Benefits Administration. Personnel Planning and Management. R/3 Procurement Logistics Overview. 10. Business Planning and Controlling. Cost Object Controlling. Production Order Preliminary Costing. Production Order Simultaneous Costing. Period-End Closing and Final Costing. Profitability Analysis. Profit Center Accounting. Overhead Cost Management. R/3(TM) Business Planning and Controlling Summary. 11. Capital Asset Management. Planned Plant Maintenance. Maintenance Plan Processing. Maintenance Plan Scheduling. Maintenance Call Processing. Maintenance Order Creation and Processing. Maintenance Order Release. Maintenance Order Execution. Maintenance Order Completion Confirmation. Maintenance Order Settlement. Damage-Related Maintenance Processing. Project-Based Maintenance Processing. Cash Management. Budgeting. Fixed Asset Processing. Leased Asset Processing. R/3(TM) Capital Asset Management Summary. 12. Finance Management. Treasury Management. Fixed-Term Deposit Processing (Money Market/Foreign Exchange/Derivatives Trading). Product Type Selection. Fixed-Term Deposit Processing. Rollover. Correspondence. Settlement in Treasury. Netting Processing. Posting Approval in Treasury. Posting in Treasury. Accrual. Key Date Valuation. Realized Profits/Losses. Treasury Master Data Scenario. New Security Management. Treasury. Treasury Information System. Cash Management. Market Risk Management. R/3(TM) Finance Management Summary. 13. Customer Service. Field Service. Recording and Processing Service Notifications. Opening and Processing Service Orders. Service Order Release. Service Order Completion Confirmation. Technical Results Recording. Resource-Related Billing and Invoice Processing. Service Order Settlement. Long-Term Service Agreements. In-House Repair Processing. Replacement Part Delivery Processing. Notification Receipt and Processing. Evaluations. R/3(TM) Customer Service Summary. III. ARCHITECTURE, FRAMEWORK, AND TOOLS. 14. Architecture of the R/3(TM) System. R/3(TM) and the Distributed Environment. The Three-Tier Client/Server R/3(TM) Architecture. Benefits of the R/3(TM) Three-Tier Client/Server. Interprogram Communication. Middleware Transaction Management. Rationale for Distributed Business-Process Integration. Capabilities of Application Distribution in R/3(TM). Tools for Application Distribution. Model-Based Application Distribution. Distribution Reference Model. Using the Business Blueprint for Application Integration. Conclusion. 15. R/3(TM) Framework and Infrastructure. Background of Business Integration. SAP(TM) Business Framework. Configuration of Enterprise Applications. Rationale for the Business Framework. Repository as Integrating Factor. Business Processes. Business Objects. Data Models. Object-Oriented Interfaces. Business Components. Enterprise Application Development. ABAP/4 Development Workbench. Development Workbench Features. Conclusion. 16. Business Engineering in R/3(TM). R/3(TM) Business Engineer Overview. Business Engineer and Streamlined Implementations. Modeling the Distributed Enterprise. Application Components. Session Manager. Enterprise Organization. Using the R/3(TM) Reference Model. Business Object Model. Object-Oriented Data Model. Business Process Model. Workflow Model. Guideline for Implementing R/3(TM). Project Management Procedure Model. AcceleratedSAP(TM). The Roadmap. Tools. R/3(TM) Services and Training. Phase 1: Project Preparation. Phase 2: Business Blueprint. Phase 3: Realization. Phase 4: Final Preparation. Phase 5: Go Live and Support Continuous Change. Workflow and Personnel Organization. Open Repository Interface. Business Engineer: Future Vision. 17. Next Generation Enterprise. What Is Internet ERP? Next Generation Application Components. The Industry Reference Model, Process Configuration, and Vertical Markets. Supply Chain Optimization, Planning, and Execution. Enterprise Application Integration. Business Object Integration Model. Business Process Integration Models. Electronic Commerce. Desktop ERP: Automating the Way People Work. Improved Browsers. Desktop ERP. Autonomous Software Agents. Conclusion. Index.",
+        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
+      }
+    ],
+    "landscape_summary": {
+      "themes": [
+        "agent-based decomposition strategies for autonomous code repair agents",
+        "applied research themes around autonomous in autonomous code repair agents"
+      ],
+      "active_methods": [
+        "agent-mediated problem decomposition"
+      ],
+      "likely_gaps": [
+        "clear task scoping for narrow research questions",
+        "stronger evidence on feasibility under limited resources"
+      ],
+      "saturated_areas": [
+        "broad generic summaries without a sharply defined question"
+      ]
+    },
+    "candidate_topics": [
+      {
+        "candidate_id": "candidate_1",
+        "title": "Benchmark-Guided Narrow Task Definition",
+        "research_question": "How can a narrower evaluation slice around business blueprint reveal actionable limitations in current systems?",
+        "positioning": "gap-driven",
+        "novelty_note": "Frames novelty through sharper evaluation boundaries rather than broader performance reporting.",
+        "feasibility_note": "Moderate feasibility with public evidence and a bounded evaluation target.",
+        "risk_note": "May become incremental if the evaluation slice is not sharply distinguished.",
+        "supporting_source_ids": [
+          "openalex_w1497744507",
+          "openalex_w4402442868"
+        ],
+        "open_questions": [
+          "Which business blueprint slice best isolates the intended failure mode or capability?"
+        ]
+      },
+      {
+        "candidate_id": "candidate_2",
+        "title": "Applied Method Transfer Under Practical Constraints",
+        "research_question": "Can an existing method family associated with program improvement be adapted effectively under strict practical constraints?",
+        "positioning": "applied-transfer",
+        "novelty_note": "Frames novelty through constrained adaptation of an existing method family.",
+        "feasibility_note": "Strong fit for an applied project that can reuse a visible baseline.",
+        "risk_note": "Novelty may depend heavily on the chosen constraint and evaluation design.",
+        "supporting_source_ids": [
+          "openalex_w4402442868",
+          "openalex_w1497744507"
+        ],
+        "open_questions": [
+          "Which constraint creates the strongest research signal?"
+        ]
+      },
+      {
+        "candidate_id": "candidate_3",
+        "title": "Tooling And Evaluation Workflow Support",
+        "research_question": "What tooling or workflow support around automating human would make research in this area more reproducible?",
+        "positioning": "systems",
+        "novelty_note": "Shifts value from model novelty toward reproducibility, workflow support, and evaluation reliability.",
+        "feasibility_note": "High feasibility for a short-cycle engineering-heavy project.",
+        "risk_note": "Applied impact may be clearer than publication novelty unless the workflow pain point is precisely chosen.",
+        "supporting_source_ids": [
+          "openalex_w2164445617",
+          "openalex_w1497744507",
+          "openalex_w4402442868"
+        ],
+        "open_questions": [
+          "What concrete reproducibility pain point should be prioritized first?",
+          "Which workflow improvement around automating human reduces setup or audit cost the most?",
+          "Which workflow improvement reduces compute or setup cost the most?"
+        ]
+      }
+    ],
+    "comparison_result": {
+      "dimensions": [
+        "novelty",
+        "feasibility",
+        "evidence_strength",
+        "data_availability",
+        "implementation_cost",
+        "risk"
+      ],
+      "summary": "Candidate 2 is strongest for applied feasibility under the current constraints, candidate 1 remains strongest on research framing, and candidate 3 remains the fastest engineering path.",
+      "candidate_assessments": [
+        {
+          "candidate_id": "candidate_1",
+          "novelty": "high",
+          "feasibility": "medium",
+          "evidence_strength": "medium_high",
+          "data_availability": "medium",
+          "implementation_cost": "medium",
+          "risk": "medium"
+        },
+        {
+          "candidate_id": "candidate_2",
+          "novelty": "medium_high",
+          "feasibility": "high",
+          "evidence_strength": "medium_high",
+          "data_availability": "medium_high",
+          "implementation_cost": "medium_low",
+          "risk": "medium_low"
+        },
+        {
+          "candidate_id": "candidate_3",
+          "novelty": "medium",
+          "feasibility": "high",
+          "evidence_strength": "medium",
+          "data_availability": "high",
+          "implementation_cost": "low",
+          "risk": "medium_high"
+        }
+      ]
+    },
+    "convergence_result": {
+      "recommended_candidate_id": "candidate_2",
+      "backup_candidate_id": "candidate_1",
+      "rationale": "Candidate 2 is the best fit for the current constraints because it starts from reusable baselines, matches an applied project style, and is easier to execute within a tighter timeline.",
+      "manual_checks": [
+        "Confirm that the selected sub-problem is narrow enough for the available timeline.",
+        "Verify that at least one benchmark or dataset is realistically accessible.",
+        "Check whether the proposed gap is genuinely underexplored rather than a retrieval miss.",
+        "Verify that the topic still has enough novelty signal for the intended venue."
+      ]
+    },
+    "evidence_presentation": {
+      "source_facts": [
+        {
+          "statement": "Retrieved survey evidence 'Semi-autonomous visual inspection of vessels assisted by an unmanned Micro Aerial Vehicle' (2012) as tier A support for the current topic.",
+          "statement_type": "source_fact",
+          "supporting_source_ids": [
+            "openalex_w1984552983"
+          ],
+          "note": "Directly grounded in retrieved source metadata and source summary.",
+          "uncertainty_reason": null,
+          "missing_evidence": []
+        },
+        {
+          "statement": "Retrieved paper evidence 'AutoCodeRover: Autonomous Program Improvement' (2024) as tier B support for the current topic.",
+          "statement_type": "source_fact",
+          "supporting_source_ids": [
+            "openalex_w4402442868"
+          ],
+          "note": "Directly grounded in retrieved source metadata and source summary.",
+          "uncertainty_reason": null,
+          "missing_evidence": []
+        },
+        {
+          "statement": "Retrieved paper evidence 'Automating human based negotiation processes for autonomic logistics' (2002) as tier B support for the current topic.",
+          "statement_type": "source_fact",
+          "supporting_source_ids": [
+            "openalex_w2164445617"
+          ],
+          "note": "Directly grounded in retrieved source metadata and source summary.",
+          "uncertainty_reason": null,
+          "missing_evidence": []
+        }
+      ],
+      "system_synthesis": [
+        {
+          "statement": "Current evidence clusters most strongly around agent-based decomposition strategies for autonomous code repair agents, applied research themes around autonomous in autonomous code repair agents.",
+          "statement_type": "system_synthesis",
+          "supporting_source_ids": [
+            "openalex_w4402442868",
+            "openalex_w2164445617",
+            "openalex_w1984552983"
+          ],
+          "note": "Agent synthesis over multiple retrieved sources with theme-level evidence matching.",
+          "uncertainty_reason": null,
+          "missing_evidence": []
+        },
+        {
+          "statement": "The current output separates into 3 candidate directions with distinct positioning and comparison scores.",
+          "statement_type": "system_synthesis",
+          "supporting_source_ids": [
+            "openalex_w1497744507",
+            "openalex_w4402442868",
+            "openalex_w2164445617"
+          ],
+          "note": "Agent synthesis over candidate generation and comparison outputs, anchored to candidate support sets.",
+          "uncertainty_reason": null,
+          "missing_evidence": []
+        }
+      ],
+      "tentative_inferences": [
+        {
+          "statement": "candidate_2 is currently the leading direction under the present constraints.",
+          "statement_type": "tentative_inference",
+          "supporting_source_ids": [
+            "openalex_w4402442868",
+            "openalex_w1497744507"
+          ],
+          "note": "Recommendation-level inference that still requires human validation.",
+          "uncertainty_reason": "This recommendation remains constraint-sensitive and depends on the current evidence bundle, not on a settled benchmark choice or direct experimental validation.",
+          "missing_evidence": [
+            "Confirm that the selected sub-problem is narrow enough for the available timeline.",
+            "Verify that at least one benchmark or dataset is realistically accessible."
+          ]
+        },
+        {
+          "statement": "Confirm that the selected sub-problem is narrow enough for the available timeline.",
+          "statement_type": "tentative_inference",
+          "supporting_source_ids": [
+            "openalex_w4402442868",
+            "openalex_w1497744507"
+          ],
+          "note": "Open validation requirement rather than a settled fact.",
+          "uncertainty_reason": "The recommendation should not be treated as final until this validation step is checked.",
+          "missing_evidence": [
+            "Confirm that the selected sub-problem is narrow enough for the available timeline."
+          ]
+        }
+      ]
+    },
+    "human_confirmations": [
+      "Confirm that the system correctly interpreted the topic as 'autonomous code repair agents'.",
+      "Confirm that candidate_2 should remain the leading direction after reviewing the supporting evidence and risks.",
+      "Manual check: Confirm that the selected sub-problem is narrow enough for the available timeline.",
+      "Manual check: Verify that at least one benchmark or dataset is realistically accessible."
+    ],
+    "clarification_suggestions": [],
+    "trace": [
+      {
+        "stage": "frame_problem",
+        "status": "completed",
+        "timestamp": "2026-03-26T20:54:16.703326+00:00",
+        "detail": "Structured the user input into a topic-exploration request."
+      },
+      {
+        "stage": "retrieve_evidence",
+        "status": "completed",
+        "timestamp": "2026-03-26T20:54:16.703339+00:00",
+        "detail": "Retrieved 5 evidence records using the openalex provider."
+      },
+      {
+        "stage": "synthesize_landscape",
+        "status": "completed",
+        "timestamp": "2026-03-26T20:54:16.703344+00:00",
+        "detail": "Organized the current evidence bundle into a lightweight research landscape summary."
+      },
+      {
+        "stage": "generate_candidates",
+        "status": "completed",
+        "timestamp": "2026-03-26T20:54:16.703347+00:00",
+        "detail": "Generated 3 candidate topic directions from the current evidence bundle."
+      },
+      {
+        "stage": "compare_candidates",
+        "status": "completed",
+        "timestamp": "2026-03-26T20:54:16.703351+00:00",
+        "detail": "Produced a structured candidate comparison across fixed MVP dimensions."
+      },
+      {
+        "stage": "converge_recommendation",
+        "status": "completed",
+        "timestamp": "2026-03-26T20:54:16.703353+00:00",
+        "detail": "Produced a recommended next-best option with manual verification checks."
+      }
+    ],
+    "confidence_summary": {
+      "evidence_coverage": "medium",
+      "source_quality": "medium_high",
+      "candidate_separation": "high",
+      "conflict_level": "low",
+      "rationale": [
+        "Evidence coverage is medium based on the current number of retrieved records.",
+        "Source quality is medium_high based on the current source-tier mix.",
+        "Candidate separation is high based on the diversity of candidate positioning.",
+        "Conflict level is low because this development slice does not yet model explicit source disagreement."
+      ]
+    },
+    "evidence_diagnostics": {
+      "requested_provider": "openalex",
+      "used_provider": "openalex",
+      "fallback_used": false,
+      "fallback_reason": null,
+      "record_count": 5,
+      "cache_hit": false
+    }
   }
 ]

@@ -1,5 +1,6 @@
 import json
 import re
+import time
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
@@ -7,6 +8,7 @@ from typing import Any
 from app.core.config import DATA_ROOT
 
 REPORT_STORE_DIR = DATA_ROOT / "tool_state" / "evaluation_reports"
+REPORT_HISTORY_RETENTION_LIMIT = 20
 
 
 def _sanitize_segment(value: str) -> str:
@@ -119,10 +121,39 @@ def _sorted_history_payloads(paths: list[Path]) -> list[dict[str, Any]]:
     return payloads
 
 
+def _effective_history_limit(limit: int) -> int:
+    if REPORT_HISTORY_RETENTION_LIMIT > 0:
+        return min(limit, REPORT_HISTORY_RETENTION_LIMIT)
+    return limit
+
+
+def _prune_history_reports(pattern: str) -> None:
+    if REPORT_HISTORY_RETENTION_LIMIT <= 0:
+        return
+    paths = sorted(
+        REPORT_STORE_DIR.glob(pattern),
+        key=lambda path: path.name,
+        reverse=True,
+    )
+    for path in paths[REPORT_HISTORY_RETENTION_LIMIT:]:
+        if path.exists() and path.is_file():
+            for _attempt in range(3):
+                try:
+                    path.unlink()
+                    break
+                except PermissionError:
+                    try:
+                        path.chmod(0o666)
+                    except PermissionError:
+                        pass
+                    time.sleep(0.02)
+
+
 def persist_retrieval_report(dataset_name: str, top_k: int, report: Any) -> dict[str, Any]:
     payload = _report_payload(dataset_name=dataset_name, report=report, report_source="fresh")
     payload["top_k"] = top_k
     _write_report(_retrieval_history_report_path(dataset_name, top_k, payload["saved_at"]), payload)
+    _prune_history_reports(f"retrieval__{_sanitize_segment(dataset_name)}__topk_{top_k}__*.json")
     return _write_report(_retrieval_report_path(dataset_name, top_k), payload)
 
 
@@ -137,7 +168,7 @@ def load_latest_retrieval_report(dataset_name: str, top_k: int) -> dict[str, Any
 def list_retrieval_report_history(dataset_name: str, top_k: int, limit: int = 5) -> list[dict[str, Any]]:
     safe_name = _sanitize_segment(dataset_name)
     pattern = f"retrieval__{safe_name}__topk_{top_k}__*.json"
-    payloads = _sorted_history_payloads(sorted(REPORT_STORE_DIR.glob(pattern)))[:limit]
+    payloads = _sorted_history_payloads(sorted(REPORT_STORE_DIR.glob(pattern)))[: _effective_history_limit(limit)]
     return [
         _history_entry(
             payload=payload,
@@ -151,6 +182,7 @@ def list_retrieval_report_history(dataset_name: str, top_k: int, limit: int = 5)
 def persist_agent_route_report(dataset_name: str, report: Any) -> dict[str, Any]:
     payload = _report_payload(dataset_name=dataset_name, report=report, report_source="fresh")
     _write_report(_agent_route_history_report_path(dataset_name, payload["saved_at"]), payload)
+    _prune_history_reports(f"agent_route__{_sanitize_segment(dataset_name)}__*.json")
     return _write_report(_agent_route_report_path(dataset_name), payload)
 
 
@@ -165,7 +197,7 @@ def load_latest_agent_route_report(dataset_name: str) -> dict[str, Any] | None:
 def list_agent_route_report_history(dataset_name: str, limit: int = 5) -> list[dict[str, Any]]:
     safe_name = _sanitize_segment(dataset_name)
     pattern = f"agent_route__{safe_name}__*.json"
-    payloads = _sorted_history_payloads(sorted(REPORT_STORE_DIR.glob(pattern)))[:limit]
+    payloads = _sorted_history_payloads(sorted(REPORT_STORE_DIR.glob(pattern)))[: _effective_history_limit(limit)]
     return [
         _history_entry(
             payload=payload,
@@ -179,6 +211,7 @@ def list_agent_route_report_history(dataset_name: str, limit: int = 5) -> list[d
 def persist_agent_workflow_report(dataset_name: str, report: Any) -> dict[str, Any]:
     payload = _report_payload(dataset_name=dataset_name, report=report, report_source="fresh")
     _write_report(_agent_workflow_history_report_path(dataset_name, payload["saved_at"]), payload)
+    _prune_history_reports(f"agent_workflow__{_sanitize_segment(dataset_name)}__*.json")
     return _write_report(_agent_workflow_report_path(dataset_name), payload)
 
 
@@ -193,7 +226,7 @@ def load_latest_agent_workflow_report(dataset_name: str) -> dict[str, Any] | Non
 def list_agent_workflow_report_history(dataset_name: str, limit: int = 5) -> list[dict[str, Any]]:
     safe_name = _sanitize_segment(dataset_name)
     pattern = f"agent_workflow__{safe_name}__*.json"
-    payloads = _sorted_history_payloads(sorted(REPORT_STORE_DIR.glob(pattern)))[:limit]
+    payloads = _sorted_history_payloads(sorted(REPORT_STORE_DIR.glob(pattern)))[: _effective_history_limit(limit)]
     return [
         _history_entry(
             payload=payload,
@@ -207,6 +240,7 @@ def list_agent_workflow_report_history(dataset_name: str, limit: int = 5) -> lis
 def persist_tool_execution_report(dataset_name: str, report: Any) -> dict[str, Any]:
     payload = _report_payload(dataset_name=dataset_name, report=report, report_source="fresh")
     _write_report(_tool_execution_history_report_path(dataset_name, payload["saved_at"]), payload)
+    _prune_history_reports(f"tool_execution__{_sanitize_segment(dataset_name)}__*.json")
     return _write_report(_tool_execution_report_path(dataset_name), payload)
 
 
@@ -221,7 +255,7 @@ def load_latest_tool_execution_report(dataset_name: str) -> dict[str, Any] | Non
 def list_tool_execution_report_history(dataset_name: str, limit: int = 5) -> list[dict[str, Any]]:
     safe_name = _sanitize_segment(dataset_name)
     pattern = f"tool_execution__{safe_name}__*.json"
-    payloads = _sorted_history_payloads(sorted(REPORT_STORE_DIR.glob(pattern)))[:limit]
+    payloads = _sorted_history_payloads(sorted(REPORT_STORE_DIR.glob(pattern)))[: _effective_history_limit(limit)]
     return [
         _history_entry(
             payload=payload,

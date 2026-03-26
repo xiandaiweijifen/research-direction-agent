@@ -244,5 +244,46 @@
         "relevance_reason": "Retrieved from arXiv as a public academic source for the current topic query."
       }
     ]
+  },
+  "\"autonomous code repair agents\" autonomous repair agents software maintenance code::max=3": {
+    "saved_at": "2026-03-27T04:52:57.609820+08:00",
+    "records": [
+      {
+        "source_id": "arxiv_2",
+        "title": "Agent-Driven Automatic Software Improvement",
+        "source_type": "paper",
+        "source_tier": "B",
+        "year": 2024,
+        "authors_or_publisher": "Fernando Vallecillos Ruiz",
+        "identifier": "https://arxiv.org/abs/2406.16739v1",
+        "url": "https://arxiv.org/abs/2406.16739v1",
+        "summary": "With software maintenance accounting for 50% of the cost of developing software, enhancing code quality and reliability has become more critical than ever. In response to this challenge, this doctoral research proposal aims to explore innovative solutions by focusing on the deployment of agents powered by Large Language Models (LLMs) to perform software maintenance tasks. The iterative nature of agents, which allows for continuous learning and adaptation, can help surpass common challenges in code generation. One distinct challenge is the last-mile problems, errors at the final stage of producing functionally and contextually relevant code. Furthermore, this project aims to surpass the inherent limitations of current LLMs in source code through a collaborative framework where agents can correct and learn from each other's errors. We aim to use the iterative feedback in these systems to further fine-tune the LLMs underlying the agents, becoming better aligned to the task of automated software improvement. Our main goal is to achieve a leap forward in the field of automatic software improvement by developing new tools and frameworks that can enhance the efficiency and reliability of software development.",
+        "relevance_reason": "Retrieved from arXiv as a public academic source for the current topic query."
+      },
+      {
+        "source_id": "arxiv_3",
+        "title": "AIBugHunter: A Practical Tool for Predicting, Classifying and Repairing Software Vulnerabilities",
+        "source_type": "survey",
+        "source_tier": "A",
+        "year": 2023,
+        "authors_or_publisher": "Michael Fu, Chakkrit Tantithamthavorn, Trung Le, Yuki Kume",
+        "identifier": "https://arxiv.org/abs/2305.16615v1",
+        "url": "https://arxiv.org/abs/2305.16615v1",
+        "summary": "Many ML-based approaches have been proposed to automatically detect, localize, and repair software vulnerabilities. While ML-based methods are more effective than program analysis-based vulnerability analysis tools, few have been integrated into modern IDEs, hindering practical adoption. To bridge this critical gap, we propose AIBugHunter, a novel ML-based software vulnerability analysis tool for C/C++ languages that is integrated into Visual Studio Code. AIBugHunter helps software developers to achieve real-time vulnerability detection, explanation, and repairs during programming. In particular, AIBugHunter scans through developers' source code to (1) locate vulnerabilities, (2) identify vulnerability types, (3) estimate vulnerability severity, and (4) suggest vulnerability repairs. In this article, we propose a novel multi-objective optimization (MOO)-based vulnerability classification approach and a transformer-based estimation approach to help AIBugHunter accurately identify vulnerability types and estimate severity. Our empirical experiments on a large dataset consisting of 188K+ C/C++ functions confirm that our proposed approaches are more accurate than other state-of-the-art baseline methods for vulnerability classification and estimation. Furthermore, we conduct qualitative evaluations including a survey study and a user study to obtain software practitioners' perceptions of our AIBugHunter tool and assess the impact that AIBugHunter may have on developers' productivity in security aspects. Our survey study shows that our AIBugHunter is perceived as useful where 90% of the participants consider adopting our AIBugHunter. Last but not least, our user study shows that our AIBugHunter could possibly enhance developers' productivity in combating cybersecurity issues during software development.",
+        "relevance_reason": "Retrieved from arXiv as a public academic source for the current topic query."
+      },
+      {
+        "source_id": "arxiv_1",
+        "title": "Mining Software Repair Models for Reasoning on the Search Space of Automated Program Fixing",
+        "source_type": "paper",
+        "source_tier": "B",
+        "year": 2013,
+        "authors_or_publisher": "Matias Martinez, Martin Monperrus",
+        "identifier": "https://arxiv.org/abs/1311.3414v1",
+        "url": "https://arxiv.org/abs/1311.3414v1",
+        "summary": "This paper is about understanding the nature of bug fixing by analyzing thousands of bug fix transactions of software repositories. It then places this learned knowledge in the context of automated program repair. We give extensive empirical results on the nature of human bug fixes at a large scale and a fine granularity with abstract syntax tree differencing. We set up mathematical reasoning on the search space of automated repair and the time to navigate through it. By applying our method on 14 repositories of Java software and 89,993 versioning transactions, we show that not all probabilistic repair models are equivalent.",
+        "relevance_reason": "Retrieved from arXiv as a public academic source for the current topic query."
+      }
+    ]
   }
 }

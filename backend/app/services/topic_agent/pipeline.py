@@ -559,11 +559,15 @@ def _record_text(record: TopicAgentSourceRecord) -> str:
 def _record_title_anchor(record: TopicAgentSourceRecord) -> str:
     title_lower = record.title.lower()
     preferred_phrases = [
+        "developer workflow support",
+        "developer tooling workflows",
         "software engineering",
         "developer-ai collaboration",
         "developer workflow",
         "program improvement",
         "code intent extraction",
+        "tool-building agents",
+        "empirical software engineering",
         "clinical reasoning",
         "medical reasoning",
         "decision-making",
@@ -578,10 +582,34 @@ def _record_title_anchor(record: TopicAgentSourceRecord) -> str:
     for phrase in preferred_phrases:
         if phrase in title_lower:
             return phrase
+    if "making agent tools" in title_lower or "agent tools" in title_lower:
+        return "tool-building agents"
+    if "software developers" in title_lower or "generalist agents" in title_lower:
+        return "developer workflow support"
+    if "smart app development" in title_lower or "solidgpt" in title_lower:
+        return "developer tooling workflows"
+    if "empirical software engineering" in title_lower:
+        return "empirical software engineering"
+
+    summary_lower = record.summary.lower()
+    for phrase in preferred_phrases:
+        if phrase in summary_lower:
+            return phrase
+    if "developer workflow" in summary_lower or "developer workflows" in summary_lower:
+        return "developer workflow support"
+    if "reproducib" in summary_lower or "audit" in summary_lower:
+        return "reproducible evaluation workflow"
 
     tokens = _tokenize_text(record.title)
+    if len(tokens) >= 2:
+        return " ".join(tokens[:2])
     if not tokens:
-        return "current evidence"
+        summary_tokens = _tokenize_text(record.summary)
+        if len(summary_tokens) >= 2:
+            return " ".join(summary_tokens[:2])
+        if summary_tokens:
+            return summary_tokens[0]
+        return "target workflow"
     return " ".join(tokens[:3])
 
 
@@ -783,6 +811,30 @@ def _build_candidate_draft_from_record(
             request=request,
             roles=roles,
         ),
+    )
+
+
+def _is_generic_anchor(anchor: str) -> bool:
+    normalized = anchor.strip().lower()
+    return normalized in {
+        "",
+        "current evidence",
+        "software engineering",
+        "target workflow",
+        "benchmark",
+        "empirical software engineering",
+    }
+
+
+def _non_visual_benchmark_question(anchor: str) -> tuple[str, list[str]]:
+    if _is_generic_anchor(anchor):
+        return (
+            "How can a narrower benchmark slice reveal actionable limitations in current systems?",
+            ["Which benchmark slice best isolates genuine task gains rather than workflow or prompt shortcuts?"],
+        )
+    return (
+        f"How can a narrower evaluation slice around {anchor} reveal actionable limitations in current systems?",
+        [f"Which {anchor} slice best isolates the intended failure mode or capability?"],
     )
 
 
@@ -1291,10 +1343,10 @@ def generate_candidates(context: TopicAgentPipelineContext) -> list[TopicAgentCa
             ]
         else:
             candidate_1.research_question = (
-                "How can a narrower benchmark slice expose shortcut behavior and weak multimodal dependence in current systems?"
+                "How can a narrower benchmark slice expose shortcut behavior and weak evaluation robustness in current systems?"
             )
             candidate_1.open_questions = [
-                "Which benchmark slice best isolates genuine image-grounded reasoning?"
+                "Which benchmark slice best isolates genuine task gains rather than workflow or prompt shortcuts?"
             ]
     if grounding_phrase:
         candidate_1.novelty_note = (
@@ -1413,6 +1465,41 @@ def generate_candidates(context: TopicAgentPipelineContext) -> list[TopicAgentCa
         draft_for_candidate_3,
         override_text=allow_draft_text_override,
     )
+
+    if allow_draft_text_override:
+        draft_candidate_1_anchor = ""
+        if draft_for_candidate_1 is not None:
+            for record in evidence_records:
+                if record.source_id == draft_for_candidate_1.supporting_source_ids[0]:
+                    draft_candidate_1_anchor = _record_title_anchor(record)
+                    break
+        if not query_flags["visual_qa"] and not query_flags["hallucination_eval"]:
+            candidate_1.research_question, candidate_1.open_questions = _non_visual_benchmark_question(
+                draft_candidate_1_anchor
+            )
+        if "current evidence" in candidate_2.research_question.lower():
+            candidate_2.research_question = (
+                "Can an existing coding-agent method family be adapted effectively under strict practical constraints?"
+            )
+        if "associated with software engineering" in candidate_2.research_question.lower():
+            candidate_2.research_question = (
+                "Can an existing coding-agent method family be adapted effectively under strict practical constraints?"
+            )
+        if any(
+            bad_phrase in candidate_3.research_question.lower()
+            for bad_phrase in {"around openhands platform developers", "around empowering smart development"}
+        ):
+            candidate_3.research_question = (
+                "What tooling or workflow support for reproducible coding-agent evaluation would make research in this area more reproducible?"
+            )
+            candidate_3.open_questions = _dedupe_open_questions(
+                [
+                    "What concrete reproducibility pain point should be prioritized first?",
+                    "Which workflow improvement for reproducible coding-agent evaluation reduces setup or audit cost the most?",
+                    "Which workflow improvement reduces compute or setup cost the most?",
+                ]
+                + candidate_3.open_questions
+            )
 
     result = [
         candidate_1,
