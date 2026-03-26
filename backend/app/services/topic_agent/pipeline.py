@@ -409,7 +409,10 @@ def _build_likely_gaps(
     query_flags = _query_intent_flags(request)
     gaps: list[str] = []
     if cues["benchmark"]:
-        gaps.append("benchmark protocols that distinguish real image use from shortcut exploitation")
+        if query_flags["broad_medical_reasoning"]:
+            gaps.append("benchmark protocols that distinguish genuine reasoning gains from answer-pattern shortcuts")
+        else:
+            gaps.append("benchmark protocols that distinguish real image use from shortcut exploitation")
     if cues["trust"] or cues["grounding"]:
         gaps.append("trustworthy evaluation signals beyond accuracy-only reporting")
     if query_flags["hallucination_eval"]:
@@ -617,12 +620,20 @@ def generate_candidates(context: TopicAgentPipelineContext) -> list[TopicAgentCa
             f"Which {benchmark_phrase} slice best represents the intended problem?"
         ]
     elif evidence_cues["benchmark"]:
-        candidate_1.research_question = (
-            "How can a narrower benchmark slice expose shortcut behavior and weak multimodal dependence in current systems?"
-        )
-        candidate_1.open_questions = [
-            "Which benchmark slice best isolates genuine image-grounded reasoning?"
-        ]
+        if query_flags["broad_medical_reasoning"]:
+            candidate_1.research_question = (
+                "How can a narrower benchmark slice expose shortcut behavior and weak reasoning verification in current systems?"
+            )
+            candidate_1.open_questions = [
+                "Which benchmark slice best isolates genuine reasoning quality rather than answer-pattern matching?"
+            ]
+        else:
+            candidate_1.research_question = (
+                "How can a narrower benchmark slice expose shortcut behavior and weak multimodal dependence in current systems?"
+            )
+            candidate_1.open_questions = [
+                "Which benchmark slice best isolates genuine image-grounded reasoning?"
+            ]
     if grounding_phrase:
         candidate_1.novelty_note = (
             f"Uses {grounding_phrase} as a concrete lens for defining a sharper evaluation target."

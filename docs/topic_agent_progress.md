@@ -90,6 +90,16 @@ This file tracks the recent development progress for the backend Topic Agent ret
 - Document-centric synthesis is now reserved for:
   - explicit document/report queries
   - stronger document-specific evidence signals outside the broad-query case
+- Normalized broad-query wording so general medical reasoning outputs no longer default to:
+  - `weak multimodal dependence`
+  - `image-grounded reasoning`
+  - `real image use`
+  when the user never asked for a multimodal or image-centric topic.
+- Broad medical reasoning wording now prefers:
+  - reasoning verification
+  - reasoning quality
+  - answer-pattern shortcuts
+  - benchmark validity
 
 ## Current Status
 

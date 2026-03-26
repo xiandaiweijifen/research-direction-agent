@@ -647,6 +647,10 @@ def test_topic_agent_pipeline_keeps_broad_medical_reasoning_queries_from_overfit
     assert "document qa baseline comparison" not in joined_methods
     assert "document-centric clinical reasoning" not in response.candidate_topics[1].research_question.lower()
     assert "medical reasoning method family" in response.candidate_topics[1].research_question.lower()
+    assert "weak reasoning verification" in response.candidate_topics[0].research_question.lower()
+    assert "image-grounded" not in response.candidate_topics[0].research_question.lower()
+    assert "reasoning quality" in response.candidate_topics[0].open_questions[0].lower()
+    assert "answer-pattern shortcuts" in " ".join(response.landscape_summary.likely_gaps).lower()
 
 
 def test_topic_agent_pipeline_builds_human_confirmations_for_missing_constraints():
