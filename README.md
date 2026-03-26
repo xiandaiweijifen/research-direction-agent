@@ -7,9 +7,9 @@ The current repository should be read as an engineering prototype and delivery s
 ## Quick Links
 
 - Topic Agent demo video: [Google Drive Demo](https://drive.google.com/file/d/12pbYxgtxA7wtjKtN7XfPKfG21vqj69Gj/view?usp=sharing)
-- Topic Agent solution summary (ZH): [docs/topic_agent_solution_summary_zh.md](d:/project/research-topic-copilot/docs/topic_agent_solution_summary_zh.md)
-- Topic Agent design: [docs/topic_agent_design.md](d:/project/research-topic-copilot/docs/topic_agent_design.md)
-- Topic Agent acceptance plan: [docs/topic_agent_acceptance.md](d:/project/research-topic-copilot/docs/topic_agent_acceptance.md)
+- Topic Agent solution summary (ZH): [docs/topic_agent_solution_summary_zh.md](./docs/topic_agent_solution_summary_zh.md)
+- Topic Agent design: [docs/topic_agent_design.md](./docs/topic_agent_design.md)
+- Topic Agent acceptance plan: [docs/topic_agent_acceptance.md](./docs/topic_agent_acceptance.md)
 
 Click the cover image below to open the demo video:
 
@@ -17,7 +17,7 @@ Click the cover image below to open the demo video:
 
 Demo assets folder:
 
-- [docs/demo](d:/project/research-topic-copilot/docs/demo)
+- [docs/demo](./docs/demo)
 
 This repository currently provides a reusable runtime and presentation baseline with:
 
@@ -80,12 +80,12 @@ Planned system modules:
 
 ## Documentation
 
-- Architecture baseline: [docs/architecture.md](/d:/project/research-topic-copilot/docs/architecture.md)
-- Roadmap: [docs/roadmap.md](/d:/project/research-topic-copilot/docs/roadmap.md)
-- Topic Agent initial design: [docs/topic_agent_design.md](/d:/project/research-topic-copilot/docs/topic_agent_design.md)
-- Topic Agent acceptance plan: [docs/topic_agent_acceptance.md](/d:/project/research-topic-copilot/docs/topic_agent_acceptance.md)
-- Topic Agent MVP plan: [docs/topic_agent_mvp.md](/d:/project/research-topic-copilot/docs/topic_agent_mvp.md)
-- Topic Agent solution summary (ZH): [docs/topic_agent_solution_summary_zh.md](/d:/project/research-topic-copilot/docs/topic_agent_solution_summary_zh.md)
+- Architecture baseline: [docs/architecture.md](./docs/architecture.md)
+- Roadmap: [docs/roadmap.md](./docs/roadmap.md)
+- Topic Agent initial design: [docs/topic_agent_design.md](./docs/topic_agent_design.md)
+- Topic Agent acceptance plan: [docs/topic_agent_acceptance.md](./docs/topic_agent_acceptance.md)
+- Topic Agent MVP plan: [docs/topic_agent_mvp.md](./docs/topic_agent_mvp.md)
+- Topic Agent solution summary (ZH): [docs/topic_agent_solution_summary_zh.md](./docs/topic_agent_solution_summary_zh.md)
 
 ## Local Setup
 
@@ -208,11 +208,11 @@ Research Topic Copilot 是一个本地优先的科研选题副驾系统，目标
 
 ## 文档入口
 
-- 架构基线：[docs/architecture.md](/d:/project/research-topic-copilot/docs/architecture.md)
-- 规划路线：[docs/roadmap.md](/d:/project/research-topic-copilot/docs/roadmap.md)
-- Topic Agent 初步设计：[docs/topic_agent_design.md](/d:/project/research-topic-copilot/docs/topic_agent_design.md)
-- Topic Agent 验收规划：[docs/topic_agent_acceptance.md](/d:/project/research-topic-copilot/docs/topic_agent_acceptance.md)
-- Topic Agent MVP 规划：[docs/topic_agent_mvp.md](/d:/project/research-topic-copilot/docs/topic_agent_mvp.md)
+- 架构基线：[docs/architecture.md](./docs/architecture.md)
+- 规划路线：[docs/roadmap.md](./docs/roadmap.md)
+- Topic Agent 初步设计：[docs/topic_agent_design.md](./docs/topic_agent_design.md)
+- Topic Agent 验收规划：[docs/topic_agent_acceptance.md](./docs/topic_agent_acceptance.md)
+- Topic Agent MVP 规划：[docs/topic_agent_mvp.md](./docs/topic_agent_mvp.md)
 
 ## 本地启动
 
