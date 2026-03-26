@@ -5,9 +5,12 @@ import type {
   TopicAgentComparisonAssessment,
   TopicAgentSessionResponse,
   TopicAgentSessionSummary,
-  TopicAgentSourceRecord,
 } from "../types";
+import { TopicAgentCandidatesPanel } from "../features/topic-agent/components/TopicAgentCandidatesPanel";
+import { TopicAgentEvidencePanel } from "../features/topic-agent/components/TopicAgentEvidencePanel";
+import { TopicAgentInputPanel } from "../features/topic-agent/components/TopicAgentInputPanel";
 import { TopicAgentRecommendationSummary } from "../features/topic-agent/components/TopicAgentRecommendationSummary";
+import { TopicAgentSessionHistory } from "../features/topic-agent/components/TopicAgentSessionHistory";
 import { TopicAgentTrustPanel } from "../features/topic-agent/components/TopicAgentTrustPanel";
 
 type TopicWorkspaceProps = {
@@ -302,10 +305,6 @@ export function TopicWorkspaceV2({
     (title) => !currentCandidateTitles.has(title),
   );
 
-  const handleFocusEvidence = (record: TopicAgentSourceRecord) => {
-    setFocusedEvidenceId(record.source_id);
-  };
-
   return (
     <section className="panel-grid">
       <article className="panel panel-span view-banner">
@@ -318,118 +317,35 @@ export function TopicWorkspaceV2({
         </div>
       </article>
 
-      <article className="panel">
-        <div className="panel-heading">
-          <div>
-            <h2>{copy.formTitle}</h2>
-            <p className="panel-intro">{copy.formCopy}</p>
-          </div>
-        </div>
-        <form className="stack-form" onSubmit={onSubmit}>
-          <label>
-            <span>{copy.interest}</span>
-            <input value={interest} onChange={(event) => onChangeInterest(event.target.value)} />
-          </label>
-          <label>
-            <span>{copy.problemDomain}</span>
-            <input
-              value={problemDomain}
-              onChange={(event) => onChangeProblemDomain(event.target.value)}
-            />
-          </label>
-          <label>
-            <span>{copy.seedIdea}</span>
-            <textarea value={seedIdea} onChange={(event) => onChangeSeedIdea(event.target.value)} />
-          </label>
-          <label>
-            <span>{copy.timeBudget}</span>
-            <input
-              value={timeBudgetMonths}
-              inputMode="numeric"
-              onChange={(event) => onChangeTimeBudgetMonths(event.target.value)}
-            />
-          </label>
-          <label>
-            <span>{copy.resourceLevel}</span>
-            <input
-              value={resourceLevel}
-              onChange={(event) => onChangeResourceLevel(event.target.value)}
-            />
-          </label>
-          <label>
-            <span>{copy.preferredStyle}</span>
-            <input
-              value={preferredStyle}
-              onChange={(event) => onChangePreferredStyle(event.target.value)}
-            />
-          </label>
-          <div className="button-row">
-            <button type="submit" className="primary-button" disabled={topicBusy}>
-              {topicBusy ? copy.running : copy.run}
-            </button>
-            <button
-              type="button"
-              className="secondary-button"
-              disabled={topicBusy || !topicResult}
-              onClick={onRefine}
-            >
-              {copy.refine}
-            </button>
-          </div>
-        </form>
-        {topicError && <p className="error">{topicError}</p>}
-      </article>
+      <TopicAgentInputPanel
+        copy={copy}
+        interest={interest}
+        problemDomain={problemDomain}
+        seedIdea={seedIdea}
+        timeBudgetMonths={timeBudgetMonths}
+        resourceLevel={resourceLevel}
+        preferredStyle={preferredStyle}
+        topicBusy={topicBusy}
+        topicError={topicError}
+        hasTopicResult={Boolean(topicResult)}
+        onChangeInterest={onChangeInterest}
+        onChangeProblemDomain={onChangeProblemDomain}
+        onChangeSeedIdea={onChangeSeedIdea}
+        onChangeTimeBudgetMonths={onChangeTimeBudgetMonths}
+        onChangeResourceLevel={onChangeResourceLevel}
+        onChangePreferredStyle={onChangePreferredStyle}
+        onSubmit={onSubmit}
+        onRefine={onRefine}
+      />
 
-      <article className="panel">
-        <div className="panel-heading">
-          <div>
-            <h2>{copy.recentSessions}</h2>
-            <p className="panel-intro">
-              {topicSessions.length} {copy.sessions}
-            </p>
-          </div>
-        </div>
-        {topicSessions.length === 0 ? (
-          <div className="empty-state">
-            <strong>{copy.noResult}</strong>
-            <p>{copy.noResultCopy}</p>
-          </div>
-        ) : (
-          <div className="trace-list">
-            {topicSessions.map((session) => (
-              <article key={session.session_id} className="trace-card">
-                <div className="trace-meta-row">
-                  <strong>{session.interest}</strong>
-                  <span className="status-chip">
-                    {session.candidate_count} {copy.topicCount}
-                  </span>
-                </div>
-                <p className="trace-detail">
-                  {resolveCandidateLabel(session.recommended_candidate_id)}
-                </p>
-                <div className="button-row">
-                  <button
-                    type="button"
-                    className="secondary-button"
-                    onClick={() => onLoadSession(session.session_id)}
-                  >
-                    {copy.load}
-                  </button>
-                  {topicResult && session.session_id !== topicResult.session_id && (
-                    <button
-                      type="button"
-                      className="ghost-button"
-                      onClick={() => onCompareSession(session.session_id)}
-                    >
-                      {copy.compare}
-                    </button>
-                  )}
-                </div>
-              </article>
-            ))}
-          </div>
-        )}
-      </article>
+      <TopicAgentSessionHistory
+        copy={copy}
+        topicSessions={topicSessions}
+        currentSessionId={topicResult?.session_id}
+        resolveCandidateLabel={resolveCandidateLabel}
+        onLoadSession={onLoadSession}
+        onCompareSession={onCompareSession}
+      />
 
       <article className="panel panel-span preview-panel">
         <div className="panel-heading">
@@ -608,185 +524,26 @@ export function TopicWorkspaceV2({
             </div>
           </article>
 
-          <article className="panel">
-            <div className="panel-heading">
-              <div>
-                <h2>{copy.evidence}</h2>
-                <p className="panel-intro">
-                  {filteredEvidenceRecords.length} / {topicResult.evidence_records.length}{" "}
-                  {copy.records}
-                </p>
-              </div>
-            </div>
-            <div className="result-stack">
-              <article className="subsection-card">
-                <span className="trace-label">{copy.evidenceFilters}</span>
-                <div className="filter-row">
-                  <button
-                    type="button"
-                    className={`filter-chip${evidenceTierFilter === "all" ? " active" : ""}`}
-                    onClick={() => setEvidenceTierFilter("all")}
-                  >
-                    {copy.sourceTier}: {copy.all}
-                  </button>
-                  {evidenceTierOptions.map((tier) => (
-                    <button
-                      key={tier}
-                      type="button"
-                      className={`filter-chip${evidenceTierFilter === tier ? " active" : ""}`}
-                      onClick={() => setEvidenceTierFilter(tier)}
-                    >
-                      {copy.sourceTier}: {tier}
-                    </button>
-                  ))}
-                </div>
-                <div className="filter-row">
-                  <button
-                    type="button"
-                    className={`filter-chip${evidenceTypeFilter === "all" ? " active" : ""}`}
-                    onClick={() => setEvidenceTypeFilter("all")}
-                  >
-                    {copy.sourceType}: {copy.all}
-                  </button>
-                  {evidenceTypeOptions.map((type) => (
-                    <button
-                      key={type}
-                      type="button"
-                      className={`filter-chip${evidenceTypeFilter === type ? " active" : ""}`}
-                      onClick={() => setEvidenceTypeFilter(type)}
-                    >
-                      {copy.sourceType}: {type}
-                    </button>
-                  ))}
-                </div>
-              </article>
-              <div className="trace-list">
-                {filteredEvidenceRecords.map((record) => (
-                  <article key={record.source_id} className="trace-card">
-                    <div className="trace-meta-row">
-                      <strong>{record.title}</strong>
-                      <span className="status-chip">{record.source_tier}</span>
-                    </div>
-                    <p className="trace-detail">
-                      {record.source_type} | {record.year} | {record.authors_or_publisher}
-                    </p>
-                    <p className="trace-detail">{record.summary}</p>
-                    <p className="trace-detail">
-                      {copy.relevance}: {record.relevance_reason}
-                    </p>
-                    <div className="button-row">
-                      <button
-                        type="button"
-                        className="secondary-button"
-                        onClick={() => handleFocusEvidence(record)}
-                      >
-                        {copy.evidenceFocus}
-                      </button>
-                      <a
-                        className="inline-link-button"
-                        href={record.url}
-                        target="_blank"
-                        rel="noreferrer"
-                      >
-                        {copy.openSource}
-                      </a>
-                    </div>
-                  </article>
-                ))}
-              </div>
-            </div>
-          </article>
+          <TopicAgentEvidencePanel
+            copy={copy}
+            filteredEvidenceRecords={filteredEvidenceRecords}
+            totalEvidenceCount={topicResult.evidence_records.length}
+            evidenceTierFilter={evidenceTierFilter}
+            evidenceTypeFilter={evidenceTypeFilter}
+            evidenceTierOptions={evidenceTierOptions}
+            evidenceTypeOptions={evidenceTypeOptions}
+            focusedEvidence={focusedEvidence}
+            onSetEvidenceTierFilter={setEvidenceTierFilter}
+            onSetEvidenceTypeFilter={setEvidenceTypeFilter}
+            onFocusEvidence={(record) => setFocusedEvidenceId(record.source_id)}
+          />
 
-          <article className="panel panel-span">
-            <div className="panel-heading">
-              <div>
-                <h2>{copy.evidenceFocus}</h2>
-                <p className="panel-intro">
-                  {focusedEvidence ? focusedEvidence.source_id : copy.noResult}
-                </p>
-              </div>
-            </div>
-            {focusedEvidence ? (
-              <div className="result-stack">
-                <article className="subsection-card">
-                  <div className="trace-meta-row">
-                    <strong>{focusedEvidence.title}</strong>
-                    <span className="status-chip">
-                      {focusedEvidence.source_tier} / {focusedEvidence.source_type}
-                    </span>
-                  </div>
-                  <p className="trace-detail">
-                    {focusedEvidence.year} | {focusedEvidence.authors_or_publisher}
-                  </p>
-                  <p className="trace-detail">{focusedEvidence.summary}</p>
-                  <p className="trace-detail">
-                    {copy.relevance}: {focusedEvidence.relevance_reason}
-                  </p>
-                  <p className="trace-detail">{focusedEvidence.identifier}</p>
-                  <a
-                    className="inline-link-button"
-                    href={focusedEvidence.url}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    {copy.openSource}
-                  </a>
-                </article>
-              </div>
-            ) : (
-              <div className="empty-state">
-                <strong>{copy.noResult}</strong>
-                <p>{copy.noResultCopy}</p>
-              </div>
-            )}
-          </article>
-
-          <article className="panel panel-span">
-            <div className="panel-heading">
-              <div>
-                <h2>{copy.candidates}</h2>
-                <p className="panel-intro">
-                  {topicResult.candidate_topics.length} {copy.candidateUnit}
-                </p>
-              </div>
-            </div>
-            <div className="trace-list candidate-grid">
-              {topicResult.candidate_topics.map((candidate) => (
-                <article key={candidate.candidate_id} className="trace-card">
-                  <div className="trace-meta-row">
-                    <strong>{candidate.title}</strong>
-                    <span className="status-chip">{candidate.positioning}</span>
-                  </div>
-                  <p className="trace-detail">{candidate.research_question}</p>
-                  <div className="pill-strip">
-                    <span className="meta-pill">{candidate.novelty_note}</span>
-                    <span className="meta-pill muted-pill">{candidate.feasibility_note}</span>
-                    <span className="meta-pill muted-pill">{candidate.risk_note}</span>
-                  </div>
-                  <span className="trace-label">{copy.supportingEvidence}</span>
-                  <div className="list-block">
-                    {candidate.supporting_source_ids.map((sourceId) => (
-                      <p key={`${candidate.candidate_id}-${sourceId}`}>
-                        <button
-                          type="button"
-                          className="inline-link-button"
-                          onClick={() => setFocusedEvidenceId(sourceId)}
-                        >
-                          {sourceId}: {evidenceTitleById.get(sourceId) ?? sourceId}
-                        </button>
-                      </p>
-                    ))}
-                  </div>
-                  <span className="trace-label">{copy.openQuestions}</span>
-                  <div className="list-block">
-                    {candidate.open_questions.map((question) => (
-                      <p key={question}>{question}</p>
-                    ))}
-                  </div>
-                </article>
-              ))}
-            </div>
-          </article>
+          <TopicAgentCandidatesPanel
+            copy={copy}
+            candidates={topicResult.candidate_topics}
+            evidenceTitleById={evidenceTitleById}
+            onFocusSourceId={setFocusedEvidenceId}
+          />
 
           <TopicAgentRecommendationSummary
             topicResult={topicResult}
