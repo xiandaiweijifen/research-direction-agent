@@ -1395,5 +1395,70 @@
         "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
       }
     ]
+  },
+  "v4::medical reasoning applied||medical reasoning medical ai benchmark evaluation||medical reasoning medical ai method framework||medical reasoning medical ai workflow reproducibility||medical reasoning medical ai reliability failure analysis||medical reasoning medical ai practical baseline adaptation||medical reasoning medical ai clinical evaluation benchmark||medical reasoning medical ai decision support reliability||medical reasoning benchmark||medical reasoning large language models||clinical reasoning benchmark medical ai||medical question answering reasoning benchmark::max=5": {
+    "saved_at": "2026-03-27T06:04:17.565241+08:00",
+    "records": [
+      {
+        "source_id": "openalex_w4414530509",
+        "title": "Benchmarking GPT-5 for Zero-Shot Multimodal Medical Reasoning in Radiology and Radiation Oncology",
+        "source_type": "benchmark",
+        "source_tier": "A",
+        "year": 2025,
+        "authors_or_publisher": "Mingzhe Hu, Zach Eidex, Shansong Wang, Mojtaba Safari",
+        "identifier": "https://openalex.org/W4414530509",
+        "url": "https://arxiv.org/abs/2508.13192",
+        "summary": "Radiology, radiation oncology, and medical physics require decision-making that integrates medical images, textual reports, and quantitative data under high-stakes conditions. With the introduction of GPT-5, it is critical to assess whether recent advances in large multimodal models translate into measurable gains in these safety-critical domains. We present a targeted zero-shot evaluation of GPT-5 and its smaller variants (GPT-5-mini, GPT-5-nano) against GPT-4o across three representative tasks. We present a targeted zero-shot evaluation of GPT-5 and its smaller variants (GPT-5-mini, GPT-5-nano) against GPT-4o across three representative tasks: (1) VQA-RAD, a benchmark for visual question answering in radiology; (2) SLAKE, a semantically annotated, multilingual VQA dataset testing cross-modal grounding; and (3) a curated Medical Physics Board Examination-style dataset of 150 multiple-choice questions spanning treatment planning, dosimetry, imaging, and quality assurance. Across all datasets, GPT-5 achieved the highest accuracy, with substantial gains over GPT-4o up to +20.00% in challenging anatomical regions such as the chest-mediastinal, +13.60% in lung-focused questions, and +11.44% in brain-tissue interpretation. On the board-style physics questions, GPT-5 attained 90.7% accuracy (136/150), exceeding the estimated human passing threshold, while GPT-4o trailed at 78.0%. These results demonstrate that GPT-5 delivers consistent and often pronounced performance improvements over GPT-4o in both image-grounded reasoning and domain-specific numerical problem-solving, highlighting its potential to augment expert workflows in medical imaging and therapeutic physics.",
+        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
+      },
+      {
+        "source_id": "openalex_w4401863364",
+        "title": "RJUA-MedDQA: A Multimodal Benchmark for Medical Document Question Answering and Clinical Reasoning",
+        "source_type": "benchmark",
+        "source_tier": "A",
+        "year": 2024,
+        "authors_or_publisher": "Congyun Jin, Ming Zhang, Weixiao Ma, Yujiao Li",
+        "identifier": "https://openalex.org/W4401863364",
+        "url": "https://doi.org/10.1145/3637528.3671644",
+        "summary": "Recent advancements in Large Language Models (LLMs) and Large Multi-modal Models (LMMs) have shown potential in various medical applications, such as Intelligent Medical Diagnosis. Although impressive results have been achieved, we find that existing benchmarks do not reflect the complexity of real medical reports and specialized in-depth reasoning capabilities. In this work, we establish a comprehensive benchmark in the field of medical specialization and introduced RJUA-MedDQA, which contains 2000 real-world Chinese medical report images poses several challenges: comprehensively interpreting imgage content across a wide variety of challenging layouts, possessing the numerical reasoning ability to identify abnormal indicators and demonstrating robust clinical reasoning ability to provide the statement of disease diagnosis, status and advice based on a collection of medical contexts. We carefully design the data generation pipeline and proposed the Efficient Structural Restoration Annotation (ESRA) Method, aimed at restoring textual and tabular content in medical report images. This method substantially enhances annotation efficiency, doubling the productivity of each annotator, and yields a 26.8% improvement in accuracy. We conduct extensive evaluations, including few-shot assessments of 5 LMMs which are capable of solving Chinese medical QA tasks. To further investigate the limitations and potential of current LMMs, we conduct comparative experiments on a set of strong LLMs by using image-text generated by ESRA method. We report the performance of baselines and offer several observations: (1) The overall performance of existing LMMs is still limited; however LMMs more robust to low-quality and diverse-structured images compared to LLMs. (3) Reasoning across context and image content present significant challenges. We hope this benchmark helps the community make progress on these challenging tasks in multi-modal medical document understanding and facilitate its application in healthcare. Our dataset will be publicly available for noncommercial use at https://github.com/Alipay-Med/medDQA_benchmark.git",
+        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
+      },
+      {
+        "source_id": "openalex_w3094950914",
+        "title": "Medical Visual Question Answering via Conditional Reasoning",
+        "source_type": "benchmark",
+        "source_tier": "A",
+        "year": 2020,
+        "authors_or_publisher": "Li-Ming Zhan, Bo Liu, Lu Fan, Jiaxin Chen",
+        "identifier": "https://openalex.org/W3094950914",
+        "url": "https://doi.org/10.1145/3394171.3413761",
+        "summary": "Medical visual question answering (Med-VQA) aims to accurately answer a clinical question presented with a medical image. Despite its enormous potential in healthcare industry and services, the technology is still in its infancy and is far from practical use. Med-VQA tasks are highly challenging due to the massive diversity of clinical questions and the disparity of required visual reasoning skills for different types of questions. In this paper, we propose a novel conditional reasoning framework for Med-VQA, aiming to automatically learn effective reasoning skills for various Med-VQA tasks. Particularly, we develop a question-conditioned reasoning module to guide the importance selection over multimodal fusion features. Considering the different nature of closed-ended and open-ended Med-VQA tasks, we further propose a type-conditioned reasoning module to learn a different set of reasoning skills for the two types of tasks separately. Our conditional reasoning framework can be easily applied to existing Med-VQA systems to bring performance gains. In the experiments, we build our system on top of a recent state-of-the-art Med-VQA model and evaluate it on the VQA-RAD benchmark [23]. Remarkably, our system achieves significantly increased accuracy in predicting answers to both closed-ended and open-ended questions, especially for open-ended questions, where a 10.8% increase in absolute accuracy is obtained. The source code can be downloaded from https://github.com/awenbocc/med-vqa.",
+        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
+      },
+      {
+        "source_id": "openalex_w4312982094",
+        "title": "Medical Visual Question Answering via Conditional Reasoning and Contrastive Learning",
+        "source_type": "benchmark",
+        "source_tier": "A",
+        "year": 2022,
+        "authors_or_publisher": "Bo Liu, Li-Ming Zhan, Li Xu, Xiao-Ming Wu",
+        "identifier": "https://openalex.org/W4312982094",
+        "url": "https://doi.org/10.1109/tmi.2022.3232411",
+        "summary": "Medical visual question answering (Med-VQA) aims to accurately answer a clinical question presented with a medical image. Despite its enormous potential in healthcare services, the development of this technology is still in the initial stage. On the one hand, Med-VQA tasks are highly challenging due to the massive diversity of clinical questions that require different visual reasoning skills for different types of questions. On the other hand, medical images are complex in nature and very different from natural images, while current Med-VQA datasets are small-scale with a few hundred radiology images, making it difficult to train a well-performing visual feature extractor. This paper addresses above two critical issues. We propose a novel conditional reasoning mechanism with a question-conditioned reasoning component and a type-conditioned reasoning strategy to learn effective reasoning skills for different Med-VQA tasks adaptively. Further, we propose to pre-train a visual feature extractor for Med-VQA via contrastive learning on large amounts of unlabeled radiology images. The effectiveness of our proposals is validated by extensive experiments on existing Med-VQA benchmarks, which show significant improvement of our model in prediction accuracy over state-of-the-art methods. The source code and pre-training dataset are provided at https://github.com/Awenbocc/CPCR.",
+        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
+      },
+      {
+        "source_id": "openalex_w4416954175",
+        "title": "Benchmarking large language models on the United States medical licensing examination for clinical reasoning and medical licensing scenarios",
+        "source_type": "benchmark",
+        "source_tier": "A",
+        "year": 2025,
+        "authors_or_publisher": "K. Siam, A. Diaz Varela, Md Jobair Hossain Faruk, Jerry Cheng",
+        "identifier": "https://openalex.org/W4416954175",
+        "url": "https://doi.org/10.1038/s41598-025-31010-4",
+        "summary": "Artificial intelligence (AI) is transforming healthcare by assisting with intricate clinical reasoning and diagnosis. Recent research demonstrates that large language models (LLMs), such as ChatGPT and DeepSeek, possess considerable potential in medical comprehension. This study meticulously evaluates the clinical reasoning capabilities of four advanced LLMs, including ChatGPT, DeepSeek, Grok, and Qwen, utilizing the United States Medical Licensing Examination (USMLE) as a standard benchmark. We assess 376 publicly accessible USMLE sample exam questions (Step 1, Step 2 CK, Step 3) from the most recent booklet released in July 2023. We analyze model performance across four question categories: text-only, text with image, text with mathematical reasoning, and integrated text-image-mathematical reasoning and measure model accuracy at three USMLE steps. Our findings show that DeepSeek and ChatGPT consistently outperform Grok and Qwen, with DeepSeek reaching 93% on Step 2 CK. Error analysis revealed that universal failures were rare (≤1.60%) and concentrated in multimodal and quantitative reasoning tasks, suggesting both ensemble potential and shared blind spots. Compared to the baseline ChatGPT-3.5 Turbo, newer models demonstrate substantial gains, though possible training-data exposure to USMLE content limits generalizability. Despite encouraging accuracy, models exhibited overconfidence and hallucinations, underscoring the need for human oversight. Limitations include reliance on sample questions, the small number of multimodal items, and lack of real-world datasets. Future work should expand benchmarks, integrate physician feedback, and improve reproducibility through shared prompts and configurations. Overall, these results highlight both the promise and the limitations of LLMs in medical testing: strong accuracy and complementarity, but persistent risks requiring innovation, benchmarking, and clinical oversight.",
+        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
+      }
+    ]
   }
 }

@@ -1,5 +1,14 @@
 # Research Topic Copilot
 
+## Demo Video
+
+Topic Agent demo video location:
+
+- Local demo folder: [docs/demo](d:/project/research-topic-copilot/docs/demo)
+- Recommended video file: [docs/demo/topic-agent-demo.mp4](d:/project/research-topic-copilot/docs/demo/topic-agent-demo.mp4)
+
+If the video is hosted externally later, replace the local file reference above with the final public link.
+
 Research Topic Copilot is a local-first agent system for research topic exploration, evidence gathering, candidate direction comparison, and topic convergence support.
 
 This repository currently contains a reusable agent runtime baseline:
