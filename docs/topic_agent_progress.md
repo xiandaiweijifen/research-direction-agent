@@ -466,6 +466,26 @@ Near-term implementation strategy:
 - let current final candidates be populated from the strongest generated drafts
 - delay frontend structural changes until draft quality stabilizes
 
+### Internal Draft-Candidate Step
+
+The first migration step toward evidence-grounded candidate generation is now implemented in the pipeline.
+
+Completed in this slice:
+
+- added an internal draft-candidate structure inside `pipeline.py`
+- draft generation now happens from retrieved evidence before final candidate mapping
+- final public candidates still remain `candidate_1 / candidate_2 / candidate_3` for compatibility
+- query-specific medical and radiology behaviors are preserved by limiting when draft text is allowed to override existing candidate wording
+- modern non-medical topics can now use draft-selected primary evidence and draft-shaped candidate wording more directly
+
+Current limitation of this step:
+
+- the public candidate shape is still fixed to three final slots
+- draft generation is not yet exposed in the API or frontend
+- convergence is still performed over the three final slots rather than over a larger draft pool
+
+This means the architecture has started to move away from pure template filling, but it has not yet completed the full evidence-grounded candidate-generation transition.
+
 ### Frontend Productization Slice
 
 The frontend Topic Agent page is now structurally functional and demo-usable, but further productization is still useful.
@@ -503,4 +523,4 @@ backend\.venv\Scripts\python.exe -m pytest backend\tests\test_topic_agent_api.py
 
 Latest result:
 
-- `54 passed`
+- `56 passed`

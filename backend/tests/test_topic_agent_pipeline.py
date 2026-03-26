@@ -999,3 +999,80 @@ def test_topic_agent_pipeline_uses_clearer_candidate_composition_for_clinical_me
     assert "openalex_d" in response.candidate_topics[1].supporting_source_ids
     assert "openalex_e" not in response.candidate_topics[1].supporting_source_ids
     assert "openalex_c" in response.candidate_topics[2].supporting_source_ids
+
+
+def test_topic_agent_pipeline_generates_internal_drafts_before_final_candidate_mapping():
+    class SoftwareAgentProvider:
+        provider_name = "static"
+
+        def retrieve(self, request: TopicAgentExploreRequest):
+            records = [
+                TopicAgentSourceRecord(
+                    source_id="openalex_eval",
+                    title="SWE-bench: Can Language Models Resolve Real-World GitHub Issues?",
+                    source_type="benchmark",
+                    source_tier="A",
+                    year=2024,
+                    authors_or_publisher="Author A",
+                    identifier="https://example.org/swebench",
+                    url="https://example.org/swebench",
+                    summary="Benchmark for software engineering agents and coding evaluation.",
+                    relevance_reason="Test record",
+                ),
+                TopicAgentSourceRecord(
+                    source_id="openalex_transfer",
+                    title="AutoCodeRover: Autonomous Program Improvement",
+                    source_type="paper",
+                    source_tier="B",
+                    year=2024,
+                    authors_or_publisher="Author B",
+                    identifier="https://example.org/autocoderover",
+                    url="https://example.org/autocoderover",
+                    summary="Autonomous program improvement for developer workflows and coding tasks.",
+                    relevance_reason="Test record",
+                ),
+                TopicAgentSourceRecord(
+                    source_id="openalex_systems",
+                    title="Developer Workflow Auditing for Reproducible Coding Agent Evaluation",
+                    source_type="paper",
+                    source_tier="B",
+                    year=2025,
+                    authors_or_publisher="Author C",
+                    identifier="https://example.org/workflow-audit",
+                    url="https://example.org/workflow-audit",
+                    summary="Workflow, audit, and reproducibility support for coding agent evaluation.",
+                    relevance_reason="Test record",
+                ),
+            ]
+            return TopicAgentEvidenceRetrievalResult(
+                records=records,
+                diagnostics=TopicAgentEvidenceDiagnostics(
+                    requested_provider="static",
+                    used_provider="static",
+                    fallback_used=False,
+                    fallback_reason=None,
+                    record_count=3,
+                ),
+            )
+
+    request = TopicAgentExploreRequest(
+        interest="coding agents for software engineering",
+        problem_domain="developer workflows",
+        constraints=TopicAgentConstraintSet(
+            time_budget_months=6,
+            resource_level="student",
+            preferred_style="applied",
+        ),
+    )
+
+    response = run_topic_agent_pipeline(request, provider=SoftwareAgentProvider())
+
+    assert response.candidate_topics[0].supporting_source_ids[0] == "openalex_eval"
+    assert response.candidate_topics[1].supporting_source_ids[0] == "openalex_transfer"
+    assert response.candidate_topics[2].supporting_source_ids[0] == "openalex_systems"
+    assert "evaluation slice" in response.candidate_topics[0].research_question.lower()
+    assert "autocoderover" in response.candidate_topics[1].research_question.lower()
+    assert (
+        "workflow" in response.candidate_topics[2].research_question.lower()
+        or "workflow" in " ".join(response.candidate_topics[2].open_questions).lower()
+    )

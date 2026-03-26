@@ -42,6 +42,20 @@ class TopicAgentPipelineContext:
     trace: list[TopicAgentTraceEvent] | None = None
 
 
+@dataclass
+class TopicAgentCandidateDraft:
+    draft_id: str
+    direction_type: str
+    working_title: str
+    research_question: str
+    novelty_note: str
+    feasibility_note: str
+    risk_note: str
+    supporting_source_ids: list[str]
+    open_questions: list[str]
+    score: int
+
+
 STOPWORDS = {
     "about",
     "across",
@@ -528,6 +542,301 @@ def _record_text(record: TopicAgentSourceRecord) -> str:
     return f"{record.title} {record.summary}".lower()
 
 
+def _record_title_anchor(record: TopicAgentSourceRecord) -> str:
+    tokens = _tokenize_text(record.title)
+    if not tokens:
+        return "current evidence"
+    return " ".join(tokens[:3])
+
+
+def _infer_record_roles_for_drafts(
+    record: TopicAgentSourceRecord,
+    request: TopicAgentExploreRequest,
+) -> set[str]:
+    text = _record_text(record)
+    query_text = _query_context_text(request)
+    roles: set[str] = set()
+
+    if record.source_type == "benchmark" or any(
+        term in text for term in {"benchmark", "evaluation", "exam", "leaderboard", "stress test"}
+    ):
+        roles.add("benchmark_evaluation")
+    if any(
+        term in text
+        for term in {
+            "framework",
+            "methodology",
+            "method",
+            "approach",
+            "workflow",
+            "program improvement",
+            "developer-ai collaboration",
+            "virtual patient",
+        }
+    ):
+        roles.add("method_framework")
+    if any(
+        term in text
+        for term in {"tooling", "tool", "pipeline", "reproducibility", "audit", "devsecops", "workflow"}
+    ):
+        roles.add("systems_tooling")
+    if any(
+        term in text
+        for term in {"failure analysis", "hallucination", "calibration", "confidence", "metacognition", "reliability"}
+    ):
+        roles.add("failure_analysis")
+    if record.source_type == "survey" or "systematic review" in text or "survey" in text:
+        roles.add("survey_background")
+
+    if (
+        ("llm" in query_text or "agent" in query_text or "agents" in query_text)
+        and any(term in query_text for term in {"software engineering", "developer tools", "developer workflows", "coding"})
+    ):
+        if any(
+            term in text
+            for term in {
+                "numpy",
+                "pandas",
+                "python library",
+                "array programming",
+                "numerical python",
+                "matrix",
+                "matrices",
+            }
+        ) and not any(
+            term in text
+            for term in {
+                "developer",
+                "coding",
+                "benchmark",
+                "evaluation",
+                "workflow",
+                "agent",
+                "program repair",
+                "github issues",
+            }
+        ):
+            roles.add("off_target_neighbor")
+
+    if not roles:
+        roles.add("domain_background")
+    return roles
+
+
+def _draft_score(
+    *,
+    direction_type: str,
+    record: TopicAgentSourceRecord,
+    request: TopicAgentExploreRequest,
+    roles: set[str],
+) -> int:
+    score = 0
+    style = _preferred_style(request)
+    budget_bucket = _time_budget_bucket(request.constraints.time_budget_months)
+    resource_bucket = _resource_bucket(request.constraints.resource_level)
+    text = _record_text(record)
+
+    score += 3 if record.source_tier == "A" else 1
+    score += min(max(record.year - 2018, 0), 8)
+
+    if direction_type == "evaluation":
+        if "benchmark_evaluation" in roles:
+            score += 8
+        if "failure_analysis" in roles:
+            score += 3
+        if style == "benchmark-driven":
+            score += 3
+    elif direction_type == "transfer":
+        if "method_framework" in roles:
+            score += 8
+        if style == "applied":
+            score += 4
+        if budget_bucket in {"tight", "moderate"}:
+            score += 2
+        if resource_bucket == "limited":
+            score += 2
+    elif direction_type == "systems":
+        if "systems_tooling" in roles:
+            score += 8
+        if "failure_analysis" in roles:
+            score += 2
+        if style == "systems":
+            score += 4
+        if budget_bucket in {"tight", "moderate"}:
+            score += 2
+
+    if "off_target_neighbor" in roles:
+        score -= 12
+    if "survey_background" in roles and direction_type != "evaluation":
+        score -= 2
+
+    if any(term in text for term in {"developer", "coding", "workflow", "benchmark", "evaluation"}):
+        score += 2
+
+    return score
+
+
+def _supports_transfer_draft(text: str) -> bool:
+    return any(
+        term in text
+        for term in {
+            "framework",
+            "methodology",
+            "method",
+            "approach",
+            "program improvement",
+            "autonomous program improvement",
+            "developer-ai collaboration",
+            "decision-making",
+            "differential diagnosis",
+            "virtual patient",
+            "zero-shot",
+            "zero shot",
+            "baseline",
+            "coding tasks",
+        }
+    )
+
+
+def _build_candidate_draft_from_record(
+    record: TopicAgentSourceRecord,
+    *,
+    direction_type: str,
+    request: TopicAgentExploreRequest,
+    roles: set[str],
+) -> TopicAgentCandidateDraft:
+    anchor = _record_title_anchor(record)
+    if direction_type == "evaluation":
+        working_title = "Evidence-Grounded Evaluation Slice"
+        research_question = f"How can a narrower evaluation slice around {anchor} reveal actionable limitations in current systems?"
+        novelty_note = "Frames novelty through sharper evaluation boundaries rather than broader performance reporting."
+        feasibility_note = "Moderate feasibility with public evidence and a bounded evaluation target."
+        risk_note = "May become incremental if the evaluation slice is not sharply distinguished."
+        open_questions = [f"Which {anchor} slice best isolates the intended failure mode or capability?"]
+    elif direction_type == "systems":
+        working_title = "Reproducible Workflow And Evaluation Support"
+        research_question = f"What tooling or workflow support around {anchor} would make research in this area more reproducible?"
+        novelty_note = "Shifts value from model novelty toward reproducibility, workflow support, and evaluation reliability."
+        feasibility_note = "High feasibility for a short-cycle engineering-heavy project."
+        risk_note = "Applied impact may be clearer than publication novelty unless the workflow pain point is precisely chosen."
+        open_questions = [
+            "What concrete reproducibility pain point should be prioritized first?",
+            f"Which workflow improvement around {anchor} reduces setup or audit cost the most?",
+        ]
+    else:
+        working_title = "Constraint-Aware Method Transfer"
+        research_question = f"Can an existing method family associated with {anchor} be adapted effectively under strict practical constraints?"
+        novelty_note = "Frames novelty through constrained adaptation of an existing method family."
+        feasibility_note = "Strong fit for an applied project that can reuse a visible baseline."
+        risk_note = "Novelty may depend heavily on the chosen constraint and evaluation design."
+        open_questions = ["Which constraint creates the strongest research signal?"]
+
+    return TopicAgentCandidateDraft(
+        draft_id=f"{direction_type}_{record.source_id}",
+        direction_type=direction_type,
+        working_title=working_title,
+        research_question=research_question,
+        novelty_note=novelty_note,
+        feasibility_note=feasibility_note,
+        risk_note=risk_note,
+        supporting_source_ids=[record.source_id],
+        open_questions=open_questions,
+        score=_draft_score(
+            direction_type=direction_type,
+            record=record,
+            request=request,
+            roles=roles,
+        ),
+    )
+
+
+def _generate_candidate_drafts(
+    evidence_records: list[TopicAgentSourceRecord],
+    request: TopicAgentExploreRequest,
+) -> list[TopicAgentCandidateDraft]:
+    drafts: list[TopicAgentCandidateDraft] = []
+    for record in evidence_records:
+        roles = _infer_record_roles_for_drafts(record, request)
+        text = _record_text(record)
+        if "benchmark_evaluation" in roles:
+            drafts.append(
+                _build_candidate_draft_from_record(
+                    record,
+                    direction_type="evaluation",
+                    request=request,
+                    roles=roles,
+                )
+            )
+        if "method_framework" in roles and _supports_transfer_draft(text):
+            drafts.append(
+                _build_candidate_draft_from_record(
+                    record,
+                    direction_type="transfer",
+                    request=request,
+                    roles=roles,
+                )
+            )
+        if "systems_tooling" in roles or "failure_analysis" in roles:
+            drafts.append(
+                _build_candidate_draft_from_record(
+                    record,
+                    direction_type="systems",
+                    request=request,
+                    roles=roles,
+                )
+            )
+
+    deduped: list[TopicAgentCandidateDraft] = []
+    seen: set[tuple[str, tuple[str, ...]]] = set()
+    for draft in sorted(drafts, key=lambda item: (item.score, item.direction_type, item.draft_id), reverse=True):
+        key = (draft.direction_type, tuple(draft.supporting_source_ids))
+        if key in seen:
+            continue
+        seen.add(key)
+        deduped.append(draft)
+    return deduped
+
+
+def _select_candidate_draft(
+    drafts: list[TopicAgentCandidateDraft],
+    *,
+    preferred_type: str,
+    used_source_ids: set[str],
+) -> TopicAgentCandidateDraft | None:
+    best: TopicAgentCandidateDraft | None = None
+    best_key: tuple[int, int] | None = None
+    for draft in drafts:
+        if draft.direction_type != preferred_type:
+            continue
+        unused_support = sum(1 for source_id in draft.supporting_source_ids if source_id not in used_source_ids)
+        rank_key = (unused_support, draft.score)
+        if best is None or rank_key > best_key:
+            best = draft
+            best_key = rank_key
+    return best
+
+
+def _apply_draft_to_candidate(
+    candidate: TopicAgentCandidateTopic,
+    draft: TopicAgentCandidateDraft | None,
+    *,
+    override_text: bool,
+) -> TopicAgentCandidateTopic:
+    if draft is None:
+        return candidate
+    candidate.supporting_source_ids = _merge_supporting_source_ids(
+        draft.supporting_source_ids,
+        candidate.supporting_source_ids,
+    )
+    if override_text:
+        candidate.research_question = draft.research_question
+        candidate.novelty_note = draft.novelty_note
+        candidate.feasibility_note = draft.feasibility_note
+        candidate.risk_note = draft.risk_note
+        candidate.open_questions = _dedupe_open_questions(draft.open_questions + candidate.open_questions)
+    return candidate
+
+
 def _candidate_binding_terms(
     candidate: TopicAgentCandidateTopic,
     *,
@@ -597,6 +906,10 @@ def _candidate_record_fit(
                 "virtual patient",
                 "clinical reasoning skills",
                 "educational tools",
+                "autonomous program improvement",
+                "developer-ai collaboration",
+                "developer workflows",
+                "coding tasks",
                 "lightweight",
                 "compact",
                 "transformers",
@@ -737,9 +1050,9 @@ def _rank_supporting_source_ids_for_candidate(
             if any(term in text for term in {"method", "baseline", "adapt"}):
                 overlap += 1
             if _candidate_record_fit(candidate, record, query_flags=query_flags) == "method_support":
-                overlap += 3
+                overlap += 8
             if _candidate_record_fit(candidate, record, query_flags=query_flags) == "benchmark_context":
-                overlap += 1
+                overlap -= 1
             if _candidate_record_fit(candidate, record, query_flags=query_flags) == "off_topic_subtask":
                 overlap -= 4
             if query_flags["broad_medical_reasoning"] and "document question answering" in text:
@@ -784,7 +1097,7 @@ def _rank_supporting_source_ids_for_candidate(
                 ):
                     overlap -= 2
 
-        fallback_bonus = 1 if record.source_id in fallback_ids else 0
+        fallback_bonus = 3 if record.source_id in fallback_ids else 0
         tier_bonus = 1 if record.source_tier == "A" else 0
         ranked.append((overlap, fallback_bonus, tier_bonus, record.source_id))
 
@@ -848,11 +1161,25 @@ def _apply_query_specific_candidate_polish(
     return [candidate_1, candidate_2, candidate_3]
 
 
+def _allow_draft_text_override(
+    request: TopicAgentExploreRequest,
+    *,
+    query_flags: dict[str, bool],
+) -> bool:
+    query_text = _query_context_text(request)
+    if any(query_flags.values()):
+        return False
+    if any(term in query_text for term in {"medical", "clinical", "radiology", "biomedical"}):
+        return False
+    return True
+
+
 def generate_candidates(context: TopicAgentPipelineContext) -> list[TopicAgentCandidateTopic]:
     budget_bucket = _time_budget_bucket(context.request.constraints.time_budget_months)
     resource_bucket = _resource_bucket(context.request.constraints.resource_level)
     style = _preferred_style(context.request)
     evidence_records = context.evidence_records or []
+    candidate_drafts = _generate_candidate_drafts(evidence_records, context.request)
     evidence_phrases = _filter_evidence_phrases(
         _extract_evidence_phrases(evidence_records),
         topic=context.request.interest,
@@ -1010,6 +1337,47 @@ def generate_candidates(context: TopicAgentPipelineContext) -> list[TopicAgentCa
             else "Targets benchmark slicing and evaluation boundary design as the main source of research value."
         )
 
+    used_source_ids: set[str] = set()
+    draft_for_candidate_1 = _select_candidate_draft(
+        candidate_drafts,
+        preferred_type="evaluation",
+        used_source_ids=used_source_ids,
+    )
+    if draft_for_candidate_1 is not None:
+        used_source_ids.update(draft_for_candidate_1.supporting_source_ids)
+    draft_for_candidate_2 = _select_candidate_draft(
+        candidate_drafts,
+        preferred_type="transfer",
+        used_source_ids=used_source_ids,
+    )
+    if draft_for_candidate_2 is not None:
+        used_source_ids.update(draft_for_candidate_2.supporting_source_ids)
+    draft_for_candidate_3 = _select_candidate_draft(
+        candidate_drafts,
+        preferred_type="systems",
+        used_source_ids=used_source_ids,
+    )
+
+    allow_draft_text_override = _allow_draft_text_override(
+        context.request,
+        query_flags=query_flags,
+    )
+    candidate_1 = _apply_draft_to_candidate(
+        candidate_1,
+        draft_for_candidate_1,
+        override_text=allow_draft_text_override,
+    )
+    candidate_2 = _apply_draft_to_candidate(
+        candidate_2,
+        draft_for_candidate_2,
+        override_text=allow_draft_text_override,
+    )
+    candidate_3 = _apply_draft_to_candidate(
+        candidate_3,
+        draft_for_candidate_3,
+        override_text=allow_draft_text_override,
+    )
+
     result = [
         candidate_1,
         candidate_2,
@@ -1024,6 +1392,19 @@ def generate_candidates(context: TopicAgentPipelineContext) -> list[TopicAgentCa
         evidence_records,
         query_flags=query_flags,
     )
+    if allow_draft_text_override:
+        result[0].supporting_source_ids = _merge_supporting_source_ids(
+            draft_for_candidate_1.supporting_source_ids if draft_for_candidate_1 else [],
+            result[0].supporting_source_ids,
+        )
+        result[1].supporting_source_ids = _merge_supporting_source_ids(
+            draft_for_candidate_2.supporting_source_ids if draft_for_candidate_2 else [],
+            result[1].supporting_source_ids,
+        )
+        result[2].supporting_source_ids = _merge_supporting_source_ids(
+            draft_for_candidate_3.supporting_source_ids if draft_for_candidate_3 else [],
+            result[2].supporting_source_ids,
+        )
     context.candidate_topics = result
     return result
 
