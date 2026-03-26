@@ -1,497 +1,5 @@
 [
   {
-    "session_id": "ccc0f781789a45449b6e89820c00c9c7",
-    "created_at": "2026-03-25T13:13:36.946851+00:00",
-    "updated_at": "2026-03-25T13:13:36.946851+00:00",
-    "user_input": {
-      "interest": "trustworthy multimodal reasoning in medical imaging",
-      "problem_domain": "medical AI",
-      "seed_idea": "I want a narrow and feasible research topic.",
-      "constraints": {
-        "time_budget_months": 4,
-        "resource_level": "student",
-        "preferred_style": "applied",
-        "notes": null
-      }
-    },
-    "framing_result": {
-      "normalized_topic": "trustworthy multimodal reasoning in medical imaging",
-      "extracted_constraints": {
-        "time_budget_months": "4",
-        "resource_level": "student",
-        "preferred_style": "applied"
-      },
-      "missing_clarifications": [],
-      "search_questions": [
-        "What are the main research themes in trustworthy multimodal reasoning in medical imaging?",
-        "What methods and benchmarks are commonly used in trustworthy multimodal reasoning in medical imaging?",
-        "What open problems or underexplored gaps exist in trustworthy multimodal reasoning in medical imaging?"
-      ]
-    },
-    "evidence_records": [
-      {
-        "source_id": "source_1",
-        "title": "Recent Survey On Trustworthy Multimodal Reasoning In Medical Imaging",
-        "source_type": "survey",
-        "source_tier": "A",
-        "year": 2025,
-        "authors_or_publisher": "Survey Authors",
-        "identifier": "survey:source_1",
-        "url": "https://example.org/survey/source_1",
-        "summary": "A survey-style summary of methods, benchmarks, and open questions in trustworthy multimodal reasoning in medical imaging.",
-        "relevance_reason": "Provides a high-level map of the research landscape."
-      },
-      {
-        "source_id": "source_2",
-        "title": "Benchmarking Practical Methods For Medical Ai",
-        "source_type": "benchmark",
-        "source_tier": "A",
-        "year": 2024,
-        "authors_or_publisher": "Benchmark Team",
-        "identifier": "benchmark:source_2",
-        "url": "https://example.org/benchmark/source_2",
-        "summary": "Benchmark-oriented evidence describing evaluation patterns related to trustworthy multimodal reasoning in medical imaging.",
-        "relevance_reason": "Helps estimate feasibility and evaluation setup."
-      },
-      {
-        "source_id": "source_3",
-        "title": "Open Repository For Trustworthy Multimodal Reasoning In Medical Imaging Experiments",
-        "source_type": "code",
-        "source_tier": "B",
-        "year": 2024,
-        "authors_or_publisher": "Open Source Maintainers",
-        "identifier": "repo:source_3",
-        "url": "https://example.org/code/source_3",
-        "summary": "An implementation-oriented resource with reusable baselines for trustworthy multimodal reasoning in medical imaging.",
-        "relevance_reason": "Supports feasibility assessment for a first project iteration."
-      }
-    ],
-    "landscape_summary": {
-      "themes": [
-        "benchmark design and stress-testing for trustworthy multimodal reasoning in medical imaging",
-        "trustworthy evaluation and failure analysis in trustworthy multimodal reasoning in medical imaging",
-        "trustworthy as an emerging theme in trustworthy multimodal reasoning in medical imaging"
-      ],
-      "active_methods": [
-        "benchmark-centered experimental design"
-      ],
-      "likely_gaps": [
-        "benchmark protocols that distinguish real image use from shortcut exploitation",
-        "trustworthy evaluation signals beyond accuracy-only reporting"
-      ],
-      "saturated_areas": [
-        "broad generic summaries without a sharply defined question"
-      ]
-    },
-    "candidate_topics": [
-      {
-        "candidate_id": "candidate_1",
-        "title": "Benchmark-Guided Narrow Task Definition",
-        "research_question": "How can a narrower benchmark slice expose shortcut behavior and weak multimodal dependence in current systems?",
-        "positioning": "gap-driven",
-        "novelty_note": "Focuses on trustworthy evaluation boundaries, not just raw task accuracy.",
-        "feasibility_note": "Lower feasibility under a tight timeline unless the benchmark scope is aggressively constrained.",
-        "risk_note": "May become incremental if the task boundary is not sharply differentiated.",
-        "supporting_source_ids": [
-          "source_1",
-          "source_2"
-        ],
-        "open_questions": [
-          "Which benchmark slice best isolates genuine image-grounded reasoning?"
-        ]
-      },
-      {
-        "candidate_id": "candidate_2",
-        "title": "Applied Method Transfer Under Practical Constraints",
-        "research_question": "Can an existing method family be adapted effectively for reasoning under strict compute and annotation constraints?",
-        "positioning": "applied-transfer",
-        "novelty_note": "Frames novelty through constraint-aware adaptation rather than larger-model gains.",
-        "feasibility_note": "Strong fit for an applied project that needs a visible baseline-to-improvement story.",
-        "risk_note": "Novelty may depend heavily on the chosen constraint and evaluation design.",
-        "supporting_source_ids": [
-          "source_1",
-          "source_3"
-        ],
-        "open_questions": [
-          "Which constraint creates the strongest research signal?"
-        ]
-      },
-      {
-        "candidate_id": "candidate_3",
-        "title": "Tooling And Evaluation Workflow Support",
-        "research_question": "What tooling or evaluation workflow improvements would make research in this area more reproducible?",
-        "positioning": "systems",
-        "novelty_note": "Shifts from model novelty to workflow and evaluation reliability.",
-        "feasibility_note": "High feasibility for a short-cycle project with engineering emphasis and bounded implementation scope.",
-        "risk_note": "Applied impact may be clearer than publication novelty unless evaluation endpoints are sharply chosen.",
-        "supporting_source_ids": [
-          "source_2",
-          "source_3"
-        ],
-        "open_questions": [
-          "What workflow support would make trustworthy evaluation and audit trails easier to reproduce?",
-          "What concrete reproducibility pain point should be prioritized first?",
-          "Which workflow improvement reduces compute or setup cost the most?"
-        ]
-      }
-    ],
-    "comparison_result": {
-      "dimensions": [
-        "novelty",
-        "feasibility",
-        "evidence_strength",
-        "data_availability",
-        "implementation_cost",
-        "risk"
-      ],
-      "summary": "Candidate 2 is strongest for applied feasibility under the current constraints, candidate 1 remains strongest on research framing, and candidate 3 remains the fastest engineering path.",
-      "candidate_assessments": [
-        {
-          "candidate_id": "candidate_1",
-          "novelty": "high",
-          "feasibility": "low_medium",
-          "evidence_strength": "medium_high",
-          "data_availability": "medium",
-          "implementation_cost": "medium_high",
-          "risk": "medium"
-        },
-        {
-          "candidate_id": "candidate_2",
-          "novelty": "medium_high",
-          "feasibility": "high",
-          "evidence_strength": "medium_high",
-          "data_availability": "medium_high",
-          "implementation_cost": "medium_low",
-          "risk": "medium_low"
-        },
-        {
-          "candidate_id": "candidate_3",
-          "novelty": "medium",
-          "feasibility": "high",
-          "evidence_strength": "medium",
-          "data_availability": "high",
-          "implementation_cost": "low",
-          "risk": "medium_high"
-        }
-      ]
-    },
-    "convergence_result": {
-      "recommended_candidate_id": "candidate_2",
-      "backup_candidate_id": "candidate_1",
-      "rationale": "Candidate 2 is the best fit for the current constraints because it starts from reusable baselines, matches an applied project style, and is easier to execute within a tighter timeline.",
-      "manual_checks": [
-        "Confirm that the selected sub-problem can be completed within a 4-month or shorter timeline.",
-        "Verify that at least one benchmark or dataset is realistically accessible.",
-        "Check whether the proposed gap is genuinely underexplored rather than a retrieval miss.",
-        "Verify that the topic still has enough novelty signal for the intended venue."
-      ]
-    },
-    "human_confirmations": [],
-    "trace": [
-      {
-        "stage": "frame_problem",
-        "status": "completed",
-        "timestamp": "2026-03-25T13:14:01.490581+00:00",
-        "detail": "Structured the user input into a topic-exploration request."
-      },
-      {
-        "stage": "retrieve_evidence",
-        "status": "completed",
-        "timestamp": "2026-03-25T13:14:01.490601+00:00",
-        "detail": "Retrieved 3 evidence records using the mock provider after fallback from openalex (ConnectError:[WinError 10054] 远程主机强迫关闭了一个现有的连接。)."
-      },
-      {
-        "stage": "synthesize_landscape",
-        "status": "completed",
-        "timestamp": "2026-03-25T13:14:01.490609+00:00",
-        "detail": "Organized the current evidence bundle into a lightweight research landscape summary."
-      },
-      {
-        "stage": "generate_candidates",
-        "status": "completed",
-        "timestamp": "2026-03-25T13:14:01.490615+00:00",
-        "detail": "Generated 3 candidate topic directions from the current evidence bundle."
-      },
-      {
-        "stage": "compare_candidates",
-        "status": "completed",
-        "timestamp": "2026-03-25T13:14:01.490621+00:00",
-        "detail": "Produced a structured candidate comparison across fixed MVP dimensions."
-      },
-      {
-        "stage": "converge_recommendation",
-        "status": "completed",
-        "timestamp": "2026-03-25T13:14:01.490626+00:00",
-        "detail": "Produced a recommended next-best option with manual verification checks."
-      }
-    ],
-    "confidence_summary": {
-      "evidence_coverage": "medium",
-      "source_quality": "medium_high",
-      "candidate_separation": "high",
-      "conflict_level": "low",
-      "rationale": [
-        "Evidence coverage is medium based on the current number of retrieved records.",
-        "Source quality is medium_high based on the current source-tier mix.",
-        "Candidate separation is high based on the diversity of candidate positioning.",
-        "Conflict level is low because this development slice does not yet model explicit source disagreement."
-      ]
-    },
-    "evidence_diagnostics": {
-      "requested_provider": "openalex",
-      "used_provider": "mock",
-      "fallback_used": true,
-      "fallback_reason": "ConnectError:[WinError 10054] 远程主机强迫关闭了一个现有的连接。",
-      "record_count": 3,
-      "cache_hit": false
-    }
-  },
-  {
-    "session_id": "82357ed597ee49cb9eefda2949ba1ea7",
-    "created_at": "2026-03-25T13:14:28.596975+00:00",
-    "updated_at": "2026-03-25T13:14:28.596975+00:00",
-    "user_input": {
-      "interest": "trustworthy multimodal reasoning in medical imaging",
-      "problem_domain": "medical AI",
-      "seed_idea": "I want a narrow and feasible research topic.",
-      "constraints": {
-        "time_budget_months": 4,
-        "resource_level": "student",
-        "preferred_style": "applied",
-        "notes": null
-      }
-    },
-    "framing_result": {
-      "normalized_topic": "trustworthy multimodal reasoning in medical imaging",
-      "extracted_constraints": {
-        "time_budget_months": "4",
-        "resource_level": "student",
-        "preferred_style": "applied"
-      },
-      "missing_clarifications": [],
-      "search_questions": [
-        "What are the main research themes in trustworthy multimodal reasoning in medical imaging?",
-        "What methods and benchmarks are commonly used in trustworthy multimodal reasoning in medical imaging?",
-        "What open problems or underexplored gaps exist in trustworthy multimodal reasoning in medical imaging?"
-      ]
-    },
-    "evidence_records": [
-      {
-        "source_id": "arxiv_2",
-        "title": "Liver Segmentation from Multimodal Images using HED-Mask R-CNN",
-        "source_type": "paper",
-        "source_tier": "B",
-        "year": 2019,
-        "authors_or_publisher": "Supriti Mulay, Deepika G, Jeevakala S, Keerthi Ram",
-        "identifier": "https://arxiv.org/abs/1910.10504v1",
-        "url": "https://arxiv.org/abs/1910.10504v1",
-        "summary": "Precise segmentation of the liver is critical for computer-aided diagnosis such as pre-evaluation of the liver for living donor-based transplantation surgery. This task is challenging due to the weak boundaries of organs, countless anatomical variations, and the complexity of the background. Computed tomography (CT) scanning and magnetic resonance imaging (MRI) images have different parameters and settings. Thus, images acquired from different modalities differ from one another making liver segmentation challenging task. We propose an efficient liver segmentation with the combination of holistically-nested edge detection (HED) and the Mask-region-convolutional neural network (R-CNN) to address these challenges. The proposed HED-Mask R-CNN approach is based on effective identification of edge maps from multimodal images. The proposed system firstly applies a preprocessing step of image enhancement to get the 'primal sketches' of the abdomen. Then the HED network is applied to enhanced CT and MRI modality images to get a better edge map. Finally, the Mask R-CNN is used to segment the liver from edge map images. We used a dataset of 20 CT patients and 9 MR patients from the CHAOS challenge. The system is trained on CT and MRI images separately and then converted to 2D slices. We significantly improved the segmentation accuracy of CT and MRI images on a database with a Dice value of 0.94 for CT, 0.89 for T2-weighted MRI and 0.91 for T1-weighted MRI.",
-        "relevance_reason": "Retrieved from arXiv as a public academic source for the current topic query."
-      },
-      {
-        "source_id": "arxiv_1",
-        "title": "Automatic Landmarks Correspondence Detection in Medical Images with an Application to Deformable Image Registration",
-        "source_type": "paper",
-        "source_tier": "B",
-        "year": 2021,
-        "authors_or_publisher": "Monika Grewal, Jan Wiersma, Henrike Westerveld, Peter A. N. Bosman",
-        "identifier": "https://arxiv.org/abs/2109.02722v2",
-        "url": "https://arxiv.org/abs/2109.02722v2",
-        "summary": "Purpose: Deformable Image Registration (DIR) can benefit from additional guidance using corresponding landmarks in the images. However, the benefits thereof are largely understudied, especially due to the lack of automatic landmark detection methods for three-dimensional (3D) medical images. Approach: We present a Deep Convolutional Neural Network (DCNN), called DCNN-Match, that learns to predict landmark correspondences in 3D images in a self-supervised manner. We trained DCNN-Match on pairs of Computed Tomography (CT) scans containing simulated deformations. We explored five variants of DCNN-Match that use different loss functions and assessed their effect on the spatial density of predicted landmarks and the associated matching errors. We also tested DCNN-Match variants in combination with the open-source registration software Elastix to assess the impact of predicted landmarks in providing additional guidance to DIR. Results: We tested our approach on lower-abdominal CT scans from cervical cancer patients: 121 pairs containing simulated deformations and 11 pairs demonstrating clinical deformations. The results showed significant improvement in DIR performance when landmark correspondences predicted by DCNN-Match were used in the case of simulated (p = $0e^0$) as well as clinical deformations (p = 0.030). We also observed that the spatial density of the automatic landmarks with respect to the underlying deformation affect the extent of improvement in DIR. Finally, DCNN-Match was found to generalize to Magnetic Resonance Imaging (MRI) scans without requiring retraining, indicating easy applicability to other datasets. Conclusions: DCNN-Match learns to predict landmark correspondences in 3D medical images in a self-supervised manner, which can improve DIR performance.",
-        "relevance_reason": "Retrieved from arXiv as a public academic source for the current topic query."
-      },
-      {
-        "source_id": "arxiv_3",
-        "title": "SADM: Sequence-Aware Diffusion Model for Longitudinal Medical Image Generation",
-        "source_type": "paper",
-        "source_tier": "B",
-        "year": 2022,
-        "authors_or_publisher": "Jee Seok Yoon, Chenghao Zhang, Heung-Il Suk, Jia Guo",
-        "identifier": "https://arxiv.org/abs/2212.08228v2",
-        "url": "https://arxiv.org/abs/2212.08228v2",
-        "summary": "Human organs constantly undergo anatomical changes due to a complex mix of short-term (e.g., heartbeat) and long-term (e.g., aging) factors. Evidently, prior knowledge of these factors will be beneficial when modeling their future state, i.e., via image generation. However, most of the medical image generation tasks only rely on the input from a single image, thus ignoring the sequential dependency even when longitudinal data is available. Sequence-aware deep generative models, where model input is a sequence of ordered and timestamped images, are still underexplored in the medical imaging domain that is featured by several unique challenges: 1) Sequences with various lengths; 2) Missing data or frame, and 3) High dimensionality. To this end, we propose a sequence-aware diffusion model (SADM) for the generation of longitudinal medical images. Recently, diffusion models have shown promising results in high-fidelity image generation. Our method extends this new technique by introducing a sequence-aware transformer as the conditional module in a diffusion model. The novel design enables learning longitudinal dependency even with missing data during training and allows autoregressive generation of a sequence of images during inference. Our extensive experiments on 3D longitudinal medical images demonstrate the effectiveness of SADM compared with baselines and alternative methods. The code is available at https://github.com/ubc-tea/SADM-Longitudinal-Medical-Image-Generation.",
-        "relevance_reason": "Retrieved from arXiv as a public academic source for the current topic query."
-      }
-    ],
-    "landscape_summary": {
-      "themes": [
-        "multimodal mask as an emerging theme in trustworthy multimodal reasoning in medical imaging"
-      ],
-      "active_methods": [
-        "multimodal mask"
-      ],
-      "likely_gaps": [
-        "clear task scoping for narrow research questions",
-        "stronger evidence on feasibility under limited resources"
-      ],
-      "saturated_areas": [
-        "broad generic summaries without a sharply defined question"
-      ]
-    },
-    "candidate_topics": [
-      {
-        "candidate_id": "candidate_1",
-        "title": "Benchmark-Guided Narrow Task Definition",
-        "research_question": "How can a narrower benchmark task reveal actionable limitations in current methods?",
-        "positioning": "gap-driven",
-        "novelty_note": "Focuses on under-specified evaluation boundaries rather than generic performance claims.",
-        "feasibility_note": "Lower feasibility under a tight timeline unless the benchmark scope is aggressively constrained.",
-        "risk_note": "May become incremental if the task boundary is not sharply differentiated.",
-        "supporting_source_ids": [
-          "arxiv_2",
-          "arxiv_1"
-        ],
-        "open_questions": [
-          "Which benchmark subset best represents the intended problem?",
-          "Can the task be scoped to a 4-month or shorter execution window?"
-        ]
-      },
-      {
-        "candidate_id": "candidate_2",
-        "title": "Applied Method Transfer Under Practical Constraints",
-        "research_question": "Can an existing method family be adapted effectively under strict compute and annotation constraints?",
-        "positioning": "applied-transfer",
-        "novelty_note": "Frames novelty through constraint-aware adaptation rather than larger-model gains.",
-        "feasibility_note": "Strong fit for an applied project that needs a visible baseline-to-improvement story.",
-        "risk_note": "Novelty may depend heavily on the chosen constraint and evaluation design.",
-        "supporting_source_ids": [
-          "arxiv_2",
-          "arxiv_3"
-        ],
-        "open_questions": [
-          "Which constraint creates the strongest research signal?"
-        ]
-      },
-      {
-        "candidate_id": "candidate_3",
-        "title": "Tooling And Evaluation Workflow Support",
-        "research_question": "What tooling or evaluation workflow improvements would make research in this area more reproducible?",
-        "positioning": "systems",
-        "novelty_note": "Shifts from model novelty to workflow and evaluation reliability.",
-        "feasibility_note": "High feasibility for a short-cycle project with engineering emphasis and bounded implementation scope.",
-        "risk_note": "Applied impact may be clearer than publication novelty unless evaluation endpoints are sharply chosen.",
-        "supporting_source_ids": [
-          "arxiv_1",
-          "arxiv_3"
-        ],
-        "open_questions": [
-          "What concrete reproducibility pain point should be prioritized first?",
-          "Which workflow improvement reduces compute or setup cost the most?"
-        ]
-      }
-    ],
-    "comparison_result": {
-      "dimensions": [
-        "novelty",
-        "feasibility",
-        "evidence_strength",
-        "data_availability",
-        "implementation_cost",
-        "risk"
-      ],
-      "summary": "Candidate 2 is strongest for applied feasibility under the current constraints, candidate 1 remains strongest on research framing, and candidate 3 remains the fastest engineering path.",
-      "candidate_assessments": [
-        {
-          "candidate_id": "candidate_1",
-          "novelty": "high",
-          "feasibility": "low_medium",
-          "evidence_strength": "medium_high",
-          "data_availability": "medium",
-          "implementation_cost": "medium_high",
-          "risk": "medium"
-        },
-        {
-          "candidate_id": "candidate_2",
-          "novelty": "medium_high",
-          "feasibility": "high",
-          "evidence_strength": "medium_high",
-          "data_availability": "medium_high",
-          "implementation_cost": "medium_low",
-          "risk": "medium_low"
-        },
-        {
-          "candidate_id": "candidate_3",
-          "novelty": "medium",
-          "feasibility": "high",
-          "evidence_strength": "medium",
-          "data_availability": "high",
-          "implementation_cost": "low",
-          "risk": "medium_high"
-        }
-      ]
-    },
-    "convergence_result": {
-      "recommended_candidate_id": "candidate_2",
-      "backup_candidate_id": "candidate_1",
-      "rationale": "Candidate 2 is the best fit for the current constraints because it starts from reusable baselines, matches an applied project style, and is easier to execute within a tighter timeline.",
-      "manual_checks": [
-        "Confirm that the selected sub-problem can be completed within a 4-month or shorter timeline.",
-        "Verify that at least one benchmark or dataset is realistically accessible.",
-        "Check whether the proposed gap is genuinely underexplored rather than a retrieval miss.",
-        "Verify that the topic still has enough novelty signal for the intended venue."
-      ]
-    },
-    "human_confirmations": [],
-    "trace": [
-      {
-        "stage": "frame_problem",
-        "status": "completed",
-        "timestamp": "2026-03-25T13:14:41.112574+00:00",
-        "detail": "Structured the user input into a topic-exploration request."
-      },
-      {
-        "stage": "retrieve_evidence",
-        "status": "completed",
-        "timestamp": "2026-03-25T13:14:41.112586+00:00",
-        "detail": "Retrieved 3 evidence records using the arxiv provider after fallback from openalex (ConnectError:[WinError 10054] 远程主机强迫关闭了一个现有的连接。)."
-      },
-      {
-        "stage": "synthesize_landscape",
-        "status": "completed",
-        "timestamp": "2026-03-25T13:14:41.112591+00:00",
-        "detail": "Organized the current evidence bundle into a lightweight research landscape summary."
-      },
-      {
-        "stage": "generate_candidates",
-        "status": "completed",
-        "timestamp": "2026-03-25T13:14:41.112594+00:00",
-        "detail": "Generated 3 candidate topic directions from the current evidence bundle."
-      },
-      {
-        "stage": "compare_candidates",
-        "status": "completed",
-        "timestamp": "2026-03-25T13:14:41.112597+00:00",
-        "detail": "Produced a structured candidate comparison across fixed MVP dimensions."
-      },
-      {
-        "stage": "converge_recommendation",
-        "status": "completed",
-        "timestamp": "2026-03-25T13:14:41.112600+00:00",
-        "detail": "Produced a recommended next-best option with manual verification checks."
-      }
-    ],
-    "confidence_summary": {
-      "evidence_coverage": "medium",
-      "source_quality": "medium",
-      "candidate_separation": "high",
-      "conflict_level": "low",
-      "rationale": [
-        "Evidence coverage is medium based on the current number of retrieved records.",
-        "Source quality is medium based on the current source-tier mix.",
-        "Candidate separation is high based on the diversity of candidate positioning.",
-        "Conflict level is low because this development slice does not yet model explicit source disagreement."
-      ]
-    },
-    "evidence_diagnostics": {
-      "requested_provider": "openalex",
-      "used_provider": "arxiv",
-      "fallback_used": true,
-      "fallback_reason": "ConnectError:[WinError 10054] 远程主机强迫关闭了一个现有的连接。",
-      "record_count": 3,
-      "cache_hit": false
-    }
-  },
-  {
     "session_id": "dd4bc611719f4f79b1ad79f2af14ab89",
     "created_at": "2026-03-25T13:16:09.993629+00:00",
     "updated_at": "2026-03-25T13:16:09.993629+00:00",
@@ -18774,6 +18282,737 @@
         "stage": "converge_recommendation",
         "status": "completed",
         "timestamp": "2026-03-26T21:02:59.103754+00:00",
+        "detail": "Produced a recommended next-best option with manual verification checks."
+      }
+    ],
+    "confidence_summary": {
+      "evidence_coverage": "medium",
+      "source_quality": "medium_high",
+      "candidate_separation": "high",
+      "conflict_level": "low",
+      "rationale": [
+        "Evidence coverage is medium based on the current number of retrieved records.",
+        "Source quality is medium_high based on the current source-tier mix.",
+        "Candidate separation is high based on the diversity of candidate positioning.",
+        "Conflict level is low because this development slice does not yet model explicit source disagreement."
+      ]
+    },
+    "evidence_diagnostics": {
+      "requested_provider": "openalex",
+      "used_provider": "openalex",
+      "fallback_used": false,
+      "fallback_reason": null,
+      "record_count": 5,
+      "cache_hit": false
+    }
+  },
+  {
+    "session_id": "98ad8b2054c643d79d2717182643bb4c",
+    "created_at": "2026-03-26T21:13:58.714394+00:00",
+    "updated_at": "2026-03-26T21:13:58.714394+00:00",
+    "user_input": {
+      "interest": "llm agents for automated bug fixing",
+      "problem_domain": "software engineering",
+      "seed_idea": "I want a feasible applied topic on reproducible evaluation for low-cost bug-fixing agents.",
+      "constraints": {
+        "time_budget_months": 6,
+        "resource_level": "student",
+        "preferred_style": "applied",
+        "notes": null
+      }
+    },
+    "framing_result": {
+      "normalized_topic": "llm agents for automated bug fixing",
+      "extracted_constraints": {
+        "time_budget_months": "6",
+        "resource_level": "student",
+        "preferred_style": "applied"
+      },
+      "missing_clarifications": [],
+      "search_questions": [
+        "What are the main research themes in llm agents for automated bug fixing?",
+        "What methods and benchmarks are commonly used in llm agents for automated bug fixing?",
+        "What open problems or underexplored gaps exist in llm agents for automated bug fixing?"
+      ]
+    },
+    "evidence_records": [
+      {
+        "source_id": "openalex_w4407006224",
+        "title": "Empirical Research on Utilizing LLM-based Agents for Automated Bug Fixing via LangGraph",
+        "source_type": "paper",
+        "source_tier": "B",
+        "year": 2025,
+        "authors_or_publisher": "Jialin Wang, Zhihua Duan",
+        "identifier": "https://openalex.org/W4407006224",
+        "url": "https://doi.org/10.33774/coe-2025-jbpg6",
+        "summary": "This paper presents a novel framework for automated code generation and debugging, designed to improve accuracy, efficiency, and scalability in software development. The proposed system integrates three core components—LangGraph, GLM-4-Flash, and ChromaDB—within a four-step iterative workflow to deliver robust performance and seamless functionality. LangGraph serves as a graph-based library for orchestrating tasks, providing precise control and execution while maintaining a unified state object for dynamic updates and consistency. It supports multi-agent, hierarchical, and sequential processes, making it highly adaptable to complex software engineering workflows. GLM-4-Flash, a large language model, leverages its advanced capabilities in natural language understanding, contextual reasoning, and multilingual support to generate accurate code snippets based on user prompts. ChromaDB acts as a vector database for semantic search and contextual memory storage, enabling the identification of patterns and the generation of context-aware bug fixes based on historical data. The system operates through a structured four-step process: (1) Code Generation, which translates natural language descriptions into executable code; (2) Code Execution, which validates the code by identifying runtime errors and inconsistencies; (3) Code Repair, which iteratively refines buggy code using ChromaDB’s memory capabilities and LangGraph’s state tracking; and (4) Code Update, which ensures the code meets functional and performance requirements through iterative modifications. By combining advanced task orchestration, semantic reasoning, and memory-driven insights, the system achieves precise and iterative debugging, significantly enhancing software development workflows. This work represents a substantial advancement in automated software engineering, addressing critical challenges in code reliability and runtime error resolution.",
+        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
+      },
+      {
+        "source_id": "openalex_w4399114781",
+        "title": "SWE-agent: Agent-Computer Interfaces Enable Automated Software Engineering",
+        "source_type": "paper",
+        "source_tier": "B",
+        "year": 2024,
+        "authors_or_publisher": "John Yang, Carlos Jimenez-Gomez, Alexander Wettig, K. Lieret",
+        "identifier": "https://openalex.org/W4399114781",
+        "url": "https://arxiv.org/abs/2405.15793",
+        "summary": "Language model (LM) agents are increasingly being used to automate complicated tasks in digital environments. Just as humans benefit from powerful software applications, such as integrated development environments, for complex tasks like software engineering, we posit that LM agents represent a new category of end users with their own needs and abilities, and would benefit from specially-built interfaces to the software they use. We investigate how interface design affects the performance of language model agents. As a result of this exploration, we introduce SWE-agent: a system that facilitates LM agents to autonomously use computers to solve software engineering tasks. SWE-agent's custom agent-computer interface (ACI) significantly enhances an agent's ability to create and edit code files, navigate entire repositories, and execute tests and other programs. We evaluate SWE-agent on SWE-bench and HumanEvalFix, achieving state-of-the-art performance on both with a pass@1 rate of 12.5% and 87.7%, respectively, far exceeding the previous state-of-the-art achieved with non-interactive LMs. Finally, we provide insight on how the design of the ACI can impact agents' behavior and performance.",
+        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
+      },
+      {
+        "source_id": "openalex_w4403555534",
+        "title": "Large Language Model-Based Agents for Software Engineering: A Survey",
+        "source_type": "survey",
+        "source_tier": "A",
+        "year": 2024,
+        "authors_or_publisher": "Junwei Liu, Kaixin Wang, Yixuan Chen, Xin Peng",
+        "identifier": "https://openalex.org/W4403555534",
+        "url": "https://arxiv.org/abs/2409.02977",
+        "summary": "The recent advance in Large Language Models (LLMs) has shaped a new paradigm of AI agents, i.e., LLM-based agents. Compared to standalone LLMs, LLM-based agents substantially extend the versatility and expertise of LLMs by enhancing LLMs with the capabilities of perceiving and utilizing external resources and tools. To date, LLM-based agents have been applied and shown remarkable effectiveness in Software Engineering (SE). The synergy between multiple agents and human interaction brings further promise in tackling complex real-world SE problems. In this work, we present a comprehensive and systematic survey on LLM-based agents for SE. We collect 124 papers and categorize them from two perspectives, i.e., the SE and agent perspectives. In addition, we discuss open challenges and future directions in this critical domain. The repository of this survey is at https://github.com/FudanSELab/Agent4SE-Paper-List.",
+        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
+      },
+      {
+        "source_id": "openalex_w4411551762",
+        "title": "RepairAgent: An Autonomous, LLM-Based Agent for Program Repair",
+        "source_type": "paper",
+        "source_tier": "B",
+        "year": 2025,
+        "authors_or_publisher": "Islem Bouzenia, Prémkumar Dévanbu, Michael Pradel",
+        "identifier": "https://openalex.org/W4411551762",
+        "url": "https://doi.org/10.1109/icse55347.2025.00157",
+        "summary": "Automated program repair has emerged as a powerful technique to mitigate the impact of software bugs on system reliability and user experience. This paper introduces Repair Agent, the first work to address the program repair challenge through an autonomous agent based on a large language model (LLM). Unlike existing deep learning-based approaches, which prompt a model with a fixed prompt or in a fixed feedback loop, our work treats the LLM as an agent capable of autonomously planning and executing actions to fix bugs by invoking suitable tools. Repair Agent freely interleaves gathering information about the bug, gathering repair ingredients, and validating fixes, while deciding which tools to invoke based on the gathered information and feedback from previous fix attempts. Key contributions that enable Repair Agent include a set of tools that are useful for program repair, a dynamically updated prompt format that allows the LLM to interact with these tools, and a finite state machine that guides the agent in invoking the tools. Our evaluation on the popular Defects4J dataset demonstrates Repair Agent's effectiveness in autonomously repairing 164 bugs, including 39 bugs not fixed by prior techniques. Interacting with the LLM imposes an average cost of 270k tokens per bug, which, under the current pricing of OpenAI's GPT-3.5 model, translates to 14 cents per bug. To the best of our knowledge, this work is the first to present an autonomous, LLM-based agent for program repair, paving the way for future agent-based techniques in software engineering.",
+        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
+      },
+      {
+        "source_id": "openalex_w4390306128",
+        "title": "A Survey on Large Language Models for Software Engineering",
+        "source_type": "survey",
+        "source_tier": "A",
+        "year": 2023,
+        "authors_or_publisher": "Quanjun Zhang, Chunrong Fang, Yang Xie, Yaxin Zhang",
+        "identifier": "https://openalex.org/W4390306128",
+        "url": "https://arxiv.org/abs/2312.15223",
+        "summary": "Software Engineering (SE) is the systematic design, development, maintenance, and management of software applications underpinning the digital infrastructure of our modern world. Very recently, the SE community has seen a rapidly increasing number of techniques employing Large Language Models (LLMs) to automate a broad range of SE tasks. Nevertheless, existing information of the applications, effects, and possible limitations of LLMs within SE is still not well-studied. In this paper, we provide a systematic survey to summarize the current state-of-the-art research in the LLM-based SE community. We summarize 62 representative LLMs of Code across three model architectures, 15 pre-training objectives across four categories, and 16 downstream tasks across five categories. We then present a detailed summarization of the recent SE studies for which LLMs are commonly utilized, including 947 studies for 112 specific code-related tasks across five crucial phases within the SE workflow. We also discuss several critical aspects during the integration of LLMs into SE, such as empirical evaluation, benchmarking, security and reliability, domain tuning, compressing and distillation. Finally, we highlight several challenges and potential opportunities on applying LLMs for future SE studies, such as exploring domain LLMs and constructing clean evaluation datasets. Overall, our work can help researchers gain a comprehensive understanding about the achievements of the existing LLM-based SE studies and promote the practical application of these techniques. Our artifacts are publicly available and will be continuously updated at the living repository: https://github.com/iSEngLab/AwesomeLLM4SE.",
+        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
+      }
+    ],
+    "landscape_summary": {
+      "themes": [
+        "trustworthy evaluation and failure analysis in llm agents for automated bug fixing",
+        "agent-based decomposition strategies for llm agents for automated bug fixing",
+        "applied research themes around automated in llm agents for automated bug fixing"
+      ],
+      "active_methods": [
+        "agent-mediated problem decomposition"
+      ],
+      "likely_gaps": [
+        "trustworthy evaluation signals beyond accuracy-only reporting",
+        "clear task scoping for narrow research questions"
+      ],
+      "saturated_areas": [
+        "broad generic summaries without a sharply defined question"
+      ]
+    },
+    "candidate_topics": [
+      {
+        "candidate_id": "candidate_1",
+        "title": "Benchmark-Guided Narrow Task Definition",
+        "research_question": "How can a narrower benchmark slice reveal actionable limitations in current systems?",
+        "positioning": "gap-driven",
+        "novelty_note": "Frames novelty through sharper evaluation boundaries rather than broader performance reporting.",
+        "feasibility_note": "Moderate feasibility with public evidence and a bounded evaluation target.",
+        "risk_note": "May become incremental if the evaluation slice is not sharply distinguished.",
+        "supporting_source_ids": [
+          "openalex_w4411551762",
+          "openalex_w4390306128"
+        ],
+        "open_questions": [
+          "Which benchmark slice best isolates genuine task gains rather than workflow or prompt shortcuts?"
+        ]
+      },
+      {
+        "candidate_id": "candidate_2",
+        "title": "Applied Method Transfer Under Practical Constraints",
+        "research_question": "Can an existing coding-agent method family be adapted effectively under strict practical constraints?",
+        "positioning": "applied-transfer",
+        "novelty_note": "Frames novelty through constrained adaptation of an existing method family.",
+        "feasibility_note": "Strong fit for an applied project that can reuse a visible baseline.",
+        "risk_note": "Novelty may depend heavily on the chosen constraint and evaluation design.",
+        "supporting_source_ids": [
+          "openalex_w4407006224",
+          "openalex_w4411551762"
+        ],
+        "open_questions": [
+          "Which constraint creates the strongest research signal?"
+        ]
+      },
+      {
+        "candidate_id": "candidate_3",
+        "title": "Tooling And Evaluation Workflow Support",
+        "research_question": "What tooling or workflow support around software engineering would make research in this area more reproducible?",
+        "positioning": "systems",
+        "novelty_note": "Shifts value from model novelty toward reproducibility, workflow support, and evaluation reliability.",
+        "feasibility_note": "High feasibility for a short-cycle engineering-heavy project.",
+        "risk_note": "Applied impact may be clearer than publication novelty unless the workflow pain point is precisely chosen.",
+        "supporting_source_ids": [
+          "openalex_w4390306128",
+          "openalex_w4407006224"
+        ],
+        "open_questions": [
+          "What concrete reproducibility pain point should be prioritized first?",
+          "Which workflow improvement around software engineering reduces setup or audit cost the most?",
+          "What workflow support would make trustworthy evaluation and audit trails easier to reproduce?",
+          "Which workflow improvement reduces compute or setup cost the most?"
+        ]
+      }
+    ],
+    "comparison_result": {
+      "dimensions": [
+        "novelty",
+        "feasibility",
+        "evidence_strength",
+        "data_availability",
+        "implementation_cost",
+        "risk"
+      ],
+      "summary": "Candidate 2 is strongest for applied feasibility under the current constraints, candidate 1 remains strongest on research framing, and candidate 3 remains the fastest engineering path.",
+      "candidate_assessments": [
+        {
+          "candidate_id": "candidate_1",
+          "novelty": "high",
+          "feasibility": "medium",
+          "evidence_strength": "medium_high",
+          "data_availability": "medium",
+          "implementation_cost": "medium",
+          "risk": "medium"
+        },
+        {
+          "candidate_id": "candidate_2",
+          "novelty": "medium_high",
+          "feasibility": "high",
+          "evidence_strength": "medium_high",
+          "data_availability": "medium_high",
+          "implementation_cost": "medium_low",
+          "risk": "medium_low"
+        },
+        {
+          "candidate_id": "candidate_3",
+          "novelty": "medium",
+          "feasibility": "high",
+          "evidence_strength": "medium",
+          "data_availability": "high",
+          "implementation_cost": "low",
+          "risk": "medium_high"
+        }
+      ]
+    },
+    "convergence_result": {
+      "recommended_candidate_id": "candidate_2",
+      "backup_candidate_id": "candidate_1",
+      "rationale": "Candidate 2 is the best fit for the current constraints because it starts from reusable baselines, matches an applied project style, and is easier to execute within a tighter timeline.",
+      "manual_checks": [
+        "Confirm that the selected sub-problem is narrow enough for the available timeline.",
+        "Verify that at least one benchmark or dataset is realistically accessible.",
+        "Check whether the proposed gap is genuinely underexplored rather than a retrieval miss.",
+        "Verify that the topic still has enough novelty signal for the intended venue."
+      ]
+    },
+    "evidence_presentation": {
+      "source_facts": [
+        {
+          "statement": "Retrieved paper evidence 'Empirical Research on Utilizing LLM-based Agents for Automated Bug Fixing via LangGraph' (2025) as tier B support for the current topic.",
+          "statement_type": "source_fact",
+          "supporting_source_ids": [
+            "openalex_w4407006224"
+          ],
+          "note": "Directly grounded in retrieved source metadata and source summary.",
+          "uncertainty_reason": null,
+          "missing_evidence": []
+        },
+        {
+          "statement": "Retrieved paper evidence 'SWE-agent: Agent-Computer Interfaces Enable Automated Software Engineering' (2024) as tier B support for the current topic.",
+          "statement_type": "source_fact",
+          "supporting_source_ids": [
+            "openalex_w4399114781"
+          ],
+          "note": "Directly grounded in retrieved source metadata and source summary.",
+          "uncertainty_reason": null,
+          "missing_evidence": []
+        },
+        {
+          "statement": "Retrieved survey evidence 'Large Language Model-Based Agents for Software Engineering: A Survey' (2024) as tier A support for the current topic.",
+          "statement_type": "source_fact",
+          "supporting_source_ids": [
+            "openalex_w4403555534"
+          ],
+          "note": "Directly grounded in retrieved source metadata and source summary.",
+          "uncertainty_reason": null,
+          "missing_evidence": []
+        }
+      ],
+      "system_synthesis": [
+        {
+          "statement": "Current evidence clusters most strongly around trustworthy evaluation and failure analysis in llm agents for automated bug fixing, agent-based decomposition strategies for llm agents for automated bug fixing.",
+          "statement_type": "system_synthesis",
+          "supporting_source_ids": [
+            "openalex_w4411551762",
+            "openalex_w4407006224",
+            "openalex_w4390306128"
+          ],
+          "note": "Agent synthesis over multiple retrieved sources with theme-level evidence matching.",
+          "uncertainty_reason": null,
+          "missing_evidence": []
+        },
+        {
+          "statement": "The current output separates into 3 candidate directions with distinct positioning and comparison scores.",
+          "statement_type": "system_synthesis",
+          "supporting_source_ids": [
+            "openalex_w4411551762",
+            "openalex_w4390306128",
+            "openalex_w4407006224"
+          ],
+          "note": "Agent synthesis over candidate generation and comparison outputs, anchored to candidate support sets.",
+          "uncertainty_reason": null,
+          "missing_evidence": []
+        }
+      ],
+      "tentative_inferences": [
+        {
+          "statement": "candidate_2 is currently the leading direction under the present constraints.",
+          "statement_type": "tentative_inference",
+          "supporting_source_ids": [
+            "openalex_w4407006224",
+            "openalex_w4411551762"
+          ],
+          "note": "Recommendation-level inference that still requires human validation.",
+          "uncertainty_reason": "This recommendation remains constraint-sensitive and depends on the current evidence bundle, not on a settled benchmark choice or direct experimental validation.",
+          "missing_evidence": [
+            "Confirm that the selected sub-problem is narrow enough for the available timeline.",
+            "Verify that at least one benchmark or dataset is realistically accessible."
+          ]
+        },
+        {
+          "statement": "Confirm that the selected sub-problem is narrow enough for the available timeline.",
+          "statement_type": "tentative_inference",
+          "supporting_source_ids": [
+            "openalex_w4407006224",
+            "openalex_w4411551762"
+          ],
+          "note": "Open validation requirement rather than a settled fact.",
+          "uncertainty_reason": "The recommendation should not be treated as final until this validation step is checked.",
+          "missing_evidence": [
+            "Confirm that the selected sub-problem is narrow enough for the available timeline."
+          ]
+        }
+      ]
+    },
+    "human_confirmations": [
+      "Confirm that the system correctly interpreted the topic as 'llm agents for automated bug fixing'.",
+      "Confirm that candidate_2 should remain the leading direction after reviewing the supporting evidence and risks.",
+      "Manual check: Confirm that the selected sub-problem is narrow enough for the available timeline.",
+      "Manual check: Verify that at least one benchmark or dataset is realistically accessible."
+    ],
+    "clarification_suggestions": [],
+    "trace": [
+      {
+        "stage": "frame_problem",
+        "status": "completed",
+        "timestamp": "2026-03-26T21:14:24.237125+00:00",
+        "detail": "Structured the user input into a topic-exploration request."
+      },
+      {
+        "stage": "retrieve_evidence",
+        "status": "completed",
+        "timestamp": "2026-03-26T21:14:24.237139+00:00",
+        "detail": "Retrieved 5 evidence records using the openalex provider."
+      },
+      {
+        "stage": "synthesize_landscape",
+        "status": "completed",
+        "timestamp": "2026-03-26T21:14:24.237144+00:00",
+        "detail": "Organized the current evidence bundle into a lightweight research landscape summary."
+      },
+      {
+        "stage": "generate_candidates",
+        "status": "completed",
+        "timestamp": "2026-03-26T21:14:24.237148+00:00",
+        "detail": "Generated 3 candidate topic directions from the current evidence bundle."
+      },
+      {
+        "stage": "compare_candidates",
+        "status": "completed",
+        "timestamp": "2026-03-26T21:14:24.237151+00:00",
+        "detail": "Produced a structured candidate comparison across fixed MVP dimensions."
+      },
+      {
+        "stage": "converge_recommendation",
+        "status": "completed",
+        "timestamp": "2026-03-26T21:14:24.237154+00:00",
+        "detail": "Produced a recommended next-best option with manual verification checks."
+      }
+    ],
+    "confidence_summary": {
+      "evidence_coverage": "medium",
+      "source_quality": "medium_high",
+      "candidate_separation": "high",
+      "conflict_level": "low",
+      "rationale": [
+        "Evidence coverage is medium based on the current number of retrieved records.",
+        "Source quality is medium_high based on the current source-tier mix.",
+        "Candidate separation is high based on the diversity of candidate positioning.",
+        "Conflict level is low because this development slice does not yet model explicit source disagreement."
+      ]
+    },
+    "evidence_diagnostics": {
+      "requested_provider": "openalex",
+      "used_provider": "openalex",
+      "fallback_used": false,
+      "fallback_reason": null,
+      "record_count": 5,
+      "cache_hit": false
+    }
+  },
+  {
+    "session_id": "9ccce5356986486889e316dc289f1d6a",
+    "created_at": "2026-03-26T21:25:14.137920+00:00",
+    "updated_at": "2026-03-26T21:25:14.137920+00:00",
+    "user_input": {
+      "interest": "repository-level bug-fixing agents",
+      "problem_domain": "software engineering evaluation",
+      "seed_idea": "I want a feasible applied topic on reproducible evaluation and workflow support for low-cost repair agents.",
+      "constraints": {
+        "time_budget_months": 6,
+        "resource_level": "student",
+        "preferred_style": "applied",
+        "notes": null
+      }
+    },
+    "framing_result": {
+      "normalized_topic": "repository-level bug-fixing agents",
+      "extracted_constraints": {
+        "time_budget_months": "6",
+        "resource_level": "student",
+        "preferred_style": "applied"
+      },
+      "missing_clarifications": [],
+      "search_questions": [
+        "What are the main research themes in repository-level bug-fixing agents?",
+        "What methods and benchmarks are commonly used in repository-level bug-fixing agents?",
+        "What open problems or underexplored gaps exist in repository-level bug-fixing agents?"
+      ]
+    },
+    "evidence_records": [
+      {
+        "source_id": "openalex_w4400582844",
+        "title": "CodePlan: Repository-Level Coding using LLMs and Planning",
+        "source_type": "paper",
+        "source_tier": "B",
+        "year": 2024,
+        "authors_or_publisher": "Ramakrishna Bairi, Atharv Sonwane, Aditya Kanade, D. C. Vageesh",
+        "identifier": "https://openalex.org/W4400582844",
+        "url": "https://doi.org/10.1145/3643757",
+        "summary": "Software engineering activities such as package migration, fixing error reports from static analysis or testing, and adding type annotations or other specifications to a codebase, involve pervasively editing the entire repository of code. We formulate these activities as repository-level coding tasks. Recent tools like GitHub Copilot, which are powered by Large Language Models (LLMs), have succeeded in offering high-quality solutions to localized coding problems. Repository-level coding tasks are more involved and cannot be solved directly using LLMs, since code within a repository is inter-dependent and the entire repository may be too large to fit into the prompt. We frame repository-level coding as a planning problem and present a task-agnostic, neuro-symbolic framework called CodePlan to solve it. CodePlan synthesizes a multi-step chain-of-edits (plan), where each step results in a call to an LLM on a code location with context derived from the entire repository, previous code changes and task-specific instructions. CodePlan is based on a novel combination of an incremental dependency analysis, a change may-impact analysis and an adaptive planning algorithm (symbolic components) with the neural LLMs. We evaluate the effectiveness of CodePlan on two repository-level tasks: package migration (C#) and temporal code edits (Python). Each task is evaluated on multiple code repositories, each of which requires inter-dependent changes to many files (between 2-97 files). Coding tasks of this level of complexity have not been automated using LLMs before. Our results show that CodePlan has better match with the ground truth compared to baselines. CodePlan is able to get 5/7 repositories to pass the validity checks (i.e., to build without errors and make correct code edits) whereas the baselines (without planning but with the same type of contextual information as CodePlan) cannot get any of the repositories to pass them. We provide our (nonproprietary) data, evaluation scripts and supplementary material at https://github.com/microsoft/codeplan.",
+        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
+      },
+      {
+        "source_id": "openalex_w2090894850",
+        "title": "Process mining software repositories from student projects in an undergraduate software engineering course",
+        "source_type": "paper",
+        "source_tier": "B",
+        "year": 2014,
+        "authors_or_publisher": "Megha Mittal, Ashish Sureka",
+        "identifier": "https://openalex.org/W2090894850",
+        "url": "https://doi.org/10.1145/2591062.2591152",
+        "summary": "An undergraduate level Software Engineering courses generally consists of a team-based semester long project and emphasizes on both technical and managerial skills. Software Engineering is a practice-oriented and applied discipline and hence there is an emphasis on hands-on development, process, usage of tools in addition to theory and basic concepts. We present an approach for mining the process data (process mining) from software repositories archiving data generated as a result of constructing software by student teams in an educational setting. We present an application of mining three software repositories: team wiki (used during requirement engineering), version control system (development and maintenance) and issue tracking system (corrective and adaptive maintenance) in the context of an undergraduate Software Engineering course. We propose visualizations, metrics and algorithms to provide an insight into practices and procedures followed during various phases of a software development life-cycle. The proposed visualizations and metrics (learning analytics) provide a multi-faceted view to the instructor serving as a feedback tool on development process and quality by students. We mine the event logs produced by software repositories and derive insights such as degree of individual contributions in a team, quality of commit messages, intensity and consistency of commit activities, bug fixing process trend and quality, component and developer entropy, process compliance and verification. We present our empirical analysis on a software repository dataset consisting of 19 teams of 5 members each and discuss challenges, limitations and recommendations.",
+        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
+      },
+      {
+        "source_id": "openalex_w4403555534",
+        "title": "Large Language Model-Based Agents for Software Engineering: A Survey",
+        "source_type": "survey",
+        "source_tier": "A",
+        "year": 2024,
+        "authors_or_publisher": "Junwei Liu, Kaixin Wang, Yixuan Chen, Xin Peng",
+        "identifier": "https://openalex.org/W4403555534",
+        "url": "https://arxiv.org/abs/2409.02977",
+        "summary": "The recent advance in Large Language Models (LLMs) has shaped a new paradigm of AI agents, i.e., LLM-based agents. Compared to standalone LLMs, LLM-based agents substantially extend the versatility and expertise of LLMs by enhancing LLMs with the capabilities of perceiving and utilizing external resources and tools. To date, LLM-based agents have been applied and shown remarkable effectiveness in Software Engineering (SE). The synergy between multiple agents and human interaction brings further promise in tackling complex real-world SE problems. In this work, we present a comprehensive and systematic survey on LLM-based agents for SE. We collect 124 papers and categorize them from two perspectives, i.e., the SE and agent perspectives. In addition, we discuss open challenges and future directions in this critical domain. The repository of this survey is at https://github.com/FudanSELab/Agent4SE-Paper-List.",
+        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
+      },
+      {
+        "source_id": "openalex_w2253813875",
+        "title": "MINING EFFORT DATA FROM THE OSS REPOSITORY OF DEVELOPER’S BUG FIX ACTIVITY",
+        "source_type": "paper",
+        "source_tier": "B",
+        "year": 2016,
+        "authors_or_publisher": "Syed Nadeem Ahsan, Muhammad Tanvir Afzal, Safdar Zaman, Christian Gütel",
+        "identifier": "https://openalex.org/W2253813875",
+        "url": "https://doi.org/10.33736/jita.38.2010",
+        "summary": "During the evolution of any software, efforts are made to fix bugs or to add new features in software. In software engineering, previous history of effort data is required to build an effort estimation model, which estimates the cost and complexity of any software. Therefore, the role of effort data is indispensable to build state-of-the-art effort estimation models. Most of the Open Source Software does not maintain any effort related information. Consequently there is no state-of-the-art effort estimation model for Open Source Software, whereas most of the existing effort models are for commercial software. In this paper we present an approach to build an effort estimation model for Open Source Software. For this purpose we suggest to mine effort data from the history of the developer’s bug fix activities. Our approach determines the actual time spend to fix a bug, and considers it as an estimated effort. Initially, we use the developer’s bug-fix-activity data to construct the developer’s activity log-book. The log-book is used to store the actual time elapsed to fix a bug. Subsequently, the log-book information is used to mine the bug fix effort data. Furthermore, the developer’s bug fix activity data is used to define three different measures for the developer’s contribution or expertise level. Finally, we used the bug-fix-activity data to visualize the developer’s collaborations and the involved source files. In order to perform an experiment we selected the Mozilla open source project and downloaded 93,607 bug reports from the Mozilla project bug tracking system i.e., Bugzilla. We also downloaded the available CVS-log data from the Mozilla project repository. In this study we reveal that in case of Mozilla only 4.9% developers have been involved in fixing 71.5% of the reported bugs.",
+        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
+      },
+      {
+        "source_id": "openalex_w4388483102",
+        "title": "Minecraft: Automated Mining of Software Bug Fixes with Precise Code Context",
+        "source_type": "paper",
+        "source_tier": "B",
+        "year": 2023,
+        "authors_or_publisher": "Sai Krishna Avula, V. Vobbilisetti, Shouvick Mondal",
+        "identifier": "https://openalex.org/W4388483102",
+        "url": "https://doi.org/10.1109/ase56229.2023.00116",
+        "summary": "Repository mining of bug fixes from version control systems like GitHub is a challenging problem as far as the precision of the bug context is concerned, i.e., source codes immediately preceding and succeeding the fix location. Coupled with this, identification of the type of the bug fix goes a long way towards creating high quality datasets that can be used for several downstream tasks. However, existing bug fix datasets suffer from the following limitations that dilute the data quality. Firstly, they do not focus on multilingual projects in their entirety given that most open-source projects are now multilingual. Secondly, the granularity of the bug fixes are considered only at the function/method level without specifying line/statement level information. Thirdly, bug fixes lying within the scope of a source file but outside any of its constituent functions have not been examined. In this paper, we propose a solution to overcome the aforementioned limitations by introducing a novel and extensive dataset named Minecraft. With a size of 28.8GB (considering 416 GitHub projects encompassing programming languages such as C, C++, Java, and Python, 2.2M commits, 3.29M bug-fix pairs), Minecraft surpasses the existing datasets by 4-fold enlargement in terms of data availability. We believe Minecraft would serve as a valuable resource for various stakeholders in the software development and research communities, empowering them to improve software quality, develop innovative bug detection and auto-fix techniques, and advance the field of software engineering.",
+        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
+      }
+    ],
+    "landscape_summary": {
+      "themes": [
+        "agent-based decomposition strategies for repository-level bug-fixing agents",
+        "applied research themes around level in repository-level bug-fixing agents"
+      ],
+      "active_methods": [
+        "agent-mediated problem decomposition"
+      ],
+      "likely_gaps": [
+        "clear task scoping for narrow research questions",
+        "stronger evidence on feasibility under limited resources"
+      ],
+      "saturated_areas": [
+        "broad generic summaries without a sharply defined question"
+      ]
+    },
+    "candidate_topics": [
+      {
+        "candidate_id": "candidate_1",
+        "title": "Benchmark-Guided Narrow Task Definition",
+        "research_question": "How can a narrower benchmark task reveal actionable limitations in current methods?",
+        "positioning": "gap-driven",
+        "novelty_note": "Focuses on under-specified evaluation boundaries rather than generic performance claims.",
+        "feasibility_note": "Moderate feasibility with public resources and modest compute.",
+        "risk_note": "May become incremental if the task boundary is not sharply differentiated.",
+        "supporting_source_ids": [
+          "openalex_w4400582844",
+          "openalex_w2090894850"
+        ],
+        "open_questions": [
+          "Which benchmark subset best represents the intended problem?"
+        ]
+      },
+      {
+        "candidate_id": "candidate_2",
+        "title": "Applied Method Transfer Under Practical Constraints",
+        "research_question": "Can an existing method family be adapted effectively under strict compute and annotation constraints?",
+        "positioning": "applied-transfer",
+        "novelty_note": "Frames novelty through adapting agent-based reasoning workflows under tighter practical constraints.",
+        "feasibility_note": "Strong fit for an applied project that needs a visible baseline-to-improvement story.",
+        "risk_note": "Novelty may depend heavily on the chosen constraint and evaluation design.",
+        "supporting_source_ids": [
+          "openalex_w4400582844",
+          "openalex_w2090894850"
+        ],
+        "open_questions": [
+          "Which constraint creates the strongest research signal?"
+        ]
+      },
+      {
+        "candidate_id": "candidate_3",
+        "title": "Tooling And Evaluation Workflow Support",
+        "research_question": "What tooling or workflow support for reproducible bug-fixing agent evaluation would make research in this area more reproducible?",
+        "positioning": "systems",
+        "novelty_note": "Shifts from model novelty to workflow and evaluation reliability.",
+        "feasibility_note": "Strong feasibility for a short-cycle project with engineering emphasis.",
+        "risk_note": "Applied impact may be clearer than publication novelty unless evaluation endpoints are sharply chosen.",
+        "supporting_source_ids": [
+          "openalex_w4400582844",
+          "openalex_w2090894850"
+        ],
+        "open_questions": [
+          "What concrete reproducibility pain point should be prioritized first?",
+          "Which workflow improvement for reproducible bug-fixing agent evaluation reduces setup or audit cost the most?",
+          "Which workflow improvement reduces compute or setup cost the most?"
+        ]
+      }
+    ],
+    "comparison_result": {
+      "dimensions": [
+        "novelty",
+        "feasibility",
+        "evidence_strength",
+        "data_availability",
+        "implementation_cost",
+        "risk"
+      ],
+      "summary": "Candidate 2 is strongest for applied feasibility under the current constraints, candidate 1 remains strongest on research framing, and candidate 3 remains the fastest engineering path.",
+      "candidate_assessments": [
+        {
+          "candidate_id": "candidate_1",
+          "novelty": "high",
+          "feasibility": "medium",
+          "evidence_strength": "medium_high",
+          "data_availability": "medium",
+          "implementation_cost": "medium",
+          "risk": "medium"
+        },
+        {
+          "candidate_id": "candidate_2",
+          "novelty": "medium_high",
+          "feasibility": "high",
+          "evidence_strength": "medium_high",
+          "data_availability": "medium_high",
+          "implementation_cost": "medium_low",
+          "risk": "medium_low"
+        },
+        {
+          "candidate_id": "candidate_3",
+          "novelty": "medium",
+          "feasibility": "high",
+          "evidence_strength": "medium",
+          "data_availability": "high",
+          "implementation_cost": "low",
+          "risk": "medium_high"
+        }
+      ]
+    },
+    "convergence_result": {
+      "recommended_candidate_id": "candidate_2",
+      "backup_candidate_id": "candidate_1",
+      "rationale": "Candidate 2 is the best fit for the current constraints because it starts from reusable baselines, matches an applied project style, and is easier to execute within a tighter timeline.",
+      "manual_checks": [
+        "Confirm that the selected sub-problem is narrow enough for the available timeline.",
+        "Verify that at least one benchmark or dataset is realistically accessible.",
+        "Check whether the proposed gap is genuinely underexplored rather than a retrieval miss.",
+        "Verify that the topic still has enough novelty signal for the intended venue."
+      ]
+    },
+    "evidence_presentation": {
+      "source_facts": [
+        {
+          "statement": "Retrieved paper evidence 'CodePlan: Repository-Level Coding using LLMs and Planning' (2024) as tier B support for the current topic.",
+          "statement_type": "source_fact",
+          "supporting_source_ids": [
+            "openalex_w4400582844"
+          ],
+          "note": "Directly grounded in retrieved source metadata and source summary.",
+          "uncertainty_reason": null,
+          "missing_evidence": []
+        },
+        {
+          "statement": "Retrieved paper evidence 'Process mining software repositories from student projects in an undergraduate software engineering course' (2014) as tier B support for the current topic.",
+          "statement_type": "source_fact",
+          "supporting_source_ids": [
+            "openalex_w2090894850"
+          ],
+          "note": "Directly grounded in retrieved source metadata and source summary.",
+          "uncertainty_reason": null,
+          "missing_evidence": []
+        },
+        {
+          "statement": "Retrieved survey evidence 'Large Language Model-Based Agents for Software Engineering: A Survey' (2024) as tier A support for the current topic.",
+          "statement_type": "source_fact",
+          "supporting_source_ids": [
+            "openalex_w4403555534"
+          ],
+          "note": "Directly grounded in retrieved source metadata and source summary.",
+          "uncertainty_reason": null,
+          "missing_evidence": []
+        }
+      ],
+      "system_synthesis": [
+        {
+          "statement": "Current evidence clusters most strongly around agent-based decomposition strategies for repository-level bug-fixing agents, applied research themes around level in repository-level bug-fixing agents.",
+          "statement_type": "system_synthesis",
+          "supporting_source_ids": [
+            "openalex_w4388483102",
+            "openalex_w2253813875",
+            "openalex_w2090894850"
+          ],
+          "note": "Agent synthesis over multiple retrieved sources with theme-level evidence matching.",
+          "uncertainty_reason": null,
+          "missing_evidence": []
+        },
+        {
+          "statement": "The current output separates into 3 candidate directions with distinct positioning and comparison scores.",
+          "statement_type": "system_synthesis",
+          "supporting_source_ids": [
+            "openalex_w4400582844",
+            "openalex_w2090894850"
+          ],
+          "note": "Agent synthesis over candidate generation and comparison outputs, anchored to candidate support sets.",
+          "uncertainty_reason": null,
+          "missing_evidence": []
+        }
+      ],
+      "tentative_inferences": [
+        {
+          "statement": "candidate_2 is currently the leading direction under the present constraints.",
+          "statement_type": "tentative_inference",
+          "supporting_source_ids": [
+            "openalex_w4400582844",
+            "openalex_w2090894850"
+          ],
+          "note": "Recommendation-level inference that still requires human validation.",
+          "uncertainty_reason": "This recommendation remains constraint-sensitive and depends on the current evidence bundle, not on a settled benchmark choice or direct experimental validation.",
+          "missing_evidence": [
+            "Confirm that the selected sub-problem is narrow enough for the available timeline.",
+            "Verify that at least one benchmark or dataset is realistically accessible."
+          ]
+        },
+        {
+          "statement": "Confirm that the selected sub-problem is narrow enough for the available timeline.",
+          "statement_type": "tentative_inference",
+          "supporting_source_ids": [
+            "openalex_w4400582844",
+            "openalex_w2090894850"
+          ],
+          "note": "Open validation requirement rather than a settled fact.",
+          "uncertainty_reason": "The recommendation should not be treated as final until this validation step is checked.",
+          "missing_evidence": [
+            "Confirm that the selected sub-problem is narrow enough for the available timeline."
+          ]
+        }
+      ]
+    },
+    "human_confirmations": [
+      "Confirm that the system correctly interpreted the topic as 'repository-level bug-fixing agents'.",
+      "Confirm that candidate_2 should remain the leading direction after reviewing the supporting evidence and risks.",
+      "Manual check: Confirm that the selected sub-problem is narrow enough for the available timeline.",
+      "Manual check: Verify that at least one benchmark or dataset is realistically accessible."
+    ],
+    "clarification_suggestions": [],
+    "trace": [
+      {
+        "stage": "frame_problem",
+        "status": "completed",
+        "timestamp": "2026-03-26T21:25:38.176511+00:00",
+        "detail": "Structured the user input into a topic-exploration request."
+      },
+      {
+        "stage": "retrieve_evidence",
+        "status": "completed",
+        "timestamp": "2026-03-26T21:25:38.176534+00:00",
+        "detail": "Retrieved 5 evidence records using the openalex provider."
+      },
+      {
+        "stage": "synthesize_landscape",
+        "status": "completed",
+        "timestamp": "2026-03-26T21:25:38.176544+00:00",
+        "detail": "Organized the current evidence bundle into a lightweight research landscape summary."
+      },
+      {
+        "stage": "generate_candidates",
+        "status": "completed",
+        "timestamp": "2026-03-26T21:25:38.176551+00:00",
+        "detail": "Generated 3 candidate topic directions from the current evidence bundle."
+      },
+      {
+        "stage": "compare_candidates",
+        "status": "completed",
+        "timestamp": "2026-03-26T21:25:38.176558+00:00",
+        "detail": "Produced a structured candidate comparison across fixed MVP dimensions."
+      },
+      {
+        "stage": "converge_recommendation",
+        "status": "completed",
+        "timestamp": "2026-03-26T21:25:38.176563+00:00",
         "detail": "Produced a recommended next-best option with manual verification checks."
       }
     ],

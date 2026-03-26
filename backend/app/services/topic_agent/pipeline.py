@@ -328,7 +328,24 @@ def _query_intent_flags(request: TopicAgentExploreRequest) -> dict[str, bool]:
                 }
             )
         ),
+        "bug_fixing": _is_bug_fixing_query(request),
     }
+
+
+def _is_bug_fixing_query(request: TopicAgentExploreRequest) -> bool:
+    query_text = _query_context_text(request)
+    return any(
+        term in query_text
+        for term in {
+            "bug fixing",
+            "bug-fixing",
+            "program repair",
+            "code repair",
+            "automated bug fixing",
+            "automated program repair",
+            "software maintenance",
+        }
+    )
 
 
 def _detect_evidence_cues(
@@ -980,7 +997,44 @@ def _candidate_record_fit(
 ) -> str:
     text = _record_text(record)
 
+    if candidate.candidate_id == "candidate_1":
+        if any(
+            term in text
+            for term in {
+                "benchmark",
+                "evaluation",
+                "defects4j",
+                "humanevalfix",
+                "swe-bench",
+                "empirical evaluation",
+            }
+        ):
+            return "benchmark_support"
+        return "general"
+
     if candidate.candidate_id == "candidate_2":
+        if query_flags.get("bug_fixing") and any(
+            term in text
+            for term in {
+                "program repair",
+                "bug fixing",
+                "repairing",
+                "repair bot",
+                "repair agent",
+                "defects4j",
+            }
+        ):
+            return "method_support"
+        if query_flags.get("bug_fixing") and any(
+            term in text
+            for term in {
+                "agent-computer interface",
+                "repository navigation",
+                "software engineering: a survey",
+                "software engineering tasks",
+            }
+        ):
+            return "benchmark_context"
         if any(
             term in text
             for term in {
@@ -998,6 +1052,9 @@ def _candidate_record_fit(
                 "developer-ai collaboration",
                 "developer workflows",
                 "coding tasks",
+                "program repair",
+                "bug fixing",
+                "repairing",
                 "lightweight",
                 "compact",
                 "transformers",
@@ -1038,6 +1095,12 @@ def _candidate_record_fit(
                 "annotation",
                 "tooling",
                 "pipeline",
+                "agent-computer interface",
+                "langgraph",
+                "repository",
+                "tests",
+                "debugging",
+                "bug fixing",
                 "metacognition",
                 "calibration",
                 "confidence",
@@ -1086,6 +1149,17 @@ def _rank_supporting_source_ids_for_candidate(
     if not evidence_records:
         return []
 
+    if candidate.candidate_id == "candidate_1":
+        preferred_records = [
+            record
+            for record in evidence_records
+            if _candidate_record_fit(candidate, record, query_flags=query_flags) == "benchmark_support"
+        ]
+        if preferred_records:
+            evidence_records = preferred_records + [
+                record for record in evidence_records if record not in preferred_records
+            ]
+
     if candidate.candidate_id == "candidate_2":
         preferred_records = [
             record
@@ -1132,6 +1206,8 @@ def _rank_supporting_source_ids_for_candidate(
                 overlap += 3
             if any(term in text for term in {"verification", "reliable", "reliability", "metacognition"}):
                 overlap += 1
+            if _candidate_record_fit(candidate, record, query_flags=query_flags) == "benchmark_support":
+                overlap += 6
         elif candidate.candidate_id == "candidate_2":
             if any(term in text for term in {"agent", "framework", "collaborative", "zero-shot", "zero shot"}):
                 overlap += 3
@@ -1260,6 +1336,35 @@ def _allow_draft_text_override(
     if any(term in query_text for term in {"medical", "clinical", "radiology", "biomedical"}):
         return False
     return True
+
+
+def _specialize_bug_fixing_candidates(
+    candidates: list[TopicAgentCandidateTopic],
+    *,
+    request: TopicAgentExploreRequest,
+) -> list[TopicAgentCandidateTopic]:
+    if not _is_bug_fixing_query(request) or len(candidates) < 3:
+        return candidates
+
+    candidate_3 = candidates[2]
+    normalized_question = candidate_3.research_question.strip().lower()
+    if (
+        "software engineering" in normalized_question
+        or normalized_question
+        == "what tooling or evaluation workflow improvements would make research in this area more reproducible?"
+    ):
+        candidate_3.research_question = (
+            "What tooling or workflow support for reproducible bug-fixing agent evaluation would make research in this area more reproducible?"
+        )
+        candidate_3.open_questions = _dedupe_open_questions(
+            [
+                "What concrete reproducibility pain point should be prioritized first?",
+                "Which workflow improvement for reproducible bug-fixing agent evaluation reduces setup or audit cost the most?",
+                "Which workflow improvement reduces compute or setup cost the most?",
+            ]
+            + candidate_3.open_questions
+        )
+    return candidates
 
 
 def generate_candidates(context: TopicAgentPipelineContext) -> list[TopicAgentCandidateTopic]:
@@ -1500,6 +1605,22 @@ def generate_candidates(context: TopicAgentPipelineContext) -> list[TopicAgentCa
                 ]
                 + candidate_3.open_questions
             )
+        if _is_bug_fixing_query(context.request) and (
+            "software engineering" in candidate_3.research_question.lower()
+            or candidate_3.research_question.lower()
+            == "what tooling or evaluation workflow improvements would make research in this area more reproducible?"
+        ):
+            candidate_3.research_question = (
+                "What tooling or workflow support for reproducible bug-fixing agent evaluation would make research in this area more reproducible?"
+            )
+            candidate_3.open_questions = _dedupe_open_questions(
+                [
+                    "What concrete reproducibility pain point should be prioritized first?",
+                    "Which workflow improvement for reproducible bug-fixing agent evaluation reduces setup or audit cost the most?",
+                    "Which workflow improvement reduces compute or setup cost the most?",
+                ]
+                + candidate_3.open_questions
+            )
 
     result = [
         candidate_1,
@@ -1509,6 +1630,10 @@ def generate_candidates(context: TopicAgentPipelineContext) -> list[TopicAgentCa
     result = _apply_query_specific_candidate_polish(
         result,
         query_flags=query_flags,
+    )
+    result = _specialize_bug_fixing_candidates(
+        result,
+        request=context.request,
     )
     result = _rebind_candidate_supporting_sources(
         result,

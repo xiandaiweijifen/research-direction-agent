@@ -1223,3 +1223,88 @@ def test_topic_agent_pipeline_avoids_generic_candidate_fallback_wording_for_soft
     assert "current evidence" not in candidate_2.research_question.lower()
     assert "coding-agent method family" in candidate_2.research_question.lower() or "tool-building agents" in candidate_2.research_question.lower()
     assert "openhands platform developers" not in candidate_3.research_question.lower()
+
+
+def test_topic_agent_pipeline_strengthens_candidate_role_binding_for_bug_fixing_topics():
+    class BugFixingProvider:
+        provider_name = "static"
+
+        def retrieve(self, request: TopicAgentExploreRequest):
+            records = [
+                TopicAgentSourceRecord(
+                    source_id="openalex_eval",
+                    title="An empirical evaluation of pre-trained large language models for repairing declarative formal specifications",
+                    source_type="benchmark",
+                    source_tier="A",
+                    year=2025,
+                    authors_or_publisher="Author A",
+                    identifier="https://example.org/eval",
+                    url="https://example.org/eval",
+                    summary="Empirical evaluation, benchmark, and automated program repair for declarative specifications.",
+                    relevance_reason="Test record",
+                ),
+                TopicAgentSourceRecord(
+                    source_id="openalex_method",
+                    title="RepairAgent: An Autonomous, LLM-Based Agent for Program Repair",
+                    source_type="paper",
+                    source_tier="B",
+                    year=2025,
+                    authors_or_publisher="Author B",
+                    identifier="https://example.org/repairagent",
+                    url="https://example.org/repairagent",
+                    summary="Autonomous agent for program repair, tool invocation, and bug fixing workflows.",
+                    relevance_reason="Test record",
+                ),
+                TopicAgentSourceRecord(
+                    source_id="openalex_systems",
+                    title="SWE-agent: Agent-Computer Interfaces Enable Automated Software Engineering",
+                    source_type="paper",
+                    source_tier="B",
+                    year=2024,
+                    authors_or_publisher="Author C",
+                    identifier="https://example.org/swe-agent",
+                    url="https://example.org/swe-agent",
+                    summary="Agent-computer interface, repository navigation, tests, and reproducible workflow support for automated software engineering.",
+                    relevance_reason="Test record",
+                ),
+                TopicAgentSourceRecord(
+                    source_id="openalex_survey",
+                    title="Large Language Model-Based Agents for Software Engineering: A Survey",
+                    source_type="survey",
+                    source_tier="A",
+                    year=2024,
+                    authors_or_publisher="Author D",
+                    identifier="https://example.org/survey",
+                    url="https://example.org/survey",
+                    summary="Survey of agents for software engineering and broad workflow patterns.",
+                    relevance_reason="Test record",
+                ),
+            ]
+            return TopicAgentEvidenceRetrievalResult(
+                records=records,
+                diagnostics=TopicAgentEvidenceDiagnostics(
+                    requested_provider="static",
+                    used_provider="static",
+                    fallback_used=False,
+                    fallback_reason=None,
+                    record_count=4,
+                ),
+            )
+
+    request = TopicAgentExploreRequest(
+        interest="llm agents for automated bug fixing",
+        problem_domain="software engineering",
+        constraints=TopicAgentConstraintSet(
+            preferred_style="applied",
+            time_budget_months=6,
+            resource_level="student",
+        ),
+    )
+
+    response = run_topic_agent_pipeline(request, provider=BugFixingProvider())
+
+    assert response.candidate_topics[0].supporting_source_ids[0] == "openalex_eval"
+    assert response.candidate_topics[1].supporting_source_ids[0] == "openalex_method"
+    assert response.candidate_topics[2].supporting_source_ids[0] == "openalex_systems"
+    assert "bug-fixing agent evaluation" in response.candidate_topics[2].research_question.lower()
+    assert "software engineering" not in response.candidate_topics[2].research_question.lower()
