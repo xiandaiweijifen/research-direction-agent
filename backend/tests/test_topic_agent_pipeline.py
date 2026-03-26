@@ -904,3 +904,98 @@ def test_topic_agent_pipeline_matches_system_synthesis_sources_to_statement_cont
     assert "theme-level evidence matching" in theme_statement.note.lower()
     assert "openalex_a" in theme_statement.supporting_source_ids
     assert "openalex_b" in theme_statement.supporting_source_ids
+
+
+def test_topic_agent_pipeline_uses_clearer_candidate_composition_for_clinical_medical_reasoning():
+    class ClinicalReasoningProvider:
+        provider_name = "static"
+
+        def retrieve(self, request: TopicAgentExploreRequest):
+            records = [
+                TopicAgentSourceRecord(
+                    source_id="openalex_a",
+                    title="Benchmarking large language models on the United States medical licensing examination for clinical reasoning and medical licensing scenarios",
+                    source_type="benchmark",
+                    source_tier="A",
+                    year=2025,
+                    authors_or_publisher="Author A",
+                    identifier="https://example.org/a",
+                    url="https://example.org/a",
+                    summary="USMLE benchmark with clinical reasoning, hallucinations, and reproducibility concerns.",
+                    relevance_reason="Test record",
+                ),
+                TopicAgentSourceRecord(
+                    source_id="openalex_b",
+                    title="Towards Metacognitive Clinical Reasoning: Benchmarking MD-PIE Against State-of-the-Art LLMs in Medical Decision-Making",
+                    source_type="benchmark",
+                    source_tier="A",
+                    year=2025,
+                    authors_or_publisher="Author B",
+                    identifier="https://example.org/b",
+                    url="https://example.org/b",
+                    summary="Framework for clinical decision-making and differential diagnosis with benchmark evidence.",
+                    relevance_reason="Test record",
+                ),
+                TopicAgentSourceRecord(
+                    source_id="openalex_c",
+                    title="Large Language Models lack essential metacognition for reliable medical reasoning",
+                    source_type="benchmark",
+                    source_tier="A",
+                    year=2025,
+                    authors_or_publisher="Author C",
+                    identifier="https://example.org/c",
+                    url="https://example.org/c",
+                    summary="Reliable medical reasoning benchmark with metacognition checks.",
+                    relevance_reason="Test record",
+                ),
+                TopicAgentSourceRecord(
+                    source_id="openalex_d",
+                    title="The effectiveness of using virtual patient educational tools to improve medical students' clinical reasoning skills: a systematic review",
+                    source_type="paper",
+                    source_tier="B",
+                    year=2022,
+                    authors_or_publisher="Author D",
+                    identifier="https://example.org/d",
+                    url="https://example.org/d",
+                    summary="Virtual patient educational tools improve clinical reasoning skills under limited teaching resources.",
+                    relevance_reason="Test record",
+                ),
+                TopicAgentSourceRecord(
+                    source_id="openalex_e",
+                    title="Medical Visual Question Answering via Conditional Reasoning",
+                    source_type="benchmark",
+                    source_tier="A",
+                    year=2020,
+                    authors_or_publisher="Author E",
+                    identifier="https://example.org/e",
+                    url="https://example.org/e",
+                    summary="Medical visual question answering and VQA-RAD reasoning.",
+                    relevance_reason="Test record",
+                ),
+            ]
+            return TopicAgentEvidenceRetrievalResult(
+                records=records,
+                diagnostics=TopicAgentEvidenceDiagnostics(
+                    requested_provider="static",
+                    used_provider="static",
+                    fallback_used=False,
+                    fallback_reason=None,
+                    record_count=5,
+                ),
+            )
+
+    request = TopicAgentExploreRequest(
+        interest="clinical medical reasoning",
+        constraints=TopicAgentConstraintSet(
+            time_budget_months=6,
+            resource_level="student",
+            preferred_style="applied",
+        ),
+    )
+
+    response = run_topic_agent_pipeline(request, provider=ClinicalReasoningProvider())
+
+    assert "openalex_b" in response.candidate_topics[1].supporting_source_ids
+    assert "openalex_d" in response.candidate_topics[1].supporting_source_ids
+    assert "openalex_e" not in response.candidate_topics[1].supporting_source_ids
+    assert "openalex_c" in response.candidate_topics[2].supporting_source_ids

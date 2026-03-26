@@ -21462,5 +21462,372 @@
       "record_count": 5,
       "cache_hit": false
     }
+  },
+  {
+    "session_id": "8eed7731a7bc4bac99bce3d0379c13c5",
+    "created_at": "2026-03-26T17:18:40.336083+00:00",
+    "updated_at": "2026-03-26T17:18:40.336083+00:00",
+    "user_input": {
+      "interest": "clinical medical reasoning",
+      "problem_domain": null,
+      "seed_idea": null,
+      "constraints": {
+        "time_budget_months": 6,
+        "resource_level": "student",
+        "preferred_style": "applied",
+        "notes": null
+      }
+    },
+    "framing_result": {
+      "normalized_topic": "clinical medical reasoning",
+      "extracted_constraints": {
+        "time_budget_months": "6",
+        "resource_level": "student",
+        "preferred_style": "applied"
+      },
+      "missing_clarifications": [],
+      "search_questions": [
+        "What are the main research themes in clinical medical reasoning?",
+        "What methods and benchmarks are commonly used in clinical medical reasoning?",
+        "What open problems or underexplored gaps exist in clinical medical reasoning?"
+      ]
+    },
+    "evidence_records": [
+      {
+        "source_id": "openalex_w4416954175",
+        "title": "Benchmarking large language models on the United States medical licensing examination for clinical reasoning and medical licensing scenarios",
+        "source_type": "benchmark",
+        "source_tier": "A",
+        "year": 2025,
+        "authors_or_publisher": "K. Siam, A. Diaz Varela, Md Jobair Hossain Faruk, Jerry Cheng",
+        "identifier": "https://openalex.org/W4416954175",
+        "url": "https://doi.org/10.1038/s41598-025-31010-4",
+        "summary": "Artificial intelligence (AI) is transforming healthcare by assisting with intricate clinical reasoning and diagnosis. Recent research demonstrates that large language models (LLMs), such as ChatGPT and DeepSeek, possess considerable potential in medical comprehension. This study meticulously evaluates the clinical reasoning capabilities of four advanced LLMs, including ChatGPT, DeepSeek, Grok, and Qwen, utilizing the United States Medical Licensing Examination (USMLE) as a standard benchmark. We assess 376 publicly accessible USMLE sample exam questions (Step 1, Step 2 CK, Step 3) from the most recent booklet released in July 2023. We analyze model performance across four question categories: text-only, text with image, text with mathematical reasoning, and integrated text-image-mathematical reasoning and measure model accuracy at three USMLE steps. Our findings show that DeepSeek and ChatGPT consistently outperform Grok and Qwen, with DeepSeek reaching 93% on Step 2 CK. Error analysis revealed that universal failures were rare (≤1.60%) and concentrated in multimodal and quantitative reasoning tasks, suggesting both ensemble potential and shared blind spots. Compared to the baseline ChatGPT-3.5 Turbo, newer models demonstrate substantial gains, though possible training-data exposure to USMLE content limits generalizability. Despite encouraging accuracy, models exhibited overconfidence and hallucinations, underscoring the need for human oversight. Limitations include reliance on sample questions, the small number of multimodal items, and lack of real-world datasets. Future work should expand benchmarks, integrate physician feedback, and improve reproducibility through shared prompts and configurations. Overall, these results highlight both the promise and the limitations of LLMs in medical testing: strong accuracy and complementarity, but persistent risks requiring innovation, benchmarking, and clinical oversight.",
+        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
+      },
+      {
+        "source_id": "openalex_w4406940684",
+        "title": "Towards Metacognitive Clinical Reasoning: Benchmarking MD-PIE Against State-of-the-Art LLMs in Medical Decision-Making",
+        "source_type": "benchmark",
+        "source_tier": "A",
+        "year": 2025,
+        "authors_or_publisher": "Yasma Esteitieh, S. Mandal, George Laliotis",
+        "identifier": "https://openalex.org/W4406940684",
+        "url": "https://doi.org/10.1101/2025.01.28.25321282",
+        "summary": "Abstract The ability of large language models (LLMs) to perform clinical reasoning and cognitive tasks within medicine remains a critical measure of their overall capabilities in decision-making, with significant implications for patient outcomes and healthcare efficiency. Current AI models often face limitations in real-world clinical environments, including variability in performance, a lack of domain-specific knowledge, and black-box reasoning processes. In this study, we introduce a novel PIE framework, named MD-PIE, which emulates cognitive and reasoning abilities in medical reasoning and decision-making. We benchmark our framework and baseline methods both quantitatively and qualitatively using state-of-the-art LLMs, comparing them against OpenAI’s o1, Gemini 2.0 Flash Thinking, and DeepSeek V3 across diverse benchmarks. Our results demonstrate that MD-PIE surpasses existing models in differential diagnosis and reasoning accuracy across diverse medical benchmarks. This study underscores its potential to improve clinical decision-making through adaptive and collaborative design. Future research should focus on larger benchmarks and real-world validation to confirm its reliability and effectiveness in varied clinical scenarios.",
+        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
+      },
+      {
+        "source_id": "openalex_w4406371336",
+        "title": "Large Language Models lack essential metacognition for reliable medical reasoning",
+        "source_type": "benchmark",
+        "source_tier": "A",
+        "year": 2025,
+        "authors_or_publisher": "Maxime Griot, Coralie Hemptinne, Jean Vanderdonckt, Demet Yüksel",
+        "identifier": "https://openalex.org/W4406371336",
+        "url": "https://doi.org/10.1038/s41467-024-55628-6",
+        "summary": "Large Language Models have demonstrated expert-level accuracy on medical board examinations, suggesting potential for clinical decision support systems. However, their metacognitive abilities, crucial for medical decision-making, remain largely unexplored. To address this gap, we developed MetaMedQA, a benchmark incorporating confidence scores and metacognitive tasks into multiple-choice medical questions. We evaluated twelve models on dimensions including confidence-based accuracy, missing answer recall, and unknown recall. Despite high accuracy on multiple-choice questions, our study revealed significant metacognitive deficiencies across all tested models. Models consistently failed to recognize their knowledge limitations and provided confident answers even when correct options were absent. In this work, we show that current models exhibit a critical disconnect between perceived and actual capabilities in medical reasoning, posing significant risks in clinical settings. Our findings emphasize the need for more robust evaluation frameworks that incorporate metacognitive abilities, essential for developing reliable Large Language Model enhanced clinical decision support systems.",
+        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
+      },
+      {
+        "source_id": "openalex_w4384561103",
+        "title": "Chatbot vs Medical Student Performance on Free-Response Clinical Reasoning Examinations",
+        "source_type": "paper",
+        "source_tier": "B",
+        "year": 2023,
+        "authors_or_publisher": "Eric Strong, Alicia DiGiammarino, Yingjie Weng, Andre Kumar",
+        "identifier": "https://openalex.org/W4384561103",
+        "url": "https://doi.org/10.1001/jamainternmed.2023.2909",
+        "summary": "This study compares performance on free-response clinical reasoning examinations of first- and second-year medical students vs 2 models of a popular chatbot.",
+        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
+      },
+      {
+        "source_id": "openalex_w4280567834",
+        "title": "The effectiveness of using virtual patient educational tools to improve medical students’ clinical reasoning skills: a systematic review",
+        "source_type": "paper",
+        "source_tier": "B",
+        "year": 2022,
+        "authors_or_publisher": "Ruth Plackett, Angelos P. Kassianos, Sophie Mylan, Maria Kambouri",
+        "identifier": "https://openalex.org/W4280567834",
+        "url": "https://doi.org/10.1186/s12909-022-03410-x",
+        "summary": "Using virtual patient tools could effectively complement current teaching especially if opportunities for face-to-face teaching or other methods are limited, as there was some evidence that virtual patient educational tools can improve undergraduate medical students' clinical reasoning skills. Evaluations that measured more case specific clinical reasoning domains, such as data gathering, showed more consistent improvement than general measures like problem-solving. Case specific measures might be more sensitive to change given the context dependent nature of clinical reasoning. Consistent use of validated clinical reasoning measures is needed to enable a meta-analysis to estimate effectiveness.",
+        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
+      }
+    ],
+    "landscape_summary": {
+      "themes": [
+        "benchmark design and stress-testing for clinical medical reasoning",
+        "trustworthy evaluation and failure analysis in clinical medical reasoning",
+        "reasoning challenges in clinical medical reasoning"
+      ],
+      "active_methods": [
+        "benchmark-centered experimental design"
+      ],
+      "likely_gaps": [
+        "benchmark protocols that distinguish genuine reasoning gains from answer-pattern shortcuts",
+        "trustworthy evaluation signals beyond accuracy-only reporting"
+      ],
+      "saturated_areas": [
+        "broad generic summaries without a sharply defined question"
+      ]
+    },
+    "candidate_topics": [
+      {
+        "candidate_id": "candidate_1",
+        "title": "Benchmark-Guided Narrow Task Definition",
+        "research_question": "How can a narrower benchmark slice expose shortcut behavior and weak reasoning verification in current systems?",
+        "positioning": "gap-driven",
+        "novelty_note": "Focuses on trustworthy evaluation boundaries, not just raw task accuracy.",
+        "feasibility_note": "Moderate feasibility with public resources and modest compute.",
+        "risk_note": "May become incremental if the task boundary is not sharply differentiated.",
+        "supporting_source_ids": [
+          "openalex_w4406940684",
+          "openalex_w4406371336"
+        ],
+        "open_questions": [
+          "Which benchmark slice best isolates genuine reasoning quality rather than answer-pattern matching?"
+        ]
+      },
+      {
+        "candidate_id": "candidate_2",
+        "title": "Applied Method Transfer Under Practical Constraints",
+        "research_question": "Can an existing medical reasoning method family be adapted effectively under strict compute and annotation constraints?",
+        "positioning": "applied-transfer",
+        "novelty_note": "Frames novelty through constraint-aware adaptation rather than larger-model gains.",
+        "feasibility_note": "Strong fit for an applied project that needs a visible baseline-to-improvement story.",
+        "risk_note": "Novelty may depend heavily on the chosen constraint and evaluation design.",
+        "supporting_source_ids": [
+          "openalex_w4406940684",
+          "openalex_w4280567834"
+        ],
+        "open_questions": [
+          "Which constraint creates the strongest research signal?"
+        ]
+      },
+      {
+        "candidate_id": "candidate_3",
+        "title": "Tooling And Evaluation Workflow Support",
+        "research_question": "What tooling or evaluation workflow improvements would make research in this area more reproducible?",
+        "positioning": "systems",
+        "novelty_note": "Shifts from model novelty to workflow and evaluation reliability.",
+        "feasibility_note": "Strong feasibility for a short-cycle project with engineering emphasis.",
+        "risk_note": "Applied impact may be clearer than publication novelty unless evaluation endpoints are sharply chosen.",
+        "supporting_source_ids": [
+          "openalex_w4406371336",
+          "openalex_w4416954175"
+        ],
+        "open_questions": [
+          "What workflow support would make trustworthy evaluation and audit trails easier to reproduce?",
+          "What concrete reproducibility pain point should be prioritized first?",
+          "Which workflow improvement reduces compute or setup cost the most?"
+        ]
+      }
+    ],
+    "comparison_result": {
+      "dimensions": [
+        "novelty",
+        "feasibility",
+        "evidence_strength",
+        "data_availability",
+        "implementation_cost",
+        "risk"
+      ],
+      "summary": "Candidate 2 is strongest for applied feasibility under the current constraints, candidate 1 remains strongest on research framing, and candidate 3 remains the fastest engineering path.",
+      "candidate_assessments": [
+        {
+          "candidate_id": "candidate_1",
+          "novelty": "high",
+          "feasibility": "medium",
+          "evidence_strength": "medium_high",
+          "data_availability": "medium",
+          "implementation_cost": "medium",
+          "risk": "medium"
+        },
+        {
+          "candidate_id": "candidate_2",
+          "novelty": "medium_high",
+          "feasibility": "high",
+          "evidence_strength": "medium_high",
+          "data_availability": "medium_high",
+          "implementation_cost": "medium_low",
+          "risk": "medium_low"
+        },
+        {
+          "candidate_id": "candidate_3",
+          "novelty": "medium",
+          "feasibility": "high",
+          "evidence_strength": "medium",
+          "data_availability": "high",
+          "implementation_cost": "low",
+          "risk": "medium_high"
+        }
+      ]
+    },
+    "convergence_result": {
+      "recommended_candidate_id": "candidate_2",
+      "backup_candidate_id": "candidate_1",
+      "rationale": "Candidate 2 is the best fit for the current constraints because it starts from reusable baselines, matches an applied project style, and is easier to execute within a tighter timeline.",
+      "manual_checks": [
+        "Confirm that the selected sub-problem is narrow enough for the available timeline.",
+        "Verify that at least one benchmark or dataset is realistically accessible.",
+        "Check whether the proposed gap is genuinely underexplored rather than a retrieval miss.",
+        "Verify that the topic still has enough novelty signal for the intended venue."
+      ]
+    },
+    "evidence_presentation": {
+      "source_facts": [
+        {
+          "statement": "Retrieved benchmark evidence 'Benchmarking large language models on the United States medical licensing examination for clinical reasoning and medical licensing scenarios' (2025) as tier A support for the current topic.",
+          "statement_type": "source_fact",
+          "supporting_source_ids": [
+            "openalex_w4416954175"
+          ],
+          "note": "Directly grounded in retrieved source metadata and source summary.",
+          "uncertainty_reason": null,
+          "missing_evidence": []
+        },
+        {
+          "statement": "Retrieved benchmark evidence 'Towards Metacognitive Clinical Reasoning: Benchmarking MD-PIE Against State-of-the-Art LLMs in Medical Decision-Making' (2025) as tier A support for the current topic.",
+          "statement_type": "source_fact",
+          "supporting_source_ids": [
+            "openalex_w4406940684"
+          ],
+          "note": "Directly grounded in retrieved source metadata and source summary.",
+          "uncertainty_reason": null,
+          "missing_evidence": []
+        },
+        {
+          "statement": "Retrieved benchmark evidence 'Large Language Models lack essential metacognition for reliable medical reasoning' (2025) as tier A support for the current topic.",
+          "statement_type": "source_fact",
+          "supporting_source_ids": [
+            "openalex_w4406371336"
+          ],
+          "note": "Directly grounded in retrieved source metadata and source summary.",
+          "uncertainty_reason": null,
+          "missing_evidence": []
+        }
+      ],
+      "system_synthesis": [
+        {
+          "statement": "Current evidence clusters most strongly around benchmark design and stress-testing for clinical medical reasoning, trustworthy evaluation and failure analysis in clinical medical reasoning.",
+          "statement_type": "system_synthesis",
+          "supporting_source_ids": [
+            "openalex_w4416954175",
+            "openalex_w4406940684",
+            "openalex_w4280567834"
+          ],
+          "note": "Agent synthesis over multiple retrieved sources with theme-level evidence matching.",
+          "uncertainty_reason": null,
+          "missing_evidence": []
+        },
+        {
+          "statement": "The current output separates into 3 candidate directions with distinct positioning and comparison scores.",
+          "statement_type": "system_synthesis",
+          "supporting_source_ids": [
+            "openalex_w4406940684",
+            "openalex_w4406371336",
+            "openalex_w4280567834",
+            "openalex_w4416954175"
+          ],
+          "note": "Agent synthesis over candidate generation and comparison outputs, anchored to candidate support sets.",
+          "uncertainty_reason": null,
+          "missing_evidence": []
+        }
+      ],
+      "tentative_inferences": [
+        {
+          "statement": "candidate_2 is currently the leading direction under the present constraints.",
+          "statement_type": "tentative_inference",
+          "supporting_source_ids": [
+            "openalex_w4406940684",
+            "openalex_w4280567834"
+          ],
+          "note": "Recommendation-level inference that still requires human validation.",
+          "uncertainty_reason": "This recommendation remains constraint-sensitive and depends on the current evidence bundle, not on a settled benchmark choice or direct experimental validation.",
+          "missing_evidence": [
+            "Confirm that the selected sub-problem is narrow enough for the available timeline.",
+            "Verify that at least one benchmark or dataset is realistically accessible."
+          ]
+        },
+        {
+          "statement": "Confirm that the selected sub-problem is narrow enough for the available timeline.",
+          "statement_type": "tentative_inference",
+          "supporting_source_ids": [
+            "openalex_w4406940684",
+            "openalex_w4280567834"
+          ],
+          "note": "Open validation requirement rather than a settled fact.",
+          "uncertainty_reason": "The recommendation should not be treated as final until this validation step is checked.",
+          "missing_evidence": [
+            "Confirm that the selected sub-problem is narrow enough for the available timeline."
+          ]
+        }
+      ]
+    },
+    "human_confirmations": [
+      "Confirm that the system correctly interpreted the topic as 'clinical medical reasoning'.",
+      "Confirm that candidate_2 should remain the leading direction after reviewing the supporting evidence and risks.",
+      "Manual check: Confirm that the selected sub-problem is narrow enough for the available timeline.",
+      "Manual check: Verify that at least one benchmark or dataset is realistically accessible."
+    ],
+    "clarification_suggestions": [],
+    "trace": [
+      {
+        "stage": "frame_problem",
+        "status": "completed",
+        "timestamp": "2026-03-26T17:18:40.344366+00:00",
+        "detail": "Structured the user input into a topic-exploration request."
+      },
+      {
+        "stage": "retrieve_evidence",
+        "status": "completed",
+        "timestamp": "2026-03-26T17:18:40.344383+00:00",
+        "detail": "Retrieved 5 evidence records using the openalex provider."
+      },
+      {
+        "stage": "synthesize_landscape",
+        "status": "completed",
+        "timestamp": "2026-03-26T17:18:40.344388+00:00",
+        "detail": "Organized the current evidence bundle into a lightweight research landscape summary."
+      },
+      {
+        "stage": "generate_candidates",
+        "status": "completed",
+        "timestamp": "2026-03-26T17:18:40.344392+00:00",
+        "detail": "Generated 3 candidate topic directions from the current evidence bundle."
+      },
+      {
+        "stage": "compare_candidates",
+        "status": "completed",
+        "timestamp": "2026-03-26T17:18:40.344395+00:00",
+        "detail": "Produced a structured candidate comparison across fixed MVP dimensions."
+      },
+      {
+        "stage": "converge_recommendation",
+        "status": "completed",
+        "timestamp": "2026-03-26T17:18:40.344399+00:00",
+        "detail": "Produced a recommended next-best option with manual verification checks."
+      }
+    ],
+    "confidence_summary": {
+      "evidence_coverage": "medium",
+      "source_quality": "high",
+      "candidate_separation": "high",
+      "conflict_level": "low",
+      "rationale": [
+        "Evidence coverage is medium based on the current number of retrieved records.",
+        "Source quality is high based on the current source-tier mix.",
+        "Candidate separation is high based on the diversity of candidate positioning.",
+        "Conflict level is low because this development slice does not yet model explicit source disagreement."
+      ]
+    },
+    "evidence_diagnostics": {
+      "requested_provider": "openalex",
+      "used_provider": "openalex",
+      "fallback_used": false,
+      "fallback_reason": null,
+      "record_count": 5,
+      "cache_hit": true
+    }
   }
 ]

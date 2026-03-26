@@ -583,6 +583,50 @@ def _candidate_record_fit(
 ) -> str:
     text = _record_text(record)
 
+    if candidate.candidate_id == "candidate_2":
+        if any(
+            term in text
+            for term in {
+                "framework",
+                "agent",
+                "collaborative",
+                "zero-shot",
+                "zero shot",
+                "decision-making",
+                "differential diagnosis",
+                "virtual patient",
+                "clinical reasoning skills",
+                "educational tools",
+                "lightweight",
+                "compact",
+                "transformers",
+            }
+        ):
+            return "method_support"
+        if any(
+            term in text
+            for term in {
+                "benchmark",
+                "examination",
+                "usmle",
+                "metacognition",
+                "free-response",
+                "free response",
+            }
+        ):
+            return "benchmark_context"
+        if any(
+            term in text
+            for term in {
+                "document question answering",
+                "visual question answering",
+                "vqa",
+                "medical report",
+            }
+        ):
+            return "off_topic_subtask"
+        return "general"
+
     if candidate.candidate_id == "candidate_3":
         if any(
             term in text
@@ -641,6 +685,24 @@ def _rank_supporting_source_ids_for_candidate(
     if not evidence_records:
         return []
 
+    if candidate.candidate_id == "candidate_2":
+        preferred_records = [
+            record
+            for record in evidence_records
+            if _candidate_record_fit(candidate, record, query_flags=query_flags) == "method_support"
+        ]
+        if len(preferred_records) < limit:
+            preferred_records.extend(
+                record
+                for record in evidence_records
+                if _candidate_record_fit(candidate, record, query_flags=query_flags) == "benchmark_context"
+                and record not in preferred_records
+            )
+        if preferred_records:
+            evidence_records = preferred_records + [
+                record for record in evidence_records if record not in preferred_records
+            ]
+
     if candidate.candidate_id == "candidate_3":
         preferred_records = [
             record
@@ -674,6 +736,12 @@ def _rank_supporting_source_ids_for_candidate(
                 overlap += 3
             if any(term in text for term in {"method", "baseline", "adapt"}):
                 overlap += 1
+            if _candidate_record_fit(candidate, record, query_flags=query_flags) == "method_support":
+                overlap += 3
+            if _candidate_record_fit(candidate, record, query_flags=query_flags) == "benchmark_context":
+                overlap += 1
+            if _candidate_record_fit(candidate, record, query_flags=query_flags) == "off_topic_subtask":
+                overlap -= 4
             if query_flags["broad_medical_reasoning"] and "document question answering" in text:
                 overlap -= 1
         elif candidate.candidate_id == "candidate_3":
