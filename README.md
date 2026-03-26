@@ -5,18 +5,18 @@
 Topic Agent demo video location:
 
 - Local demo folder: [docs/demo](d:/project/research-topic-copilot/docs/demo)
-- Recommended video file: [docs/demo/topic-agent-demo.mp4](d:/project/research-topic-copilot/docs/demo/topic-agent-demo.mp4)
 - Demo cover image: [docs/demo/topic-agent-demo-cover.png](d:/project/research-topic-copilot/docs/demo/topic-agent-demo-cover.png)
+- Demo video link: [Google Drive Demo](https://drive.google.com/file/d/12pbYxgtxA7wtjKtN7XfPKfG21vqj69Gj/view?usp=sharing)
 
-If the video is hosted externally later, replace the local file reference above with the final public link.
+If the hosting location changes later, replace the external demo link above with the final public video link.
 
 Click the cover image below to open the demo video:
 
-[![Topic Agent Demo Cover](./docs/demo/topic-agent-demo-cover.png)](./docs/demo/topic-agent-demo.mp4)
+[![Topic Agent Demo Cover](./docs/demo/topic-agent-demo-cover.png)](https://drive.google.com/file/d/12pbYxgtxA7wtjKtN7XfPKfG21vqj69Gj/view?usp=sharing)
 
 Direct video link:
 
-- [Play or download `topic-agent-demo.mp4`](d:/project/research-topic-copilot/docs/demo/topic-agent-demo.mp4)
+- [Watch the Topic Agent demo on Google Drive](https://drive.google.com/file/d/12pbYxgtxA7wtjKtN7XfPKfG21vqj69Gj/view?usp=sharing)
 
 Research Topic Copilot is a local-first agent system for research topic exploration, evidence gathering, candidate direction comparison, and topic convergence support.
 
