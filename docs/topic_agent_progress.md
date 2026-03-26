@@ -120,7 +120,7 @@ In short:
 
 ### Completion Against The Original Topic Agent Plan
 
-Estimated completion for the current design-and-MVP slice: `80% to 85%`.
+Estimated completion for the current design-and-MVP slice: `85% to 90%`.
 
 Rough breakdown:
 
@@ -133,6 +133,16 @@ Rough breakdown:
 - acceptance logic and evaluation plan: `done in docs, partial in product flow`
 - full conflict modeling across disagreeing sources: `not done`
 - polished end-user validation UX and explicit human-confirm checkpoints: `not done`
+
+### Demo Readiness
+
+- Stable manual demo scenarios are now documented in:
+  - [topic_agent_demo_scenarios.md](/d:/project/research-topic-copilot/docs/topic_agent_demo_scenarios.md)
+- The current demo coverage includes:
+  - broad `medical reasoning`
+  - radiology VQA
+  - hallucination / grounding evaluation
+  - clarification and refine loop behavior
 
 ### Stable
 
@@ -178,4 +188,4 @@ backend\.venv\Scripts\python.exe -m pytest backend\tests\test_topic_agent_api.py
 
 Latest result:
 
-- `44 passed`
+- `45 passed`
