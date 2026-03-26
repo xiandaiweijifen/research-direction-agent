@@ -1071,8 +1071,76 @@ def test_topic_agent_pipeline_generates_internal_drafts_before_final_candidate_m
     assert response.candidate_topics[1].supporting_source_ids[0] == "openalex_transfer"
     assert response.candidate_topics[2].supporting_source_ids[0] == "openalex_systems"
     assert "evaluation slice" in response.candidate_topics[0].research_question.lower()
-    assert "autocoderover" in response.candidate_topics[1].research_question.lower()
+    assert (
+        "code intent extraction" in response.candidate_topics[1].research_question.lower()
+        or "program improvement" in response.candidate_topics[1].research_question.lower()
+    )
     assert (
         "workflow" in response.candidate_topics[2].research_question.lower()
         or "workflow" in " ".join(response.candidate_topics[2].open_questions).lower()
     )
+
+
+def test_topic_agent_pipeline_uses_non_visual_gap_wording_for_software_agent_topics():
+    class SoftwareAgentProvider:
+        provider_name = "static"
+
+        def retrieve(self, request: TopicAgentExploreRequest):
+            records = [
+                TopicAgentSourceRecord(
+                    source_id="openalex_a",
+                    title="OpenHands: An Open Platform for AI Software Developers as Generalist Agents",
+                    source_type="benchmark",
+                    source_tier="A",
+                    year=2024,
+                    authors_or_publisher="Author A",
+                    identifier="https://example.org/a",
+                    url="https://example.org/a",
+                    summary="Platform and benchmark coverage for software engineering agents and evaluation tasks.",
+                    relevance_reason="Test record",
+                ),
+                TopicAgentSourceRecord(
+                    source_id="openalex_b",
+                    title="SpecRover: Code Intent Extraction via LLMs",
+                    source_type="paper",
+                    source_tier="B",
+                    year=2025,
+                    authors_or_publisher="Author B",
+                    identifier="https://example.org/b",
+                    url="https://example.org/b",
+                    summary="Intent-aware workflows for LLM agents in automated program improvement.",
+                    relevance_reason="Test record",
+                ),
+            ]
+            return TopicAgentEvidenceRetrievalResult(
+                records=records,
+                diagnostics=TopicAgentEvidenceDiagnostics(
+                    requested_provider="static",
+                    used_provider="static",
+                    fallback_used=False,
+                    fallback_reason=None,
+                    record_count=2,
+                ),
+            )
+
+    request = TopicAgentExploreRequest(
+        interest="llm coding agents for software engineering",
+        problem_domain="developer workflows",
+        constraints=TopicAgentConstraintSet(
+            time_budget_months=6,
+            resource_level="student",
+            preferred_style="applied",
+        ),
+    )
+
+    response = run_topic_agent_pipeline(request, provider=SoftwareAgentProvider())
+
+    joined_gaps = " ".join(response.landscape_summary.likely_gaps).lower()
+    joined_themes = " ".join(response.landscape_summary.themes).lower()
+
+    assert "real image use" not in joined_gaps
+    assert (
+        "code intent extraction" in response.candidate_topics[1].research_question.lower()
+        or "program improvement" in response.candidate_topics[1].research_question.lower()
+    )
+    assert "agent-based decomposition" in joined_themes or "benchmark" in joined_themes

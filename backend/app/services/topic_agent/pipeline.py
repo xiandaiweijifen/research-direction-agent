@@ -100,6 +100,12 @@ STOPWORDS = {
     "using",
     "visual",
     "with",
+    "making",
+    "tools",
+    "software",
+    "engineering",
+    "agent",
+    "agents",
 }
 
 EVIDENCE_CUE_TERMS = {
@@ -428,8 +434,10 @@ def _build_likely_gaps(
     if cues["benchmark"]:
         if query_flags["broad_medical_reasoning"]:
             gaps.append("benchmark protocols that distinguish genuine reasoning gains from answer-pattern shortcuts")
-        else:
+        elif query_flags["visual_qa"] or cues["grounding"] or cues["radiology"]:
             gaps.append("benchmark protocols that distinguish real image use from shortcut exploitation")
+        else:
+            gaps.append("benchmark protocols that distinguish genuine task gains from workflow or prompt shortcuts")
     if cues["trust"] or cues["grounding"]:
         gaps.append("trustworthy evaluation signals beyond accuracy-only reporting")
     if query_flags["hallucination_eval"]:
@@ -463,7 +471,13 @@ def _theme_from_phrase(phrase: str, topic: str) -> str:
         return f"{phrase} and evidence faithfulness in {topic}"
     if "benchmark" in phrase:
         return f"{phrase} design and evaluation in {topic}"
-    return f"{phrase} as an emerging theme in {topic}"
+    if any(term in phrase for term in {"workflow", "audit", "reproducibility"}):
+        return f"workflow and reproducibility support in {topic}"
+    if any(term in phrase for term in {"developer", "collaboration", "explainable"}):
+        return f"developer collaboration and oversight in {topic}"
+    if any(term in phrase for term in {"program improvement", "code intent", "specification"}):
+        return f"program improvement and intent-aware workflows in {topic}"
+    return f"applied research themes around {phrase} in {topic}"
 
 
 def synthesize_landscape(context: TopicAgentPipelineContext) -> TopicAgentLandscapeSummary:
@@ -543,6 +557,28 @@ def _record_text(record: TopicAgentSourceRecord) -> str:
 
 
 def _record_title_anchor(record: TopicAgentSourceRecord) -> str:
+    title_lower = record.title.lower()
+    preferred_phrases = [
+        "software engineering",
+        "developer-ai collaboration",
+        "developer workflow",
+        "program improvement",
+        "code intent extraction",
+        "clinical reasoning",
+        "medical reasoning",
+        "decision-making",
+        "visual question answering",
+        "document question answering",
+        "radiology vqa",
+        "hallucination detection",
+        "grounding evaluation",
+        "reproducible coding agent evaluation",
+        "benchmark",
+    ]
+    for phrase in preferred_phrases:
+        if phrase in title_lower:
+            return phrase
+
     tokens = _tokenize_text(record.title)
     if not tokens:
         return "current evidence"

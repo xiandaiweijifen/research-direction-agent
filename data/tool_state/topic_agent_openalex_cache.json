@@ -1070,5 +1070,70 @@
         "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
       }
     ]
+  },
+  "v4::software engineering agents developer tooling applied||software engineering agents developer tooling||llm software engineering agents developer tooling benchmark evaluation||llm software engineering agents developer tooling method framework||llm software engineering agents developer tooling workflow reproducibility||llm software engineering agents developer tooling reliability failure analysis||llm software engineering agents developer tooling practical baseline adaptation||llm software engineering agents developer tooling benchmark software engineering evaluation||llm software engineering agents developer tooling developer workflow audit::max=5": {
+    "saved_at": "2026-03-27T04:31:36.633449+08:00",
+    "records": [
+      {
+        "source_id": "openalex_w4403885061",
+        "title": "OpenHands: An Open Platform for AI Software Developers as Generalist Agents",
+        "source_type": "benchmark",
+        "source_tier": "A",
+        "year": 2024,
+        "authors_or_publisher": "Xingyao Wang, Boxuan Li, Yufan Song, Frank F. Xu",
+        "identifier": "https://openalex.org/W4403885061",
+        "url": "https://arxiv.org/abs/2407.16741",
+        "summary": "Software is one of the most powerful tools that we humans have at our disposal; it allows a skilled programmer to interact with the world in complex and profound ways. At the same time, thanks to improvements in large language models (LLMs), there has also been a rapid development in AI agents that interact with and affect change in their surrounding environments. In this paper, we introduce OpenHands (f.k.a. OpenDevin), a platform for the development of powerful and flexible AI agents that interact with the world in similar ways to those of a human developer: by writing code, interacting with a command line, and browsing the web. We describe how the platform allows for the implementation of new agents, safe interaction with sandboxed environments for code execution, coordination between multiple agents, and incorporation of evaluation benchmarks. Based on our currently incorporated benchmarks, we perform an evaluation of agents over 15 challenging tasks, including software engineering (e.g., SWE-BENCH) and web browsing (e.g., WEBARENA), among others. Released under the permissive MIT license, OpenHands is a community project spanning academia and industry with more than 2.1K contributions from over 188 contributors.",
+        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
+      },
+      {
+        "source_id": "openalex_w4407719442",
+        "title": "LLM Agents Making Agent Tools",
+        "source_type": "benchmark",
+        "source_tier": "A",
+        "year": 2025,
+        "authors_or_publisher": "Georg Wölflein, Dyke Ferber, Daniel Truhn, Ognjen Arandjelović",
+        "identifier": "https://openalex.org/W4407719442",
+        "url": "https://arxiv.org/abs/2502.11705",
+        "summary": "Tool use has turned large language models (LLMs) into powerful agents that can perform complex multi-step tasks by dynamically utilising external software components. However, these tools must be implemented in advance by human developers, hindering the applicability of LLM agents in domains demanding large numbers of highly specialised tools, like in life sciences and medicine. Motivated by the growing trend of scientific studies accompanied by public code repositories, we propose ToolMaker, an agentic framework that autonomously transforms papers with code into LLM-compatible tools. Given a GitHub URL and short task description, ToolMaker autonomously installs dependencies and generates code to perform the task, using a closed-loop self-correction mechanism for debugging. To evaluate our approach, we introduce a benchmark comprising 15 complex computational tasks spanning various domains with over 100 unit tests to assess correctness and robustness. Our method correctly implements 80% of the tasks, substantially outperforming current state-of-the-art software engineering agents. ToolMaker therefore is a step towards fully autonomous agent-based scientific workflows. Our code and benchmark are publicly available at https://github.com/KatherLab/ToolMaker.",
+        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
+      },
+      {
+        "source_id": "openalex_w4411915058",
+        "title": "Explainable AI In Software Engineering: Enhancing Developer-AI Collaboration",
+        "source_type": "paper",
+        "source_tier": "B",
+        "year": 2024,
+        "authors_or_publisher": "Jami J. Shah, Jyoti Kunal Shah",
+        "identifier": "https://openalex.org/W4411915058",
+        "url": "https://doi.org/10.37547/tajet/volume06issue07-11",
+        "summary": "Artificial Intelligence (AI) tools are increasingly integrated into software engineering tasks such as code generation, defect prediction, and project planning. However, widespread adoption is hindered by developers’ skepticism toward opaque AI models that lack transparency. This paper explores the integration of Explainable AI (XAI) into software engineering to foster a “developer-in-the-loop” paradigm that enhances trust, understanding, and collaboration between developers and AI agents. We review existing research on XAI techniques applied to feature planning, debugging, and refactoring, and identify the challenges of embedding XAI in real-world development workflows. A modular framework and system architecture are proposed to integrate explanation engines with AI models, IDEs, dashboards, and CI tools. A case study on explainable code review demonstrates how transparent AI suggestions can improve developer trust and team learning. We conclude by highlighting future directions, including personalization of explanations, cross-SDLC integration, and human-AI dialogue mechanisms, positioning XAI as essential to the next generation of intelligent development environments.",
+        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
+      },
+      {
+        "source_id": "openalex_w2151982903",
+        "title": "Applying Software Engineering to Agent Development",
+        "source_type": "paper",
+        "source_tier": "B",
+        "year": 2010,
+        "authors_or_publisher": "Mark A. Cohen, Frank E. Ritter, Steven R. Haynes",
+        "identifier": "https://openalex.org/W2151982903",
+        "url": "https://doi.org/10.1609/aimag.v31i2.2214",
+        "summary": "Developing intelligent agents and cognitive models is a complex software‐engineering activity. This article shows how tools to create intelligent agents can be improved by taking advantage of established software‐engineering principles such as high‐level languages, maintenance‐oriented development environments, and software reuse. We describe how these principles have been realized in the Herbal integrated development environment, a collection of tools that allows agent developers to exploit modern software‐engineering principles.",
+        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
+      },
+      {
+        "source_id": "openalex_w4417314561",
+        "title": "Generative AI and Empirical Software Engineering: A Paradigm Shift",
+        "source_type": "paper",
+        "source_tier": "B",
+        "year": 2025,
+        "authors_or_publisher": "Christoph Treude, Margaret‐Anne Storey",
+        "identifier": "https://openalex.org/W4417314561",
+        "url": "https://arxiv.org/abs/2502.08108",
+        "summary": "The adoption of large language models (LLMs) and autonomous agents in software engineering marks an enduring paradigm shift. These systems create new opportunities for tool design, workflow orchestration, and empirical observation, while fundamentally reshaping the roles of developers and the artifacts they produce. Although traditional empirical methods remain central to software engineering research, the rapid evolution of AI introduces new data modalities, alters causal assumptions, and challenges foundational constructs such as \"developer\", \"artifact\", and \"interaction\". As humans and AI agents increasingly co-create, the boundaries between social and technical actors blur, and the reproducibility of findings becomes contingent on model updates and prompt contexts. This vision paper examines how the integration of LLMs into software engineering disrupts established research paradigms. We discuss how it transforms the phenomena we study, the methods and theories we rely on, the data we analyze, and the threats to validity that arise in dynamic AI-mediated environments. Our aim is to help the empirical software engineering community adapt its questions, instruments, and validation standards to a future in which AI systems are not merely tools, but active collaborators shaping software engineering and its study.",
+        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
+      }
+    ]
   }
 }
