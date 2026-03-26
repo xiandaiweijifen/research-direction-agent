@@ -27,6 +27,22 @@ export function TopicAgentSessionHistory({
     [expanded, topicSessions],
   );
   const hiddenCount = Math.max(topicSessions.length - visibleSessions.length, 0);
+  const uiCurrent = locale === "zh" ? "当前" : "Current";
+  const uiUpdated = locale === "zh" ? "更新于" : "Updated";
+
+  function formatUpdatedAt(value: string) {
+    const date = new Date(value);
+    if (Number.isNaN(date.getTime())) {
+      return value;
+    }
+
+    return new Intl.DateTimeFormat(locale === "zh" ? "zh-CN" : "en-US", {
+      month: "short",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    }).format(date);
+  }
 
   const uiCopy =
     locale === "zh"
@@ -60,10 +76,18 @@ export function TopicAgentSessionHistory({
             <article key={session.session_id} className="trace-card">
               <div className="trace-meta-row">
                 <strong>{session.interest}</strong>
-                <span className="status-chip">
-                  {session.candidate_count} {copy.topicCount}
-                </span>
+                <div className="pill-strip">
+                  {currentSessionId === session.session_id && (
+                    <span className="status-chip success">{uiCurrent}</span>
+                  )}
+                  <span className="status-chip">
+                    {session.candidate_count} {copy.topicCount}
+                  </span>
+                </div>
               </div>
+              <p className="trace-detail">
+                {uiUpdated}: {formatUpdatedAt(session.updated_at)}
+              </p>
               <p className="trace-detail">{resolveCandidateLabel(session.recommended_candidate_id)}</p>
               <div className="button-row">
                 <button

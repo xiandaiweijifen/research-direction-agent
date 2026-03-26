@@ -152,6 +152,21 @@ describe("TopicWorkspaceV2", () => {
         ]}
         topicBusy={false}
         topicError=""
+        topicPresets={[
+          {
+            id: "bug_fixing",
+            labelEn: "Bug-Fixing Agents",
+            labelZh: "Bug 修复 Agent",
+            summaryEn: "Modern software-agent demo with reproducible evaluation pressure.",
+            summaryZh: "面向现代软件 Agent 的可复现实验演示场景。",
+            interest: "llm agents for automated bug fixing",
+            problemDomain: "software engineering",
+            seedIdea: "applied topic",
+            timeBudgetMonths: "6",
+            resourceLevel: "student",
+            preferredStyle: "applied",
+          },
+        ]}
         topicResult={{
           session_id: "session_1",
           created_at: "2026-03-25T00:00:00+00:00",
@@ -302,6 +317,7 @@ describe("TopicWorkspaceV2", () => {
         onRefine={onRefine}
         onLoadSession={vi.fn()}
         onCompareSession={onCompareSession}
+        onApplyPreset={vi.fn()}
       />,
     );
 
@@ -315,7 +331,8 @@ describe("TopicWorkspaceV2", () => {
       0,
     );
     expect(screen.getByText("Evidence coverage is medium.")).toBeInTheDocument();
-    expect(screen.getByText("Recent Sessions")).toBeInTheDocument();
+    expect(screen.getByText("Recent Runs")).toBeInTheDocument();
+    expect(screen.getByText("Demo Presets")).toBeInTheDocument();
     expect(screen.getByText("2 topics")).toBeInTheDocument();
     expect(screen.getByText("Session Diff")).toBeInTheDocument();
     expect(screen.getByText("Previous rationale.")).toBeInTheDocument();

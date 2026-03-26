@@ -23,6 +23,7 @@ export function TopicAgentDemoPage({ locale }: TopicAgentDemoPageProps) {
       topicSessions={topicAgent.topicSessions}
       topicBusy={topicAgent.topicBusy}
       topicError={topicAgent.topicError}
+      topicPresets={topicAgent.topicPresets}
       onChangeInterest={topicAgent.setInterest}
       onChangeProblemDomain={topicAgent.setProblemDomain}
       onChangeSeedIdea={topicAgent.setSeedIdea}
@@ -33,6 +34,7 @@ export function TopicAgentDemoPage({ locale }: TopicAgentDemoPageProps) {
       onRefine={() => void topicAgent.refineCurrentTopicSession()}
       onLoadSession={(sessionId) => void topicAgent.loadTopicAgentSession(sessionId)}
       onCompareSession={(sessionId) => void topicAgent.compareTopicAgentSession(sessionId)}
+      onApplyPreset={topicAgent.applyTopicPreset}
     />
   );
 }

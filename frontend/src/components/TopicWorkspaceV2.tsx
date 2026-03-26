@@ -6,6 +6,7 @@ import type {
   TopicAgentSessionResponse,
   TopicAgentSessionSummary,
 } from "../types";
+import type { TopicAgentDemoPreset } from "../features/topic-agent/hooks/useTopicAgent";
 import { TopicAgentCandidatesPanel } from "../features/topic-agent/components/TopicAgentCandidatesPanel";
 import { TopicAgentEvidencePanel } from "../features/topic-agent/components/TopicAgentEvidencePanel";
 import { TopicAgentFramingPanel } from "../features/topic-agent/components/TopicAgentFramingPanel";
@@ -28,6 +29,7 @@ type TopicWorkspaceProps = {
   topicSessions: TopicAgentSessionSummary[];
   topicBusy: boolean;
   topicError: string;
+  topicPresets: TopicAgentDemoPreset[];
   onChangeInterest: (value: string) => void;
   onChangeProblemDomain: (value: string) => void;
   onChangeSeedIdea: (value: string) => void;
@@ -38,6 +40,7 @@ type TopicWorkspaceProps = {
   onRefine: () => void;
   onLoadSession: (sessionId: string) => void;
   onCompareSession: (sessionId: string) => void;
+  onApplyPreset: (presetId: string) => void;
 };
 
 type TopicSectionShellProps = {
@@ -80,6 +83,7 @@ export function TopicWorkspaceV2({
   topicSessions,
   topicBusy,
   topicError,
+  topicPresets,
   onChangeInterest,
   onChangeProblemDomain,
   onChangeSeedIdea,
@@ -90,6 +94,7 @@ export function TopicWorkspaceV2({
   onRefine,
   onLoadSession,
   onCompareSession,
+  onApplyPreset,
 }: TopicWorkspaceProps) {
   const [evidenceTierFilter, setEvidenceTierFilter] = useState("all");
   const [evidenceTypeFilter, setEvidenceTypeFilter] = useState("all");
@@ -211,7 +216,7 @@ export function TopicWorkspaceV2({
           noDiff: "Choose a different history record to compare convergence changes.",
           trace: "Execution Trace",
           confidence: "Confidence Summary",
-          recentSessions: "Recent Sessions",
+          recentSessions: "Recent Runs",
           load: "Load",
           noResult: "No Topic Agent result yet",
           noResultCopy: "Submit a research interest to view structured Topic Agent output here.",
@@ -347,7 +352,9 @@ export function TopicWorkspaceV2({
       </article>
 
       <TopicAgentInputPanel
+        locale={locale}
         copy={copy}
+        topicPresets={topicPresets}
         interest={interest}
         problemDomain={problemDomain}
         seedIdea={seedIdea}
@@ -365,6 +372,7 @@ export function TopicWorkspaceV2({
         onChangePreferredStyle={onChangePreferredStyle}
         onSubmit={onSubmit}
         onRefine={onRefine}
+        onApplyPreset={onApplyPreset}
       />
 
       <TopicAgentSessionHistory
