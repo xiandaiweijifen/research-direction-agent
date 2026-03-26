@@ -1,26 +1,25 @@
 # Research Topic Copilot
 
-## Demo Video
+Research Topic Copilot is a local-first research-direction support system centered on `Topic Agent`: a focused sub-system for topic framing, scholarly evidence gathering, candidate-direction comparison, and convergence support.
 
-Topic Agent demo video location:
+The current repository should be read as an engineering prototype and delivery slice rather than a finished academic platform. Its main contribution is a structured Topic Agent workflow that makes topic selection more inspectable through explicit evidence records, candidate comparisons, recommendation rationale, and human confirmation points.
 
-- Local demo folder: [docs/demo](d:/project/research-topic-copilot/docs/demo)
-- Demo cover image: [docs/demo/topic-agent-demo-cover.png](d:/project/research-topic-copilot/docs/demo/topic-agent-demo-cover.png)
-- Demo video link: [Google Drive Demo](https://drive.google.com/file/d/12pbYxgtxA7wtjKtN7XfPKfG21vqj69Gj/view?usp=sharing)
+## Quick Links
 
-If the hosting location changes later, replace the external demo link above with the final public video link.
+- Topic Agent demo video: [Google Drive Demo](https://drive.google.com/file/d/12pbYxgtxA7wtjKtN7XfPKfG21vqj69Gj/view?usp=sharing)
+- Topic Agent solution summary (ZH): [docs/topic_agent_solution_summary_zh.md](d:/project/research-topic-copilot/docs/topic_agent_solution_summary_zh.md)
+- Topic Agent design: [docs/topic_agent_design.md](d:/project/research-topic-copilot/docs/topic_agent_design.md)
+- Topic Agent acceptance plan: [docs/topic_agent_acceptance.md](d:/project/research-topic-copilot/docs/topic_agent_acceptance.md)
 
 Click the cover image below to open the demo video:
 
 [![Topic Agent Demo Cover](./docs/demo/topic-agent-demo-cover.png)](https://drive.google.com/file/d/12pbYxgtxA7wtjKtN7XfPKfG21vqj69Gj/view?usp=sharing)
 
-Direct video link:
+Demo assets folder:
 
-- [Watch the Topic Agent demo on Google Drive](https://drive.google.com/file/d/12pbYxgtxA7wtjKtN7XfPKfG21vqj69Gj/view?usp=sharing)
+- [docs/demo](d:/project/research-topic-copilot/docs/demo)
 
-Research Topic Copilot is a local-first agent system for research topic exploration, evidence gathering, candidate direction comparison, and topic convergence support.
-
-This repository currently contains a reusable agent runtime baseline:
+This repository currently provides a reusable runtime and presentation baseline with:
 
 - document ingestion and local artifact persistence
 - retrieval with diagnostics and lightweight reranking
@@ -28,8 +27,7 @@ This repository currently contains a reusable agent runtime baseline:
 - persisted workflow runs, recovery semantics, and trace inspection
 - evaluation datasets, reports, and a frontend console
 
-The next product direction is a focused sub-system: `Topic Agent`.
-It is intended to help a researcher start from a broad interest, problem domain, or rough idea, then move through:
+Within that baseline, `Topic Agent` is designed to help a researcher start from a broad interest, problem domain, or rough idea, then move through:
 
 1. literature retrieval
 2. landscape synthesis
@@ -37,7 +35,7 @@ It is intended to help a researcher start from a broad interest, problem domain,
 4. candidate comparison
 5. convergence and decision support
 
-This project is not intended to become a general-purpose academic platform. The scope is intentionally narrower: a decision-support copilot for research topic selection with explicit evidence chains and human checkpoints.
+This project is intentionally scoped as a decision-support copilot for research topic selection, not as a general-purpose academic platform. The emphasis is on scope control, evidence traceability, and human-in-the-loop convergence rather than full academic workflow automation.
 
 ## Current Repository Status
 
