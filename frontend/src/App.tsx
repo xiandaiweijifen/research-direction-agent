@@ -18,8 +18,6 @@ import {
   fetchLatestAgentWorkflowEvaluation,
   fetchLatestEvaluation,
   fetchLatestToolExecutionEvaluation,
-  fetchTopicAgentSession,
-  fetchTopicAgentSessions,
   fetchPersistedChunks,
   fetchPersistedEmbeddings,
   fetchSystemHealth,
@@ -35,15 +33,13 @@ import {
   runDiagnostics as runDiagnosticsRequest,
   runEvaluation as runEvaluationRequest,
   runQuery as runQueryRequest,
-  refineTopicAgentSession as refineTopicAgentSessionRequest,
-  runTopicAgentExplore as runTopicAgentExploreRequest,
   uploadDocument as uploadDocumentRequest,
 } from "./api";
 import { DocumentsView } from "./components/DocumentsView";
 import { EvaluationView } from "./components/EvaluationView";
 import { QueryView } from "./components/QueryView";
-import { TopicWorkspaceV2 } from "./components/TopicWorkspaceV2";
 import { getViews, presetQuestions } from "./constants";
+import { TopicAgentDemoPage } from "./features/topic-agent/TopicAgentDemoPage";
 import type {
   AgentWorkflowResponse,
   AgentWorkflowRunSummary,
@@ -61,8 +57,6 @@ import type {
   EvaluationMetricsSummaryResponse,
   EvalReportResponse,
   ToolExecutionEvalReportResponse,
-  TopicAgentSessionSummary,
-  TopicAgentSessionResponse,
   PersistedChunkDocument,
   PersistedEmbeddingDocument,
   QueryResponse,
@@ -98,23 +92,6 @@ function App() {
   const [diagnosticsResult, setDiagnosticsResult] = useState<DiagnosticsResponse | null>(null);
   const [queryError, setQueryError] = useState("");
   const [queryBusy, setQueryBusy] = useState(false);
-  const [topicInterest, setTopicInterest] = useState(
-    "trustworthy multimodal reasoning in medical imaging",
-  );
-  const [topicProblemDomain, setTopicProblemDomain] = useState("medical AI");
-  const [topicSeedIdea, setTopicSeedIdea] = useState(
-    "I want a narrow and feasible research topic.",
-  );
-  const [topicTimeBudgetMonths, setTopicTimeBudgetMonths] = useState("6");
-  const [topicResourceLevel, setTopicResourceLevel] = useState("student");
-  const [topicPreferredStyle, setTopicPreferredStyle] = useState("benchmark-driven");
-  const [topicResult, setTopicResult] = useState<TopicAgentSessionResponse | null>(null);
-  const [topicComparisonResult, setTopicComparisonResult] =
-    useState<TopicAgentSessionResponse | null>(null);
-  const [topicSessions, setTopicSessions] = useState<TopicAgentSessionSummary[]>([]);
-  const [topicBusy, setTopicBusy] = useState(false);
-  const [topicError, setTopicError] = useState("");
-
   const [datasets, setDatasets] = useState<EvalDatasetInfo[]>([]);
   const [agentRouteDatasets, setAgentRouteDatasets] = useState<AgentEvalDatasetInfo[]>([]);
   const [agentWorkflowDatasets, setAgentWorkflowDatasets] = useState<AgentEvalDatasetInfo[]>([]);
@@ -251,7 +228,6 @@ function App() {
     void loadDocuments();
     void loadEvaluationDatasets();
     void loadAgentWorkflowRuns();
-    void loadTopicAgentSessions();
   }, []);
 
   useEffect(() => {
@@ -660,110 +636,6 @@ function App() {
     }
   }
 
-  async function loadTopicAgentSessions() {
-    try {
-      const payload = await fetchTopicAgentSessions(8);
-      setTopicSessions(payload.sessions);
-    } catch {
-      setTopicSessions([]);
-    }
-  }
-
-  async function submitTopicExplore(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    setTopicBusy(true);
-    setTopicError("");
-    setTopicResult(null);
-    setTopicComparisonResult(null);
-
-    try {
-      const payload = await runTopicAgentExploreRequest(
-        topicInterest,
-        topicProblemDomain,
-        topicSeedIdea,
-        {
-          time_budget_months: topicTimeBudgetMonths ? Number(topicTimeBudgetMonths) : undefined,
-          resource_level: topicResourceLevel || undefined,
-          preferred_style: topicPreferredStyle || undefined,
-        },
-      );
-      setTopicResult(payload);
-      await loadTopicAgentSessions();
-    } catch (error) {
-      setTopicError(error instanceof Error ? error.message : "Failed to run Topic Agent");
-    } finally {
-      setTopicBusy(false);
-    }
-  }
-
-  async function refineCurrentTopicSession() {
-    if (!topicResult) {
-      return;
-    }
-
-    setTopicBusy(true);
-    setTopicError("");
-    setTopicComparisonResult(null);
-
-    try {
-      const payload = await refineTopicAgentSessionRequest(topicResult.session_id, {
-        interest: topicInterest || undefined,
-        problem_domain: topicProblemDomain || undefined,
-        seed_idea: topicSeedIdea || undefined,
-        constraints: {
-          time_budget_months: topicTimeBudgetMonths ? Number(topicTimeBudgetMonths) : undefined,
-          resource_level: topicResourceLevel || undefined,
-          preferred_style: topicPreferredStyle || undefined,
-        },
-      });
-      setTopicResult(payload);
-      await loadTopicAgentSessions();
-    } catch (error) {
-      setTopicError(error instanceof Error ? error.message : "Failed to refine Topic Agent session");
-    } finally {
-      setTopicBusy(false);
-    }
-  }
-
-  async function loadTopicAgentSession(sessionId: string) {
-    setTopicBusy(true);
-    setTopicError("");
-    setTopicComparisonResult(null);
-
-    try {
-      const payload = await fetchTopicAgentSession(sessionId);
-      setTopicResult(payload);
-      setTopicInterest(payload.user_input.interest);
-      setTopicProblemDomain(payload.user_input.problem_domain ?? "");
-      setTopicSeedIdea(payload.user_input.seed_idea ?? "");
-      setTopicTimeBudgetMonths(
-        payload.user_input.constraints.time_budget_months != null
-          ? String(payload.user_input.constraints.time_budget_months)
-          : "",
-      );
-      setTopicResourceLevel(payload.user_input.constraints.resource_level ?? "");
-      setTopicPreferredStyle(payload.user_input.constraints.preferred_style ?? "");
-    } catch (error) {
-      setTopicError(error instanceof Error ? error.message : "Failed to load Topic Agent session");
-    } finally {
-      setTopicBusy(false);
-    }
-  }
-
-  async function compareTopicAgentSession(sessionId: string) {
-    setTopicBusy(true);
-    setTopicError("");
-
-    try {
-      const payload = await fetchTopicAgentSession(sessionId);
-      setTopicComparisonResult(payload);
-    } catch (error) {
-      setTopicError(error instanceof Error ? error.message : "Failed to compare Topic Agent session");
-    } finally {
-      setTopicBusy(false);
-    }
-  }
-
   async function loadAgentWorkflowRun(runId: string) {
     setQueryBusy(true);
     setQueryError("");
@@ -898,7 +770,7 @@ function App() {
             </div>
             <div className="stat-card">
               <span>{appCopy.topic}</span>
-              <strong>{topicResult ? topicResult.candidate_topics.length : 0}</strong>
+              <strong>{activeView === "topic" ? "Live" : "-"}</strong>
             </div>
             <div className="stat-card">
               <span>{appCopy.evalDatasets}</span>
@@ -1085,30 +957,7 @@ function App() {
       )}
 
       {activeView === "topic" && (
-        <TopicWorkspaceV2
-          locale={locale}
-          interest={topicInterest}
-          problemDomain={topicProblemDomain}
-          seedIdea={topicSeedIdea}
-          timeBudgetMonths={topicTimeBudgetMonths}
-          resourceLevel={topicResourceLevel}
-          preferredStyle={topicPreferredStyle}
-          topicResult={topicResult}
-          topicComparisonResult={topicComparisonResult}
-          topicSessions={topicSessions}
-          topicBusy={topicBusy}
-          topicError={topicError}
-          onChangeInterest={setTopicInterest}
-          onChangeProblemDomain={setTopicProblemDomain}
-          onChangeSeedIdea={setTopicSeedIdea}
-          onChangeTimeBudgetMonths={setTopicTimeBudgetMonths}
-          onChangeResourceLevel={setTopicResourceLevel}
-          onChangePreferredStyle={setTopicPreferredStyle}
-          onSubmit={submitTopicExplore}
-          onRefine={() => void refineCurrentTopicSession()}
-          onLoadSession={(sessionId) => void loadTopicAgentSession(sessionId)}
-          onCompareSession={(sessionId) => void compareTopicAgentSession(sessionId)}
-        />
+        <TopicAgentDemoPage locale={locale} />
       )}
     </div>
   );

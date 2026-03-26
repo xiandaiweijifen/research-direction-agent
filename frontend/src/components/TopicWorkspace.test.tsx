@@ -99,7 +99,13 @@ describe("TopicWorkspaceV2", () => {
             rationale: "Previous rationale.",
             manual_checks: ["Previous check."],
           },
+          evidence_presentation: {
+            source_facts: [],
+            system_synthesis: [],
+            tentative_inferences: [],
+          },
           human_confirmations: [],
+          clarification_suggestions: [],
           trace: [
             {
               stage: "frame_problem",
@@ -114,6 +120,14 @@ describe("TopicWorkspaceV2", () => {
             candidate_separation: "medium",
             conflict_level: "low",
             rationale: ["Previous confidence."],
+          },
+          evidence_diagnostics: {
+            requested_provider: "openalex",
+            used_provider: "openalex",
+            fallback_used: false,
+            fallback_reason: null,
+            record_count: 1,
+            cache_hit: false,
           },
         }}
         topicSessions={[
@@ -247,7 +261,13 @@ describe("TopicWorkspaceV2", () => {
             rationale: "Best balance.",
             manual_checks: ["Check benchmark availability."],
           },
+          evidence_presentation: {
+            source_facts: [],
+            system_synthesis: [],
+            tentative_inferences: [],
+          },
           human_confirmations: [],
+          clarification_suggestions: [],
           trace: [
             {
               stage: "frame_problem",
@@ -262,6 +282,14 @@ describe("TopicWorkspaceV2", () => {
             candidate_separation: "high",
             conflict_level: "low",
             rationale: ["Evidence coverage is medium."],
+          },
+          evidence_diagnostics: {
+            requested_provider: "openalex",
+            used_provider: "openalex",
+            fallback_used: false,
+            fallback_reason: null,
+            record_count: 2,
+            cache_hit: false,
           },
         }}
         onChangeInterest={vi.fn()}

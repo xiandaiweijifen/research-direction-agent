@@ -421,6 +421,38 @@ export type TopicAgentConvergenceResult = {
   manual_checks: string[];
 };
 
+export type TopicAgentEvidenceStatement = {
+  statement: string;
+  statement_type: string;
+  supporting_source_ids: string[];
+  note: string;
+  uncertainty_reason?: string | null;
+  missing_evidence: string[];
+};
+
+export type TopicAgentEvidencePresentation = {
+  source_facts: TopicAgentEvidenceStatement[];
+  system_synthesis: TopicAgentEvidenceStatement[];
+  tentative_inferences: TopicAgentEvidenceStatement[];
+};
+
+export type TopicAgentClarificationSuggestion = {
+  field_key: string;
+  prompt: string;
+  reason: string;
+  suggested_values: string[];
+  refine_patch: Record<string, unknown>;
+};
+
+export type TopicAgentEvidenceDiagnostics = {
+  requested_provider: string;
+  used_provider: string;
+  fallback_used: boolean;
+  fallback_reason?: string | null;
+  record_count: number;
+  cache_hit: boolean;
+};
+
 export type TopicAgentTraceEvent = {
   stage: string;
   status: string;
@@ -447,9 +479,12 @@ export type TopicAgentSessionResponse = {
   candidate_topics: TopicAgentCandidateTopic[];
   comparison_result: TopicAgentComparisonResult;
   convergence_result: TopicAgentConvergenceResult;
+  evidence_presentation: TopicAgentEvidencePresentation;
   human_confirmations: string[];
+  clarification_suggestions: TopicAgentClarificationSuggestion[];
   trace: TopicAgentTraceEvent[];
   confidence_summary: TopicAgentConfidenceSummary;
+  evidence_diagnostics: TopicAgentEvidenceDiagnostics;
 };
 
 export type TopicAgentSessionSummary = {
