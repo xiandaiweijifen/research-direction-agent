@@ -42,6 +42,7 @@ def test_topic_agent_explore_creates_session_with_mock_outputs(workspace_tmp_pat
     assert payload["confidence_summary"]["rationale"]
     assert payload["trace"]
     assert payload["human_confirmations"]
+    assert isinstance(payload["clarification_suggestions"], list)
     assert [event["stage"] for event in payload["trace"]] == [
         "frame_problem",
         "retrieve_evidence",
@@ -138,6 +139,7 @@ def test_topic_agent_refine_updates_existing_session(workspace_tmp_path, monkeyp
     assert "project timeline" not in joined_confirmations
     assert "resource level" not in joined_confirmations
     assert "leading direction" in joined_confirmations
+    assert refined_payload["clarification_suggestions"] == []
 
 
 def test_topic_agent_explore_rejects_empty_interest(workspace_tmp_path, monkeypatch):
@@ -213,6 +215,7 @@ def test_topic_agent_session_endpoints_backfill_missing_legacy_diagnostics(works
             "manual_checks": [],
         },
         "human_confirmations": [],
+        "clarification_suggestions": [],
         "trace": [],
         "confidence_summary": {
             "evidence_coverage": "low",
@@ -241,4 +244,32 @@ def test_topic_agent_session_endpoints_backfill_missing_legacy_diagnostics(works
         "fallback_reason": None,
         "record_count": 0,
         "cache_hit": False,
+    }
+
+
+def test_topic_agent_explore_returns_structured_clarification_suggestions(workspace_tmp_path, monkeypatch):
+    session_store_path = workspace_tmp_path / "topic_agent_sessions.json"
+    monkeypatch.setattr(
+        "app.services.topic_agent.topic_agent_runtime.TOPIC_AGENT_STORE_PATH",
+        session_store_path,
+    )
+
+    client = TestClient(app)
+    response = client.post(
+        "/api/topic-agent/explore",
+        json={
+            "interest": "medical reasoning",
+            "constraints": {},
+        },
+    )
+
+    assert response.status_code == 200
+    payload = response.json()
+    assert [item["field_key"] for item in payload["clarification_suggestions"]] == [
+        "time_budget",
+        "resource_level",
+        "preferred_style",
+    ]
+    assert payload["clarification_suggestions"][0]["refine_patch"] == {
+        "constraints": {"time_budget_months": 6}
     }

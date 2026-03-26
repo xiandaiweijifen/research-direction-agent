@@ -5,6 +5,7 @@ import uuid
 from dataclasses import dataclass
 
 from app.schemas.topic_agent import (
+    TopicAgentClarificationSuggestion,
     TopicAgentCandidateTopic,
     TopicAgentComparisonResult,
     TopicAgentConfidenceSummary,
@@ -946,6 +947,63 @@ def build_human_confirmations(context: TopicAgentPipelineContext) -> list[str]:
     return confirmations
 
 
+def build_clarification_suggestions(
+    context: TopicAgentPipelineContext,
+) -> list[TopicAgentClarificationSuggestion]:
+    framing_result = context.framing_result
+    if not framing_result or not framing_result.missing_clarifications:
+        return []
+
+    suggestion_specs = {
+        "time_budget": {
+            "prompt": "Choose a rough project timeline so the agent can judge scope realistically.",
+            "reason": "The current recommendation still lacks an explicit time budget.",
+            "suggested_values": ["3", "6", "12"],
+            "refine_patch": {
+                "constraints": {
+                    "time_budget_months": 6,
+                }
+            },
+        },
+        "resource_level": {
+            "prompt": "Specify the available resource level so feasibility estimates are grounded.",
+            "reason": "The current recommendation still lacks a resource assumption.",
+            "suggested_values": ["student", "lab", "team"],
+            "refine_patch": {
+                "constraints": {
+                    "resource_level": "student",
+                }
+            },
+        },
+        "preferred_style": {
+            "prompt": "Choose whether the project should lean applied, systems, or benchmark-driven.",
+            "reason": "The current recommendation still lacks a preferred project style.",
+            "suggested_values": ["applied", "systems", "benchmark-driven"],
+            "refine_patch": {
+                "constraints": {
+                    "preferred_style": "applied",
+                }
+            },
+        },
+    }
+
+    suggestions: list[TopicAgentClarificationSuggestion] = []
+    for missing_field in framing_result.missing_clarifications:
+        spec = suggestion_specs.get(missing_field)
+        if not spec:
+            continue
+        suggestions.append(
+            TopicAgentClarificationSuggestion(
+                field_key=missing_field,
+                prompt=spec["prompt"],
+                reason=spec["reason"],
+                suggested_values=spec["suggested_values"],
+                refine_patch=spec["refine_patch"],
+            )
+        )
+    return suggestions
+
+
 def run_topic_agent_pipeline(
     request: TopicAgentExploreRequest,
     *,
@@ -964,6 +1022,7 @@ def run_topic_agent_pipeline(
     build_confidence_summary(context)
     build_trace(context)
     human_confirmations = build_human_confirmations(context)
+    clarification_suggestions = build_clarification_suggestions(context)
     return TopicAgentSessionResponse(
         session_id=session_id or uuid.uuid4().hex,
         created_at=created_at or timestamp,
@@ -976,6 +1035,7 @@ def run_topic_agent_pipeline(
         comparison_result=context.comparison_result,
         convergence_result=context.convergence_result,
         human_confirmations=human_confirmations,
+        clarification_suggestions=clarification_suggestions,
         trace=context.trace or [],
         confidence_summary=context.confidence_summary,
         evidence_diagnostics=context.evidence_diagnostics

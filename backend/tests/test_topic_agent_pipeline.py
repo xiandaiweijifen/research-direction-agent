@@ -622,3 +622,55 @@ def test_topic_agent_pipeline_builds_human_confirmations_for_missing_constraints
     assert "prioritize theory" in joined_confirmations
     assert "correctly interpreted the topic" in joined_confirmations
     assert "leading direction" in joined_confirmations
+
+
+def test_topic_agent_pipeline_builds_structured_clarification_suggestions():
+    class SparseProvider:
+        provider_name = "static"
+
+        def retrieve(self, request: TopicAgentExploreRequest):
+            records = [
+                TopicAgentSourceRecord(
+                    source_id="openalex_a",
+                    title="Benchmarking Medical Reasoning",
+                    source_type="benchmark",
+                    source_tier="A",
+                    year=2025,
+                    authors_or_publisher="Author A",
+                    identifier="https://example.org/a",
+                    url="https://example.org/a",
+                    summary="Benchmark evidence for medical reasoning.",
+                    relevance_reason="Test record",
+                )
+            ]
+            return TopicAgentEvidenceRetrievalResult(
+                records=records,
+                diagnostics=TopicAgentEvidenceDiagnostics(
+                    requested_provider="static",
+                    used_provider="static",
+                    fallback_used=False,
+                    fallback_reason=None,
+                    record_count=1,
+                ),
+            )
+
+    request = TopicAgentExploreRequest(
+        interest="medical reasoning",
+        constraints=TopicAgentConstraintSet(),
+    )
+
+    response = run_topic_agent_pipeline(request, provider=SparseProvider())
+
+    assert [item.field_key for item in response.clarification_suggestions] == [
+        "time_budget",
+        "resource_level",
+        "preferred_style",
+    ]
+    assert response.clarification_suggestions[0].refine_patch == {
+        "constraints": {"time_budget_months": 6}
+    }
+    assert response.clarification_suggestions[1].suggested_values == [
+        "student",
+        "lab",
+        "team",
+    ]

@@ -98,6 +98,14 @@ class TopicAgentTraceEvent(BaseModel):
     detail: str
 
 
+class TopicAgentClarificationSuggestion(BaseModel):
+    field_key: str
+    prompt: str
+    reason: str
+    suggested_values: list[str] = Field(default_factory=list)
+    refine_patch: dict[str, object] = Field(default_factory=dict)
+
+
 class TopicAgentSessionResponse(BaseModel):
     session_id: str
     created_at: str
@@ -110,6 +118,7 @@ class TopicAgentSessionResponse(BaseModel):
     comparison_result: TopicAgentComparisonResult
     convergence_result: TopicAgentConvergenceResult
     human_confirmations: list[str] = Field(default_factory=list)
+    clarification_suggestions: list[TopicAgentClarificationSuggestion] = Field(default_factory=list)
     trace: list[TopicAgentTraceEvent] = Field(default_factory=list)
     confidence_summary: TopicAgentConfidenceSummary
     evidence_diagnostics: TopicAgentEvidenceDiagnostics

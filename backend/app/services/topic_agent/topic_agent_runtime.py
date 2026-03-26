@@ -76,6 +76,12 @@ def _backfill_session_payload(payload: dict) -> dict:
     if "human_confirmations" not in normalized or not isinstance(normalized.get("human_confirmations"), list):
         normalized["human_confirmations"] = []
 
+    if "clarification_suggestions" not in normalized or not isinstance(
+        normalized.get("clarification_suggestions"),
+        list,
+    ):
+        normalized["clarification_suggestions"] = []
+
     return normalized
 
 
