@@ -778,20 +778,8 @@
     ]
   },
   "v3::agents software engineering developer tools applied||agents software engineering developer tools::max=5": {
-    "saved_at": "2026-03-27T02:59:38.770908+08:00",
+    "saved_at": "2026-03-27T03:27:07.999687+08:00",
     "records": [
-      {
-        "source_id": "openalex_w1512603479",
-        "title": "Prometheus: A Pragmatic Methodology for Engineering Intelligent Agents",
-        "source_type": "paper",
-        "source_tier": "B",
-        "year": 2002,
-        "authors_or_publisher": "Lin Padgham, Michael Winikoff",
-        "identifier": "https://openalex.org/W1512603479",
-        "url": "http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.19.9128",
-        "summary": "Agents are a powerful technology with many significant applications. A key issue in getting the technology into mainstream software development is the development of appropriate methodologies for engineering agent-oriented software. This paper presents the Prometheus methodology, which has been developed over several years in collaboration with Agent Oriented Software. The methodology has been taught at industry workshops and university courses. It has proven effective in assisting developers to design, document, and build agent systems. Prometheus is a detailed and complete (start to end) methodology for developing intelligent agents which has evolved out of industrial and pedagogical experience, and which is supported by tools. This paper gives a brief overview of the design process as a whole and then discusses envisaged tool support as well as the implemented tool prototypes we have been using.",
-        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
-      },
       {
         "source_id": "openalex_w2982485630",
         "title": "An Empirical Study on Culture, Automation, Measurement, and Sharing of DevSecOps",
@@ -802,6 +790,18 @@
         "identifier": "https://openalex.org/W2982485630",
         "url": "https://doi.org/10.1109/cybersecpods.2019.8884935",
         "summary": "Programmers are central agents in creating secure applications. However, software engineering and software security have historically worked in separate silos. DevSecOps is the practice of breaking down silos between development, operations, and quality assurance of security. To understand the state of art and challenges of DevSecOps, we interviewed six developers about their DevSecOps practices. We asked interview subjects about their security practices rooted in the four pillars of DevOps, namely culture, automation, sharing, and measurement. Results were analyzed by using qualitative methods. The results of the study show that it is necessary first to create a security culture. Several interviewees identified the importance of caring about security and issues in existing culture, such as how developers feel attacked by security engineers if they create vulnerable code. After establishing a security culture in the organization, development and operations need the necessary training and knowledge so that security automation tools can be utilized effectively. Measurements need to be applied continuously to keep track of identified vulnerabilities, the amount of training staff has received, and staffs general opinions regarding security.",
+        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
+      },
+      {
+        "source_id": "openalex_w1512603479",
+        "title": "Prometheus: A Pragmatic Methodology for Engineering Intelligent Agents",
+        "source_type": "paper",
+        "source_tier": "B",
+        "year": 2002,
+        "authors_or_publisher": "Lin Padgham, Michael Winikoff",
+        "identifier": "https://openalex.org/W1512603479",
+        "url": "http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.19.9128",
+        "summary": "Agents are a powerful technology with many significant applications. A key issue in getting the technology into mainstream software development is the development of appropriate methodologies for engineering agent-oriented software. This paper presents the Prometheus methodology, which has been developed over several years in collaboration with Agent Oriented Software. The methodology has been taught at industry workshops and university courses. It has proven effective in assisting developers to design, document, and build agent systems. Prometheus is a detailed and complete (start to end) methodology for developing intelligent agents which has evolved out of industrial and pedagogical experience, and which is supported by tools. This paper gives a brief overview of the design process as a whole and then discusses envisaged tool support as well as the implemented tool prototypes we have been using.",
         "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
       },
       {
@@ -838,6 +838,112 @@
         "identifier": "https://openalex.org/W1576195516",
         "url": "https://doi.org/10.1201/9781420070248",
         "summary": "Methodological Guidelines for Modeling and Developing MAS-Based Simulations The intersection of agents, modeling, simulation, and application domains has been the subject of active research for over two decades. Although agents and simulation have been used effectively in a variety of application domains, much of the supporting research remains scattered in the literature, too often leaving scientists to develop multi-agent system (MAS) models and simulations from scratch. Multi-Agent Systems: Simulation and Applications provides an overdue review of the wide ranging facets of MAS simulation, including methodological and application-oriented guidelines. This comprehensive resource reviews two decades of research in the intersection of MAS, simulation, and different application domains. It provides scientists and developers with disciplined engineering approaches to modeling and developing MAS-based simulations. After providing an overview of the fields history and its basic principles, as well as cataloging the various simulation engines for MAS, the book devotes three sections to current and emerging approaches and applications. Simulation for MAS explains simulation support for agent decision making, the use of simulation for the design of self-organizing systems, the role of software architecture in simulating MAS, and the use of simulation for studying learning and stigmergic interaction. MAS for Simulation discusses an agent-based framework for symbiotic simulation, the use of country databases and expert systems for agent-based modeling of social systems, crowd-behavior modeling, agent-based modeling and simulation of adult stem cells, and agents for traffic simulation. Tools presents a number of representative platforms and tools for MAS and simulation, including Jason, James II, SeSAm, and RoboCup Rescue. Complete with over 200 figures and formulas, this reference book provides the necessary overview of experiences with MAS simulation and the tools needed to exploit simulation in MAS for future research in a vast array of applications including home security, computational systems biology, and traffic management.",
+        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
+      }
+    ]
+  },
+  "v3::clinical medical reasoning applied||clinical medical reasoning medical||medical reasoning benchmark||medical reasoning large language models||clinical reasoning benchmark medical ai||medical question answering reasoning benchmark||clinical reasoning benchmark||clinical decision support reasoning evaluation||medical reasoning metacognition benchmark||free-response clinical reasoning evaluation::max=5": {
+    "saved_at": "2026-03-27T03:25:32.019735+08:00",
+    "records": [
+      {
+        "source_id": "openalex_w4416954175",
+        "title": "Benchmarking large language models on the United States medical licensing examination for clinical reasoning and medical licensing scenarios",
+        "source_type": "benchmark",
+        "source_tier": "A",
+        "year": 2025,
+        "authors_or_publisher": "K. Siam, A. Diaz Varela, Md Jobair Hossain Faruk, Jerry Cheng",
+        "identifier": "https://openalex.org/W4416954175",
+        "url": "https://doi.org/10.1038/s41598-025-31010-4",
+        "summary": "Artificial intelligence (AI) is transforming healthcare by assisting with intricate clinical reasoning and diagnosis. Recent research demonstrates that large language models (LLMs), such as ChatGPT and DeepSeek, possess considerable potential in medical comprehension. This study meticulously evaluates the clinical reasoning capabilities of four advanced LLMs, including ChatGPT, DeepSeek, Grok, and Qwen, utilizing the United States Medical Licensing Examination (USMLE) as a standard benchmark. We assess 376 publicly accessible USMLE sample exam questions (Step 1, Step 2 CK, Step 3) from the most recent booklet released in July 2023. We analyze model performance across four question categories: text-only, text with image, text with mathematical reasoning, and integrated text-image-mathematical reasoning and measure model accuracy at three USMLE steps. Our findings show that DeepSeek and ChatGPT consistently outperform Grok and Qwen, with DeepSeek reaching 93% on Step 2 CK. Error analysis revealed that universal failures were rare (≤1.60%) and concentrated in multimodal and quantitative reasoning tasks, suggesting both ensemble potential and shared blind spots. Compared to the baseline ChatGPT-3.5 Turbo, newer models demonstrate substantial gains, though possible training-data exposure to USMLE content limits generalizability. Despite encouraging accuracy, models exhibited overconfidence and hallucinations, underscoring the need for human oversight. Limitations include reliance on sample questions, the small number of multimodal items, and lack of real-world datasets. Future work should expand benchmarks, integrate physician feedback, and improve reproducibility through shared prompts and configurations. Overall, these results highlight both the promise and the limitations of LLMs in medical testing: strong accuracy and complementarity, but persistent risks requiring innovation, benchmarking, and clinical oversight.",
+        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
+      },
+      {
+        "source_id": "openalex_w4406940684",
+        "title": "Towards Metacognitive Clinical Reasoning: Benchmarking MD-PIE Against State-of-the-Art LLMs in Medical Decision-Making",
+        "source_type": "benchmark",
+        "source_tier": "A",
+        "year": 2025,
+        "authors_or_publisher": "Yasma Esteitieh, S. Mandal, George Laliotis",
+        "identifier": "https://openalex.org/W4406940684",
+        "url": "https://doi.org/10.1101/2025.01.28.25321282",
+        "summary": "Abstract The ability of large language models (LLMs) to perform clinical reasoning and cognitive tasks within medicine remains a critical measure of their overall capabilities in decision-making, with significant implications for patient outcomes and healthcare efficiency. Current AI models often face limitations in real-world clinical environments, including variability in performance, a lack of domain-specific knowledge, and black-box reasoning processes. In this study, we introduce a novel PIE framework, named MD-PIE, which emulates cognitive and reasoning abilities in medical reasoning and decision-making. We benchmark our framework and baseline methods both quantitatively and qualitatively using state-of-the-art LLMs, comparing them against OpenAI’s o1, Gemini 2.0 Flash Thinking, and DeepSeek V3 across diverse benchmarks. Our results demonstrate that MD-PIE surpasses existing models in differential diagnosis and reasoning accuracy across diverse medical benchmarks. This study underscores its potential to improve clinical decision-making through adaptive and collaborative design. Future research should focus on larger benchmarks and real-world validation to confirm its reliability and effectiveness in varied clinical scenarios.",
+        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
+      },
+      {
+        "source_id": "openalex_w4406371336",
+        "title": "Large Language Models lack essential metacognition for reliable medical reasoning",
+        "source_type": "benchmark",
+        "source_tier": "A",
+        "year": 2025,
+        "authors_or_publisher": "Maxime Griot, Coralie Hemptinne, Jean Vanderdonckt, Demet Yüksel",
+        "identifier": "https://openalex.org/W4406371336",
+        "url": "https://doi.org/10.1038/s41467-024-55628-6",
+        "summary": "Large Language Models have demonstrated expert-level accuracy on medical board examinations, suggesting potential for clinical decision support systems. However, their metacognitive abilities, crucial for medical decision-making, remain largely unexplored. To address this gap, we developed MetaMedQA, a benchmark incorporating confidence scores and metacognitive tasks into multiple-choice medical questions. We evaluated twelve models on dimensions including confidence-based accuracy, missing answer recall, and unknown recall. Despite high accuracy on multiple-choice questions, our study revealed significant metacognitive deficiencies across all tested models. Models consistently failed to recognize their knowledge limitations and provided confident answers even when correct options were absent. In this work, we show that current models exhibit a critical disconnect between perceived and actual capabilities in medical reasoning, posing significant risks in clinical settings. Our findings emphasize the need for more robust evaluation frameworks that incorporate metacognitive abilities, essential for developing reliable Large Language Model enhanced clinical decision support systems.",
+        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
+      },
+      {
+        "source_id": "openalex_w4280567834",
+        "title": "The effectiveness of using virtual patient educational tools to improve medical students’ clinical reasoning skills: a systematic review",
+        "source_type": "paper",
+        "source_tier": "B",
+        "year": 2022,
+        "authors_or_publisher": "Ruth Plackett, Angelos P. Kassianos, Sophie Mylan, Maria Kambouri",
+        "identifier": "https://openalex.org/W4280567834",
+        "url": "https://doi.org/10.1186/s12909-022-03410-x",
+        "summary": "Using virtual patient tools could effectively complement current teaching especially if opportunities for face-to-face teaching or other methods are limited, as there was some evidence that virtual patient educational tools can improve undergraduate medical students' clinical reasoning skills. Evaluations that measured more case specific clinical reasoning domains, such as data gathering, showed more consistent improvement than general measures like problem-solving. Case specific measures might be more sensitive to change given the context dependent nature of clinical reasoning. Consistent use of validated clinical reasoning measures is needed to enable a meta-analysis to estimate effectiveness.",
+        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
+      },
+      {
+        "source_id": "openalex_w4401863364",
+        "title": "RJUA-MedDQA: A Multimodal Benchmark for Medical Document Question Answering and Clinical Reasoning",
+        "source_type": "benchmark",
+        "source_tier": "A",
+        "year": 2024,
+        "authors_or_publisher": "Congyun Jin, Ming Zhang, Weixiao Ma, Yujiao Li",
+        "identifier": "https://openalex.org/W4401863364",
+        "url": "https://doi.org/10.1145/3637528.3671644",
+        "summary": "Recent advancements in Large Language Models (LLMs) and Large Multi-modal Models (LMMs) have shown potential in various medical applications, such as Intelligent Medical Diagnosis. Although impressive results have been achieved, we find that existing benchmarks do not reflect the complexity of real medical reports and specialized in-depth reasoning capabilities. In this work, we establish a comprehensive benchmark in the field of medical specialization and introduced RJUA-MedDQA, which contains 2000 real-world Chinese medical report images poses several challenges: comprehensively interpreting imgage content across a wide variety of challenging layouts, possessing the numerical reasoning ability to identify abnormal indicators and demonstrating robust clinical reasoning ability to provide the statement of disease diagnosis, status and advice based on a collection of medical contexts. We carefully design the data generation pipeline and proposed the Efficient Structural Restoration Annotation (ESRA) Method, aimed at restoring textual and tabular content in medical report images. This method substantially enhances annotation efficiency, doubling the productivity of each annotator, and yields a 26.8% improvement in accuracy. We conduct extensive evaluations, including few-shot assessments of 5 LMMs which are capable of solving Chinese medical QA tasks. To further investigate the limitations and potential of current LMMs, we conduct comparative experiments on a set of strong LLMs by using image-text generated by ESRA method. We report the performance of baselines and offer several observations: (1) The overall performance of existing LMMs is still limited; however LMMs more robust to low-quality and diverse-structured images compared to LLMs. (3) Reasoning across context and image content present significant challenges. We hope this benchmark helps the community make progress on these challenging tasks in multi-modal medical document understanding and facilitate its application in healthcare. Our dataset will be publicly available for noncommercial use at https://github.com/Alipay-Med/medDQA_benchmark.git",
+        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
+      }
+    ]
+  },
+  "v3::coding agents software engineering developer workflows applied||coding agents software developer workflows::max=5": {
+    "saved_at": "2026-03-27T03:29:09.189116+08:00",
+    "records": [
+      {
+        "source_id": "openalex_w4411915058",
+        "title": "Explainable AI In Software Engineering: Enhancing Developer-AI Collaboration",
+        "source_type": "paper",
+        "source_tier": "B",
+        "year": 2024,
+        "authors_or_publisher": "Jami J. Shah, Jyoti Kunal Shah",
+        "identifier": "https://openalex.org/W4411915058",
+        "url": "https://doi.org/10.37547/tajet/volume06issue07-11",
+        "summary": "Artificial Intelligence (AI) tools are increasingly integrated into software engineering tasks such as code generation, defect prediction, and project planning. However, widespread adoption is hindered by developers’ skepticism toward opaque AI models that lack transparency. This paper explores the integration of Explainable AI (XAI) into software engineering to foster a “developer-in-the-loop” paradigm that enhances trust, understanding, and collaboration between developers and AI agents. We review existing research on XAI techniques applied to feature planning, debugging, and refactoring, and identify the challenges of embedding XAI in real-world development workflows. A modular framework and system architecture are proposed to integrate explanation engines with AI models, IDEs, dashboards, and CI tools. A case study on explainable code review demonstrates how transparent AI suggestions can improve developer trust and team learning. We conclude by highlighting future directions, including personalization of explanations, cross-SDLC integration, and human-AI dialogue mechanisms, positioning XAI as essential to the next generation of intelligent development environments.",
+        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
+      },
+      {
+        "source_id": "openalex_w4402442868",
+        "title": "AutoCodeRover: Autonomous Program Improvement",
+        "source_type": "paper",
+        "source_tier": "B",
+        "year": 2024,
+        "authors_or_publisher": "Yuntong Zhang, Haifeng Ruan, Zhiyu Fan, Abhik Roychoudhury",
+        "identifier": "https://openalex.org/W4402442868",
+        "url": "https://doi.org/10.1145/3650212.3680384",
+        "summary": "Researchers have made significant progress in automating the software development process in the past decades. Automated techniques for issue summarization, bug reproduction, fault localization, and program repair have been built to ease the workload of developers. Recent progress in Large Language Models (LLMs) has significantly impacted the development process, where developers can use LLM-based programming assistants to achieve automated coding. Nevertheless, software engineering involves the process of program improvement apart from coding, specifically to enable software maintenance (e.g. program repair to fix bugs) and software evolution (e.g. feature additions). In this paper, we propose an automated approach for solving Github issues to autonomously achieve program improvement. In our approach called AutoCodeRover, LLMs are combined with sophisticated code search capabilities, ultimately leading to a program modification or patch. In contrast to recent LLM agent approaches from AI researchers and practitioners, our outlook is more software engineering oriented. We work on a program representation (abstract syntax tree) as opposed to viewing a software project as a mere collection of files. Our code search exploits the program structure in the form of classes/methods to enhance LLM’s understanding of the issue’s root cause, and effectively retrieve a context via iterative search. The use of spectrum-based fault localization using tests, further sharpens the context, as long as a test-suite is available. Experiments on the recently proposed SWE-bench-lite (300 real-life Github issues) show increased efficacy in solving Github issues (19% on SWE-bench-lite), which is higher than the efficacy of the recently reported Swe-agent. Interestingly, our approach resolved 57 GitHub issues in about 4 minutes each (pass@1), whereas developers spent more than 2.68 days on average. In addition, AutoCodeRover achieved this efficacy with significantly lower cost (on average, $0.43 USD), compared to other baselines. We posit that our workflow enables autonomous software engineering, where, in future, auto-generated code from LLMs can be autonomously improved.",
+        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
+      },
+      {
+        "source_id": "openalex_w3035965352",
+        "title": "Array programming with NumPy",
+        "source_type": "paper",
+        "source_tier": "B",
+        "year": 2020,
+        "authors_or_publisher": "Charles R. Harris, K. Jarrod Millman, Stéfan J. van der Walt, Ralf Gommers",
+        "identifier": "https://openalex.org/W3035965352",
+        "url": "https://doi.org/10.1038/s41586-020-2649-2",
+        "summary": "Array programming provides a powerful, compact and expressive syntax for accessing, manipulating and operating on data in vectors, matrices and higher-dimensional arrays. NumPy is the primary array programming library for the Python language. It has an essential role in research analysis pipelines in fields as diverse as physics, chemistry, astronomy, geoscience, biology, psychology, materials science, engineering, finance and economics. For example, in astronomy, NumPy was an important part of the software stack used in the discovery of gravitational waves<sup>1</sup> and in the first imaging of a black hole<sup>2</sup>. Here we review how a few fundamental array concepts lead to a simple and powerful programming paradigm for organizing, exploring and analysing scientific data. NumPy is the foundation upon which the scientific Python ecosystem is constructed. It is so pervasive that several projects, targeting audiences with specialized needs, have developed their own NumPy-like interfaces and array objects. Owing to its central position in the ecosystem, NumPy increasingly acts as an interoperability layer between such array computation libraries and, together with its application programming interface (API), provides a flexible framework to support the next decade of scientific and industrial analysis.",
         "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
       }
     ]

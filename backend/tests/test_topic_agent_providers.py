@@ -1350,6 +1350,83 @@ def test_rank_records_prefers_modern_software_agent_evidence_over_legacy_agent_n
     assert ranked_titles[-1] == "Prometheus: A Pragmatic Methodology for Engineering Intelligent Agents"
 
 
+def test_rank_records_penalizes_software_library_neighbors_for_modern_agent_queries():
+    request = TopicAgentExploreRequest(
+        interest="coding agents for software engineering",
+        problem_domain="developer workflows",
+        constraints=TopicAgentConstraintSet(preferred_style="applied"),
+    )
+    records = [
+        _parse_openalex_response(
+            {
+                "results": [
+                    {
+                        "id": "https://openalex.org/W1",
+                        "display_name": "Explainable AI In Software Engineering: Enhancing Developer-AI Collaboration",
+                        "publication_year": 2024,
+                        "abstract_inverted_index": {
+                            "software": [0],
+                            "engineering": [1],
+                            "developer": [2],
+                            "collaboration": [3],
+                            "ai": [4],
+                        },
+                        "authorships": [{"author": {"display_name": "Author A"}}],
+                        "primary_location": {"landing_page_url": "https://example.org/explainable-se"},
+                    }
+                ]
+            }
+        )[0],
+        _parse_openalex_response(
+            {
+                "results": [
+                    {
+                        "id": "https://openalex.org/W2",
+                        "display_name": "AutoCodeRover: Autonomous Program Improvement",
+                        "publication_year": 2024,
+                        "abstract_inverted_index": {
+                            "autonomous": [0],
+                            "program": [1],
+                            "improvement": [2],
+                            "developer": [3],
+                            "workflow": [4],
+                            "coding": [5],
+                        },
+                        "authorships": [{"author": {"display_name": "Author B"}}],
+                        "primary_location": {"landing_page_url": "https://example.org/autocoderover"},
+                    }
+                ]
+            }
+        )[0],
+        _parse_openalex_response(
+            {
+                "results": [
+                    {
+                        "id": "https://openalex.org/W3",
+                        "display_name": "Array programming with NumPy",
+                        "publication_year": 2020,
+                        "abstract_inverted_index": {
+                            "array": [0],
+                            "programming": [1],
+                            "numpy": [2],
+                            "python": [3],
+                            "library": [4],
+                        },
+                        "authorships": [{"author": {"display_name": "Author C"}}],
+                        "primary_location": {"landing_page_url": "https://example.org/numpy"},
+                    }
+                ]
+            }
+        )[0],
+    ]
+
+    ranked_titles = [record.title for record in _rank_records(records, request, max_results=3)]
+    filtered_titles = [record.title for record in _filter_ranked_records(_rank_records(records, request, max_results=3), request, max_results=3)]
+
+    assert ranked_titles[-1] == "Array programming with NumPy"
+    assert "Array programming with NumPy" not in filtered_titles
+
+
 def test_fallback_provider_returns_mock_records_when_primary_fails():
     class FailingProvider:
         provider_name = "primary"

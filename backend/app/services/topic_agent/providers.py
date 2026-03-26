@@ -627,6 +627,51 @@ def _query_has_modern_ai_topic(query_text: str) -> bool:
     )
 
 
+def _is_modern_software_agent_query(query_text: str) -> bool:
+    return _query_has_modern_ai_topic(query_text) and _contains_any(
+        query_text,
+        {"software engineering", "developer tools", "developer workflows", "coding"},
+    )
+
+
+def _software_agent_target_terms() -> set[str]:
+    return {
+        "agent",
+        "agents",
+        "developer",
+        "coding",
+        "code generation",
+        "program repair",
+        "repository",
+        "repository-level",
+        "github issues",
+        "issue resolution",
+        "developer-ai collaboration",
+        "benchmark",
+        "evaluation",
+        "reproducibility",
+        "workflow",
+        "autonomous program improvement",
+        "devsecops",
+        "assistant",
+    }
+
+
+def _software_library_neighbor_terms() -> set[str]:
+    return {
+        "numpy",
+        "pandas",
+        "scipy",
+        "python library",
+        "library for python",
+        "array programming",
+        "matrix",
+        "matrices",
+        "numerical computing",
+        "numerical python",
+    }
+
+
 def _infer_evidence_roles(
     record: TopicAgentSourceRecord,
     request: TopicAgentExploreRequest,
@@ -702,6 +747,12 @@ def _infer_evidence_roles(
             },
         ):
             roles.add("off_target_neighbor")
+    if _is_modern_software_agent_query(query_text):
+        if _contains_any(haystack, _software_library_neighbor_terms()) and not _contains_any(
+            haystack,
+            _software_agent_target_terms(),
+        ):
+            roles.add("off_target_neighbor")
 
     if not roles:
         roles.add("domain_background")
@@ -747,22 +798,10 @@ def _topic_fit_score(
     if modern_topic_query and record.year < 2018 and "off_target_neighbor" in roles:
         score -= 8
 
-    if "llm agents" in query_text or (
-        ("agent" in query_text or "agents" in query_text)
-        and _contains_any(query_text, {"software engineering", "developer tools", "coding"})
-    ):
-        preferred_terms = {
+    if _is_modern_software_agent_query(query_text):
+        preferred_terms = _software_agent_target_terms() | {
             "software engineering",
-            "developer",
-            "coding",
-            "code generation",
-            "program repair",
-            "repository-level",
             "swe-bench",
-            "devsecops",
-            "evaluation",
-            "benchmark",
-            "reproducibility",
         }
         legacy_agent_terms = {
             "multi-agent systems",
@@ -771,8 +810,11 @@ def _topic_fit_score(
             "roles and xml",
             "engineering intelligent agents",
         }
+        weak_neighbor_terms = _software_library_neighbor_terms() | {"python", "programming"}
         if _contains_any(haystack, preferred_terms):
             score += 10
+        if _contains_any(haystack, weak_neighbor_terms) and not _contains_any(haystack, preferred_terms):
+            score -= 12
         if _contains_any(haystack, legacy_agent_terms):
             score -= 14
 
@@ -1144,7 +1186,8 @@ def _filter_ranked_records(
     non_overview_records = [record for record in filtered if not _is_generic_overview_record(record)]
     overview_backfill_records = [record for record in filtered if _is_generic_overview_record(record)]
 
-    if _query_has_modern_ai_topic(f"{request.interest} {request.problem_domain or ''}".lower()):
+    query_text = f"{request.interest} {request.problem_domain or ''}".lower()
+    if _query_has_modern_ai_topic(query_text):
         preferred_records = [
             record
             for record in non_overview_records
@@ -1155,7 +1198,10 @@ def _filter_ranked_records(
             for record in non_overview_records
             if "off_target_neighbor" in _infer_evidence_roles(record, request)
         ]
-        ranked_filtered = preferred_records + off_target_backfill_records + overview_backfill_records
+        if _is_modern_software_agent_query(query_text) and len(preferred_records) >= 2:
+            ranked_filtered = preferred_records + overview_backfill_records
+        else:
+            ranked_filtered = preferred_records + off_target_backfill_records + overview_backfill_records
     else:
         ranked_filtered = non_overview_records + overview_backfill_records
     return ranked_filtered[:max_results]
