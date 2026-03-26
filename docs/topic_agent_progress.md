@@ -337,7 +337,7 @@ In short:
 - the project is no longer only in the design phase
 - the backend Topic Agent slice is already capable of end-to-end exploratory runs
 - the remaining work is mainly productization, explicit confirmation flow, and richer trust surfaces
-- backend quality iteration is now intentionally paused so the next phase can focus on demo completion rather than continued retrieval tuning
+- backend quality iteration is currently deferred so the next phase can focus on consolidating the user-facing Topic Agent experience rather than continuing retrieval tuning
 
 #### Completion Against The Original Topic Agent Plan
 
@@ -355,15 +355,15 @@ Rough breakdown:
 - full conflict modeling across disagreeing sources: `not done`
 - polished end-user validation UX and explicit human-confirm checkpoints: `not done`
 
-#### Demo Readiness
+#### Demonstration Readiness
 
-- Stable manual demo scenarios are now documented in:
+- Stable manual validation scenarios are now documented in:
   - [topic_agent_demo_scenarios.md](/d:/project/research-topic-copilot/docs/topic_agent_demo_scenarios.md)
-- Reviewer-facing acceptance narration is now documented in:
+- Acceptance-oriented walkthrough guidance is now documented in:
   - [topic_agent_acceptance_walkthrough.md](/d:/project/research-topic-copilot/docs/topic_agent_acceptance_walkthrough.md)
-- Demo-completion execution guidance is now documented in:
+- Delivery-stage execution guidance is now documented in:
   - [topic_agent_demo_completion_plan.md](/d:/project/research-topic-copilot/docs/topic_agent_demo_completion_plan.md)
-- The current demo coverage includes:
+- The current validation coverage includes:
   - broad `medical reasoning`
   - radiology VQA
   - hallucination / grounding evaluation
@@ -380,7 +380,7 @@ Rough breakdown:
 - Topic Agent session history is now capped and trimmed on save.
 - Evaluation report history is now capped and pruned automatically.
 
-#### Good Query Classes
+#### Strong Query Classes
 
 - `trustworthy multimodal reasoning in medical imaging`
 - `document-centric clinical reasoning with multimodal medical reports`
@@ -398,7 +398,7 @@ Rough breakdown:
 - Broad topic synthesis is improved, but wording on very general topics still benefits from manual review because top evidence can legitimately mix benchmarks, clinical reasoning, and QA settings.
 - Candidate generation is still mostly organized around a fixed three-direction frame, so broad topic exploration can feel repetitive even when retrieval improves.
 - The current convergence layer still behaves more like template filling than open candidate generation, especially on non-medical modern topics such as coding agents.
-- Some non-medical repository / bug-fixing queries still retrieve partially relevant repository-mining or broad software-engineering records, so evidence bundles remain good enough for demo use but not fully publication-grade.
+- Some non-medical repository / bug-fixing queries still retrieve partially relevant repository-mining or broad software-engineering records, so evidence bundles remain serviceable for presentation and inspection, but not yet publication-grade.
 
 ### Generic Quality-Control Slice
 
@@ -504,7 +504,7 @@ This means the architecture has started to move away from pure template filling,
 
 ### Frontend Productization Slice
 
-The frontend Topic Agent page is now structurally functional and demo-usable, but further productization is still useful.
+The frontend Topic Agent page is now structurally functional and suitable for guided presentation, but further productization is still useful.
 
 Recently completed frontend improvements include:
 
@@ -520,9 +520,9 @@ The next likely frontend polish areas are:
 - softer presentation of internal identifiers and debugging-style fields
 - lighter-weight trust-panel summaries before detailed drill-down
 
-### Current Freeze Point
+### Current Delivery Focus
 
-The backend should now be treated as feature-frozen for the current demo pass.
+The backend should now be treated as functionally stable for the current delivery pass.
 
 That means:
 

@@ -6,7 +6,7 @@ Integrate the current Topic Agent backend workflow into a frontend demo surface 
 
 This step does not change backend semantics. It reorganizes the frontend so the existing Topic Agent capability can be demonstrated clearly.
 
-For the current phase, backend quality iteration is intentionally paused. The goal is to finish a convincing demo on top of the stabilized Topic Agent backend rather than continue retrieval or synthesis tuning.
+For the current phase, backend quality iteration is intentionally deferred. The goal is to complete a clear and credible Topic Agent presentation layer on top of the stabilized backend slice rather than continue retrieval or synthesis tuning.
 
 ## 2. Current Frontend Assessment
 
@@ -39,7 +39,7 @@ The frontend should consume the existing endpoints as they are:
 
 No backend API redesign is required for the first frontend integration pass.
 
-For the current demo push, treat the backend response contract as frozen unless a frontend-blocking bug is found.
+For the current delivery pass, treat the backend response contract as stable unless a frontend-blocking bug is found.
 
 ### 3.2 Move Topic-Agent Logic Out Of `App.tsx`
 
@@ -193,7 +193,7 @@ This order is better for demo flow because:
 - candidate topics are visible early
 - evidence and trust surfaces remain accessible without overwhelming the top of the page
 
-For the demo pass, the page should optimize for:
+For the current delivery pass, the page should optimize for:
 
 - one-screen comprehension of the recommendation
 - quick drilling into candidate evidence
@@ -263,9 +263,9 @@ Goal:
 - either wrap the new page temporarily
 - or stop using it once `App.tsx` points directly to the new feature page
 
-## 8. Demo Freeze Interpretation
+## 8. Current Delivery Interpretation
 
-At this point, the backend should be considered stable enough for demo use.
+At this point, the backend should be considered sufficiently stable for presentation and walkthrough use.
 
 This means the frontend should now assume:
 
@@ -280,7 +280,7 @@ The frontend should not wait for:
 - richer backend conflict modeling
 - another backend retrieval pass
 
-Those can remain post-demo items.
+Those can remain post-delivery items.
 
 ## 9. Suggested Ownership Of Existing Files
 
@@ -344,7 +344,7 @@ Lower priority for the first pass:
 
 ## 11. Immediate Next Step
 
-The next implementation step should be demo-focused rather than architecture-heavy:
+The next implementation step should be presentation-focused rather than architecture-heavy:
 
 1. verify `frontend/src/types.ts` against the now-stable backend payload
 2. make sure the Topic Agent tab is routed through a dedicated feature page rather than a monolithic console surface

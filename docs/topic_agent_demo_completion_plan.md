@@ -2,17 +2,17 @@
 
 ## Goal
 
-Finish a convincing Topic Agent demo on top of the now-stabilized backend slice.
+Complete a clear Topic Agent presentation on top of the now-stabilized backend slice.
 
 This plan assumes:
 
-- the backend contract is stable enough for demo use
+- the backend contract is stable enough for presentation use
 - backend retrieval and candidate-generation tuning is paused
 - the remaining work is mainly frontend composition, walkthrough quality, and demo readiness
 
-## Demo Completion Definition
+## Completion Definition
 
-The demo is complete when a reviewer can:
+This delivery slice is complete when a reviewer can:
 
 1. enter a topic request from the UI
 2. inspect the recommended direction and backup direction quickly
@@ -41,7 +41,7 @@ And on these response surfaces being present:
 - diagnostics
 - session history
 
-## Demo Priorities
+## Delivery Priorities
 
 ### P0
 
@@ -74,10 +74,10 @@ And on these response surfaces being present:
    - evidence
    - trust
 4. Make session history feel recent-run oriented instead of archival.
-5. Add a lightweight demo walkthrough cue in the UI copy where useful.
-6. Run one final manual pass on the chosen demo scenarios.
+5. Add a lightweight walkthrough cue in the UI copy where useful.
+6. Run one final manual pass on the chosen validation scenarios.
 
-## Recommended Demo Scenarios
+## Recommended Validation Scenarios
 
 Use one topic from each class:
 
@@ -101,7 +101,7 @@ Recommended non-medical scenario:
 }
 ```
 
-## Non-Goals For This Demo Pass
+## Non-Goals For This Delivery Pass
 
 Do not expand scope into:
 
@@ -110,7 +110,7 @@ Do not expand scope into:
 - full source-conflict modeling
 - large new backend schema changes
 
-If a backend issue is found, only fix it if it blocks the demo directly.
+If a backend issue is found, only fix it if it blocks the delivery directly.
 
 ## Exit Checklist
 

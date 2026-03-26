@@ -216,16 +216,16 @@
 
 ### Purpose
 
-This document provides a reviewer-friendly walkthrough for the current Topic Agent slice.
+This document provides a structured walkthrough for the current Topic Agent slice.
 
 It is designed for:
 
-- demo sessions
+- guided presentations
 - milestone reviews
 - acceptance discussions
 - final submission walkthroughs
 
-The goal is to show the current system as a focused, evidence-driven topic-selection copilot rather than a generic academic assistant.
+The goal is to present the current system as a focused, evidence-driven topic-selection copilot rather than a generic academic assistant.
 
 ### What The Reviewer Should Understand
 
@@ -431,7 +431,7 @@ This walkthrough is successful if the reviewer can see:
 - evidence-linked candidates
 - stable query-specific behavior on key demo classes
 - explicit confidence and diagnostics surfaces
-- at least one non-medical software-agent path is now demo-usable
+- at least one non-medical software-agent path is now suitable for structured presentation
 
 #### What Is Still Partial
 
