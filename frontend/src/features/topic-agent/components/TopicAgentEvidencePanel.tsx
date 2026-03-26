@@ -29,7 +29,7 @@ export function TopicAgentEvidencePanel({
 }: TopicAgentEvidencePanelProps) {
   return (
     <>
-      <article className="panel">
+      <article className="panel panel-span">
         <div className="panel-heading">
           <div>
             <h2>{copy.evidence}</h2>
@@ -80,7 +80,7 @@ export function TopicAgentEvidencePanel({
               ))}
             </div>
           </article>
-          <div className="trace-list">
+          <div className="trace-list evidence-record-grid">
             {filteredEvidenceRecords.map((record) => (
               <article key={record.source_id} className="trace-card">
                 <div className="trace-meta-row">
