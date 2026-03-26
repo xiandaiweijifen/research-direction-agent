@@ -85,7 +85,7 @@ export function TopicWorkspaceV2({
     topicResult?.evidence_records[0] ??
     null;
 
-  const copy: Record<string, string> =
+  const legacyCopy: Record<string, string> =
     locale === "zh"
       ? {
           workspace: "选题工作台",
@@ -192,6 +192,97 @@ export function TopicWorkspaceV2({
           topicCount: "topics",
         };
 
+  const copy: Record<string, string> =
+    locale === "zh"
+      ? {
+          workspace: "选题工作台",
+          title: "科研选题副驾",
+          banner: "从研究兴趣出发，查看问题 framing、证据、候选方向、比较结果与收敛建议。",
+          formTitle: "探索输入",
+          formCopy: "用一个小而清晰的结构化表单驱动 Topic Agent MVP 工作流。",
+          interest: "研究兴趣",
+          problemDomain: "问题域",
+          seedIdea: "初步想法",
+          timeBudget: "时间预算（月）",
+          resourceLevel: "资源水平",
+          preferredStyle: "偏好风格",
+          run: "运行 Topic Agent",
+          refine: "基于当前结果收敛",
+          running: "正在运行 Topic Agent...",
+          framing: "问题 Framing",
+          landscape: "研究全景",
+          evidence: "证据记录",
+          evidenceFocus: "焦点证据",
+          evidenceFilters: "证据过滤",
+          all: "全部",
+          sourceTier: "来源等级",
+          sourceType: "来源类型",
+          relevance: "相关性",
+          openSource: "打开来源",
+          candidates: "候选选题",
+          supportingEvidence: "支撑证据",
+          openQuestions: "待确认问题",
+          comparison: "比较与收敛",
+          candidateScores: "候选比较",
+          rationale: "推荐理由",
+          dimensions: "比较维度",
+          compare: "比较",
+          sessionDiff: "会话对比",
+          currentSession: "当前会话",
+          compareSession: "对比会话",
+          candidateDelta: "候选差异",
+          evidenceDelta: "证据差异",
+          noDiff: "选择一条不同的历史记录来比较收敛变化。",
+          trace: "执行轨迹",
+          confidence: "可信度摘要",
+          recentSessions: "最近探索记录",
+          load: "加载",
+          noResult: "还没有 Topic Agent 结果",
+          noResultCopy: "填写研究兴趣并运行后，这里会展示结构化的选题分析结果。",
+          recommendation: "推荐方向",
+          backup: "备选方向",
+          searchQuestions: "检索子问题",
+          manualChecks: "人工确认",
+          themes: "主题",
+          methods: "活跃方法",
+          gaps: "可能空白",
+          saturated: "相对饱和",
+          topicCount: "个候选",
+          sessions: "条记录",
+          candidateUnit: "个候选",
+          assessments: "个评估",
+          records: "条记录",
+          stages: "个阶段",
+          addedInCurrent: "当前新增",
+          onlyInCompared: "仅在对比会话中",
+          noNewCandidates: "没有新增候选",
+          noRemovedCandidates: "没有移除候选",
+          novelty: "新颖性",
+          feasibility: "可行性",
+          evidenceStrength: "证据强度",
+          dataAvailability: "数据可得性",
+          implementationCost: "实现成本",
+          risk: "风险",
+        }
+      : {
+          ...legacyCopy,
+          sessions: "sessions",
+          candidateUnit: "candidates",
+          assessments: "assessments",
+          records: "records",
+          stages: "stages",
+          addedInCurrent: "Added In Current",
+          onlyInCompared: "Only In Compared",
+          noNewCandidates: "No new candidates",
+          noRemovedCandidates: "No removed candidates",
+          novelty: "Novelty",
+          feasibility: "Feasibility",
+          evidenceStrength: "Evidence",
+          dataAvailability: "Data",
+          implementationCost: "Cost",
+          risk: "Risk",
+        };
+
   const resolveAssessmentTitle = (assessment: TopicAgentComparisonAssessment) =>
     candidateTitleById.get(assessment.candidate_id) ?? assessment.candidate_id;
 
@@ -291,7 +382,9 @@ export function TopicWorkspaceV2({
         <div className="panel-heading">
           <div>
             <h2>{copy.recentSessions}</h2>
-            <p className="panel-intro">{topicSessions.length} sessions</p>
+            <p className="panel-intro">
+              {topicSessions.length} {copy.sessions}
+            </p>
           </div>
         </div>
         {topicSessions.length === 0 ? (
@@ -336,7 +429,7 @@ export function TopicWorkspaceV2({
         )}
       </article>
 
-      <article className="panel preview-panel">
+      <article className="panel panel-span preview-panel">
         <div className="panel-heading">
           <div>
             <h2>{copy.framing}</h2>
@@ -424,9 +517,11 @@ export function TopicWorkspaceV2({
                   <span className="trace-label">{copy.candidateDelta}</span>
                   <div className="comparison-diff-grid">
                     <div className="comparison-diff-card">
-                      <span className="trace-label">Added In Current</span>
+                      <span className="trace-label">{copy.addedInCurrent}</span>
                       <div className="list-block">
-                        {(addedCandidateTitles.length > 0 ? addedCandidateTitles : ["No new candidates"]).map(
+                        {(addedCandidateTitles.length > 0
+                          ? addedCandidateTitles
+                          : [copy.noNewCandidates]).map(
                           (title) => (
                             <p key={title}>{title}</p>
                           ),
@@ -434,9 +529,11 @@ export function TopicWorkspaceV2({
                       </div>
                     </div>
                     <div className="comparison-diff-card">
-                      <span className="trace-label">Only In Compared</span>
+                      <span className="trace-label">{copy.onlyInCompared}</span>
                       <div className="list-block">
-                        {(removedCandidateTitles.length > 0 ? removedCandidateTitles : ["No removed candidates"]).map(
+                        {(removedCandidateTitles.length > 0
+                          ? removedCandidateTitles
+                          : [copy.noRemovedCandidates]).map(
                           (title) => (
                             <p key={title}>{title}</p>
                           ),
@@ -466,7 +563,8 @@ export function TopicWorkspaceV2({
               <div>
                 <h2>{copy.landscape}</h2>
                 <p className="panel-intro">
-                  {topicResult.landscape_summary.themes.length} {copy.themes.toLowerCase()}
+                  {topicResult.landscape_summary.themes.length}{" "}
+                  {locale === "zh" ? copy.themes : copy.themes.toLowerCase()}
                 </p>
               </div>
             </div>
@@ -513,7 +611,8 @@ export function TopicWorkspaceV2({
               <div>
                 <h2>{copy.evidence}</h2>
                 <p className="panel-intro">
-                  {filteredEvidenceRecords.length} / {topicResult.evidence_records.length} records
+                  {filteredEvidenceRecords.length} / {topicResult.evidence_records.length}{" "}
+                  {copy.records}
                 </p>
               </div>
             </div>
@@ -596,7 +695,7 @@ export function TopicWorkspaceV2({
             </div>
           </article>
 
-          <article className="panel">
+          <article className="panel panel-span">
             <div className="panel-heading">
               <div>
                 <h2>{copy.evidenceFocus}</h2>
@@ -644,7 +743,9 @@ export function TopicWorkspaceV2({
             <div className="panel-heading">
               <div>
                 <h2>{copy.candidates}</h2>
-                <p className="panel-intro">{topicResult.candidate_topics.length} candidates</p>
+                <p className="panel-intro">
+                  {topicResult.candidate_topics.length} {copy.candidateUnit}
+                </p>
               </div>
             </div>
             <div className="trace-list candidate-grid">
@@ -736,7 +837,7 @@ export function TopicWorkspaceV2({
               <div>
                 <h2>{copy.candidateScores}</h2>
                 <p className="panel-intro">
-                  {topicResult.comparison_result.candidate_assessments.length} assessments
+                  {topicResult.comparison_result.candidate_assessments.length} {copy.assessments}
                 </p>
               </div>
             </div>
@@ -749,27 +850,27 @@ export function TopicWorkspaceV2({
                   </div>
                   <div className="comparison-metric-grid">
                     <div className="comparison-metric">
-                      <span className="trace-label">Novelty</span>
+                      <span className="trace-label">{copy.novelty}</span>
                       <strong>{assessment.novelty}</strong>
                     </div>
                     <div className="comparison-metric">
-                      <span className="trace-label">Feasibility</span>
+                      <span className="trace-label">{copy.feasibility}</span>
                       <strong>{assessment.feasibility}</strong>
                     </div>
                     <div className="comparison-metric">
-                      <span className="trace-label">Evidence</span>
+                      <span className="trace-label">{copy.evidenceStrength}</span>
                       <strong>{assessment.evidence_strength}</strong>
                     </div>
                     <div className="comparison-metric">
-                      <span className="trace-label">Data</span>
+                      <span className="trace-label">{copy.dataAvailability}</span>
                       <strong>{assessment.data_availability}</strong>
                     </div>
                     <div className="comparison-metric">
-                      <span className="trace-label">Cost</span>
+                      <span className="trace-label">{copy.implementationCost}</span>
                       <strong>{assessment.implementation_cost}</strong>
                     </div>
                     <div className="comparison-metric">
-                      <span className="trace-label">Risk</span>
+                      <span className="trace-label">{copy.risk}</span>
                       <strong>{assessment.risk}</strong>
                     </div>
                   </div>
@@ -782,7 +883,9 @@ export function TopicWorkspaceV2({
             <div className="panel-heading">
               <div>
                 <h2>{copy.trace}</h2>
-                <p className="panel-intro">{topicResult.trace.length} stages</p>
+                <p className="panel-intro">
+                  {topicResult.trace.length} {copy.stages}
+                </p>
               </div>
             </div>
             <div className="trace-list">

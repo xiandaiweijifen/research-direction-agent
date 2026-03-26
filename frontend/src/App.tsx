@@ -38,7 +38,7 @@ import {
 import { DocumentsView } from "./components/DocumentsView";
 import { EvaluationView } from "./components/EvaluationView";
 import { QueryView } from "./components/QueryView";
-import { getViews, presetQuestions } from "./constants";
+import { presetQuestions } from "./constants";
 import { TopicAgentDemoPage } from "./features/topic-agent/TopicAgentDemoPage";
 import type {
   AgentWorkflowResponse,
@@ -120,7 +120,20 @@ function App() {
       "What is the main topic of this document?",
       "What are the most important system behaviors described here?",
     ];
-  const views = getViews(locale);
+  const views =
+    locale === "zh"
+      ? [
+          { key: "documents" as const, label: "文档", kicker: "摄取产物" },
+          { key: "query" as const, label: "查询台", kicker: "检索与回答追踪" },
+          { key: "topic" as const, label: "选题 Agent", kicker: "科研选题副驾" },
+          { key: "evaluation" as const, label: "评测", kicker: "检索基准集" },
+        ]
+      : [
+          { key: "documents" as const, label: "Documents", kicker: "Ingestion artifacts" },
+          { key: "query" as const, label: "Query Lab", kicker: "Retrieval and answer tracing" },
+          { key: "topic" as const, label: "Topic Agent", kicker: "Research topic copilot" },
+          { key: "evaluation" as const, label: "Evaluation", kicker: "Retrieval benchmark sets" },
+        ];
   const appCopy = {
     en: {
       eyebrow: "Enterprise RAG Agent Console",
