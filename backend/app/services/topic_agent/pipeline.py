@@ -610,8 +610,38 @@ def _rank_supporting_source_ids_for_candidate(
                 overlap += 1
             if any(term in text for term in {"reliable", "reliability", "metacognition", "verification", "evaluation"}):
                 overlap += 2
-            if query_flags["broad_medical_reasoning"] and "document question answering" in text:
-                overlap -= 2
+            if any(
+                term in text
+                for term in {
+                    "benchmarking expert-level medical reasoning",
+                    "metacognition",
+                    "confidence",
+                    "calibration",
+                    "medical challenge problems",
+                    "clinical decision support",
+                }
+            ):
+                overlap += 2
+            if query_flags["broad_medical_reasoning"]:
+                if any(
+                    term in text
+                    for term in {
+                        "document question answering",
+                        "document qa",
+                        "medical report",
+                        "report images",
+                        "report layout",
+                    }
+                ):
+                    overlap -= 4
+                if any(
+                    term in text
+                    for term in {
+                        "benchmark for medical specialization",
+                        "real-world chinese medical report",
+                    }
+                ):
+                    overlap -= 2
 
         fallback_bonus = 1 if record.source_id in fallback_ids else 0
         tier_bonus = 1 if record.source_tier == "A" else 0

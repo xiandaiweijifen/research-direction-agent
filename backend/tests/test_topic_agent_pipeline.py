@@ -670,6 +670,10 @@ def test_topic_agent_pipeline_keeps_broad_medical_reasoning_queries_from_overfit
     assert "openalex_d" in response.evidence_presentation.tentative_inferences[0].supporting_source_ids
     assert "openalex_a" not in response.candidate_topics[2].supporting_source_ids
     assert "openalex_c" in response.candidate_topics[2].supporting_source_ids
+    assert (
+        "openalex_b" in response.candidate_topics[2].supporting_source_ids
+        or "openalex_c" in response.candidate_topics[2].supporting_source_ids
+    )
 
 
 def test_topic_agent_pipeline_builds_human_confirmations_for_missing_constraints():
