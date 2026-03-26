@@ -386,6 +386,26 @@ def _openalex_query_aliases(request: TopicAgentExploreRequest) -> list[str]:
                 "multimodal medical grounding evaluation",
             ]
         )
+    if "medical reasoning" in topic_text and not any(
+        term in topic_text
+        for term in {
+            "radiology",
+            "visual question answering",
+            "vqa",
+            "multimodal",
+            "document question answering",
+            "hallucination",
+            "grounding",
+        }
+    ):
+        aliases.extend(
+            [
+                "medical reasoning benchmark",
+                "medical reasoning large language models",
+                "clinical reasoning benchmark medical ai",
+                "medical question answering reasoning benchmark",
+            ]
+        )
 
     deduped_aliases: list[str] = []
     for alias in aliases:
@@ -571,6 +591,22 @@ def _task_specificity_score(
     title_lower = record.title.lower()
     haystack = f"{title_lower} {record.summary.lower()}"
     core_terms = set(_core_query_terms(request))
+    query_text = f"{request.interest} {request.problem_domain or ''}".lower()
+    generic_medical_reasoning_query = (
+        "medical reasoning" in query_text
+        and not _contains_any(
+            query_text,
+            {
+                "multimodal",
+                "radiology",
+                "vqa",
+                "visual question answering",
+                "hallucination",
+                "grounding",
+                "document question answering",
+            },
+        )
+    )
     score = 0
 
     benchmark_terms = {
@@ -645,6 +681,37 @@ def _task_specificity_score(
         score -= 4
     if "large language models" in title_lower and not _contains_any(title_lower, {"question answering", "vqa", "reasoning", "radiology"}):
         score -= 3
+
+    if generic_medical_reasoning_query:
+        modern_ai_terms = {
+            "benchmark",
+            "dataset",
+            "large language model",
+            "large language models",
+            "llm",
+            "language model",
+            "question answering",
+            "medqa",
+            "clinical reasoning",
+            "verification",
+            "retrieval",
+            "reinforcement learning",
+            "knowledge graph",
+            "medical ai",
+        }
+        legacy_reasoning_terms = {
+            "case-based reasoning",
+            "sherlock holmes",
+            "bayesians",
+            "bayesian statistics",
+            "medical acquisition tool",
+        }
+        if _contains_any(haystack, modern_ai_terms):
+            score += 10
+        if record.year < 2015 and not _contains_any(haystack, modern_ai_terms):
+            score -= 10
+        if _contains_any(haystack, legacy_reasoning_terms):
+            score -= 12
     return score
 
 

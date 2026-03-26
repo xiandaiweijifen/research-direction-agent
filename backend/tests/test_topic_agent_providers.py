@@ -460,6 +460,21 @@ def test_openalex_queries_expand_radiology_vqa_aliases():
     assert "radiology question answering" in joined_queries
 
 
+def test_openalex_queries_expand_generic_medical_reasoning_aliases():
+    request = TopicAgentExploreRequest(
+        interest="medical reasoning",
+        problem_domain="medical AI",
+        constraints=TopicAgentConstraintSet(preferred_style="applied"),
+    )
+
+    queries = _build_openalex_queries(request)
+    joined_queries = " || ".join(queries).lower()
+
+    assert "medical reasoning benchmark" in joined_queries
+    assert "medical reasoning large language models" in joined_queries
+    assert "clinical reasoning benchmark medical ai" in joined_queries
+
+
 def test_openalex_provider_ignores_legacy_unversioned_cache_key(workspace_tmp_path, monkeypatch):
     request = TopicAgentExploreRequest(
         interest="trustworthy multimodal reasoning in medical imaging",
@@ -950,6 +965,92 @@ def test_openalex_overview_records_are_backfill_only_when_task_specific_records_
         "RJUA-MedDQA: A Multimodal Benchmark for Medical Document Question Answering and Clinical Reasoning",
         "Medical Visual Question Answering via Conditional Reasoning",
     ]
+
+
+def test_openalex_reranking_prefers_modern_medical_ai_reasoning_over_legacy_reasoning_records(
+    workspace_tmp_path,
+    monkeypatch,
+):
+    request = TopicAgentExploreRequest(
+        interest="medical reasoning",
+        problem_domain="medical AI",
+        constraints=TopicAgentConstraintSet(preferred_style="applied"),
+    )
+    cache_path = workspace_tmp_path / "topic_agent_openalex_cache.json"
+    provider = OpenAlexEvidenceProvider(cache_path=cache_path, cache_ttl_seconds=3600, max_results=5)
+
+    class FakeResponse:
+        def __init__(self, payload):
+            self._payload = payload
+
+        def json(self):
+            return self._payload
+
+        def raise_for_status(self):
+            return None
+
+    payload = {
+        "results": [
+            {
+                "id": "https://openalex.org/W2023211236",
+                "display_name": "Case-based reasoning algorithms applied in a medical acquisition tool",
+                "publication_year": 1993,
+                "abstract_inverted_index": {
+                    "case-based": [0],
+                    "reasoning": [1],
+                    "medical": [2],
+                    "acquisition": [3],
+                    "tool": [4],
+                },
+                "authorships": [{"author": {"display_name": "Legacy Author"}}],
+                "primary_location": {"landing_page_url": "https://example.org/legacy"},
+            },
+            {
+                "id": "https://openalex.org/W4406152279",
+                "display_name": "Toward expert-level medical question answering with large language models",
+                "publication_year": 2025,
+                "abstract_inverted_index": {
+                    "medical": [0],
+                    "question": [1],
+                    "answering": [2],
+                    "large": [3],
+                    "language": [4],
+                    "models": [5],
+                    "clinical": [6],
+                    "reasoning": [7],
+                },
+                "authorships": [{"author": {"display_name": "Modern Author"}}],
+                "primary_location": {"landing_page_url": "https://example.org/modern-qa"},
+            },
+            {
+                "id": "https://openalex.org/W4410296683",
+                "display_name": "Scaling Medical Reasoning Verification via Tool-Integrated Reinforcement Learning",
+                "publication_year": 2026,
+                "abstract_inverted_index": {
+                    "medical": [0],
+                    "reasoning": [1],
+                    "verification": [2],
+                    "reinforcement": [3],
+                    "learning": [4],
+                    "benchmark": [5],
+                },
+                "authorships": [{"author": {"display_name": "Modern Author B"}}],
+                "primary_location": {"landing_page_url": "https://example.org/modern-verification"},
+            },
+        ]
+    }
+
+    monkeypatch.setattr(
+        "app.services.topic_agent.providers.httpx.get",
+        lambda *args, **kwargs: FakeResponse(payload),
+    )
+
+    result = provider.retrieve(request)
+    ranked_titles = [record.title for record in result.records]
+
+    assert ranked_titles[0] == "Scaling Medical Reasoning Verification via Tool-Integrated Reinforcement Learning"
+    assert ranked_titles[1] == "Toward expert-level medical question answering with large language models"
+    assert ranked_titles[-1] == "Case-based reasoning algorithms applied in a medical acquisition tool"
 
 
 def test_fallback_provider_returns_mock_records_when_primary_fails():

@@ -47,6 +47,39 @@ This file tracks the recent development progress for the backend Topic Agent ret
   - hallucination / grounding queries stay centered on unsupported answers, faithfulness, and audit workflows
 - Added candidate wording polish and open-question deduplication.
 
+### Confirmation And Clarification Improvements
+
+- Added `human_confirmations` to Topic Agent responses so missing constraints and final recommendation checks are explicit in the API output.
+- Added structured `clarification_suggestions` with:
+  - `field_key`
+  - `prompt`
+  - `reason`
+  - `suggested_values`
+  - `refine_patch`
+- This now supports a lightweight backend clarification loop:
+  - `explore`
+  - inspect missing clarifications and suggestion patches
+  - `refine`
+  - confirm that clarification prompts disappear once constraints are filled
+
+### Session Compatibility Improvements
+
+- Backfilled legacy session payloads on load when older records are missing:
+  - `evidence_diagnostics`
+  - `human_confirmations`
+  - `clarification_suggestions`
+- This removed schema-read failures on historical session data.
+
+### Broad Query Retrieval Improvements
+
+- Added generic `medical reasoning` query expansion aimed at modern medical AI evidence:
+  - `medical reasoning benchmark`
+  - `medical reasoning large language models`
+  - `clinical reasoning benchmark medical ai`
+  - `medical question answering reasoning benchmark`
+- Added ranking penalties for legacy, non-modern medical reasoning records when the query is broad and modern-AI-oriented.
+- Added ranking boosts for benchmark / verification / question answering / LLM style evidence under broad `medical reasoning` queries.
+
 ## Current Status
 
 ### Stage Assessment
@@ -102,6 +135,7 @@ Rough breakdown:
 - The current slice does not model explicit source disagreement or controversy beyond basic confidence summaries.
 - Human confirmation is represented in the design and response schema, but the current product slice still does not enforce an explicit confirmation workflow in the UI.
 - The current implementation is a focused workflow slice, not a full standalone Topic Agent platform.
+- Broad topic queries are better than before, but still need occasional manual review because generic medical terms can retrieve historically relevant but strategically weak literature.
 
 ## Manual Validation Notes
 
@@ -122,4 +156,4 @@ backend\.venv\Scripts\python.exe -m pytest backend\tests\test_topic_agent_api.py
 
 Latest result:
 
-- `38 passed`
+- `42 passed`

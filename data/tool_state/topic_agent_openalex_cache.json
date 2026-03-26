@@ -398,5 +398,188 @@
         "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
       }
     ]
+  },
+  "v2::medical reasoning::max=5": {
+    "saved_at": "2026-03-26T23:29:58.994179+08:00",
+    "records": [
+      {
+        "source_id": "openalex_w4402670791",
+        "title": "MedAgents: Large Language Models as Collaborators for Zero-shot Medical Reasoning",
+        "source_type": "paper",
+        "source_tier": "B",
+        "year": 2024,
+        "authors_or_publisher": "Xiangru Tang, Anni Zou, Zhuosheng Zhang, Ziming Li",
+        "identifier": "https://openalex.org/W4402670791",
+        "url": "https://doi.org/10.18653/v1/2024.findings-acl.33",
+        "summary": "Large language models (LLMs), despite their remarkable progress across various general domains, encounter significant barriers in medicine and healthcare.This field faces unique challenges such as domain-specific terminologies and reasoning over specialized knowledge.To address these issues, we propose MEDAGENTS, a novel multi-disciplinary collaboration framework for the medical domain.MedAgents leverages LLM-based agents in a role-playing setting that participate in a collaborative multi-round discussion, thereby enhancing LLM proficiency and reasoning capabilities.This training-free framework encompasses five critical steps: gathering domain experts, proposing individual analyses, summarising these analyses into a report, iterating over discussions until a consensus is reached, and ultimately making a decision.Our work focuses on the zeroshot setting, which is applicable in realworld scenarios.Experimental results on nine datasets (MedQA, MedMCQA, PubMedQA, and six subtasks from MMLU) establish that our proposed MEDAGENTS framework excels at mining and harnessing the medical expertise within LLMs, as well as extending its reasoning abilities.Our code can be found at https: //github.com/gersteinlab/MedAgents. Expert Gathering Analysis Proposition Report Summarization Collaborative Consultation Decision Making A 66-year-old male with a history of heart attack and recurrent stomach ulcers is experiencing persistent cough and chest pain, and recent CT scans indicate a possible lung tumor.Designing a treatment plan that minimizes risk and maximizes outcomes is the current concern due to his deteriorating health and medical history....... ...... .",
+        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
+      },
+      {
+        "source_id": "openalex_w1648486913",
+        "title": "Medical Reasoning and Thinking",
+        "source_type": "paper",
+        "source_tier": "B",
+        "year": 2012,
+        "authors_or_publisher": "Vimla L. Patel, José F. Arocha, Jiajie Zhang",
+        "identifier": "https://openalex.org/W1648486913",
+        "url": "https://doi.org/10.1093/oxfordhb/9780199734689.013.0037",
+        "summary": "Abstract The practice of medicine requires art as well as science. The latter argues for a deeper understanding of the mechanisms underlying disease processes and use of scientific evidence in making patient care decisions. The study of medical reasoning and thinking underlies much of medical cognition and has been the focus of research in cognitive science and artificial intelligence in medicine. Expertise and medical knowledge organization, the directionality of reasoning, and the nature of medical errors are intricately tied to thinking and decision-making processes in medicine. With the recent advancement of technology in medicine, technology-mediated reasoning and reasoning support systems will be a focus for future research. This chapter discusses these issues within historical and current research perspectives.",
+        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
+      },
+      {
+        "source_id": "openalex_w2073573609",
+        "title": "Knowledge based solution strategies in medical reasoning",
+        "source_type": "paper",
+        "source_tier": "B",
+        "year": 1986,
+        "authors_or_publisher": "Vimla L. Patel, Guy J. Groen",
+        "identifier": "https://openalex.org/W2073573609",
+        "url": "https://doi.org/10.1016/s0364-0213(86)80010-6",
+        "summary": "The techniques of propositionol analysis are used to examine the protocols of seven cardiologists in a task involving the diagnosis of a case of acute bacterial endocarditis and an explanation of its underlying pathophysiology. It is shown that the explanations of physicians making an accurate diagnosis can be accounted for in terms of a model consisting of pure forward reasoning through a network of causal rules, actuated by relevant propositions embedded in the stimulus text. These rules appear to derive from the physician's underlying knowledge base rather than any information in the text itself. In contrast, subjects with inacurate diagnoses tend to make use of a mixture of forward and backward reasoning, beginning with a high level hypothesis and proceeding in a top-down fashion to the propositions embedded in stimulus text, or to the generation of irrelevant rules.",
+        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
+      },
+      {
+        "source_id": "openalex_w621182473",
+        "title": "Comparative Approaches to Medical Reasoning",
+        "source_type": "paper",
+        "source_tier": "B",
+        "year": 1995,
+        "authors_or_publisher": "Madeline Cohen, D.L. Hudson",
+        "identifier": "https://openalex.org/W621182473",
+        "url": "https://doi.org/10.1142/2654",
+        "summary": "Part 1 Knowledge-based systems: CLINAID - medical knowledge-based system based on fuzzy relational structures, L.J. Kohout et al diagnostic aspects of diastolic dysfunction - representation in D-Log language, A. Muscari. Part 2 Neural network models: improved noninvasive diagnosis of coronary artery disease using neural networks, M. Akay et al fuzzy neural network-based adaptive reasoning with experiential knowledge, H. Ding and M.M. Gupta estimation of long-term mortality of myocardial infarction using a neural network based on the Alopex algorithm, W.J. Kostis et al neural network-based approach to outcome prognosis for patients with diastolic dysfunction, R.M.E. Sabbatini et al. Part 3 Statistical approaches: implementation of statistical pattern recognition for congestive heart failure, E.A. Patrick the application of Bayesian inference with fuzzy evidences in medical reasoning, C. Romer and A. Kandel. Part 4 Modelling techniques: 24 hour analysis of heart rate fluctuations before and after carotid surgery using wavelet transform, M. Akay et al reasoning for introducing a new parameter for assessment of myocardial status - the specific potential of myocardium, L. Bacharova. Part 5 Hybrid systems: correct diagnosis of chest pain by an integrated expert system, D. Assanelli et al phonocardiogram analysis of congenital and acquired heart diseases using artificial neural networks, D. Barschdorff et al hybrid system for diagnosis and treatment of heart disease, D.L. Hudson et al.",
+        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
+      }
+    ]
+  },
+  "v2::medical reasoning applied::max=5": {
+    "saved_at": "2026-03-26T23:33:32.699637+08:00",
+    "records": [
+      {
+        "source_id": "openalex_w2023211236",
+        "title": "Case-based reasoning algorithms applied in a medical acquisition tool",
+        "source_type": "paper",
+        "source_tier": "B",
+        "year": 1993,
+        "authors_or_publisher": "Salwa El-Gamal, M. Rafeh, Ibrahim Eissa",
+        "identifier": "https://openalex.org/W2023211236",
+        "url": "https://doi.org/10.3109/14639239309034477",
+        "summary": "The knowledge of clinical medicine can, efficiently and effectively, be elicited and encoded automatically as cases. The developed knowledge base often contains some redundancy. The cost can be tolerated as it affects neither the performance of the system nor the integrity of the knowledge. The advantages are simplicity in development and reliability in performance.",
+        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
+      },
+      {
+        "source_id": "openalex_w1741459804",
+        "title": "Sherlock Holmes' methods of deductive reasoning applied to medical diagnostics.",
+        "source_type": "paper",
+        "source_tier": "B",
+        "year": 1985,
+        "authors_or_publisher": "Larry E. Miller",
+        "identifier": "https://openalex.org/W1741459804",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/3887762",
+        "summary": "Having patterned the character of Sherlock Holmes after one of his professors, Sir Arthur Conan Doyle, himself a physician, incorporated many of the didactic qualities of the 19th century medical diagnostician into the character of Holmes. In this paper I explore Holmes's techniques of deductive reasoning and their basis in 19th and 20th century medical diagnostics.",
+        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
+      },
+      {
+        "source_id": "openalex_w2036242406",
+        "title": "Medical applications in case-based reasoning",
+        "source_type": "paper",
+        "source_tier": "B",
+        "year": 2005,
+        "authors_or_publisher": "A.R. Holt, Isabelle Bichindaritz, Rainer Schmidt, Petra Perner",
+        "identifier": "https://openalex.org/W2036242406",
+        "url": "https://doi.org/10.1017/s0269888906000622",
+        "summary": "This commentary summarizes case-based reasoning research applied in the medical domain. In this commentary the term ‘medical’ is used in an all-encompassing manner. It comprises all aspects of health, for example, from diagnosis to nutrition planning. This article provides references to researchers in the field, systems, workshops, and landmark publications.",
+        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
+      },
+      {
+        "source_id": "openalex_w2910890213",
+        "title": "Explainable artificial intelligence for breast cancer: A visual case-based reasoning approach",
+        "source_type": "paper",
+        "source_tier": "B",
+        "year": 2019,
+        "authors_or_publisher": "Jean-Baptiste Lamy, Boomadevi Sekar, Gilles Guézennec, Jacques Bouaud",
+        "identifier": "https://openalex.org/W2910890213",
+        "url": "https://doi.org/10.1016/j.artmed.2019.01.001",
+        "summary": "Case-Based Reasoning (CBR) is a form of analogical reasoning in which the solution for a (new) query case is determined using a database of previous known cases with their solutions. Cases similar to the query are retrieved from the database, and then their solutions are adapted to the query. In medicine, a case usually corresponds to a patient and the problem consists of classifying the patient in a class of diagnostic or therapy. Compared to \"black box\" algorithms such as deep learning, the responses of CBR systems can be justified easily using the similar cases as examples. However, this possibility is often under-exploited and the explanations provided by most CBR systems are limited to the display of the similar cases. In this paper, we propose a CBR method that can be both executed automatically as an algorithm and presented visually in a user interface for providing visual explanations or for visual reasoning. After retrieving similar cases, a visual interface displays quantitative and qualitative similarities between the query and the similar cases, so as one can easily classify the query through visual reasoning, in a fully explainable manner. It combines a quantitative approach (visualized by a scatter plot based on Multidimensional Scaling in polar coordinates, preserving distances involving the query) and a qualitative approach (set visualization using rainbow boxes). We applied this method to breast cancer management. We showed on three public datasets that our qualitative method has a classification accuracy comparable to k-Nearest Neighbors algorithms, but is better explainable. We also tested the proposed interface during a small user study. Finally, we apply the proposed approach to a real dataset in breast cancer. Medical experts found the visual approach interesting as it explains why cases are similar through the visualization of shared patient characteristics.",
+        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
+      },
+      {
+        "source_id": "openalex_w2017987083",
+        "title": "Why clinicians are natural bayesians",
+        "source_type": "paper",
+        "source_tier": "B",
+        "year": 2005,
+        "authors_or_publisher": "Christopher Gill, Lora Sabin, Christopher H. Schmid",
+        "identifier": "https://openalex.org/W2017987083",
+        "url": "https://doi.org/10.1136/bmj.330.7499.1080",
+        "summary": "Thought you didn't understand bayesian statistics? Read on and find out why doctors are expert in applying the theory, whether they realise it or not Two main approaches are used to draw statistical inferences: frequentist and bayesian. Both are valid, although they differ methodologically and perhaps philosophically. However, the frequentist approach dominates the medical literature and is increasingly applied in clinical settings. This is ironic given that clinicians apply bayesian reasoning in framing and revising differential diagnoses without necessarily undergoing, or requiring, any formal training in bayesian statistics. To justify this assertion, this article will explain how bayesian reasoning is a natural part of clinical decision making, particularly as it pertains to the clinical history and physical examination, and how bayesian approaches are a powerful and intuitive approach to the differential diagnosis.",
+        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
+      }
+    ]
+  },
+  "v2::medical reasoning applied||medical reasoning benchmark||medical reasoning large language models||clinical reasoning benchmark medical ai||medical question answering reasoning benchmark::max=5": {
+    "saved_at": "2026-03-26T23:41:59.847656+08:00",
+    "records": [
+      {
+        "source_id": "openalex_w4401863364",
+        "title": "RJUA-MedDQA: A Multimodal Benchmark for Medical Document Question Answering and Clinical Reasoning",
+        "source_type": "benchmark",
+        "source_tier": "A",
+        "year": 2024,
+        "authors_or_publisher": "Congyun Jin, Ming Zhang, Weixiao Ma, Yujiao Li",
+        "identifier": "https://openalex.org/W4401863364",
+        "url": "https://doi.org/10.1145/3637528.3671644",
+        "summary": "Recent advancements in Large Language Models (LLMs) and Large Multi-modal Models (LMMs) have shown potential in various medical applications, such as Intelligent Medical Diagnosis. Although impressive results have been achieved, we find that existing benchmarks do not reflect the complexity of real medical reports and specialized in-depth reasoning capabilities. In this work, we establish a comprehensive benchmark in the field of medical specialization and introduced RJUA-MedDQA, which contains 2000 real-world Chinese medical report images poses several challenges: comprehensively interpreting imgage content across a wide variety of challenging layouts, possessing the numerical reasoning ability to identify abnormal indicators and demonstrating robust clinical reasoning ability to provide the statement of disease diagnosis, status and advice based on a collection of medical contexts. We carefully design the data generation pipeline and proposed the Efficient Structural Restoration Annotation (ESRA) Method, aimed at restoring textual and tabular content in medical report images. This method substantially enhances annotation efficiency, doubling the productivity of each annotator, and yields a 26.8% improvement in accuracy. We conduct extensive evaluations, including few-shot assessments of 5 LMMs which are capable of solving Chinese medical QA tasks. To further investigate the limitations and potential of current LMMs, we conduct comparative experiments on a set of strong LLMs by using image-text generated by ESRA method. We report the performance of baselines and offer several observations: (1) The overall performance of existing LMMs is still limited; however LMMs more robust to low-quality and diverse-structured images compared to LLMs. (3) Reasoning across context and image content present significant challenges. We hope this benchmark helps the community make progress on these challenging tasks in multi-modal medical document understanding and facilitate its application in healthcare. Our dataset will be publicly available for noncommercial use at https://github.com/Alipay-Med/medDQA_benchmark.git",
+        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
+      },
+      {
+        "source_id": "openalex_w4407012395",
+        "title": "MedXpertQA: Benchmarking Expert-Level Medical Reasoning and Understanding",
+        "source_type": "benchmark",
+        "source_tier": "A",
+        "year": 2025,
+        "authors_or_publisher": "Yuxin Zuo, Shang Qu, Yifei Li, Zhang-Ren Chen",
+        "identifier": "https://openalex.org/W4407012395",
+        "url": "https://arxiv.org/abs/2501.18362",
+        "summary": "We introduce MedXpertQA, a highly challenging and comprehensive benchmark to evaluate expert-level medical knowledge and advanced reasoning. MedXpertQA includes 4,460 questions spanning 17 specialties and 11 body systems. It includes two subsets, Text for text evaluation and MM for multimodal evaluation. Notably, MM introduces expert-level exam questions with diverse images and rich clinical information, including patient records and examination results, setting it apart from traditional medical multimodal benchmarks with simple QA pairs generated from image captions. MedXpertQA applies rigorous filtering and augmentation to address the insufficient difficulty of existing benchmarks like MedQA, and incorporates specialty board questions to improve clinical relevance and comprehensiveness. We perform data synthesis to mitigate data leakage risk and conduct multiple rounds of expert reviews to ensure accuracy and reliability. We evaluate 18 leading models on \\benchmark. Moreover, medicine is deeply connected to real-world decision-making, providing a rich and representative setting for assessing reasoning abilities beyond mathematics and code. To this end, we develop a reasoning-oriented subset to facilitate the assessment of o1-like models. Code and data are available at: https://github.com/TsinghuaC3I/MedXpertQA",
+        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
+      },
+      {
+        "source_id": "openalex_w4406371336",
+        "title": "Large Language Models lack essential metacognition for reliable medical reasoning",
+        "source_type": "benchmark",
+        "source_tier": "A",
+        "year": 2025,
+        "authors_or_publisher": "Maxime Griot, Coralie Hemptinne, Jean Vanderdonckt, Demet Yüksel",
+        "identifier": "https://openalex.org/W4406371336",
+        "url": "https://doi.org/10.1038/s41467-024-55628-6",
+        "summary": "Large Language Models have demonstrated expert-level accuracy on medical board examinations, suggesting potential for clinical decision support systems. However, their metacognitive abilities, crucial for medical decision-making, remain largely unexplored. To address this gap, we developed MetaMedQA, a benchmark incorporating confidence scores and metacognitive tasks into multiple-choice medical questions. We evaluated twelve models on dimensions including confidence-based accuracy, missing answer recall, and unknown recall. Despite high accuracy on multiple-choice questions, our study revealed significant metacognitive deficiencies across all tested models. Models consistently failed to recognize their knowledge limitations and provided confident answers even when correct options were absent. In this work, we show that current models exhibit a critical disconnect between perceived and actual capabilities in medical reasoning, posing significant risks in clinical settings. Our findings emphasize the need for more robust evaluation frameworks that incorporate metacognitive abilities, essential for developing reliable Large Language Model enhanced clinical decision support systems.",
+        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
+      },
+      {
+        "source_id": "openalex_w4360891289",
+        "title": "Capabilities of GPT-4 on Medical Challenge Problems",
+        "source_type": "benchmark",
+        "source_tier": "A",
+        "year": 2023,
+        "authors_or_publisher": "Harsha Nori, Nicholas King, Scott Mayer McKinney, Dean Carignan",
+        "identifier": "https://openalex.org/W4360891289",
+        "url": "https://arxiv.org/abs/2303.13375",
+        "summary": "Large language models (LLMs) have demonstrated remarkable capabilities in natural language understanding and generation across various domains, including medicine. We present a comprehensive evaluation of GPT-4, a state-of-the-art LLM, on medical competency examinations and benchmark datasets. GPT-4 is a general-purpose model that is not specialized for medical problems through training or engineered to solve clinical tasks. Our analysis covers two sets of official practice materials for the USMLE, a three-step examination program used to assess clinical competency and grant licensure in the United States. We also evaluate performance on the MultiMedQA suite of benchmark datasets. Beyond measuring model performance, experiments were conducted to investigate the influence of test questions containing both text and images on model performance, probe for memorization of content during training, and study probability calibration, which is of critical importance in high-stakes applications like medicine. Our results show that GPT-4, without any specialized prompt crafting, exceeds the passing score on USMLE by over 20 points and outperforms earlier general-purpose models (GPT-3.5) as well as models specifically fine-tuned on medical knowledge (Med-PaLM, a prompt-tuned version of Flan-PaLM 540B). In addition, GPT-4 is significantly better calibrated than GPT-3.5, demonstrating a much-improved ability to predict the likelihood that its answers are correct. We also explore the behavior of the model qualitatively through a case study that shows the ability of GPT-4 to explain medical reasoning, personalize explanations to students, and interactively craft new counterfactual scenarios around a medical case. Implications of the findings are discussed for potential uses of GPT-4 in medical education, assessment, and clinical practice, with appropriate attention to challenges of accuracy and safety.",
+        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
+      },
+      {
+        "source_id": "openalex_w4402670791",
+        "title": "MedAgents: Large Language Models as Collaborators for Zero-shot Medical Reasoning",
+        "source_type": "paper",
+        "source_tier": "B",
+        "year": 2024,
+        "authors_or_publisher": "Xiangru Tang, Anni Zou, Zhuosheng Zhang, Ziming Li",
+        "identifier": "https://openalex.org/W4402670791",
+        "url": "https://doi.org/10.18653/v1/2024.findings-acl.33",
+        "summary": "Large language models (LLMs), despite their remarkable progress across various general domains, encounter significant barriers in medicine and healthcare.This field faces unique challenges such as domain-specific terminologies and reasoning over specialized knowledge.To address these issues, we propose MEDAGENTS, a novel multi-disciplinary collaboration framework for the medical domain.MedAgents leverages LLM-based agents in a role-playing setting that participate in a collaborative multi-round discussion, thereby enhancing LLM proficiency and reasoning capabilities.This training-free framework encompasses five critical steps: gathering domain experts, proposing individual analyses, summarising these analyses into a report, iterating over discussions until a consensus is reached, and ultimately making a decision.Our work focuses on the zeroshot setting, which is applicable in realworld scenarios.Experimental results on nine datasets (MedQA, MedMCQA, PubMedQA, and six subtasks from MMLU) establish that our proposed MEDAGENTS framework excels at mining and harnessing the medical expertise within LLMs, as well as extending its reasoning abilities.Our code can be found at https: //github.com/gersteinlab/MedAgents. Expert Gathering Analysis Proposition Report Summarization Collaborative Consultation Decision Making A 66-year-old male with a history of heart attack and recurrent stomach ulcers is experiencing persistent cough and chest pain, and recent CT scans indicate a possible lung tumor.Designing a treatment plan that minimizes risk and maximizes outcomes is the current concern due to his deteriorating health and medical history....... ...... .",
+        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
+      }
+    ]
   }
 }
