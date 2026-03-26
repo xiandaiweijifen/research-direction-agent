@@ -555,7 +555,20 @@ def _candidate_binding_terms(
         if query_flags["broad_medical_reasoning"]:
             terms.update({"agent", "framework", "collaborators", "zero", "shot"})
     elif candidate.candidate_id == "candidate_3":
-        terms.update({"workflow", "reproducible", "tooling", "audit", "pipeline", "annotation"})
+        terms.update(
+            {
+                "workflow",
+                "reproducible",
+                "tooling",
+                "audit",
+                "pipeline",
+                "annotation",
+                "evaluation",
+                "reliability",
+                "metacognition",
+                "verification",
+            }
+        )
         if query_flags["hallucination_eval"]:
             terms.update({"hallucination", "grounding", "audit"})
 
@@ -595,6 +608,10 @@ def _rank_supporting_source_ids_for_candidate(
                 overlap += 3
             if any(term in text for term in {"tool", "tooling", "pipeline"}):
                 overlap += 1
+            if any(term in text for term in {"reliable", "reliability", "metacognition", "verification", "evaluation"}):
+                overlap += 2
+            if query_flags["broad_medical_reasoning"] and "document question answering" in text:
+                overlap -= 2
 
         fallback_bonus = 1 if record.source_id in fallback_ids else 0
         tier_bonus = 1 if record.source_tier == "A" else 0
