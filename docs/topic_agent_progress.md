@@ -80,6 +80,17 @@ This file tracks the recent development progress for the backend Topic Agent ret
 - Added ranking penalties for legacy, non-modern medical reasoning records when the query is broad and modern-AI-oriented.
 - Added ranking boosts for benchmark / verification / question answering / LLM style evidence under broad `medical reasoning` queries.
 
+### Broad Query Synthesis Improvements
+
+- Reduced `document QA` overfitting for broad `medical reasoning` queries.
+- Broad medical reasoning topics no longer default to:
+  - `document QA and report-centric reasoning`
+  - `document-centric clinical reasoning`
+  just because one top benchmark contains `MedDQA` or related document-QA evidence.
+- Document-centric synthesis is now reserved for:
+  - explicit document/report queries
+  - stronger document-specific evidence signals outside the broad-query case
+
 ## Current Status
 
 ### Stage Assessment
@@ -136,6 +147,7 @@ Rough breakdown:
 - Human confirmation is represented in the design and response schema, but the current product slice still does not enforce an explicit confirmation workflow in the UI.
 - The current implementation is a focused workflow slice, not a full standalone Topic Agent platform.
 - Broad topic queries are better than before, but still need occasional manual review because generic medical terms can retrieve historically relevant but strategically weak literature.
+- Broad topic synthesis is improved, but wording on very general topics still benefits from manual review because top evidence can legitimately mix benchmarks, clinical reasoning, and QA settings.
 
 ## Manual Validation Notes
 
@@ -156,4 +168,4 @@ backend\.venv\Scripts\python.exe -m pytest backend\tests\test_topic_agent_api.py
 
 Latest result:
 
-- `42 passed`
+- `44 passed`

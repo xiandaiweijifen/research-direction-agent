@@ -579,6 +579,76 @@ def test_topic_agent_pipeline_dedupes_hallucination_workflow_questions():
     ]
 
 
+def test_topic_agent_pipeline_keeps_broad_medical_reasoning_queries_from_overfitting_to_document_qa():
+    class BroadMedicalReasoningProvider:
+        provider_name = "static"
+
+        def retrieve(self, request: TopicAgentExploreRequest):
+            records = [
+                TopicAgentSourceRecord(
+                    source_id="openalex_a",
+                    title="RJUA-MedDQA: A Multimodal Benchmark for Medical Document Question Answering and Clinical Reasoning",
+                    source_type="benchmark",
+                    source_tier="A",
+                    year=2024,
+                    authors_or_publisher="Author A",
+                    identifier="https://example.org/a",
+                    url="https://example.org/a",
+                    summary="Document question answering benchmark with clinical reasoning challenges.",
+                    relevance_reason="Test record",
+                ),
+                TopicAgentSourceRecord(
+                    source_id="openalex_b",
+                    title="MedXpertQA: Benchmarking Expert-Level Medical Reasoning and Understanding",
+                    source_type="benchmark",
+                    source_tier="A",
+                    year=2025,
+                    authors_or_publisher="Author B",
+                    identifier="https://example.org/b",
+                    url="https://example.org/b",
+                    summary="Benchmark for expert-level medical reasoning and multimodal understanding.",
+                    relevance_reason="Test record",
+                ),
+                TopicAgentSourceRecord(
+                    source_id="openalex_c",
+                    title="Large Language Models lack essential metacognition for reliable medical reasoning",
+                    source_type="benchmark",
+                    source_tier="A",
+                    year=2025,
+                    authors_or_publisher="Author C",
+                    identifier="https://example.org/c",
+                    url="https://example.org/c",
+                    summary="Reliable medical reasoning benchmark with metacognition checks.",
+                    relevance_reason="Test record",
+                ),
+            ]
+            return TopicAgentEvidenceRetrievalResult(
+                records=records,
+                diagnostics=TopicAgentEvidenceDiagnostics(
+                    requested_provider="static",
+                    used_provider="static",
+                    fallback_used=False,
+                    fallback_reason=None,
+                    record_count=3,
+                ),
+            )
+
+    request = TopicAgentExploreRequest(
+        interest="medical reasoning",
+        problem_domain="medical AI",
+        constraints=TopicAgentConstraintSet(preferred_style="applied"),
+    )
+
+    response = run_topic_agent_pipeline(request, provider=BroadMedicalReasoningProvider())
+    joined_themes = " ".join(response.landscape_summary.themes).lower()
+    joined_methods = " ".join(response.landscape_summary.active_methods).lower()
+
+    assert "document qa and report-centric reasoning" not in joined_themes
+    assert "document qa baseline comparison" not in joined_methods
+    assert "document-centric clinical reasoning" not in response.candidate_topics[1].research_question.lower()
+    assert "medical reasoning method family" in response.candidate_topics[1].research_question.lower()
+
+
 def test_topic_agent_pipeline_builds_human_confirmations_for_missing_constraints():
     class SparseProvider:
         provider_name = "static"

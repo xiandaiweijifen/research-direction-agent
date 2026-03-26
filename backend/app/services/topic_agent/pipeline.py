@@ -287,6 +287,24 @@ def _query_intent_flags(request: TopicAgentExploreRequest) -> dict[str, bool]:
             term in query_text
             for term in {"document question answering", "document qa", "medical report", "report-centric"}
         ),
+        "broad_medical_reasoning": (
+            "medical reasoning" in query_text
+            and not any(
+                term in query_text
+                for term in {
+                    "document question answering",
+                    "document qa",
+                    "medical report",
+                    "report-centric",
+                    "visual question answering",
+                    "vqa",
+                    "radiology",
+                    "hallucination",
+                    "grounding",
+                    "multimodal",
+                }
+            )
+        ),
     }
 
 
@@ -302,7 +320,7 @@ def _detect_evidence_cues(
         "trust": any(term in combined_text for term in {"trustworthy", "ethical", "safety", "hallucination", "reliability"}),
         "grounding": any(term in combined_text for term in {"grounding", "grounded", "image-grounded", "cross-modal"}),
         "radiology": any(term in combined_text for term in {"radiology", "x-ray", "radiation oncology"}),
-        "document_qa": any(term in combined_text for term in {"document question answering", "document qa", "medical report", "meddqa", "question answering"}),
+        "document_qa": any(term in combined_text for term in {"document question answering", "document qa", "medical report", "meddqa", "report layout"}),
         "agentic": any(term in combined_text for term in {"agent collaborative", "learner agent", "ask-answer", "multi-agent", "agent"}),
         "zero_shot": "zero-shot" in combined_text or "zero shot" in combined_text,
         "clinical_reasoning": "clinical reasoning" in combined_text,
@@ -328,7 +346,11 @@ def _build_landscape_themes(
         themes.append(f"hallucination detection and failure analysis in {topic}")
     if query_flags["visual_qa"]:
         themes.append(f"radiology VQA and image-grounded answer reliability in {topic}")
-    if (query_flags["document_qa"] or cues["document_qa"]) and not query_flags["hallucination_eval"]:
+    if (
+        (query_flags["document_qa"] or cues["document_qa"])
+        and not query_flags["hallucination_eval"]
+        and not query_flags["broad_medical_reasoning"]
+    ):
         themes.append(f"document QA and report-centric reasoning in {topic}")
     if cues["trust"]:
         themes.append(f"trustworthy evaluation and failure analysis in {topic}")
@@ -362,7 +384,11 @@ def _build_active_methods(
         methods.append("hallucination auditing and faithfulness checks")
     if cues["agentic"]:
         methods.append("agent-mediated problem decomposition")
-    if (query_flags["document_qa"] or cues["document_qa"]) and not query_flags["hallucination_eval"]:
+    if (
+        (query_flags["document_qa"] or cues["document_qa"])
+        and not query_flags["hallucination_eval"]
+        and not query_flags["broad_medical_reasoning"]
+    ):
         methods.append("document QA baseline comparison")
     if cues["radiology"]:
         methods.append("radiology task-specific benchmark slicing")
@@ -390,7 +416,11 @@ def _build_likely_gaps(
         gaps.append("medical hallucination checks that separate unsupported answers from weak image grounding")
     if cues["radiology"]:
         gaps.append("narrower radiology task slices that remain feasible under student-scale resources")
-    if (query_flags["document_qa"] or cues["document_qa"]) and not query_flags["hallucination_eval"]:
+    if (
+        (query_flags["document_qa"] or cues["document_qa"])
+        and not query_flags["hallucination_eval"]
+        and not query_flags["broad_medical_reasoning"]
+    ):
         gaps.append("stronger evidence on reasoning over report layouts and image-text context")
     if not gaps:
         gaps = [
@@ -601,9 +631,15 @@ def generate_candidates(context: TopicAgentPipelineContext) -> list[TopicAgentCa
             0,
             f"What workflow support would make {grounding_phrase} evaluation more reproducible?",
         )
-    if evidence_cues["clinical_reasoning"] or evidence_cues["document_qa"]:
+    if query_flags["document_qa"] or (
+        evidence_cues["document_qa"] and not query_flags["broad_medical_reasoning"]
+    ):
         candidate_2.research_question = (
             "Can an existing method family be adapted effectively for document-centric clinical reasoning under strict compute and annotation constraints?"
+        )
+    elif query_flags["broad_medical_reasoning"]:
+        candidate_2.research_question = (
+            "Can an existing medical reasoning method family be adapted effectively under strict compute and annotation constraints?"
         )
     elif reasoning_phrase:
         candidate_2.research_question = (
