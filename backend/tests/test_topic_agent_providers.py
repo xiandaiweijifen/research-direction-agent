@@ -591,6 +591,22 @@ def test_openalex_queries_expand_generic_medical_reasoning_aliases():
     assert "clinical reasoning benchmark medical ai" in joined_queries
 
 
+def test_openalex_queries_add_general_research_role_expansions_for_modern_topics():
+    request = TopicAgentExploreRequest(
+        interest="coding agents for software engineering",
+        problem_domain="developer workflows",
+        constraints=TopicAgentConstraintSet(preferred_style="applied"),
+    )
+
+    queries = _build_openalex_queries(request)
+    joined_queries = " || ".join(queries).lower()
+
+    assert "coding agents for software engineering developer workflows benchmark evaluation" in joined_queries
+    assert "coding agents for software engineering developer workflows method framework" in joined_queries
+    assert "coding agents for software engineering developer workflows workflow reproducibility" in joined_queries
+    assert "coding agents for software engineering developer workflows practical baseline adaptation" in joined_queries
+
+
 def test_openalex_provider_ignores_legacy_unversioned_cache_key(workspace_tmp_path, monkeypatch):
     request = TopicAgentExploreRequest(
         interest="trustworthy multimodal reasoning in medical imaging",

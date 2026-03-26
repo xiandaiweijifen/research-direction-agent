@@ -54,7 +54,7 @@ OPENALEX_API_URL = "https://api.openalex.org/works"
 ATOM_NAMESPACE = {"atom": "http://www.w3.org/2005/Atom"}
 TOPIC_AGENT_ARXIV_CACHE_PATH = DATA_ROOT / "tool_state" / "topic_agent_arxiv_cache.json"
 TOPIC_AGENT_OPENALEX_CACHE_PATH = DATA_ROOT / "tool_state" / "topic_agent_openalex_cache.json"
-OPENALEX_CACHE_SCHEMA_VERSION = "v3"
+OPENALEX_CACHE_SCHEMA_VERSION = "v4"
 
 
 def _normalize_optional(value: str | None) -> str | None:
@@ -360,6 +360,54 @@ def _build_openalex_query(request: TopicAgentExploreRequest) -> str:
     return " ".join(ordered_terms[:8]) or request.interest.strip()
 
 
+def _general_query_role_expansions(request: TopicAgentExploreRequest) -> list[str]:
+    interest = request.interest.strip()
+    problem_domain = (request.problem_domain or "").strip()
+    style = (request.constraints.preferred_style or "").strip().lower()
+    topic_text = f"{interest} {problem_domain}".strip()
+
+    if not topic_text:
+        return []
+
+    expansions: list[str] = []
+    role_queries = [
+        f"{topic_text} benchmark evaluation",
+        f"{topic_text} method framework",
+        f"{topic_text} workflow reproducibility",
+        f"{topic_text} reliability failure analysis",
+    ]
+
+    if style == "applied":
+        role_queries.append(f"{topic_text} practical baseline adaptation")
+    elif style == "systems":
+        role_queries.append(f"{topic_text} tooling infrastructure")
+    elif style == "benchmark-driven":
+        role_queries.append(f"{topic_text} benchmark stress test")
+
+    topic_lower = topic_text.lower()
+    if any(term in topic_lower for term in {"agent", "agents", "llm", "large language model", "coding"}):
+        role_queries.extend(
+            [
+                f"{topic_text} benchmark software engineering evaluation",
+                f"{topic_text} developer workflow audit",
+            ]
+        )
+
+    if any(term in topic_lower for term in {"medical", "clinical", "biomedical"}):
+        role_queries.extend(
+            [
+                f"{topic_text} clinical evaluation benchmark",
+                f"{topic_text} decision support reliability",
+            ]
+        )
+
+    for query in role_queries:
+        normalized = query.strip()
+        if normalized and normalized not in expansions:
+            expansions.append(normalized)
+    return expansions
+
+
 def _openalex_query_aliases(request: TopicAgentExploreRequest) -> list[str]:
     topic_text = f"{request.interest} {request.problem_domain or ''}".lower()
     aliases: list[str] = []
@@ -450,6 +498,7 @@ def _build_openalex_queries(request: TopicAgentExploreRequest) -> list[str]:
         queries.append(" ".join(["multimodal", "reasoning", *domain_terms[:2], "benchmark"]))
     if "trustworthy" in core_terms:
         queries.append(" ".join(["trustworthy", "reasoning", *domain_terms[:2], "evaluation"]))
+    queries.extend(_general_query_role_expansions(request))
     queries.extend(_openalex_query_aliases(request))
     deduped_queries: list[str] = []
     for query in queries:
