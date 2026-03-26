@@ -106,6 +106,19 @@ class TopicAgentClarificationSuggestion(BaseModel):
     refine_patch: dict[str, object] = Field(default_factory=dict)
 
 
+class TopicAgentEvidenceStatement(BaseModel):
+    statement: str
+    statement_type: str
+    supporting_source_ids: list[str] = Field(default_factory=list)
+    note: str | None = None
+
+
+class TopicAgentEvidencePresentation(BaseModel):
+    source_facts: list[TopicAgentEvidenceStatement] = Field(default_factory=list)
+    system_synthesis: list[TopicAgentEvidenceStatement] = Field(default_factory=list)
+    tentative_inferences: list[TopicAgentEvidenceStatement] = Field(default_factory=list)
+
+
 class TopicAgentSessionResponse(BaseModel):
     session_id: str
     created_at: str
@@ -117,6 +130,7 @@ class TopicAgentSessionResponse(BaseModel):
     candidate_topics: list[TopicAgentCandidateTopic] = Field(default_factory=list)
     comparison_result: TopicAgentComparisonResult
     convergence_result: TopicAgentConvergenceResult
+    evidence_presentation: TopicAgentEvidencePresentation = Field(default_factory=TopicAgentEvidencePresentation)
     human_confirmations: list[str] = Field(default_factory=list)
     clarification_suggestions: list[TopicAgentClarificationSuggestion] = Field(default_factory=list)
     trace: list[TopicAgentTraceEvent] = Field(default_factory=list)

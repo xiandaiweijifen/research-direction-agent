@@ -30,6 +30,9 @@ def test_topic_agent_pipeline_returns_structured_session_response():
     assert response.evidence_diagnostics.used_provider == "mock"
     assert response.evidence_diagnostics.record_count == 3
     assert response.evidence_diagnostics.cache_hit is False
+    assert response.evidence_presentation.source_facts
+    assert response.evidence_presentation.system_synthesis
+    assert response.evidence_presentation.tentative_inferences
     assert len(response.candidate_topics) == 3
     assert response.comparison_result.candidate_assessments[0]["candidate_id"] == "candidate_1"
     assert response.convergence_result.recommended_candidate_id == "candidate_1"
@@ -748,3 +751,63 @@ def test_topic_agent_pipeline_builds_structured_clarification_suggestions():
         "lab",
         "team",
     ]
+
+
+def test_topic_agent_pipeline_builds_evidence_presentation_layers():
+    class EvidenceProvider:
+        provider_name = "static"
+
+        def retrieve(self, request: TopicAgentExploreRequest):
+            records = [
+                TopicAgentSourceRecord(
+                    source_id="openalex_a",
+                    title="MedXpertQA: Benchmarking Expert-Level Medical Reasoning and Understanding",
+                    source_type="benchmark",
+                    source_tier="A",
+                    year=2025,
+                    authors_or_publisher="Author A",
+                    identifier="https://example.org/a",
+                    url="https://example.org/a",
+                    summary="Benchmark for expert-level medical reasoning.",
+                    relevance_reason="Test record",
+                ),
+                TopicAgentSourceRecord(
+                    source_id="openalex_b",
+                    title="Large Language Models lack essential metacognition for reliable medical reasoning",
+                    source_type="benchmark",
+                    source_tier="A",
+                    year=2025,
+                    authors_or_publisher="Author B",
+                    identifier="https://example.org/b",
+                    url="https://example.org/b",
+                    summary="Reliable medical reasoning benchmark with metacognition checks.",
+                    relevance_reason="Test record",
+                ),
+            ]
+            return TopicAgentEvidenceRetrievalResult(
+                records=records,
+                diagnostics=TopicAgentEvidenceDiagnostics(
+                    requested_provider="static",
+                    used_provider="static",
+                    fallback_used=False,
+                    fallback_reason=None,
+                    record_count=2,
+                ),
+            )
+
+    request = TopicAgentExploreRequest(
+        interest="medical reasoning",
+        constraints=TopicAgentConstraintSet(
+            time_budget_months=6,
+            resource_level="student",
+            preferred_style="applied",
+        ),
+    )
+
+    response = run_topic_agent_pipeline(request, provider=EvidenceProvider())
+
+    assert response.evidence_presentation.source_facts[0].statement_type == "source_fact"
+    assert response.evidence_presentation.system_synthesis[0].statement_type == "system_synthesis"
+    assert response.evidence_presentation.tentative_inferences[0].statement_type == "tentative_inference"
+    assert response.evidence_presentation.source_facts[0].supporting_source_ids == ["openalex_a"]
+    assert "human validation" in response.evidence_presentation.tentative_inferences[0].note.lower()

@@ -41,6 +41,9 @@ def test_topic_agent_explore_creates_session_with_mock_outputs(workspace_tmp_pat
     assert isinstance(payload["evidence_diagnostics"]["cache_hit"], bool)
     assert payload["confidence_summary"]["rationale"]
     assert payload["trace"]
+    assert payload["evidence_presentation"]["source_facts"]
+    assert payload["evidence_presentation"]["system_synthesis"]
+    assert payload["evidence_presentation"]["tentative_inferences"]
     assert payload["human_confirmations"]
     assert isinstance(payload["clarification_suggestions"], list)
     assert [event["stage"] for event in payload["trace"]] == [
@@ -216,6 +219,11 @@ def test_topic_agent_session_endpoints_backfill_missing_legacy_diagnostics(works
         },
         "human_confirmations": [],
         "clarification_suggestions": [],
+        "evidence_presentation": {
+            "source_facts": [],
+            "system_synthesis": [],
+            "tentative_inferences": [],
+        },
         "trace": [],
         "confidence_summary": {
             "evidence_coverage": "low",
@@ -244,6 +252,91 @@ def test_topic_agent_session_endpoints_backfill_missing_legacy_diagnostics(works
         "fallback_reason": None,
         "record_count": 0,
         "cache_hit": False,
+    }
+
+
+def test_topic_agent_session_endpoints_backfill_missing_legacy_evidence_presentation(workspace_tmp_path, monkeypatch):
+    session_store_path = workspace_tmp_path / "topic_agent_sessions.json"
+    monkeypatch.setattr(
+        "app.services.topic_agent.topic_agent_runtime.TOPIC_AGENT_STORE_PATH",
+        session_store_path,
+    )
+    legacy_session = {
+        "session_id": "legacy-presentation",
+        "created_at": "2026-03-26T14:42:24.334804+00:00",
+        "updated_at": "2026-03-26T14:43:54.322883+00:00",
+        "user_input": {
+            "interest": "medical reasoning",
+            "problem_domain": None,
+            "seed_idea": None,
+            "constraints": {
+                "time_budget_months": 6,
+                "resource_level": "student",
+                "preferred_style": "applied",
+                "notes": None,
+            },
+        },
+        "framing_result": {
+            "normalized_topic": "medical reasoning",
+            "extracted_constraints": {
+                "time_budget_months": "6",
+                "resource_level": "student",
+                "preferred_style": "applied",
+            },
+            "missing_clarifications": [],
+            "search_questions": [
+                "What are the main research themes in medical reasoning?"
+            ],
+        },
+        "evidence_records": [],
+        "landscape_summary": {
+            "themes": [],
+            "active_methods": [],
+            "likely_gaps": [],
+            "saturated_areas": [],
+        },
+        "candidate_topics": [],
+        "comparison_result": {
+            "dimensions": [],
+            "summary": "summary",
+            "candidate_assessments": [],
+        },
+        "convergence_result": {
+            "recommended_candidate_id": "candidate_1",
+            "backup_candidate_id": None,
+            "rationale": "rationale",
+            "manual_checks": [],
+        },
+        "human_confirmations": [],
+        "clarification_suggestions": [],
+        "trace": [],
+        "confidence_summary": {
+            "evidence_coverage": "low",
+            "source_quality": "medium",
+            "candidate_separation": "low",
+            "conflict_level": "low",
+            "rationale": [],
+        },
+        "evidence_diagnostics": {
+            "requested_provider": "unknown",
+            "used_provider": "unknown",
+            "fallback_used": False,
+            "fallback_reason": None,
+            "record_count": 0,
+            "cache_hit": False,
+        },
+    }
+    session_store_path.write_text(json.dumps([legacy_session]), encoding="utf-8")
+
+    client = TestClient(app)
+    get_response = client.get("/api/topic-agent/sessions/legacy-presentation")
+
+    assert get_response.status_code == 200
+    payload = get_response.json()
+    assert payload["evidence_presentation"] == {
+        "source_facts": [],
+        "system_synthesis": [],
+        "tentative_inferences": [],
     }
 
 

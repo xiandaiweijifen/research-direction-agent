@@ -3,6 +3,7 @@ from pathlib import Path
 from app.core.config import DATA_ROOT
 from app.schemas.topic_agent import (
     TopicAgentEvidenceDiagnostics,
+    TopicAgentEvidencePresentation,
     TopicAgentExploreRequest,
     TopicAgentRefineRequest,
     TopicAgentSessionListResponse,
@@ -81,6 +82,12 @@ def _backfill_session_payload(payload: dict) -> dict:
         list,
     ):
         normalized["clarification_suggestions"] = []
+
+    if "evidence_presentation" not in normalized or not isinstance(
+        normalized.get("evidence_presentation"),
+        dict,
+    ):
+        normalized["evidence_presentation"] = TopicAgentEvidencePresentation().model_dump()
 
     return normalized
 

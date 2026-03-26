@@ -11,6 +11,8 @@ from app.schemas.topic_agent import (
     TopicAgentConfidenceSummary,
     TopicAgentConvergenceResult,
     TopicAgentEvidenceDiagnostics,
+    TopicAgentEvidencePresentation,
+    TopicAgentEvidenceStatement,
     TopicAgentExploreRequest,
     TopicAgentFramingResult,
     TopicAgentLandscapeSummary,
@@ -35,6 +37,7 @@ class TopicAgentPipelineContext:
     comparison_result: TopicAgentComparisonResult | None = None
     convergence_result: TopicAgentConvergenceResult | None = None
     confidence_summary: TopicAgentConfidenceSummary | None = None
+    evidence_presentation: TopicAgentEvidencePresentation | None = None
     evidence_diagnostics: TopicAgentEvidenceDiagnostics | None = None
     trace: list[TopicAgentTraceEvent] | None = None
 
@@ -896,6 +899,112 @@ def build_confidence_summary(context: TopicAgentPipelineContext) -> TopicAgentCo
     return result
 
 
+def _candidate_by_id(
+    candidate_topics: list[TopicAgentCandidateTopic],
+    candidate_id: str | None,
+) -> TopicAgentCandidateTopic | None:
+    if not candidate_id:
+        return None
+    for candidate in candidate_topics:
+        if candidate.candidate_id == candidate_id:
+            return candidate
+    return None
+
+
+def build_evidence_presentation(context: TopicAgentPipelineContext) -> TopicAgentEvidencePresentation:
+    evidence_records = context.evidence_records or []
+    candidate_topics = context.candidate_topics or []
+    convergence_result = context.convergence_result
+    landscape_summary = context.landscape_summary
+
+    source_facts = [
+        TopicAgentEvidenceStatement(
+            statement=(
+                f"Retrieved {record.source_type} evidence '{record.title}' ({record.year}) "
+                f"as tier {record.source_tier} support for the current topic."
+            ),
+            statement_type="source_fact",
+            supporting_source_ids=[record.source_id],
+            note="Directly grounded in retrieved source metadata and source summary.",
+        )
+        for record in evidence_records[:3]
+    ]
+
+    synthesis_support_ids = [
+        record.source_id
+        for record in evidence_records[:3]
+    ]
+    system_synthesis: list[TopicAgentEvidenceStatement] = []
+    if landscape_summary and landscape_summary.themes:
+        system_synthesis.append(
+            TopicAgentEvidenceStatement(
+                statement=(
+                    "Current evidence clusters most strongly around "
+                    + ", ".join(landscape_summary.themes[:2])
+                    + "."
+                ),
+                statement_type="system_synthesis",
+                supporting_source_ids=synthesis_support_ids,
+                note="Agent synthesis over multiple retrieved sources.",
+            )
+        )
+    if candidate_topics:
+        system_synthesis.append(
+            TopicAgentEvidenceStatement(
+                statement=(
+                    f"The current output separates into {len(candidate_topics)} candidate directions "
+                    "with distinct positioning and comparison scores."
+                ),
+                statement_type="system_synthesis",
+                supporting_source_ids=synthesis_support_ids,
+                note="Agent synthesis over candidate generation and comparison outputs.",
+            )
+        )
+
+    tentative_inferences: list[TopicAgentEvidenceStatement] = []
+    if convergence_result:
+        recommended_candidate = _candidate_by_id(
+            candidate_topics,
+            convergence_result.recommended_candidate_id,
+        )
+        tentative_inferences.append(
+            TopicAgentEvidenceStatement(
+                statement=(
+                    f"{convergence_result.recommended_candidate_id} is currently the leading direction "
+                    "under the present constraints."
+                ),
+                statement_type="tentative_inference",
+                supporting_source_ids=(
+                    recommended_candidate.supporting_source_ids
+                    if recommended_candidate
+                    else synthesis_support_ids
+                ),
+                note="Recommendation-level inference that still requires human validation.",
+            )
+        )
+        if convergence_result.manual_checks:
+            tentative_inferences.append(
+                TopicAgentEvidenceStatement(
+                    statement=convergence_result.manual_checks[0],
+                    statement_type="tentative_inference",
+                    supporting_source_ids=(
+                        recommended_candidate.supporting_source_ids
+                        if recommended_candidate
+                        else synthesis_support_ids
+                    ),
+                    note="Open validation requirement rather than a settled fact.",
+                )
+            )
+
+    result = TopicAgentEvidencePresentation(
+        source_facts=source_facts,
+        system_synthesis=system_synthesis,
+        tentative_inferences=tentative_inferences,
+    )
+    context.evidence_presentation = result
+    return result
+
+
 def build_trace(context: TopicAgentPipelineContext) -> list[TopicAgentTraceEvent]:
     evidence_count = len(context.evidence_records or [])
     candidate_count = len(context.candidate_topics or [])
@@ -1067,6 +1176,7 @@ def run_topic_agent_pipeline(
     compare_candidates(context)
     converge_recommendation(context)
     build_confidence_summary(context)
+    build_evidence_presentation(context)
     build_trace(context)
     human_confirmations = build_human_confirmations(context)
     clarification_suggestions = build_clarification_suggestions(context)
@@ -1081,6 +1191,7 @@ def run_topic_agent_pipeline(
         candidate_topics=context.candidate_topics or [],
         comparison_result=context.comparison_result,
         convergence_result=context.convergence_result,
+        evidence_presentation=context.evidence_presentation or TopicAgentEvidencePresentation(),
         human_confirmations=human_confirmations,
         clarification_suggestions=clarification_suggestions,
         trace=context.trace or [],
