@@ -337,6 +337,7 @@ In short:
 - the project is no longer only in the design phase
 - the backend Topic Agent slice is already capable of end-to-end exploratory runs
 - the remaining work is mainly productization, explicit confirmation flow, and richer trust surfaces
+- backend quality iteration is now intentionally paused so the next phase can focus on demo completion rather than continued retrieval tuning
 
 #### Completion Against The Original Topic Agent Plan
 
@@ -365,6 +366,7 @@ Rough breakdown:
   - radiology VQA
   - hallucination / grounding evaluation
   - clarification and refine loop behavior
+  - non-medical software-agent and bug-fixing topic exploration
 
 #### Stable
 
@@ -373,6 +375,8 @@ Rough breakdown:
 - Stable OpenAlex source ids are working.
 - Duplicate evidence versions are no longer taking multiple top slots.
 - Generic overview evidence is no longer dominating the top of the evidence list.
+- Topic Agent session history is now capped and trimmed on save.
+- Evaluation report history is now capped and pruned automatically.
 
 #### Good Query Classes
 
@@ -392,6 +396,7 @@ Rough breakdown:
 - Broad topic synthesis is improved, but wording on very general topics still benefits from manual review because top evidence can legitimately mix benchmarks, clinical reasoning, and QA settings.
 - Candidate generation is still mostly organized around a fixed three-direction frame, so broad topic exploration can feel repetitive even when retrieval improves.
 - The current convergence layer still behaves more like template filling than open candidate generation, especially on non-medical modern topics such as coding agents.
+- Some non-medical repository / bug-fixing queries still retrieve partially relevant repository-mining or broad software-engineering records, so evidence bundles remain good enough for demo use but not fully publication-grade.
 
 ### Generic Quality-Control Slice
 
@@ -412,6 +417,9 @@ Completed in this slice:
 - added `topic_fit_score` as a separate scoring component so directly on-topic evidence can outrank merely adjacent literature
 - added a modern-topic guard in ranked filtering so legacy neighboring records are backfilled after more on-topic evidence for modern AI / agent queries
 - kept this slice provider-local so ranking can improve without rewriting the whole pipeline
+- added `topic_relevant`, `domain_neighbor`, and `lexical_match` style internal evidence relevance labeling for bundle selection
+- added stronger code-repair query disambiguation so generic autonomous-maintenance neighbors are penalized
+- added candidate-role-aware evidence rebinding so evaluation, method, and systems candidates bind more consistently on bug-fixing topics
 
 This is intended to improve:
 
@@ -421,6 +429,12 @@ This is intended to improve:
 - and other broad modern topics
 
 without requiring one-off ranking patches for each topic family.
+
+Recent manual checks show this slice is working materially better on:
+
+- `llm agents for automated bug fixing`
+- `program repair with llm agents`
+- `repository-level bug-fixing agents`
 
 Next planned backend quality steps:
 
@@ -504,6 +518,16 @@ The next likely frontend polish areas are:
 - softer presentation of internal identifiers and debugging-style fields
 - lighter-weight trust-panel summaries before detailed drill-down
 
+### Current Freeze Point
+
+The backend should now be treated as feature-frozen for the current demo pass.
+
+That means:
+
+- no more retrieval-quality tuning unless a demo-blocking regression appears
+- no more candidate-generation architecture changes before the demo is complete
+- remaining implementation focus should move to frontend composition, demo flow, and walkthrough quality
+
 ### Manual Validation Notes
 
 When manually checking `/api/topic-agent/explore`, prioritize:
@@ -518,9 +542,9 @@ When manually checking `/api/topic-agent/explore`, prioritize:
 Latest backend regression command:
 
 ```powershell
-backend\.venv\Scripts\python.exe -m pytest backend\tests\test_topic_agent_api.py backend\tests\test_topic_agent_pipeline.py backend\tests\test_topic_agent_providers.py backend\tests\test_health_api.py
+backend\.venv\Scripts\python.exe -m pytest backend\tests\test_topic_agent_api.py backend\tests\test_topic_agent_pipeline.py backend\tests\test_topic_agent_providers.py backend\tests\test_report_store_service.py backend\tests\test_health_api.py
 ```
 
 Latest result:
 
-- `56 passed`
+- `70 passed`

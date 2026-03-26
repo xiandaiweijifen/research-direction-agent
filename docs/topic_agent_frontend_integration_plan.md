@@ -6,6 +6,8 @@ Integrate the current Topic Agent backend workflow into a frontend demo surface 
 
 This step does not change backend semantics. It reorganizes the frontend so the existing Topic Agent capability can be demonstrated clearly.
 
+For the current phase, backend quality iteration is intentionally paused. The goal is to finish a convincing demo on top of the stabilized Topic Agent backend rather than continue retrieval or synthesis tuning.
+
 ## 2. Current Frontend Assessment
 
 The current frontend already has Topic Agent API wiring:
@@ -36,6 +38,8 @@ The frontend should consume the existing endpoints as they are:
 - `POST /api/topic-agent/sessions/{session_id}/refine`
 
 No backend API redesign is required for the first frontend integration pass.
+
+For the current demo push, treat the backend response contract as frozen unless a frontend-blocking bug is found.
 
 ### 3.2 Move Topic-Agent Logic Out Of `App.tsx`
 
@@ -189,6 +193,12 @@ This order is better for demo flow because:
 - candidate topics are visible early
 - evidence and trust surfaces remain accessible without overwhelming the top of the page
 
+For the demo pass, the page should optimize for:
+
+- one-screen comprehension of the recommendation
+- quick drilling into candidate evidence
+- visible trust and diagnostics without leading with raw internals
+
 ## 7. Planned Refactor Sequence
 
 ### Step 1. Type Alignment
@@ -253,7 +263,26 @@ Goal:
 - either wrap the new page temporarily
 - or stop using it once `App.tsx` points directly to the new feature page
 
-## 8. Suggested Ownership Of Existing Files
+## 8. Demo Freeze Interpretation
+
+At this point, the backend should be considered stable enough for demo use.
+
+This means the frontend should now assume:
+
+- Topic Agent still returns a three-candidate public shape
+- evidence, comparison, convergence, and trust sections are all available
+- provider diagnostics and cache diagnostics are part of the demo story
+- session history is bounded and suitable for recent-run browsing, not long-term archival inspection
+
+The frontend should not wait for:
+
+- a more open-ended candidate-generation schema
+- richer backend conflict modeling
+- another backend retrieval pass
+
+Those can remain post-demo items.
+
+## 9. Suggested Ownership Of Existing Files
 
 ### `frontend/src/App.tsx`
 
@@ -294,7 +323,7 @@ Optional later split:
 
 Again, optional later. For the next step, extending the existing file is enough.
 
-## 9. Demo-Oriented UI Priorities
+## 10. Demo-Oriented UI Priorities
 
 For the first frontend integration pass, prioritize these surfaces:
 
@@ -313,18 +342,18 @@ Lower priority for the first pass:
 - advanced evidence graph interactions
 - per-stage animation or complex transitions
 
-## 10. Immediate Next Step
+## 11. Immediate Next Step
 
-The next implementation step should be:
+The next implementation step should be demo-focused rather than architecture-heavy:
 
-1. extend `frontend/src/types.ts`
-2. create `frontend/src/features/topic-agent/hooks/useTopicAgent.ts`
-3. create `frontend/src/features/topic-agent/TopicAgentDemoPage.tsx`
-4. rewire `App.tsx` to render the new page for the Topic Agent tab
+1. verify `frontend/src/types.ts` against the now-stable backend payload
+2. make sure the Topic Agent tab is routed through a dedicated feature page rather than a monolithic console surface
+3. prioritize presentation of recommendation, candidates, evidence, and trust panels in demo order
+4. keep session history lightweight and recent-run oriented
 
 Only after that should the Topic Agent page be split into smaller presentation components.
 
-## 11. Frontend Implication Of The Next Backend Upgrade
+## 12. Frontend Implication Of The Next Backend Upgrade
 
 The current frontend comparison and convergence area is built around a stable three-candidate product shape.
 
