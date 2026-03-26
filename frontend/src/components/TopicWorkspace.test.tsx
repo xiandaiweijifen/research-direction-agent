@@ -330,11 +330,11 @@ describe("TopicWorkspaceV2", () => {
     expect(screen.getByText("source_1: Recent Survey")).toBeInTheDocument();
     expect(screen.getByText("source_2: Open Repo")).toBeInTheDocument();
 
-    await user.click(screen.getByRole("button", { name: "Source Tier: A" }));
+    await user.click(screen.getByRole("button", { name: "A" }));
     expect(screen.getAllByText("Recent Survey").length).toBeGreaterThan(0);
     expect(screen.queryByText("Open Repo")).not.toBeInTheDocument();
 
-    await user.click(screen.getByRole("button", { name: "Source Tier: All" }));
+    await user.click(screen.getAllByRole("button", { name: "All" })[0]);
     expect(screen.getAllByText("Open Repo").length).toBeGreaterThan(0);
 
     await user.click(screen.getByRole("button", { name: "source_2: Open Repo" }));

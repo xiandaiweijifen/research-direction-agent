@@ -370,6 +370,7 @@ export function TopicWorkspaceV2({
           />
 
           <TopicAgentEvidencePanel
+            locale={locale}
             copy={copy}
             filteredEvidenceRecords={filteredEvidenceRecords}
             totalEvidenceCount={topicResult.evidence_records.length}

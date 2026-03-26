@@ -1,6 +1,9 @@
-import type { TopicAgentSourceRecord } from "../../../types";
+import { useState } from "react";
+
+import type { Locale, TopicAgentSourceRecord } from "../../../types";
 
 type TopicAgentEvidencePanelProps = {
+  locale: Locale;
   copy: Record<string, string>;
   filteredEvidenceRecords: TopicAgentSourceRecord[];
   totalEvidenceCount: number;
@@ -15,6 +18,7 @@ type TopicAgentEvidencePanelProps = {
 };
 
 export function TopicAgentEvidencePanel({
+  locale,
   copy,
   filteredEvidenceRecords,
   totalEvidenceCount,
@@ -27,6 +31,31 @@ export function TopicAgentEvidencePanel({
   onSetEvidenceTypeFilter,
   onFocusEvidence,
 }: TopicAgentEvidencePanelProps) {
+  const [expandedEvidenceIds, setExpandedEvidenceIds] = useState<string[]>([]);
+
+  const uiCopy =
+    locale === "zh"
+      ? {
+          tierFilter: "按来源等级筛选",
+          typeFilter: "按来源类型筛选",
+          expand: "展开详情",
+          collapse: "收起详情",
+        }
+      : {
+          tierFilter: "Filter By Source Tier",
+          typeFilter: "Filter By Source Type",
+          expand: "Expand Details",
+          collapse: "Collapse Details",
+        };
+
+  function toggleExpanded(sourceId: string) {
+    setExpandedEvidenceIds((current) =>
+      current.includes(sourceId)
+        ? current.filter((item) => item !== sourceId)
+        : [...current, sourceId],
+    );
+  }
+
   return (
     <>
       <article className="panel panel-span">
@@ -41,48 +70,57 @@ export function TopicAgentEvidencePanel({
         <div className="result-stack">
           <article className="subsection-card">
             <span className="trace-label">{copy.evidenceFilters}</span>
-            <div className="filter-row">
-              <button
-                type="button"
-                className={`filter-chip${evidenceTierFilter === "all" ? " active" : ""}`}
-                onClick={() => onSetEvidenceTierFilter("all")}
-              >
-                {copy.sourceTier}: {copy.all}
-              </button>
-              {evidenceTierOptions.map((tier) => (
-                <button
-                  key={tier}
-                  type="button"
-                  className={`filter-chip${evidenceTierFilter === tier ? " active" : ""}`}
-                  onClick={() => onSetEvidenceTierFilter(tier)}
-                >
-                  {copy.sourceTier}: {tier}
-                </button>
-              ))}
-            </div>
-            <div className="filter-row">
-              <button
-                type="button"
-                className={`filter-chip${evidenceTypeFilter === "all" ? " active" : ""}`}
-                onClick={() => onSetEvidenceTypeFilter("all")}
-              >
-                {copy.sourceType}: {copy.all}
-              </button>
-              {evidenceTypeOptions.map((type) => (
-                <button
-                  key={type}
-                  type="button"
-                  className={`filter-chip${evidenceTypeFilter === type ? " active" : ""}`}
-                  onClick={() => onSetEvidenceTypeFilter(type)}
-                >
-                  {copy.sourceType}: {type}
-                </button>
-              ))}
+            <div className="evidence-filter-stack">
+              <div className="evidence-filter-group">
+                <span className="trace-label">{uiCopy.tierFilter}</span>
+                <div className="filter-row">
+                  <button
+                    type="button"
+                    className={`filter-chip${evidenceTierFilter === "all" ? " active" : ""}`}
+                    onClick={() => onSetEvidenceTierFilter("all")}
+                  >
+                    {copy.all}
+                  </button>
+                  {evidenceTierOptions.map((tier) => (
+                    <button
+                      key={tier}
+                      type="button"
+                      className={`filter-chip${evidenceTierFilter === tier ? " active" : ""}`}
+                      onClick={() => onSetEvidenceTierFilter(tier)}
+                    >
+                      {tier}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div className="evidence-filter-group">
+                <span className="trace-label">{uiCopy.typeFilter}</span>
+                <div className="filter-row">
+                  <button
+                    type="button"
+                    className={`filter-chip${evidenceTypeFilter === "all" ? " active" : ""}`}
+                    onClick={() => onSetEvidenceTypeFilter("all")}
+                  >
+                    {copy.all}
+                  </button>
+                  {evidenceTypeOptions.map((type) => (
+                    <button
+                      key={type}
+                      type="button"
+                      className={`filter-chip${evidenceTypeFilter === type ? " active" : ""}`}
+                      onClick={() => onSetEvidenceTypeFilter(type)}
+                    >
+                      {type}
+                    </button>
+                  ))}
+                </div>
+              </div>
             </div>
           </article>
           <div className="trace-list evidence-record-grid">
             {filteredEvidenceRecords.map((record) => (
-              <article key={record.source_id} className="trace-card">
+              <article key={record.source_id} className="trace-card evidence-record-card">
                 <div className="trace-meta-row">
                   <strong>{record.title}</strong>
                   <span className="status-chip">{record.source_tier}</span>
@@ -90,11 +128,25 @@ export function TopicAgentEvidencePanel({
                 <p className="trace-detail">
                   {record.source_type} | {record.year} | {record.authors_or_publisher}
                 </p>
-                <p className="trace-detail">{record.summary}</p>
-                <p className="trace-detail">
-                  {copy.relevance}: {record.relevance_reason}
-                </p>
+                <p className="trace-detail evidence-record-summary">{record.summary}</p>
+                {expandedEvidenceIds.includes(record.source_id) && (
+                  <>
+                    <p className="trace-detail">
+                      {copy.relevance}: {record.relevance_reason}
+                    </p>
+                    <p className="trace-detail evidence-record-identifier">{record.identifier}</p>
+                  </>
+                )}
                 <div className="button-row">
+                  <button
+                    type="button"
+                    className="ghost-button"
+                    onClick={() => toggleExpanded(record.source_id)}
+                  >
+                    {expandedEvidenceIds.includes(record.source_id)
+                      ? uiCopy.collapse
+                      : uiCopy.expand}
+                  </button>
                   <button
                     type="button"
                     className="secondary-button"
