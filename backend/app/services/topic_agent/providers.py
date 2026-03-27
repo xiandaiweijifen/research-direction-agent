@@ -448,6 +448,14 @@ def _general_query_role_expansions(request: TopicAgentExploreRequest) -> list[st
         role_queries.append(f"{topic_text} benchmark stress test")
 
     topic_lower = topic_text.lower()
+    is_modern_software_agent_topic = any(
+        term in topic_lower
+        for term in {"agent", "agents", "llm", "large language model", "coding", "repair", "repository", "bug"}
+    )
+    is_repair_workflow_topic = any(
+        term in topic_lower
+        for term in {"repair", "bug", "repository", "bug-fixing", "program repair"}
+    )
     if any(term in topic_lower for term in {"agent", "agents", "llm", "large language model", "coding"}):
         role_queries.extend(
             [
@@ -468,6 +476,19 @@ def _general_query_role_expansions(request: TopicAgentExploreRequest) -> list[st
         normalized = query.strip()
         if normalized and normalized not in expansions:
             expansions.append(normalized)
+
+    if is_repair_workflow_topic:
+        prioritized: list[str] = []
+        for preferred_fragment in (
+            "benchmark evaluation",
+            "workflow reproducibility",
+            "method framework",
+            "developer workflow audit",
+        ):
+            for query in expansions:
+                if preferred_fragment in query and query not in prioritized:
+                    prioritized.append(query)
+        expansions = prioritized or expansions
     return expansions
 
 

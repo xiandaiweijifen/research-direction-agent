@@ -696,6 +696,18 @@ def test_openalex_queries_are_capped_to_reduce_request_fan_out():
     assert len(queries) <= 10
 
 
+def test_openalex_queries_keep_software_agent_fan_out_small_for_interactive_use():
+    request = TopicAgentExploreRequest(
+        interest="llm repository repair workflows",
+        problem_domain="software engineering evaluation",
+        constraints=TopicAgentConstraintSet(preferred_style="applied"),
+    )
+
+    queries = _build_openalex_queries(request)
+
+    assert len(queries) <= 6
+
+
 def test_openalex_provider_reports_latency_and_query_diagnostics(workspace_tmp_path, monkeypatch):
     request = TopicAgentExploreRequest(
         interest="repository-level bug-fixing agents",
