@@ -2093,7 +2093,7 @@
     ]
   },
   "v4::repository github issue triage resolution agents engineering evaluation||repository github issue resolution agent software engineering||repository-level issue resolution benchmark evaluation||repository github issue software engineering||github issue resolution repository-level agent benchmark||repository-level github issue resolution software engineering||repository github issue triage and resolution agents software engineering workflow evaluation benchmark evaluation||repository github issue triage and resolution agents software engineering workflow evaluation workflow reproducibility||repository github issue triage and resolution agents software engineering workflow evaluation method framework||repository github issue triage and resolution agents software engineering workflow evaluation developer workflow audit::max=5": {
-    "saved_at": "2026-03-28T02:34:45.973002+08:00",
+    "saved_at": "2026-03-28T02:53:43.711172+08:00",
     "records": [
       {
         "source_id": "openalex_w4413267850",
@@ -2129,6 +2129,18 @@
         "identifier": "https://openalex.org/W4393248299",
         "url": "https://arxiv.org/abs/2403.17927",
         "summary": "In software development, resolving the emergent issues within GitHub repositories is a complex challenge that involves not only the incorporation of new code but also the maintenance of existing code. Large Language Models (LLMs) have shown promise in code generation but face difficulties in resolving Github issues, particularly at the repository level. To overcome this challenge, we empirically study the reason why LLMs fail to resolve GitHub issues and analyze the major factors. Motivated by the empirical findings, we propose a novel LLM-based Multi-Agent framework for GitHub Issue reSolution, MAGIS, consisting of four agents customized for software evolution: Manager, Repository Custodian, Developer, and Quality Assurance Engineer agents. This framework leverages the collaboration of various agents in the planning and coding process to unlock the potential of LLMs to resolve GitHub issues. In experiments, we employ the SWE-bench benchmark to compare MAGIS with popular LLMs, including GPT-3.5, GPT-4, and Claude-2. MAGIS can resolve 13.94% GitHub issues, significantly outperforming the baselines. Specifically, MAGIS achieves an eight-fold increase in resolved ratio over the direct application of GPT-4, the advanced LLM.",
+        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
+      },
+      {
+        "source_id": "openalex_w4388788714",
+        "title": "ML-Bench: Evaluating Large Language Models and Agents for Machine Learning Tasks on Repository-Level Code",
+        "source_type": "benchmark",
+        "source_tier": "A",
+        "year": 2023,
+        "authors_or_publisher": "Xiangru Tang, Yuliang Liu, Zefan Cai, Yanjun Shao",
+        "identifier": "https://openalex.org/W4388788714",
+        "url": "https://arxiv.org/abs/2311.09835",
+        "summary": "Despite Large Language Models (LLMs) like GPT-4 achieving impressive results in function-level code generation, they struggle with repository-scale code understanding (e.g., coming up with the right arguments for calling routines), requiring a deeper comprehension of complex file interactions. Also, recently, people have developed LLM agents that attempt to interact with repository code (e.g., compiling and evaluating its execution), prompting the need to evaluate their performance. These gaps have motivated our development of ML-Bench, a benchmark rooted in real-world programming applications that leverage existing code repositories to perform tasks. Addressing the need for LLMs to interpret long code contexts and translate instructions into precise, executable scripts, ML-Bench encompasses annotated 9,641 examples across 18 GitHub repositories, challenging LLMs to accommodate user-specified arguments and documentation intricacies effectively. To evaluate both LLMs and AI agents, two setups are employed: ML-LLM-Bench for assessing LLMs' text-to-code conversion within a predefined deployment environment, and ML-Agent-Bench for testing autonomous agents in an end-to-end task execution within a Linux sandbox environment. Our findings indicate that while GPT-4o leads with a Pass@5 rate surpassing 50%, there remains significant scope for improvement, highlighted by issues such as hallucinated outputs and difficulties with bash script generation. Notably, in the more demanding ML-Agent-Bench, GPT-4o achieves a 76.47% success rate, reflecting the efficacy of iterative action and feedback in complex task resolution. Our code, dataset, and models are available at https://github.com/gersteinlab/ML-bench.",
         "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
       }
     ]

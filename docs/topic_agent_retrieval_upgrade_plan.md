@@ -199,3 +199,26 @@ Verification for this package:
 - `backend/tests/test_topic_agent_providers.py`: `50 passed`
 - `backend/tests/test_topic_agent_pipeline.py`: `21 passed`
 - `backend/tests/test_topic_agent_api.py`: `9 passed`
+
+## Current Retrieval Stop Point
+
+For the current delivery pass, retrieval can be treated as good enough to stop iterating by default.
+
+The practical stop-point rationale is:
+
+- the software-agent and repository-repair families that were causing the most visible drift have now been stabilized
+- query planning, ranking, hygiene, and downstream support sets are all materially cleaner than in the earlier packages
+- manual validation is less painful because cache bypass exists at the request level
+- retrieval purity and retrieval coverage are now in a more balanced state because limited clean backfill can recover one or two useful records without reopening off-target leakage
+
+This does **not** mean retrieval is complete in an absolute sense. It means:
+
+- further retrieval work should now be regression-driven rather than curiosity-driven
+- new retrieval packages should open only when a new query family shows a concrete failure pattern
+- the default project focus should move to demo flow, documentation quality, and final delivery polish
+
+Recommended current policy:
+
+- keep `max_results` and current hygiene thresholds unchanged unless manual checks show a product-facing regression
+- use `disable_cache=true` only in testing and debugging scenarios
+- prefer adding future retrieval fixes as query-family-aware positive constraints, not ever-growing blacklists

@@ -416,3 +416,30 @@ candidate、evidence presentation 和 recommendation 都通过 `supporting_sourc
 因此，更准确的定位是：
 
 **当前项目已经完成了一个聚焦、可运行、可验收的 Topic Agent 子系统原型，并且能够较完整地展示设计逻辑、证据链结构与工程实现路径。**
+
+## 7. 当前 Retrieval 状态补充
+
+在后续实现中，retrieval 这条线已经继续推进到一个比较适合收口的状态。
+
+当前 retrieval 不是简单的“发一个 query 拿几条结果”，而是具备了以下能力：
+
+- staged provider retrieval
+- query routes 与 route-level diagnostics
+- lightweight route-aware fusion
+- query-family-aware candidate hygiene
+- anchor-preserving query rewrites
+- issue-resolution family 的更严格 same-task qualification
+- request-level `disable_cache` 调试开关
+- limited clean backfill
+
+这些增强的实际意义是：
+
+- 对 software-agent / repository-repair 这类 query，系统不再那么容易被泛 workflow、泛 collaborative engineering、泛 software-security 邻居带偏
+- retrieval 结果对 downstream candidate comparison 和 convergence 的污染明显减少
+- 手测时不必反复修改请求体来绕过缓存，可以直接用 `disable_cache=true`
+- final evidence pool 在高纯度前提下不至于收得过紧，必要时可以补回少量干净候选
+
+因此，当前版本的更准确描述是：
+
+- retrieval 已经从“容易漂移的演示级实现”提升到了“可解释、可调试、可阶段性收口的工程化实现”
+- 后续如果没有新的真实 query family 暴露回归，项目重点应优先转向 demo 表达、文档质量与交付收尾，而不是继续无边界地调 retrieval

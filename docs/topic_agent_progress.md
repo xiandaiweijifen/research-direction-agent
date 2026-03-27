@@ -635,3 +635,25 @@ Latest result:
   - `backend/tests/test_topic_agent_providers.py`: `50 passed`
   - `backend/tests/test_topic_agent_pipeline.py`: `21 passed`
   - `backend/tests/test_topic_agent_api.py`: `9 passed`
+
+### Retrieval Closure Note
+
+- The retrieval track is now in a reasonable closure state for the current delivery pass.
+- The main outcomes are:
+  - staged provider retrieval instead of one large monolithic retrieval flow
+  - explicit query routes with per-route diagnostics
+  - lightweight route-aware fusion
+  - query-family-aware candidate hygiene
+  - anchor-preserving query rewrites for drifting software-agent query families
+  - stricter issue-resolution qualification
+  - request-level cache bypass for manual validation
+  - limited clean backfill so high-purity retrieval does not collapse too aggressively
+- Recent manual checks indicate that:
+  - repository repair benchmark queries no longer drift into generic software-security or vibe-coding neighbors
+  - repository issue-resolution queries no longer leak collaborative-engineering neighbors into downstream support sets
+  - the issue-resolution family can now keep a cleaner final pool while still backfilling one additional clean record when appropriate
+- Recommended operating guidance:
+  - keep default cached behavior for normal product use
+  - use `disable_cache=true` only for retrieval validation and debugging
+  - do not broaden retrieval heuristics again unless a new real query family shows a concrete regression
+- The next high-value work should now move away from retrieval tuning unless a demo-blocking failure appears.
