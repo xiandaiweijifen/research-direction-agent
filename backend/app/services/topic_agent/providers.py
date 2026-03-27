@@ -6,6 +6,7 @@ from datetime import datetime
 from pathlib import Path
 from xml.etree import ElementTree
 from typing import Protocol
+import time
 
 import httpx
 
@@ -55,6 +56,13 @@ ATOM_NAMESPACE = {"atom": "http://www.w3.org/2005/Atom"}
 TOPIC_AGENT_ARXIV_CACHE_PATH = DATA_ROOT / "tool_state" / "topic_agent_arxiv_cache.json"
 TOPIC_AGENT_OPENALEX_CACHE_PATH = DATA_ROOT / "tool_state" / "topic_agent_openalex_cache.json"
 OPENALEX_CACHE_SCHEMA_VERSION = "v4"
+OPENALEX_MAX_QUERY_VARIANTS = 10
+
+
+@dataclass
+class TopicAgentHttpRequestMetrics:
+    attempt_count: int
+    latency_ms: int
 
 
 def _normalize_optional(value: str | None) -> str | None:
@@ -183,11 +191,18 @@ class OpenAlexEvidenceProvider:
                     fallback_reason=None,
                     record_count=len(cached_records),
                     cache_hit=True,
+                    query_count=0,
+                    provider_latency_ms=0,
+                    slowest_query=None,
+                    slowest_query_latency_ms=None,
+                    query_diagnostics=[],
                 ),
             )
         merged_records: list[TopicAgentSourceRecord] = []
+        started_at = time.perf_counter()
+        query_diagnostics: list[dict[str, str | int]] = []
         for query_text in query_texts:
-            response = _http_get_with_retries(
+            response, metrics = _http_get_with_retries(
                 self.api_url,
                 params={
                     "search": query_text,
@@ -197,6 +212,13 @@ class OpenAlexEvidenceProvider:
                 timeout_seconds=self.timeout_seconds,
                 max_retries=self.max_retries,
                 user_agent="research-topic-copilot/0.1",
+            )
+            query_diagnostics.append(
+                {
+                    "query": query_text,
+                    "latency_ms": metrics.latency_ms,
+                    "attempt_count": metrics.attempt_count,
+                }
             )
             payload = response.json()
             merged_records.extend(
@@ -209,6 +231,12 @@ class OpenAlexEvidenceProvider:
         )
         records = _filter_ranked_records(records, request, self.max_results)
         _save_cached_records(self.cache_path, cache_key, records)
+        provider_latency_ms = int((time.perf_counter() - started_at) * 1000)
+        slowest_query_entry = max(
+            query_diagnostics,
+            key=lambda item: int(item["latency_ms"]),
+            default=None,
+        )
         return TopicAgentEvidenceRetrievalResult(
             records=records,
             diagnostics=TopicAgentEvidenceDiagnostics(
@@ -218,6 +246,19 @@ class OpenAlexEvidenceProvider:
                 fallback_reason=None,
                 record_count=len(records),
                 cache_hit=False,
+                query_count=len(query_texts),
+                provider_latency_ms=provider_latency_ms,
+                slowest_query=(
+                    str(slowest_query_entry["query"])
+                    if slowest_query_entry is not None
+                    else None
+                ),
+                slowest_query_latency_ms=(
+                    int(slowest_query_entry["latency_ms"])
+                    if slowest_query_entry is not None
+                    else None
+                ),
+                query_diagnostics=query_diagnostics,
             ),
         )
 
@@ -260,9 +301,15 @@ class ArxivEvidenceProvider:
                     fallback_reason=None,
                     record_count=len(cached_records),
                     cache_hit=True,
+                    query_count=0,
+                    provider_latency_ms=0,
+                    slowest_query=None,
+                    slowest_query_latency_ms=None,
+                    query_diagnostics=[],
                 ),
             )
-        response = _http_get_with_retries(
+        started_at = time.perf_counter()
+        response, metrics = _http_get_with_retries(
             self.api_url,
             params={
                 "search_query": f"all:{query_text}",
@@ -291,6 +338,17 @@ class ArxivEvidenceProvider:
                 fallback_reason=None,
                 record_count=len(records),
                 cache_hit=False,
+                query_count=1,
+                provider_latency_ms=int((time.perf_counter() - started_at) * 1000),
+                slowest_query=query_text,
+                slowest_query_latency_ms=metrics.latency_ms,
+                query_diagnostics=[
+                    {
+                        "query": query_text,
+                        "latency_ms": metrics.latency_ms,
+                        "attempt_count": metrics.attempt_count,
+                    }
+                ],
             ),
         )
 
@@ -503,14 +561,14 @@ def _build_openalex_queries(request: TopicAgentExploreRequest) -> list[str]:
         queries.append(" ".join(["multimodal", "reasoning", *domain_terms[:2], "benchmark"]))
     if "trustworthy" in core_terms:
         queries.append(" ".join(["trustworthy", "reasoning", *domain_terms[:2], "evaluation"]))
-    queries.extend(_general_query_role_expansions(request))
     queries.extend(_openalex_query_aliases(request))
+    queries.extend(_general_query_role_expansions(request))
     deduped_queries: list[str] = []
     for query in queries:
         normalized = query.strip()
         if normalized and normalized not in deduped_queries:
             deduped_queries.append(normalized)
-    return deduped_queries
+    return deduped_queries[:OPENALEX_MAX_QUERY_VARIANTS]
 
 
 def _build_cache_key(query_text: str, max_results: int, *, version: str | None = None) -> str:
@@ -559,10 +617,13 @@ def _http_get_with_retries(
     timeout_seconds: float,
     max_retries: int,
     user_agent: str,
-) -> httpx.Response:
+) -> tuple[httpx.Response, TopicAgentHttpRequestMetrics]:
     timeout = httpx.Timeout(connect=5.0, read=timeout_seconds, write=5.0, pool=5.0)
     last_exc: Exception | None = None
+    started_at = time.perf_counter()
+    attempt_count = 0
     for _attempt in range(max_retries + 1):
+        attempt_count += 1
         try:
             response = httpx.get(
                 url,
@@ -572,7 +633,10 @@ def _http_get_with_retries(
                 headers={"User-Agent": user_agent},
             )
             response.raise_for_status()
-            return response
+            return response, TopicAgentHttpRequestMetrics(
+                attempt_count=attempt_count,
+                latency_ms=int((time.perf_counter() - started_at) * 1000),
+            )
         except (httpx.ConnectError, httpx.ReadTimeout, httpx.HTTPStatusError) as exc:
             last_exc = exc
     if last_exc is not None:

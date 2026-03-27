@@ -106,6 +106,11 @@ class TopicAgentEvidenceDiagnostics(BaseModel):
     fallback_reason: str | None = None
     record_count: int = 0
     cache_hit: bool = False
+    query_count: int = 0
+    provider_latency_ms: int | None = None
+    slowest_query: str | None = None
+    slowest_query_latency_ms: int | None = None
+    query_diagnostics: list[dict[str, str | int]] = Field(default_factory=list)
 
 
 class TopicAgentTraceEvent(BaseModel):

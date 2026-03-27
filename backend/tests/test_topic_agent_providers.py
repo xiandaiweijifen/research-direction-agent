@@ -522,7 +522,7 @@ def test_http_get_with_retries_retries_transient_connect_errors(monkeypatch):
 
     monkeypatch.setattr("app.services.topic_agent.providers.httpx.get", flaky_get)
 
-    response = _http_get_with_retries(
+    response, metrics = _http_get_with_retries(
         "https://example.org",
         params={"search": "test"},
         timeout_seconds=10.0,
@@ -532,6 +532,8 @@ def test_http_get_with_retries_retries_transient_connect_errors(monkeypatch):
 
     assert isinstance(response, FakeResponse)
     assert call_count["value"] == 3
+    assert metrics.attempt_count == 3
+    assert metrics.latency_ms >= 0
 
 
 def test_http_get_with_retries_raises_after_retry_budget(monkeypatch):
@@ -680,6 +682,63 @@ def test_openalex_queries_add_general_research_role_expansions_for_modern_topics
     assert "coding agents for software engineering developer workflows method framework" in joined_queries
     assert "coding agents for software engineering developer workflows workflow reproducibility" in joined_queries
     assert "coding agents for software engineering developer workflows practical baseline adaptation" in joined_queries
+
+
+def test_openalex_queries_are_capped_to_reduce_request_fan_out():
+    request = TopicAgentExploreRequest(
+        interest="trustworthy visual question answering in radiology",
+        problem_domain="medical AI",
+        constraints=TopicAgentConstraintSet(preferred_style="applied"),
+    )
+
+    queries = _build_openalex_queries(request)
+
+    assert len(queries) <= 10
+
+
+def test_openalex_provider_reports_latency_and_query_diagnostics(workspace_tmp_path, monkeypatch):
+    request = TopicAgentExploreRequest(
+        interest="repository-level bug-fixing agents",
+        problem_domain="software engineering evaluation",
+        constraints=TopicAgentConstraintSet(preferred_style="applied"),
+    )
+    cache_path = workspace_tmp_path / "topic_agent_openalex_cache.json"
+    provider = OpenAlexEvidenceProvider(cache_path=cache_path, cache_ttl_seconds=3600)
+
+    class FakeResponse:
+        def raise_for_status(self):
+            return None
+
+        def json(self):
+            return {
+                "results": [
+                    {
+                        "id": "https://openalex.org/W4400582844",
+                        "display_name": "CodePlan: Repository-Level Coding using LLMs and Planning",
+                        "publication_year": 2024,
+                        "abstract_inverted_index": {
+                            "repository": [0],
+                            "level": [1],
+                            "coding": [2],
+                            "planning": [3],
+                        },
+                        "authorships": [{"author": {"display_name": "Author A"}}],
+                        "primary_location": {"landing_page_url": "https://example.org/codeplan"},
+                    }
+                ]
+            }
+
+    monkeypatch.setattr("app.services.topic_agent.providers.httpx.get", lambda *args, **kwargs: FakeResponse())
+
+    result = provider.retrieve(request)
+
+    assert result.diagnostics.query_count >= 1
+    assert result.diagnostics.provider_latency_ms is not None
+    assert result.diagnostics.provider_latency_ms >= 0
+    assert result.diagnostics.query_diagnostics
+    assert result.diagnostics.slowest_query is not None
+    assert result.diagnostics.slowest_query_latency_ms is not None
+    assert all("attempt_count" in item for item in result.diagnostics.query_diagnostics)
 
 
 def test_openalex_raw_pool_size_fetches_more_than_final_max_results():

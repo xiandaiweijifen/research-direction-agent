@@ -41,6 +41,9 @@ def test_topic_agent_explore_creates_session_with_mock_outputs(workspace_tmp_pat
     assert payload["evidence_diagnostics"]["used_provider"] in {"mock", "arxiv", "openalex"}
     assert payload["evidence_diagnostics"]["record_count"] == len(payload["evidence_records"])
     assert isinstance(payload["evidence_diagnostics"]["cache_hit"], bool)
+    assert "query_count" in payload["evidence_diagnostics"]
+    assert "provider_latency_ms" in payload["evidence_diagnostics"]
+    assert "query_diagnostics" in payload["evidence_diagnostics"]
     assert payload["confidence_summary"]["rationale"]
     assert payload["trace"]
     assert payload["evidence_presentation"]["source_facts"]
@@ -287,6 +290,11 @@ def test_topic_agent_session_endpoints_backfill_missing_legacy_diagnostics(works
         "fallback_reason": None,
         "record_count": 0,
         "cache_hit": False,
+        "query_count": 0,
+        "provider_latency_ms": None,
+        "slowest_query": None,
+        "slowest_query_latency_ms": None,
+        "query_diagnostics": [],
     }
 
 
