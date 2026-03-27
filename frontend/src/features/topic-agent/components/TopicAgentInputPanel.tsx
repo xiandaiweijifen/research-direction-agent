@@ -55,11 +55,22 @@ export function TopicAgentInputPanel({
           presets: "Demo 场景",
           presetsIntro: "先用稳定场景演示，再切回自由输入。",
           recentRunsHint: "会话历史已经按 recent runs 收敛，不再作为长档案展示。",
+          boundaryTitle: "当前更适合演示的方向",
+          boundaryCopy:
+            "当前后端在软件工程导向 family 上更稳定，尤其是 repository repair、repository issue-resolution 及其相邻方向。跨域方向仍应视为边界检查，而不是默认稳定能力。",
+          readingPathTitle: "默认阅读顺序",
+          readingPathCopy: "建议按 framing → top evidence → comparison → recommendation 的顺序查看结果。",
         }
       : {
           presets: "Demo Presets",
           presetsIntro: "Start with a stable scenario, then switch back to free-form input.",
           recentRunsHint: "Session history is now trimmed to recent runs instead of acting like a long archive.",
+          boundaryTitle: "Best-Fit Demo Families",
+          boundaryCopy:
+            "The current backend is most stable on software-engineering-oriented families, especially repository repair, repository issue-resolution, and nearby directions. Cross-domain topics should still be treated as boundary checks rather than default strengths.",
+          readingPathTitle: "Default Reading Path",
+          readingPathCopy:
+            "For demos, read the result in this order: framing → top evidence → comparison → recommendation.",
         };
 
   return (
@@ -95,6 +106,12 @@ export function TopicAgentInputPanel({
             );
           })}
         </div>
+      </article>
+      <article className="subsection-card">
+        <span className="trace-label">{uiCopy.boundaryTitle}</span>
+        <p className="subsection-copy">{uiCopy.boundaryCopy}</p>
+        <span className="trace-label">{uiCopy.readingPathTitle}</span>
+        <p className="subsection-copy">{uiCopy.readingPathCopy}</p>
       </article>
       <form className="stack-form" onSubmit={onSubmit}>
         <label>

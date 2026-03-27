@@ -30,8 +30,6 @@ export function TopicAgentSessionHistory({
   const uiCurrent = locale === "zh" ? "当前" : "Current";
   const uiUpdated = locale === "zh" ? "更新于" : "Updated";
 
-  void onCompareSession;
-
   function formatUpdatedAt(value: string) {
     const date = new Date(value);
     if (Number.isNaN(date.getTime())) {
@@ -51,10 +49,12 @@ export function TopicAgentSessionHistory({
       ? {
           showMore: `展开其余 ${hiddenCount} 条`,
           showLess: "收起",
+          intro: "把 recent runs 当作辅助参考，而不是主要阅读路径。",
         }
       : {
           showMore: `Show ${hiddenCount} more`,
           showLess: "Show less",
+          intro: "Treat recent runs as supporting context, not as the primary reading path.",
         };
 
   return (
@@ -62,9 +62,7 @@ export function TopicAgentSessionHistory({
       <div className="panel-heading">
         <div>
           <h2>{copy.recentSessions}</h2>
-          <p className="panel-intro">
-            {topicSessions.length} {copy.sessions}
-          </p>
+          <p className="panel-intro">{uiCopy.intro}</p>
         </div>
       </div>
       {topicSessions.length === 0 ? (
@@ -99,6 +97,15 @@ export function TopicAgentSessionHistory({
                 >
                   {copy.load}
                 </button>
+                {currentSessionId !== session.session_id && (
+                  <button
+                    type="button"
+                    className="ghost-button"
+                    onClick={() => onCompareSession(session.session_id)}
+                  >
+                    {copy.compare}
+                  </button>
+                )}
               </div>
             </article>
           ))}

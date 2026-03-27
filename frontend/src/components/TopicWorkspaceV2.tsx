@@ -12,6 +12,7 @@ import { TopicAgentEvidencePanel } from "../features/topic-agent/components/Topi
 import { TopicAgentFramingPanel } from "../features/topic-agent/components/TopicAgentFramingPanel";
 import { TopicAgentInputPanel } from "../features/topic-agent/components/TopicAgentInputPanel";
 import { TopicAgentRecommendationSummary } from "../features/topic-agent/components/TopicAgentRecommendationSummary";
+import { TopicAgentSessionDiffPanel } from "../features/topic-agent/components/TopicAgentSessionDiffPanel";
 import { TopicAgentSessionHistory } from "../features/topic-agent/components/TopicAgentSessionHistory";
 import { TopicAgentTrustPanel } from "../features/topic-agent/components/TopicAgentTrustPanel";
 
@@ -101,9 +102,6 @@ export function TopicWorkspaceV2({
   const [evidenceTypeFilter, setEvidenceTypeFilter] = useState("all");
   const [focusedEvidenceId, setFocusedEvidenceId] = useState<string | null>(null);
 
-  void topicComparisonResult;
-  void onCompareSession;
-
   const evidenceTitleById = new Map(
     (topicResult?.evidence_records ?? []).map((record) => [record.source_id, record.title]),
   );
@@ -127,6 +125,18 @@ export function TopicWorkspaceV2({
     filteredEvidenceRecords[0] ??
     topicResult?.evidence_records[0] ??
     null;
+  const currentCandidateTitles = new Set(
+    (topicResult?.candidate_topics ?? []).map((candidate) => candidate.title),
+  );
+  const comparedCandidateTitles = new Set(
+    (topicComparisonResult?.candidate_topics ?? []).map((candidate) => candidate.title),
+  );
+  const addedCandidateTitles = Array.from(currentCandidateTitles).filter(
+    (title) => !comparedCandidateTitles.has(title),
+  );
+  const removedCandidateTitles = Array.from(comparedCandidateTitles).filter(
+    (title) => !currentCandidateTitles.has(title),
+  );
 
   const copy: Record<string, string> =
     locale === "zh"
@@ -166,6 +176,7 @@ export function TopicWorkspaceV2({
           trace: "执行轨迹",
           confidence: "可信度摘要",
           recentSessions: "最近运行记录",
+          sessionDiff: "会话差异",
           load: "加载",
           noResult: "还没有 Topic Agent 结果",
           noResultCopy: "提交研究兴趣后，这里会展示结构化的选题分析结果。",
@@ -183,6 +194,11 @@ export function TopicWorkspaceV2({
           assessments: "个评估",
           records: "条记录",
           stages: "个阶段",
+          noDiff: "还没有选择对比会话",
+          currentSession: "当前会话",
+          compareSession: "对比会话",
+          evidenceDelta: "证据数量",
+          candidateDelta: "候选差异",
           addedInCurrent: "当前新增",
           onlyInCompared: "仅在对比会话中",
           noNewCandidates: "没有新增候选",
@@ -231,6 +247,7 @@ export function TopicWorkspaceV2({
           trace: "Execution Trace",
           confidence: "Confidence Summary",
           recentSessions: "Recent Runs",
+          sessionDiff: "Session Diff",
           load: "Load",
           noResult: "No Topic Agent result yet",
           noResultCopy: "Submit a research interest to view structured Topic Agent output here.",
@@ -248,6 +265,11 @@ export function TopicWorkspaceV2({
           assessments: "assessments",
           records: "records",
           stages: "stages",
+          noDiff: "No comparison session selected yet",
+          currentSession: "Current Session",
+          compareSession: "Compared Session",
+          evidenceDelta: "Evidence Delta",
+          candidateDelta: "Candidate Delta",
           addedInCurrent: "Added In Current",
           onlyInCompared: "Only In Compared",
           noNewCandidates: "No new candidates",
@@ -300,16 +322,6 @@ export function TopicWorkspaceV2({
         onSubmit={onSubmit}
         onRefine={onRefine}
         onApplyPreset={onApplyPreset}
-      />
-
-      <TopicAgentSessionHistory
-        copy={copy}
-        locale={locale}
-        topicSessions={topicSessions}
-        currentSessionId={topicResult?.session_id}
-        resolveCandidateLabel={resolveCandidateLabel}
-        onLoadSession={onLoadSession}
-        onCompareSession={onCompareSession}
       />
 
       <TopicSectionShell
@@ -454,8 +466,41 @@ export function TopicWorkspaceV2({
               evidenceTitleById={evidenceTitleById}
             />
           </TopicSectionShell>
+
+          <TopicSectionShell
+            label={locale === "zh" ? "辅助对比" : "Supporting Comparison"}
+            title={
+              locale === "zh"
+                ? "把会话差异留在底部，按需查看"
+                : "Keep Session Diffs At The Bottom For Optional Review"
+            }
+            description={
+              locale === "zh"
+                ? "这一块保留给回看不同运行结果之间的变化，用来辅助判断，不放进默认 demo 主路径。"
+                : "Use this section to inspect changes across runs without interrupting the default demo path."
+            }
+          >
+            <TopicAgentSessionDiffPanel
+              copy={copy}
+              topicResult={topicResult}
+              topicComparisonResult={topicComparisonResult}
+              addedCandidateTitles={addedCandidateTitles}
+              removedCandidateTitles={removedCandidateTitles}
+              resolveCandidateLabel={resolveCandidateLabel}
+            />
+          </TopicSectionShell>
         </>
       )}
+
+      <TopicAgentSessionHistory
+        copy={copy}
+        locale={locale}
+        topicSessions={topicSessions}
+        currentSessionId={topicResult?.session_id}
+        resolveCandidateLabel={resolveCandidateLabel}
+        onLoadSession={onLoadSession}
+        onCompareSession={onCompareSession}
+      />
     </section>
   );
 }
