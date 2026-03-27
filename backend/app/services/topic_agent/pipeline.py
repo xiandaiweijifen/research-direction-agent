@@ -5,6 +5,7 @@ import uuid
 from dataclasses import dataclass
 
 from app.schemas.topic_agent import (
+    TopicAgentCandidateAssessment,
     TopicAgentClarificationSuggestion,
     TopicAgentCandidateTopic,
     TopicAgentComparisonResult,
@@ -1653,6 +1654,11 @@ def generate_candidates(context: TopicAgentPipelineContext) -> list[TopicAgentCa
             draft_for_candidate_3.supporting_source_ids if draft_for_candidate_3 else [],
             result[2].supporting_source_ids,
         )
+    result = _apply_candidate_origin_signals(
+        result,
+        context.landscape_summary,
+        evidence_records,
+    )
     context.candidate_topics = result
     return result
 
@@ -1660,7 +1666,8 @@ def generate_candidates(context: TopicAgentPipelineContext) -> list[TopicAgentCa
 def compare_candidates(context: TopicAgentPipelineContext) -> TopicAgentComparisonResult:
     budget_bucket = _time_budget_bucket(context.request.constraints.time_budget_months)
     style = _preferred_style(context.request)
-    assessments_by_id = {
+    candidate_map = _candidate_by_id_map(context.candidate_topics or [])
+    assessments_by_id: dict[str, dict[str, str]] = {
         "candidate_1": {
             "candidate_id": "candidate_1",
             "novelty": "high",
@@ -1718,6 +1725,78 @@ def compare_candidates(context: TopicAgentPipelineContext) -> TopicAgentComparis
             "and candidate 3 is strongest on execution speed for an engineering-oriented project."
         )
 
+    def _dimension_reason(candidate_id: str, dimension: str, score: str) -> str:
+        candidate = candidate_map.get(candidate_id)
+        if candidate is None:
+            return f"Assigned as {score} based on the current comparison template."
+
+        origin = ", ".join(candidate.origin_signals[:2]) or "the current evidence bundle"
+        support_count = len(candidate.supporting_source_ids)
+        if dimension == "novelty":
+            return (
+                f"Rated {score} because the direction frames a distinct question around {origin} "
+                f"instead of restating the topic broadly."
+            )
+        if dimension == "feasibility":
+            return (
+                f"Rated {score} because the scope implied by {origin} is compatible with the current "
+                f"time and resource constraints."
+            )
+        if dimension == "evidence_strength":
+            return (
+                f"Rated {score} because it is currently supported by {support_count} directly linked source"
+                f"{'' if support_count == 1 else 's'}."
+            )
+        if dimension == "data_availability":
+            return (
+                f"Rated {score} because the supporting materials around {origin} appear sufficiently visible "
+                "for a bounded prototype or evaluation slice."
+            )
+        if dimension == "implementation_cost":
+            return (
+                f"Rated {score} because the expected build effort around {origin} remains bounded for this stage."
+            )
+        return (
+            f"Rated {score} because the current evidence still leaves non-trivial uncertainty around {origin}."
+        )
+
+    ordered_assessments: list[TopicAgentCandidateAssessment] = []
+    for candidate_id in ("candidate_1", "candidate_2", "candidate_3"):
+        assessment = assessments_by_id[candidate_id]
+        ordered_assessments.append(
+            TopicAgentCandidateAssessment(
+                candidate_id=candidate_id,
+                novelty=assessment["novelty"],
+                feasibility=assessment["feasibility"],
+                evidence_strength=assessment["evidence_strength"],
+                data_availability=assessment["data_availability"],
+                implementation_cost=assessment["implementation_cost"],
+                risk=assessment["risk"],
+                novelty_reason=_dimension_reason(candidate_id, "novelty", assessment["novelty"]),
+                feasibility_reason=_dimension_reason(candidate_id, "feasibility", assessment["feasibility"]),
+                evidence_strength_reason=_dimension_reason(
+                    candidate_id,
+                    "evidence_strength",
+                    assessment["evidence_strength"],
+                ),
+                data_availability_reason=_dimension_reason(
+                    candidate_id,
+                    "data_availability",
+                    assessment["data_availability"],
+                ),
+                implementation_cost_reason=_dimension_reason(
+                    candidate_id,
+                    "implementation_cost",
+                    assessment["implementation_cost"],
+                ),
+                risk_reason=_dimension_reason(candidate_id, "risk", assessment["risk"]),
+            )
+        )
+
+    candidate_1_title = candidate_map.get("candidate_1").title if candidate_map.get("candidate_1") else "Candidate 1"
+    candidate_2_title = candidate_map.get("candidate_2").title if candidate_map.get("candidate_2") else "Candidate 2"
+    candidate_3_title = candidate_map.get("candidate_3").title if candidate_map.get("candidate_3") else "Candidate 3"
+
     result = TopicAgentComparisonResult(
         dimensions=[
             "novelty",
@@ -1727,8 +1806,24 @@ def compare_candidates(context: TopicAgentPipelineContext) -> TopicAgentComparis
             "implementation_cost",
             "risk",
         ],
-        summary=summary,
-        candidate_assessments=list(assessments_by_id.values()),
+        summary=(
+            f"{candidate_2_title} currently leads on practical execution, "
+            f"{candidate_1_title} remains the sharpest framing option, "
+            f"and {candidate_3_title} stays the fastest systems-oriented path."
+            if style == "applied"
+            else (
+                f"{candidate_3_title} currently leads on systems-oriented execution, "
+                f"{candidate_1_title} remains the clearest framing option, "
+                f"and {candidate_2_title} stays the most direct adaptation path."
+                if style == "systems"
+                else (
+                    f"{candidate_1_title} is strongest on framing clarity, "
+                    f"{candidate_2_title} is strongest on practical feasibility, "
+                    f"and {candidate_3_title} is strongest on delivery speed."
+                )
+            )
+        ),
+        candidate_assessments=ordered_assessments,
     )
     context.comparison_result = result
     return result
@@ -1737,27 +1832,43 @@ def compare_candidates(context: TopicAgentPipelineContext) -> TopicAgentComparis
 def converge_recommendation(context: TopicAgentPipelineContext) -> TopicAgentConvergenceResult:
     budget_bucket = _time_budget_bucket(context.request.constraints.time_budget_months)
     style = _preferred_style(context.request)
+    candidate_map = _candidate_by_id_map(context.candidate_topics or [])
 
     recommended_candidate_id = "candidate_1"
     backup_candidate_id = "candidate_2"
-    rationale = (
-        "Candidate 1 currently offers the best balance between research value, evidence support, "
-        "and scope control for a first serious topic exploration."
-    )
+    rationale = ""
 
     if style == "applied" or budget_bucket == "tight":
         recommended_candidate_id = "candidate_2"
         backup_candidate_id = "candidate_1"
-        rationale = (
-            "Candidate 2 is the best fit for the current constraints because it starts from reusable baselines, "
-            "matches an applied project style, and is easier to execute within a tighter timeline."
-        )
     elif style == "systems":
         recommended_candidate_id = "candidate_3"
         backup_candidate_id = "candidate_2"
+
+    recommended_candidate = candidate_map.get(recommended_candidate_id)
+    backup_candidate = candidate_map.get(backup_candidate_id)
+    recommended_title = recommended_candidate.title if recommended_candidate else recommended_candidate_id
+    backup_title = backup_candidate.title if backup_candidate else backup_candidate_id
+    recommended_origin = ", ".join((recommended_candidate.origin_signals if recommended_candidate else [])[:2])
+    if not recommended_origin:
+        recommended_origin = "the current evidence bundle"
+
+    if recommended_candidate_id == "candidate_2":
         rationale = (
-            "Candidate 3 is the best fit for a systems-oriented topic because it emphasizes workflow reliability, "
-            "bounded engineering scope, and clearer reproducibility outcomes."
+            f"{recommended_title} is currently the best fit because the available materials around "
+            f"{recommended_origin} point to a reusable baseline, a feasible applied scope, and a cleaner path "
+            f"than {backup_title} under the current constraints."
+        )
+    elif recommended_candidate_id == "candidate_3":
+        rationale = (
+            f"{recommended_title} is currently the best fit because the available materials around "
+            f"{recommended_origin} support a bounded systems workflow with clearer reproducibility outcomes "
+            f"than {backup_title}."
+        )
+    else:
+        rationale = (
+            f"{recommended_title} currently offers the best balance between research value, evidence support, "
+            f"and scope control, especially around {recommended_origin}."
         )
 
     manual_checks = [
@@ -1804,6 +1915,51 @@ def _derive_candidate_separation(candidate_topics: list[TopicAgentCandidateTopic
     if len(positionings) == 2:
         return "medium"
     return "low"
+
+
+def _candidate_origin_signals(
+    candidate: TopicAgentCandidateTopic,
+    landscape_summary: TopicAgentLandscapeSummary | None,
+    evidence_records: list[TopicAgentSourceRecord],
+) -> list[str]:
+    supporting_records = [
+        record for record in evidence_records if record.source_id in candidate.supporting_source_ids
+    ]
+    signals: list[str] = []
+
+    if candidate.positioning in {"gap-driven", "benchmark-gap", "benchmark"}:
+        signals.extend((landscape_summary.likely_gaps if landscape_summary else [])[:2])
+    elif candidate.positioning in {"applied-transfer", "transfer"}:
+        signals.extend((landscape_summary.active_methods if landscape_summary else [])[:2])
+    else:
+        signals.extend((landscape_summary.themes if landscape_summary else [])[:2])
+
+    for record in supporting_records[:2]:
+        anchor = _record_title_anchor(record)
+        if anchor and anchor not in signals:
+            signals.append(anchor)
+
+    return signals[:3]
+
+
+def _apply_candidate_origin_signals(
+    candidate_topics: list[TopicAgentCandidateTopic],
+    landscape_summary: TopicAgentLandscapeSummary | None,
+    evidence_records: list[TopicAgentSourceRecord],
+) -> list[TopicAgentCandidateTopic]:
+    for candidate in candidate_topics:
+        candidate.origin_signals = _candidate_origin_signals(
+            candidate,
+            landscape_summary,
+            evidence_records,
+        )
+    return candidate_topics
+
+
+def _candidate_by_id_map(
+    candidate_topics: list[TopicAgentCandidateTopic],
+) -> dict[str, TopicAgentCandidateTopic]:
+    return {candidate.candidate_id: candidate for candidate in candidate_topics}
 
 
 def build_confidence_summary(context: TopicAgentPipelineContext) -> TopicAgentConfidenceSummary:

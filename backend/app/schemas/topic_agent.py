@@ -59,12 +59,29 @@ class TopicAgentCandidateTopic(BaseModel):
     risk_note: str
     supporting_source_ids: list[str] = Field(default_factory=list)
     open_questions: list[str] = Field(default_factory=list)
+    origin_signals: list[str] = Field(default_factory=list)
+
+
+class TopicAgentCandidateAssessment(BaseModel):
+    candidate_id: str
+    novelty: str
+    feasibility: str
+    evidence_strength: str
+    data_availability: str
+    implementation_cost: str
+    risk: str
+    novelty_reason: str = ""
+    feasibility_reason: str = ""
+    evidence_strength_reason: str = ""
+    data_availability_reason: str = ""
+    implementation_cost_reason: str = ""
+    risk_reason: str = ""
 
 
 class TopicAgentComparisonResult(BaseModel):
     dimensions: list[str] = Field(default_factory=list)
     summary: str
-    candidate_assessments: list[dict[str, str]] = Field(default_factory=list)
+    candidate_assessments: list[TopicAgentCandidateAssessment] = Field(default_factory=list)
 
 
 class TopicAgentConvergenceResult(BaseModel):

@@ -33,7 +33,9 @@ def test_topic_agent_explore_creates_session_with_mock_outputs(workspace_tmp_pat
     assert payload["framing_result"]["normalized_topic"] == "trustworthy multimodal reasoning in medical imaging"
     assert len(payload["evidence_records"]) >= 3
     assert len(payload["candidate_topics"]) == 3
+    assert payload["candidate_topics"][0]["origin_signals"]
     assert payload["comparison_result"]["candidate_assessments"]
+    assert payload["comparison_result"]["candidate_assessments"][0]["novelty_reason"]
     assert payload["convergence_result"]["recommended_candidate_id"] == "candidate_1"
     assert payload["confidence_summary"]["candidate_separation"] == "high"
     assert payload["evidence_diagnostics"]["used_provider"] in {"mock", "arxiv", "openalex"}
@@ -169,10 +171,8 @@ def test_topic_agent_refine_updates_existing_session(workspace_tmp_path, monkeyp
         == "Applied Method Transfer Under Practical Constraints"
     )
     assert refined_payload["convergence_result"]["recommended_candidate_id"] == "candidate_2"
-    assert "applied project style" in refined_payload["convergence_result"]["rationale"]
-    assert refined_payload["comparison_result"]["summary"].startswith(
-        "Candidate 2 is strongest for applied feasibility"
-    )
+    assert "reusable baseline" in refined_payload["convergence_result"]["rationale"].lower()
+    assert "Applied Method Transfer Under Practical Constraints" in refined_payload["comparison_result"]["summary"]
     joined_confirmations = " ".join(refined_payload["human_confirmations"]).lower()
     assert "project timeline" not in joined_confirmations
     assert "resource level" not in joined_confirmations

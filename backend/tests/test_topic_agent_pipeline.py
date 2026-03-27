@@ -34,7 +34,9 @@ def test_topic_agent_pipeline_returns_structured_session_response():
     assert response.evidence_presentation.system_synthesis
     assert response.evidence_presentation.tentative_inferences
     assert len(response.candidate_topics) == 3
-    assert response.comparison_result.candidate_assessments[0]["candidate_id"] == "candidate_1"
+    assert response.candidate_topics[0].origin_signals
+    assert response.comparison_result.candidate_assessments[0].candidate_id == "candidate_1"
+    assert response.comparison_result.candidate_assessments[0].novelty_reason
     assert response.convergence_result.recommended_candidate_id == "candidate_1"
     assert [event.stage for event in response.trace] == [
         "frame_problem",
@@ -66,9 +68,8 @@ def test_topic_agent_pipeline_changes_recommendation_for_applied_tight_constrain
     assert response.convergence_result.recommended_candidate_id == "candidate_2"
     assert response.candidate_topics[1].title == "Applied Method Transfer Under Practical Constraints"
     assert response.evidence_diagnostics.used_provider == "mock"
-    assert response.comparison_result.summary.startswith(
-        "Candidate 2 is strongest for applied feasibility"
-    )
+    assert "Applied Method Transfer Under Practical Constraints" in response.comparison_result.summary
+    assert "reusable baseline" in response.convergence_result.rationale.lower()
 
 
 def test_topic_agent_pipeline_maps_candidate_supporting_ids_from_current_evidence():
