@@ -1,690 +1,5 @@
 [
   {
-    "session_id": "29554560c90048afa716ed240963c154",
-    "created_at": "2026-03-26T19:57:44.983212+00:00",
-    "updated_at": "2026-03-26T19:57:44.983212+00:00",
-    "user_input": {
-      "interest": "clinical medical reasoning",
-      "problem_domain": "medical AI",
-      "seed_idea": "I want a feasible applied topic focused on evaluation reliability rather than just higher benchmark scores.",
-      "constraints": {
-        "time_budget_months": 6,
-        "resource_level": "student",
-        "preferred_style": "applied",
-        "notes": null
-      }
-    },
-    "framing_result": {
-      "normalized_topic": "clinical medical reasoning",
-      "extracted_constraints": {
-        "time_budget_months": "6",
-        "resource_level": "student",
-        "preferred_style": "applied"
-      },
-      "missing_clarifications": [],
-      "search_questions": [
-        "What are the main research themes in clinical medical reasoning?",
-        "What methods and benchmarks are commonly used in clinical medical reasoning?",
-        "What open problems or underexplored gaps exist in clinical medical reasoning?"
-      ]
-    },
-    "evidence_records": [
-      {
-        "source_id": "openalex_w4416954175",
-        "title": "Benchmarking large language models on the United States medical licensing examination for clinical reasoning and medical licensing scenarios",
-        "source_type": "benchmark",
-        "source_tier": "A",
-        "year": 2025,
-        "authors_or_publisher": "K. Siam, A. Diaz Varela, Md Jobair Hossain Faruk, Jerry Cheng",
-        "identifier": "https://openalex.org/W4416954175",
-        "url": "https://doi.org/10.1038/s41598-025-31010-4",
-        "summary": "Artificial intelligence (AI) is transforming healthcare by assisting with intricate clinical reasoning and diagnosis. Recent research demonstrates that large language models (LLMs), such as ChatGPT and DeepSeek, possess considerable potential in medical comprehension. This study meticulously evaluates the clinical reasoning capabilities of four advanced LLMs, including ChatGPT, DeepSeek, Grok, and Qwen, utilizing the United States Medical Licensing Examination (USMLE) as a standard benchmark. We assess 376 publicly accessible USMLE sample exam questions (Step 1, Step 2 CK, Step 3) from the most recent booklet released in July 2023. We analyze model performance across four question categories: text-only, text with image, text with mathematical reasoning, and integrated text-image-mathematical reasoning and measure model accuracy at three USMLE steps. Our findings show that DeepSeek and ChatGPT consistently outperform Grok and Qwen, with DeepSeek reaching 93% on Step 2 CK. Error analysis revealed that universal failures were rare (≤1.60%) and concentrated in multimodal and quantitative reasoning tasks, suggesting both ensemble potential and shared blind spots. Compared to the baseline ChatGPT-3.5 Turbo, newer models demonstrate substantial gains, though possible training-data exposure to USMLE content limits generalizability. Despite encouraging accuracy, models exhibited overconfidence and hallucinations, underscoring the need for human oversight. Limitations include reliance on sample questions, the small number of multimodal items, and lack of real-world datasets. Future work should expand benchmarks, integrate physician feedback, and improve reproducibility through shared prompts and configurations. Overall, these results highlight both the promise and the limitations of LLMs in medical testing: strong accuracy and complementarity, but persistent risks requiring innovation, benchmarking, and clinical oversight.",
-        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
-      },
-      {
-        "source_id": "openalex_w4406940684",
-        "title": "Towards Metacognitive Clinical Reasoning: Benchmarking MD-PIE Against State-of-the-Art LLMs in Medical Decision-Making",
-        "source_type": "benchmark",
-        "source_tier": "A",
-        "year": 2025,
-        "authors_or_publisher": "Yasma Esteitieh, S. Mandal, George Laliotis",
-        "identifier": "https://openalex.org/W4406940684",
-        "url": "https://doi.org/10.1101/2025.01.28.25321282",
-        "summary": "Abstract The ability of large language models (LLMs) to perform clinical reasoning and cognitive tasks within medicine remains a critical measure of their overall capabilities in decision-making, with significant implications for patient outcomes and healthcare efficiency. Current AI models often face limitations in real-world clinical environments, including variability in performance, a lack of domain-specific knowledge, and black-box reasoning processes. In this study, we introduce a novel PIE framework, named MD-PIE, which emulates cognitive and reasoning abilities in medical reasoning and decision-making. We benchmark our framework and baseline methods both quantitatively and qualitatively using state-of-the-art LLMs, comparing them against OpenAI’s o1, Gemini 2.0 Flash Thinking, and DeepSeek V3 across diverse benchmarks. Our results demonstrate that MD-PIE surpasses existing models in differential diagnosis and reasoning accuracy across diverse medical benchmarks. This study underscores its potential to improve clinical decision-making through adaptive and collaborative design. Future research should focus on larger benchmarks and real-world validation to confirm its reliability and effectiveness in varied clinical scenarios.",
-        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
-      },
-      {
-        "source_id": "openalex_w4406371336",
-        "title": "Large Language Models lack essential metacognition for reliable medical reasoning",
-        "source_type": "benchmark",
-        "source_tier": "A",
-        "year": 2025,
-        "authors_or_publisher": "Maxime Griot, Coralie Hemptinne, Jean Vanderdonckt, Demet Yüksel",
-        "identifier": "https://openalex.org/W4406371336",
-        "url": "https://doi.org/10.1038/s41467-024-55628-6",
-        "summary": "Large Language Models have demonstrated expert-level accuracy on medical board examinations, suggesting potential for clinical decision support systems. However, their metacognitive abilities, crucial for medical decision-making, remain largely unexplored. To address this gap, we developed MetaMedQA, a benchmark incorporating confidence scores and metacognitive tasks into multiple-choice medical questions. We evaluated twelve models on dimensions including confidence-based accuracy, missing answer recall, and unknown recall. Despite high accuracy on multiple-choice questions, our study revealed significant metacognitive deficiencies across all tested models. Models consistently failed to recognize their knowledge limitations and provided confident answers even when correct options were absent. In this work, we show that current models exhibit a critical disconnect between perceived and actual capabilities in medical reasoning, posing significant risks in clinical settings. Our findings emphasize the need for more robust evaluation frameworks that incorporate metacognitive abilities, essential for developing reliable Large Language Model enhanced clinical decision support systems.",
-        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
-      },
-      {
-        "source_id": "openalex_w4280567834",
-        "title": "The effectiveness of using virtual patient educational tools to improve medical students’ clinical reasoning skills: a systematic review",
-        "source_type": "paper",
-        "source_tier": "B",
-        "year": 2022,
-        "authors_or_publisher": "Ruth Plackett, Angelos P. Kassianos, Sophie Mylan, Maria Kambouri",
-        "identifier": "https://openalex.org/W4280567834",
-        "url": "https://doi.org/10.1186/s12909-022-03410-x",
-        "summary": "Using virtual patient tools could effectively complement current teaching especially if opportunities for face-to-face teaching or other methods are limited, as there was some evidence that virtual patient educational tools can improve undergraduate medical students' clinical reasoning skills. Evaluations that measured more case specific clinical reasoning domains, such as data gathering, showed more consistent improvement than general measures like problem-solving. Case specific measures might be more sensitive to change given the context dependent nature of clinical reasoning. Consistent use of validated clinical reasoning measures is needed to enable a meta-analysis to estimate effectiveness.",
-        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
-      },
-      {
-        "source_id": "openalex_w4401863364",
-        "title": "RJUA-MedDQA: A Multimodal Benchmark for Medical Document Question Answering and Clinical Reasoning",
-        "source_type": "benchmark",
-        "source_tier": "A",
-        "year": 2024,
-        "authors_or_publisher": "Congyun Jin, Ming Zhang, Weixiao Ma, Yujiao Li",
-        "identifier": "https://openalex.org/W4401863364",
-        "url": "https://doi.org/10.1145/3637528.3671644",
-        "summary": "Recent advancements in Large Language Models (LLMs) and Large Multi-modal Models (LMMs) have shown potential in various medical applications, such as Intelligent Medical Diagnosis. Although impressive results have been achieved, we find that existing benchmarks do not reflect the complexity of real medical reports and specialized in-depth reasoning capabilities. In this work, we establish a comprehensive benchmark in the field of medical specialization and introduced RJUA-MedDQA, which contains 2000 real-world Chinese medical report images poses several challenges: comprehensively interpreting imgage content across a wide variety of challenging layouts, possessing the numerical reasoning ability to identify abnormal indicators and demonstrating robust clinical reasoning ability to provide the statement of disease diagnosis, status and advice based on a collection of medical contexts. We carefully design the data generation pipeline and proposed the Efficient Structural Restoration Annotation (ESRA) Method, aimed at restoring textual and tabular content in medical report images. This method substantially enhances annotation efficiency, doubling the productivity of each annotator, and yields a 26.8% improvement in accuracy. We conduct extensive evaluations, including few-shot assessments of 5 LMMs which are capable of solving Chinese medical QA tasks. To further investigate the limitations and potential of current LMMs, we conduct comparative experiments on a set of strong LLMs by using image-text generated by ESRA method. We report the performance of baselines and offer several observations: (1) The overall performance of existing LMMs is still limited; however LMMs more robust to low-quality and diverse-structured images compared to LLMs. (3) Reasoning across context and image content present significant challenges. We hope this benchmark helps the community make progress on these challenging tasks in multi-modal medical document understanding and facilitate its application in healthcare. Our dataset will be publicly available for noncommercial use at https://github.com/Alipay-Med/medDQA_benchmark.git",
-        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
-      }
-    ],
-    "landscape_summary": {
-      "themes": [
-        "benchmark design and stress-testing for clinical medical reasoning",
-        "trustworthy evaluation and failure analysis in clinical medical reasoning",
-        "reasoning challenges in clinical medical reasoning"
-      ],
-      "active_methods": [
-        "benchmark-centered experimental design"
-      ],
-      "likely_gaps": [
-        "benchmark protocols that distinguish genuine reasoning gains from answer-pattern shortcuts",
-        "trustworthy evaluation signals beyond accuracy-only reporting"
-      ],
-      "saturated_areas": [
-        "broad generic summaries without a sharply defined question"
-      ]
-    },
-    "candidate_topics": [
-      {
-        "candidate_id": "candidate_1",
-        "title": "Benchmark-Guided Narrow Task Definition",
-        "research_question": "How can a narrower benchmark slice expose shortcut behavior and weak reasoning verification in current systems?",
-        "positioning": "gap-driven",
-        "novelty_note": "Focuses on trustworthy evaluation boundaries, not just raw task accuracy.",
-        "feasibility_note": "Moderate feasibility with public resources and modest compute.",
-        "risk_note": "May become incremental if the task boundary is not sharply differentiated.",
-        "supporting_source_ids": [
-          "openalex_w4401863364",
-          "openalex_w4406940684"
-        ],
-        "open_questions": [
-          "Which benchmark slice best isolates genuine reasoning quality rather than answer-pattern matching?"
-        ]
-      },
-      {
-        "candidate_id": "candidate_2",
-        "title": "Applied Method Transfer Under Practical Constraints",
-        "research_question": "Can an existing medical reasoning method family be adapted effectively under strict compute and annotation constraints?",
-        "positioning": "applied-transfer",
-        "novelty_note": "Frames novelty through constraint-aware adaptation rather than larger-model gains.",
-        "feasibility_note": "Strong fit for an applied project that needs a visible baseline-to-improvement story.",
-        "risk_note": "Novelty may depend heavily on the chosen constraint and evaluation design.",
-        "supporting_source_ids": [
-          "openalex_w4406940684",
-          "openalex_w4280567834"
-        ],
-        "open_questions": [
-          "Which constraint creates the strongest research signal?"
-        ]
-      },
-      {
-        "candidate_id": "candidate_3",
-        "title": "Tooling And Evaluation Workflow Support",
-        "research_question": "What tooling or evaluation workflow improvements would make research in this area more reproducible?",
-        "positioning": "systems",
-        "novelty_note": "Shifts from model novelty to workflow and evaluation reliability.",
-        "feasibility_note": "Strong feasibility for a short-cycle project with engineering emphasis.",
-        "risk_note": "Applied impact may be clearer than publication novelty unless evaluation endpoints are sharply chosen.",
-        "supporting_source_ids": [
-          "openalex_w4401863364",
-          "openalex_w4406371336"
-        ],
-        "open_questions": [
-          "What workflow support would make trustworthy evaluation and audit trails easier to reproduce?",
-          "What concrete reproducibility pain point should be prioritized first?",
-          "Which workflow improvement reduces compute or setup cost the most?"
-        ]
-      }
-    ],
-    "comparison_result": {
-      "dimensions": [
-        "novelty",
-        "feasibility",
-        "evidence_strength",
-        "data_availability",
-        "implementation_cost",
-        "risk"
-      ],
-      "summary": "Candidate 2 is strongest for applied feasibility under the current constraints, candidate 1 remains strongest on research framing, and candidate 3 remains the fastest engineering path.",
-      "candidate_assessments": [
-        {
-          "candidate_id": "candidate_1",
-          "novelty": "high",
-          "feasibility": "medium",
-          "evidence_strength": "medium_high",
-          "data_availability": "medium",
-          "implementation_cost": "medium",
-          "risk": "medium"
-        },
-        {
-          "candidate_id": "candidate_2",
-          "novelty": "medium_high",
-          "feasibility": "high",
-          "evidence_strength": "medium_high",
-          "data_availability": "medium_high",
-          "implementation_cost": "medium_low",
-          "risk": "medium_low"
-        },
-        {
-          "candidate_id": "candidate_3",
-          "novelty": "medium",
-          "feasibility": "high",
-          "evidence_strength": "medium",
-          "data_availability": "high",
-          "implementation_cost": "low",
-          "risk": "medium_high"
-        }
-      ]
-    },
-    "convergence_result": {
-      "recommended_candidate_id": "candidate_2",
-      "backup_candidate_id": "candidate_1",
-      "rationale": "Candidate 2 is the best fit for the current constraints because it starts from reusable baselines, matches an applied project style, and is easier to execute within a tighter timeline.",
-      "manual_checks": [
-        "Confirm that the selected sub-problem is narrow enough for the available timeline.",
-        "Verify that at least one benchmark or dataset is realistically accessible.",
-        "Check whether the proposed gap is genuinely underexplored rather than a retrieval miss.",
-        "Verify that the topic still has enough novelty signal for the intended venue."
-      ]
-    },
-    "evidence_presentation": {
-      "source_facts": [
-        {
-          "statement": "Retrieved benchmark evidence 'Benchmarking large language models on the United States medical licensing examination for clinical reasoning and medical licensing scenarios' (2025) as tier A support for the current topic.",
-          "statement_type": "source_fact",
-          "supporting_source_ids": [
-            "openalex_w4416954175"
-          ],
-          "note": "Directly grounded in retrieved source metadata and source summary.",
-          "uncertainty_reason": null,
-          "missing_evidence": []
-        },
-        {
-          "statement": "Retrieved benchmark evidence 'Towards Metacognitive Clinical Reasoning: Benchmarking MD-PIE Against State-of-the-Art LLMs in Medical Decision-Making' (2025) as tier A support for the current topic.",
-          "statement_type": "source_fact",
-          "supporting_source_ids": [
-            "openalex_w4406940684"
-          ],
-          "note": "Directly grounded in retrieved source metadata and source summary.",
-          "uncertainty_reason": null,
-          "missing_evidence": []
-        },
-        {
-          "statement": "Retrieved benchmark evidence 'Large Language Models lack essential metacognition for reliable medical reasoning' (2025) as tier A support for the current topic.",
-          "statement_type": "source_fact",
-          "supporting_source_ids": [
-            "openalex_w4406371336"
-          ],
-          "note": "Directly grounded in retrieved source metadata and source summary.",
-          "uncertainty_reason": null,
-          "missing_evidence": []
-        }
-      ],
-      "system_synthesis": [
-        {
-          "statement": "Current evidence clusters most strongly around benchmark design and stress-testing for clinical medical reasoning, trustworthy evaluation and failure analysis in clinical medical reasoning.",
-          "statement_type": "system_synthesis",
-          "supporting_source_ids": [
-            "openalex_w4416954175",
-            "openalex_w4406940684",
-            "openalex_w4401863364"
-          ],
-          "note": "Agent synthesis over multiple retrieved sources with theme-level evidence matching.",
-          "uncertainty_reason": null,
-          "missing_evidence": []
-        },
-        {
-          "statement": "The current output separates into 3 candidate directions with distinct positioning and comparison scores.",
-          "statement_type": "system_synthesis",
-          "supporting_source_ids": [
-            "openalex_w4401863364",
-            "openalex_w4406940684",
-            "openalex_w4280567834",
-            "openalex_w4406371336"
-          ],
-          "note": "Agent synthesis over candidate generation and comparison outputs, anchored to candidate support sets.",
-          "uncertainty_reason": null,
-          "missing_evidence": []
-        }
-      ],
-      "tentative_inferences": [
-        {
-          "statement": "candidate_2 is currently the leading direction under the present constraints.",
-          "statement_type": "tentative_inference",
-          "supporting_source_ids": [
-            "openalex_w4406940684",
-            "openalex_w4280567834"
-          ],
-          "note": "Recommendation-level inference that still requires human validation.",
-          "uncertainty_reason": "This recommendation remains constraint-sensitive and depends on the current evidence bundle, not on a settled benchmark choice or direct experimental validation.",
-          "missing_evidence": [
-            "Confirm that the selected sub-problem is narrow enough for the available timeline.",
-            "Verify that at least one benchmark or dataset is realistically accessible."
-          ]
-        },
-        {
-          "statement": "Confirm that the selected sub-problem is narrow enough for the available timeline.",
-          "statement_type": "tentative_inference",
-          "supporting_source_ids": [
-            "openalex_w4406940684",
-            "openalex_w4280567834"
-          ],
-          "note": "Open validation requirement rather than a settled fact.",
-          "uncertainty_reason": "The recommendation should not be treated as final until this validation step is checked.",
-          "missing_evidence": [
-            "Confirm that the selected sub-problem is narrow enough for the available timeline."
-          ]
-        }
-      ]
-    },
-    "human_confirmations": [
-      "Confirm that the system correctly interpreted the topic as 'clinical medical reasoning'.",
-      "Confirm that candidate_2 should remain the leading direction after reviewing the supporting evidence and risks.",
-      "Manual check: Confirm that the selected sub-problem is narrow enough for the available timeline.",
-      "Manual check: Verify that at least one benchmark or dataset is realistically accessible."
-    ],
-    "clarification_suggestions": [],
-    "trace": [
-      {
-        "stage": "frame_problem",
-        "status": "completed",
-        "timestamp": "2026-03-26T19:57:44.995207+00:00",
-        "detail": "Structured the user input into a topic-exploration request."
-      },
-      {
-        "stage": "retrieve_evidence",
-        "status": "completed",
-        "timestamp": "2026-03-26T19:57:44.995237+00:00",
-        "detail": "Retrieved 5 evidence records using the openalex provider."
-      },
-      {
-        "stage": "synthesize_landscape",
-        "status": "completed",
-        "timestamp": "2026-03-26T19:57:44.995246+00:00",
-        "detail": "Organized the current evidence bundle into a lightweight research landscape summary."
-      },
-      {
-        "stage": "generate_candidates",
-        "status": "completed",
-        "timestamp": "2026-03-26T19:57:44.995252+00:00",
-        "detail": "Generated 3 candidate topic directions from the current evidence bundle."
-      },
-      {
-        "stage": "compare_candidates",
-        "status": "completed",
-        "timestamp": "2026-03-26T19:57:44.995259+00:00",
-        "detail": "Produced a structured candidate comparison across fixed MVP dimensions."
-      },
-      {
-        "stage": "converge_recommendation",
-        "status": "completed",
-        "timestamp": "2026-03-26T19:57:44.995268+00:00",
-        "detail": "Produced a recommended next-best option with manual verification checks."
-      }
-    ],
-    "confidence_summary": {
-      "evidence_coverage": "medium",
-      "source_quality": "high",
-      "candidate_separation": "high",
-      "conflict_level": "low",
-      "rationale": [
-        "Evidence coverage is medium based on the current number of retrieved records.",
-        "Source quality is high based on the current source-tier mix.",
-        "Candidate separation is high based on the diversity of candidate positioning.",
-        "Conflict level is low because this development slice does not yet model explicit source disagreement."
-      ]
-    },
-    "evidence_diagnostics": {
-      "requested_provider": "openalex",
-      "used_provider": "openalex",
-      "fallback_used": false,
-      "fallback_reason": null,
-      "record_count": 5,
-      "cache_hit": true
-    }
-  },
-  {
-    "session_id": "2c2f6d92ecdb41459c2b838723490b06",
-    "created_at": "2026-03-26T19:57:57.050441+00:00",
-    "updated_at": "2026-03-26T19:57:57.050441+00:00",
-    "user_input": {
-      "interest": "coding agents for software engineering",
-      "problem_domain": "developer workflows",
-      "seed_idea": "I want a feasible applied topic about reliable evaluation for coding agents under limited resources.",
-      "constraints": {
-        "time_budget_months": 6,
-        "resource_level": "student",
-        "preferred_style": "applied",
-        "notes": null
-      }
-    },
-    "framing_result": {
-      "normalized_topic": "coding agents for software engineering",
-      "extracted_constraints": {
-        "time_budget_months": "6",
-        "resource_level": "student",
-        "preferred_style": "applied"
-      },
-      "missing_clarifications": [],
-      "search_questions": [
-        "What are the main research themes in coding agents for software engineering?",
-        "What methods and benchmarks are commonly used in coding agents for software engineering?",
-        "What open problems or underexplored gaps exist in coding agents for software engineering?"
-      ]
-    },
-    "evidence_records": [
-      {
-        "source_id": "openalex_w4411915058",
-        "title": "Explainable AI In Software Engineering: Enhancing Developer-AI Collaboration",
-        "source_type": "paper",
-        "source_tier": "B",
-        "year": 2024,
-        "authors_or_publisher": "Jami J. Shah, Jyoti Kunal Shah",
-        "identifier": "https://openalex.org/W4411915058",
-        "url": "https://doi.org/10.37547/tajet/volume06issue07-11",
-        "summary": "Artificial Intelligence (AI) tools are increasingly integrated into software engineering tasks such as code generation, defect prediction, and project planning. However, widespread adoption is hindered by developers’ skepticism toward opaque AI models that lack transparency. This paper explores the integration of Explainable AI (XAI) into software engineering to foster a “developer-in-the-loop” paradigm that enhances trust, understanding, and collaboration between developers and AI agents. We review existing research on XAI techniques applied to feature planning, debugging, and refactoring, and identify the challenges of embedding XAI in real-world development workflows. A modular framework and system architecture are proposed to integrate explanation engines with AI models, IDEs, dashboards, and CI tools. A case study on explainable code review demonstrates how transparent AI suggestions can improve developer trust and team learning. We conclude by highlighting future directions, including personalization of explanations, cross-SDLC integration, and human-AI dialogue mechanisms, positioning XAI as essential to the next generation of intelligent development environments.",
-        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
-      },
-      {
-        "source_id": "openalex_w4402442868",
-        "title": "AutoCodeRover: Autonomous Program Improvement",
-        "source_type": "paper",
-        "source_tier": "B",
-        "year": 2024,
-        "authors_or_publisher": "Yuntong Zhang, Haifeng Ruan, Zhiyu Fan, Abhik Roychoudhury",
-        "identifier": "https://openalex.org/W4402442868",
-        "url": "https://doi.org/10.1145/3650212.3680384",
-        "summary": "Researchers have made significant progress in automating the software development process in the past decades. Automated techniques for issue summarization, bug reproduction, fault localization, and program repair have been built to ease the workload of developers. Recent progress in Large Language Models (LLMs) has significantly impacted the development process, where developers can use LLM-based programming assistants to achieve automated coding. Nevertheless, software engineering involves the process of program improvement apart from coding, specifically to enable software maintenance (e.g. program repair to fix bugs) and software evolution (e.g. feature additions). In this paper, we propose an automated approach for solving Github issues to autonomously achieve program improvement. In our approach called AutoCodeRover, LLMs are combined with sophisticated code search capabilities, ultimately leading to a program modification or patch. In contrast to recent LLM agent approaches from AI researchers and practitioners, our outlook is more software engineering oriented. We work on a program representation (abstract syntax tree) as opposed to viewing a software project as a mere collection of files. Our code search exploits the program structure in the form of classes/methods to enhance LLM’s understanding of the issue’s root cause, and effectively retrieve a context via iterative search. The use of spectrum-based fault localization using tests, further sharpens the context, as long as a test-suite is available. Experiments on the recently proposed SWE-bench-lite (300 real-life Github issues) show increased efficacy in solving Github issues (19% on SWE-bench-lite), which is higher than the efficacy of the recently reported Swe-agent. Interestingly, our approach resolved 57 GitHub issues in about 4 minutes each (pass@1), whereas developers spent more than 2.68 days on average. In addition, AutoCodeRover achieved this efficacy with significantly lower cost (on average, $0.43 USD), compared to other baselines. We posit that our workflow enables autonomous software engineering, where, in future, auto-generated code from LLMs can be autonomously improved.",
-        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
-      }
-    ],
-    "landscape_summary": {
-      "themes": [
-        "agent-based decomposition strategies for coding agents for software engineering",
-        "software as an emerging theme in coding agents for software engineering",
-        "engineering as an emerging theme in coding agents for software engineering"
-      ],
-      "active_methods": [
-        "agent-mediated problem decomposition"
-      ],
-      "likely_gaps": [
-        "clear task scoping for narrow research questions",
-        "stronger evidence on feasibility under limited resources"
-      ],
-      "saturated_areas": [
-        "broad generic summaries without a sharply defined question"
-      ]
-    },
-    "candidate_topics": [
-      {
-        "candidate_id": "candidate_1",
-        "title": "Benchmark-Guided Narrow Task Definition",
-        "research_question": "How can a narrower benchmark task reveal actionable limitations in current methods?",
-        "positioning": "gap-driven",
-        "novelty_note": "Focuses on under-specified evaluation boundaries rather than generic performance claims.",
-        "feasibility_note": "Moderate feasibility with public resources and modest compute.",
-        "risk_note": "May become incremental if the task boundary is not sharply differentiated.",
-        "supporting_source_ids": [
-          "openalex_w4402442868",
-          "openalex_w4411915058"
-        ],
-        "open_questions": [
-          "Which benchmark subset best represents the intended problem?"
-        ]
-      },
-      {
-        "candidate_id": "candidate_2",
-        "title": "Applied Method Transfer Under Practical Constraints",
-        "research_question": "Can an existing method family associated with explainable software engineering be adapted effectively under strict practical constraints?",
-        "positioning": "applied-transfer",
-        "novelty_note": "Frames novelty through constrained adaptation of an existing method family.",
-        "feasibility_note": "Strong fit for an applied project that can reuse a visible baseline.",
-        "risk_note": "Novelty may depend heavily on the chosen constraint and evaluation design.",
-        "supporting_source_ids": [
-          "openalex_w4411915058",
-          "openalex_w4402442868"
-        ],
-        "open_questions": [
-          "Which constraint creates the strongest research signal?"
-        ]
-      },
-      {
-        "candidate_id": "candidate_3",
-        "title": "Tooling And Evaluation Workflow Support",
-        "research_question": "What tooling or workflow support around autocoderover autonomous program would make research in this area more reproducible?",
-        "positioning": "systems",
-        "novelty_note": "Shifts value from model novelty toward reproducibility, workflow support, and evaluation reliability.",
-        "feasibility_note": "High feasibility for a short-cycle engineering-heavy project.",
-        "risk_note": "Applied impact may be clearer than publication novelty unless the workflow pain point is precisely chosen.",
-        "supporting_source_ids": [
-          "openalex_w4402442868",
-          "openalex_w4411915058"
-        ],
-        "open_questions": [
-          "What concrete reproducibility pain point should be prioritized first?",
-          "Which workflow improvement around autocoderover autonomous program reduces setup or audit cost the most?",
-          "Which workflow improvement reduces compute or setup cost the most?"
-        ]
-      }
-    ],
-    "comparison_result": {
-      "dimensions": [
-        "novelty",
-        "feasibility",
-        "evidence_strength",
-        "data_availability",
-        "implementation_cost",
-        "risk"
-      ],
-      "summary": "Candidate 2 is strongest for applied feasibility under the current constraints, candidate 1 remains strongest on research framing, and candidate 3 remains the fastest engineering path.",
-      "candidate_assessments": [
-        {
-          "candidate_id": "candidate_1",
-          "novelty": "high",
-          "feasibility": "medium",
-          "evidence_strength": "medium_high",
-          "data_availability": "medium",
-          "implementation_cost": "medium",
-          "risk": "medium"
-        },
-        {
-          "candidate_id": "candidate_2",
-          "novelty": "medium_high",
-          "feasibility": "high",
-          "evidence_strength": "medium_high",
-          "data_availability": "medium_high",
-          "implementation_cost": "medium_low",
-          "risk": "medium_low"
-        },
-        {
-          "candidate_id": "candidate_3",
-          "novelty": "medium",
-          "feasibility": "high",
-          "evidence_strength": "medium",
-          "data_availability": "high",
-          "implementation_cost": "low",
-          "risk": "medium_high"
-        }
-      ]
-    },
-    "convergence_result": {
-      "recommended_candidate_id": "candidate_2",
-      "backup_candidate_id": "candidate_1",
-      "rationale": "Candidate 2 is the best fit for the current constraints because it starts from reusable baselines, matches an applied project style, and is easier to execute within a tighter timeline.",
-      "manual_checks": [
-        "Confirm that the selected sub-problem is narrow enough for the available timeline.",
-        "Verify that at least one benchmark or dataset is realistically accessible.",
-        "Check whether the proposed gap is genuinely underexplored rather than a retrieval miss.",
-        "Verify that the topic still has enough novelty signal for the intended venue."
-      ]
-    },
-    "evidence_presentation": {
-      "source_facts": [
-        {
-          "statement": "Retrieved paper evidence 'Explainable AI In Software Engineering: Enhancing Developer-AI Collaboration' (2024) as tier B support for the current topic.",
-          "statement_type": "source_fact",
-          "supporting_source_ids": [
-            "openalex_w4411915058"
-          ],
-          "note": "Directly grounded in retrieved source metadata and source summary.",
-          "uncertainty_reason": null,
-          "missing_evidence": []
-        },
-        {
-          "statement": "Retrieved paper evidence 'AutoCodeRover: Autonomous Program Improvement' (2024) as tier B support for the current topic.",
-          "statement_type": "source_fact",
-          "supporting_source_ids": [
-            "openalex_w4402442868"
-          ],
-          "note": "Directly grounded in retrieved source metadata and source summary.",
-          "uncertainty_reason": null,
-          "missing_evidence": []
-        }
-      ],
-      "system_synthesis": [
-        {
-          "statement": "Current evidence clusters most strongly around agent-based decomposition strategies for coding agents for software engineering, software as an emerging theme in coding agents for software engineering.",
-          "statement_type": "system_synthesis",
-          "supporting_source_ids": [
-            "openalex_w4402442868",
-            "openalex_w4411915058"
-          ],
-          "note": "Agent synthesis over multiple retrieved sources with theme-level evidence matching.",
-          "uncertainty_reason": null,
-          "missing_evidence": []
-        },
-        {
-          "statement": "The current output separates into 3 candidate directions with distinct positioning and comparison scores.",
-          "statement_type": "system_synthesis",
-          "supporting_source_ids": [
-            "openalex_w4402442868",
-            "openalex_w4411915058"
-          ],
-          "note": "Agent synthesis over candidate generation and comparison outputs, anchored to candidate support sets.",
-          "uncertainty_reason": null,
-          "missing_evidence": []
-        }
-      ],
-      "tentative_inferences": [
-        {
-          "statement": "candidate_2 is currently the leading direction under the present constraints.",
-          "statement_type": "tentative_inference",
-          "supporting_source_ids": [
-            "openalex_w4411915058",
-            "openalex_w4402442868"
-          ],
-          "note": "Recommendation-level inference that still requires human validation.",
-          "uncertainty_reason": "This recommendation remains constraint-sensitive and depends on the current evidence bundle, not on a settled benchmark choice or direct experimental validation.",
-          "missing_evidence": [
-            "Confirm that the selected sub-problem is narrow enough for the available timeline.",
-            "Verify that at least one benchmark or dataset is realistically accessible."
-          ]
-        },
-        {
-          "statement": "Confirm that the selected sub-problem is narrow enough for the available timeline.",
-          "statement_type": "tentative_inference",
-          "supporting_source_ids": [
-            "openalex_w4411915058",
-            "openalex_w4402442868"
-          ],
-          "note": "Open validation requirement rather than a settled fact.",
-          "uncertainty_reason": "The recommendation should not be treated as final until this validation step is checked.",
-          "missing_evidence": [
-            "Confirm that the selected sub-problem is narrow enough for the available timeline."
-          ]
-        }
-      ]
-    },
-    "human_confirmations": [
-      "Confirm that the system correctly interpreted the topic as 'coding agents for software engineering'.",
-      "Confirm that candidate_2 should remain the leading direction after reviewing the supporting evidence and risks.",
-      "Manual check: Confirm that the selected sub-problem is narrow enough for the available timeline.",
-      "Manual check: Verify that at least one benchmark or dataset is realistically accessible."
-    ],
-    "clarification_suggestions": [],
-    "trace": [
-      {
-        "stage": "frame_problem",
-        "status": "completed",
-        "timestamp": "2026-03-26T19:57:57.056206+00:00",
-        "detail": "Structured the user input into a topic-exploration request."
-      },
-      {
-        "stage": "retrieve_evidence",
-        "status": "completed",
-        "timestamp": "2026-03-26T19:57:57.056227+00:00",
-        "detail": "Retrieved 2 evidence records using the openalex provider."
-      },
-      {
-        "stage": "synthesize_landscape",
-        "status": "completed",
-        "timestamp": "2026-03-26T19:57:57.056235+00:00",
-        "detail": "Organized the current evidence bundle into a lightweight research landscape summary."
-      },
-      {
-        "stage": "generate_candidates",
-        "status": "completed",
-        "timestamp": "2026-03-26T19:57:57.056242+00:00",
-        "detail": "Generated 3 candidate topic directions from the current evidence bundle."
-      },
-      {
-        "stage": "compare_candidates",
-        "status": "completed",
-        "timestamp": "2026-03-26T19:57:57.056249+00:00",
-        "detail": "Produced a structured candidate comparison across fixed MVP dimensions."
-      },
-      {
-        "stage": "converge_recommendation",
-        "status": "completed",
-        "timestamp": "2026-03-26T19:57:57.056254+00:00",
-        "detail": "Produced a recommended next-best option with manual verification checks."
-      }
-    ],
-    "confidence_summary": {
-      "evidence_coverage": "low",
-      "source_quality": "medium",
-      "candidate_separation": "high",
-      "conflict_level": "low",
-      "rationale": [
-        "Evidence coverage is low based on the current number of retrieved records.",
-        "Source quality is medium based on the current source-tier mix.",
-        "Candidate separation is high based on the diversity of candidate positioning.",
-        "Conflict level is low because this development slice does not yet model explicit source disagreement."
-      ]
-    },
-    "evidence_diagnostics": {
-      "requested_provider": "openalex",
-      "used_provider": "openalex",
-      "fallback_used": false,
-      "fallback_reason": null,
-      "record_count": 2,
-      "cache_hit": true
-    }
-  },
-  {
     "session_id": "93543c4e67584c8fb10ec21a8ad88287",
     "created_at": "2026-03-26T19:58:23.018909+00:00",
     "updated_at": "2026-03-26T19:58:23.018909+00:00",
@@ -23653,6 +22968,891 @@
           "route": "role_expansion",
           "query": "repository github issue triage and resolution agents software engineering workflow evaluation developer workflow audit",
           "latency_ms": 2561,
+          "attempt_count": 1
+        }
+      ]
+    }
+  },
+  {
+    "session_id": "1311c88f2a1149ef9fa958d5780a7b0f",
+    "created_at": "2026-03-27T20:41:28.506925+00:00",
+    "updated_at": "2026-03-27T20:41:28.506925+00:00",
+    "user_input": {
+      "interest": "llm agents for automated bug fixing",
+      "problem_domain": "software engineering",
+      "seed_idea": "I want a feasible applied topic on reproducible evaluation for low-cost bug-fixing agents.",
+      "constraints": {
+        "time_budget_months": 12,
+        "resource_level": "team",
+        "preferred_style": "applied",
+        "notes": null
+      },
+      "disable_cache": true
+    },
+    "framing_result": {
+      "normalized_topic": "llm agents for automated bug fixing",
+      "extracted_constraints": {
+        "time_budget_months": "12",
+        "resource_level": "team",
+        "preferred_style": "applied"
+      },
+      "missing_clarifications": [],
+      "search_questions": [
+        "What are the main research themes in llm agents for automated bug fixing?",
+        "What methods and benchmarks are commonly used in llm agents for automated bug fixing?",
+        "What open problems or underexplored gaps exist in llm agents for automated bug fixing?"
+      ]
+    },
+    "evidence_records": [
+      {
+        "source_id": "openalex_w4403555534",
+        "title": "Large Language Model-Based Agents for Software Engineering: A Survey",
+        "source_type": "survey",
+        "source_tier": "A",
+        "year": 2024,
+        "authors_or_publisher": "Junwei Liu, Kaixin Wang, Yixuan Chen, Xin Peng",
+        "identifier": "https://openalex.org/W4403555534",
+        "url": "https://arxiv.org/abs/2409.02977",
+        "summary": "The recent advance in Large Language Models (LLMs) has shaped a new paradigm of AI agents, i.e., LLM-based agents. Compared to standalone LLMs, LLM-based agents substantially extend the versatility and expertise of LLMs by enhancing LLMs with the capabilities of perceiving and utilizing external resources and tools. To date, LLM-based agents have been applied and shown remarkable effectiveness in Software Engineering (SE). The synergy between multiple agents and human interaction brings further promise in tackling complex real-world SE problems. In this work, we present a comprehensive and systematic survey on LLM-based agents for SE. We collect 124 papers and categorize them from two perspectives, i.e., the SE and agent perspectives. In addition, we discuss open challenges and future directions in this critical domain. The repository of this survey is at https://github.com/FudanSELab/Agent4SE-Paper-List.",
+        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
+      },
+      {
+        "source_id": "openalex_w4411551762",
+        "title": "RepairAgent: An Autonomous, LLM-Based Agent for Program Repair",
+        "source_type": "paper",
+        "source_tier": "B",
+        "year": 2025,
+        "authors_or_publisher": "Islem Bouzenia, Prémkumar Dévanbu, Michael Pradel",
+        "identifier": "https://openalex.org/W4411551762",
+        "url": "https://doi.org/10.1109/icse55347.2025.00157",
+        "summary": "Automated program repair has emerged as a powerful technique to mitigate the impact of software bugs on system reliability and user experience. This paper introduces Repair Agent, the first work to address the program repair challenge through an autonomous agent based on a large language model (LLM). Unlike existing deep learning-based approaches, which prompt a model with a fixed prompt or in a fixed feedback loop, our work treats the LLM as an agent capable of autonomously planning and executing actions to fix bugs by invoking suitable tools. Repair Agent freely interleaves gathering information about the bug, gathering repair ingredients, and validating fixes, while deciding which tools to invoke based on the gathered information and feedback from previous fix attempts. Key contributions that enable Repair Agent include a set of tools that are useful for program repair, a dynamically updated prompt format that allows the LLM to interact with these tools, and a finite state machine that guides the agent in invoking the tools. Our evaluation on the popular Defects4J dataset demonstrates Repair Agent's effectiveness in autonomously repairing 164 bugs, including 39 bugs not fixed by prior techniques. Interacting with the LLM imposes an average cost of 270k tokens per bug, which, under the current pricing of OpenAI's GPT-3.5 model, translates to 14 cents per bug. To the best of our knowledge, this work is the first to present an autonomous, LLM-based agent for program repair, paving the way for future agent-based techniques in software engineering.",
+        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
+      },
+      {
+        "source_id": "openalex_w4402442868",
+        "title": "AutoCodeRover: Autonomous Program Improvement",
+        "source_type": "paper",
+        "source_tier": "B",
+        "year": 2024,
+        "authors_or_publisher": "Yuntong Zhang, Haifeng Ruan, Zhiyu Fan, Abhik Roychoudhury",
+        "identifier": "https://openalex.org/W4402442868",
+        "url": "https://doi.org/10.1145/3650212.3680384",
+        "summary": "Researchers have made significant progress in automating the software development process in the past decades. Automated techniques for issue summarization, bug reproduction, fault localization, and program repair have been built to ease the workload of developers. Recent progress in Large Language Models (LLMs) has significantly impacted the development process, where developers can use LLM-based programming assistants to achieve automated coding. Nevertheless, software engineering involves the process of program improvement apart from coding, specifically to enable software maintenance (e.g. program repair to fix bugs) and software evolution (e.g. feature additions). In this paper, we propose an automated approach for solving Github issues to autonomously achieve program improvement. In our approach called AutoCodeRover, LLMs are combined with sophisticated code search capabilities, ultimately leading to a program modification or patch. In contrast to recent LLM agent approaches from AI researchers and practitioners, our outlook is more software engineering oriented. We work on a program representation (abstract syntax tree) as opposed to viewing a software project as a mere collection of files. Our code search exploits the program structure in the form of classes/methods to enhance LLM’s understanding of the issue’s root cause, and effectively retrieve a context via iterative search. The use of spectrum-based fault localization using tests, further sharpens the context, as long as a test-suite is available. Experiments on the recently proposed SWE-bench-lite (300 real-life Github issues) show increased efficacy in solving Github issues (19% on SWE-bench-lite), which is higher than the efficacy of the recently reported Swe-agent. Interestingly, our approach resolved 57 GitHub issues in about 4 minutes each (pass@1), whereas developers spent more than 2.68 days on average. In addition, AutoCodeRover achieved this efficacy with significantly lower cost (on average, $0.43 USD), compared to other baselines. We posit that our workflow enables autonomous software engineering, where, in future, auto-generated code from LLMs can be autonomously improved.",
+        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
+      },
+      {
+        "source_id": "openalex_w4390306128",
+        "title": "A Survey on Large Language Models for Software Engineering",
+        "source_type": "survey",
+        "source_tier": "A",
+        "year": 2023,
+        "authors_or_publisher": "Quanjun Zhang, Chunrong Fang, Yang Xie, Yaxin Zhang",
+        "identifier": "https://openalex.org/W4390306128",
+        "url": "https://arxiv.org/abs/2312.15223",
+        "summary": "Software Engineering (SE) is the systematic design, development, maintenance, and management of software applications underpinning the digital infrastructure of our modern world. Very recently, the SE community has seen a rapidly increasing number of techniques employing Large Language Models (LLMs) to automate a broad range of SE tasks. Nevertheless, existing information of the applications, effects, and possible limitations of LLMs within SE is still not well-studied. In this paper, we provide a systematic survey to summarize the current state-of-the-art research in the LLM-based SE community. We summarize 62 representative LLMs of Code across three model architectures, 15 pre-training objectives across four categories, and 16 downstream tasks across five categories. We then present a detailed summarization of the recent SE studies for which LLMs are commonly utilized, including 947 studies for 112 specific code-related tasks across five crucial phases within the SE workflow. We also discuss several critical aspects during the integration of LLMs into SE, such as empirical evaluation, benchmarking, security and reliability, domain tuning, compressing and distillation. Finally, we highlight several challenges and potential opportunities on applying LLMs for future SE studies, such as exploring domain LLMs and constructing clean evaluation datasets. Overall, our work can help researchers gain a comprehensive understanding about the achievements of the existing LLM-based SE studies and promote the practical application of these techniques. Our artifacts are publicly available and will be continuously updated at the living repository: https://github.com/iSEngLab/AwesomeLLM4SE.",
+        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
+      },
+      {
+        "source_id": "openalex_w4399114781",
+        "title": "SWE-agent: Agent-Computer Interfaces Enable Automated Software Engineering",
+        "source_type": "paper",
+        "source_tier": "B",
+        "year": 2024,
+        "authors_or_publisher": "John Yang, Carlos Jimenez-Gomez, Alexander Wettig, K. Lieret",
+        "identifier": "https://openalex.org/W4399114781",
+        "url": "https://arxiv.org/abs/2405.15793",
+        "summary": "Language model (LM) agents are increasingly being used to automate complicated tasks in digital environments. Just as humans benefit from powerful software applications, such as integrated development environments, for complex tasks like software engineering, we posit that LM agents represent a new category of end users with their own needs and abilities, and would benefit from specially-built interfaces to the software they use. We investigate how interface design affects the performance of language model agents. As a result of this exploration, we introduce SWE-agent: a system that facilitates LM agents to autonomously use computers to solve software engineering tasks. SWE-agent's custom agent-computer interface (ACI) significantly enhances an agent's ability to create and edit code files, navigate entire repositories, and execute tests and other programs. We evaluate SWE-agent on SWE-bench and HumanEvalFix, achieving state-of-the-art performance on both with a pass@1 rate of 12.5% and 87.7%, respectively, far exceeding the previous state-of-the-art achieved with non-interactive LMs. Finally, we provide insight on how the design of the ACI can impact agents' behavior and performance.",
+        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
+      }
+    ],
+    "landscape_summary": {
+      "themes": [
+        "benchmark design and stress-testing for llm agents for automated bug fixing",
+        "trustworthy evaluation and failure analysis in llm agents for automated bug fixing",
+        "agent-based decomposition strategies for llm agents for automated bug fixing"
+      ],
+      "active_methods": [
+        "benchmark-centered experimental design",
+        "agent-mediated problem decomposition"
+      ],
+      "likely_gaps": [
+        "benchmark protocols that distinguish genuine task gains from workflow or prompt shortcuts",
+        "trustworthy evaluation signals beyond accuracy-only reporting"
+      ],
+      "saturated_areas": [
+        "broad generic summaries without a sharply defined question"
+      ]
+    },
+    "candidate_topics": [
+      {
+        "candidate_id": "candidate_1",
+        "title": "Bug-Fixing Agents: Evaluation Slice",
+        "research_question": "How can a narrower benchmark slice expose shortcut behavior and weak evaluation robustness in current systems?",
+        "positioning": "gap-driven",
+        "novelty_note": "Focuses on trustworthy evaluation boundaries, not just raw task accuracy.",
+        "feasibility_note": "Moderate feasibility with public resources and modest compute.",
+        "risk_note": "May become incremental if the task boundary is not sharply differentiated.",
+        "supporting_source_ids": [
+          "openalex_w4390306128",
+          "openalex_w4411551762"
+        ],
+        "open_questions": [
+          "Which benchmark slice best isolates genuine task gains rather than workflow or prompt shortcuts?"
+        ],
+        "origin_signals": [
+          "benchmark protocols that distinguish genuine task gains from workflow or prompt shortcuts",
+          "trustworthy evaluation signals beyond accuracy-only reporting",
+          "software engineering"
+        ]
+      },
+      {
+        "candidate_id": "candidate_2",
+        "title": "Bug-Fixing Agents: Practical Method Transfer",
+        "research_question": "Can an existing method family be adapted effectively under stricter resource constraints?",
+        "positioning": "applied-transfer",
+        "novelty_note": "Frames novelty through adapting agent-based reasoning workflows under tighter practical constraints.",
+        "feasibility_note": "Strong fit for an applied project that needs a visible baseline-to-improvement story.",
+        "risk_note": "Novelty may depend heavily on the chosen constraint and evaluation design.",
+        "supporting_source_ids": [
+          "openalex_w4402442868",
+          "openalex_w4411551762"
+        ],
+        "open_questions": [
+          "Which constraint creates the strongest research signal?"
+        ],
+        "origin_signals": [
+          "benchmark-centered experimental design",
+          "agent-mediated problem decomposition",
+          "software engineering"
+        ]
+      },
+      {
+        "candidate_id": "candidate_3",
+        "title": "Bug-Fixing Agents: Workflow Support",
+        "research_question": "What tooling or workflow support for reproducible bug-fixing agent evaluation would make research in this area more reproducible?",
+        "positioning": "systems",
+        "novelty_note": "Shifts from model novelty to workflow and evaluation reliability.",
+        "feasibility_note": "Strong feasibility for a short-cycle project with engineering emphasis.",
+        "risk_note": "Applied impact may be clearer than publication novelty unless evaluation endpoints are sharply chosen.",
+        "supporting_source_ids": [
+          "openalex_w4402442868",
+          "openalex_w4390306128"
+        ],
+        "open_questions": [
+          "What concrete reproducibility pain point should be prioritized first?",
+          "Which workflow improvement for reproducible bug-fixing agent evaluation reduces setup or audit cost the most?",
+          "Which workflow improvement reduces compute or setup cost the most?",
+          "What workflow support would make trustworthy evaluation and audit trails easier to reproduce?"
+        ],
+        "origin_signals": [
+          "benchmark design and stress-testing for llm agents for automated bug fixing",
+          "trustworthy evaluation and failure analysis in llm agents for automated bug fixing",
+          "program improvement"
+        ]
+      }
+    ],
+    "comparison_result": {
+      "dimensions": [
+        "novelty",
+        "feasibility",
+        "evidence_strength",
+        "data_availability",
+        "implementation_cost",
+        "risk"
+      ],
+      "summary": "Bug-Fixing Agents: Workflow Support currently leads on the current evidence and constraints, Bug-Fixing Agents: Practical Method Transfer remains the strongest backup path, and Bug-Fixing Agents: Evaluation Slice stays the tertiary option for comparison.",
+      "candidate_assessments": [
+        {
+          "candidate_id": "candidate_1",
+          "novelty": "high",
+          "feasibility": "medium",
+          "evidence_strength": "medium_high",
+          "data_availability": "medium",
+          "implementation_cost": "high",
+          "risk": "medium",
+          "novelty_reason": "Rated high because the direction frames a distinct question around benchmark protocols that distinguish genuine task gains from workflow or prompt shortcuts, trustworthy evaluation signals beyond accuracy-only reporting instead of restating the topic broadly.",
+          "feasibility_reason": "Rated medium because the scope implied by benchmark protocols that distinguish genuine task gains from workflow or prompt shortcuts, trustworthy evaluation signals beyond accuracy-only reporting is compatible with the current time and resource constraints.",
+          "evidence_strength_reason": "Rated medium_high because it is currently supported by 2 directly linked sources.",
+          "data_availability_reason": "Rated medium because the supporting materials around benchmark protocols that distinguish genuine task gains from workflow or prompt shortcuts, trustworthy evaluation signals beyond accuracy-only reporting appear sufficiently visible for a bounded prototype or evaluation slice.",
+          "implementation_cost_reason": "Rated high because the expected build effort around benchmark protocols that distinguish genuine task gains from workflow or prompt shortcuts, trustworthy evaluation signals beyond accuracy-only reporting remains bounded for this stage.",
+          "risk_reason": "Rated medium because the current evidence still leaves non-trivial uncertainty around benchmark protocols that distinguish genuine task gains from workflow or prompt shortcuts, trustworthy evaluation signals beyond accuracy-only reporting."
+        },
+        {
+          "candidate_id": "candidate_2",
+          "novelty": "high",
+          "feasibility": "medium_high",
+          "evidence_strength": "high",
+          "data_availability": "medium",
+          "implementation_cost": "medium",
+          "risk": "medium_high",
+          "novelty_reason": "Rated high because the direction frames a distinct question around benchmark-centered experimental design, agent-mediated problem decomposition instead of restating the topic broadly.",
+          "feasibility_reason": "Rated medium_high because the scope implied by benchmark-centered experimental design, agent-mediated problem decomposition is compatible with the current time and resource constraints.",
+          "evidence_strength_reason": "Rated high because it is currently supported by 2 directly linked sources.",
+          "data_availability_reason": "Rated medium because the supporting materials around benchmark-centered experimental design, agent-mediated problem decomposition appear sufficiently visible for a bounded prototype or evaluation slice.",
+          "implementation_cost_reason": "Rated medium because the expected build effort around benchmark-centered experimental design, agent-mediated problem decomposition remains bounded for this stage.",
+          "risk_reason": "Rated medium_high because the current evidence still leaves non-trivial uncertainty around benchmark-centered experimental design, agent-mediated problem decomposition."
+        },
+        {
+          "candidate_id": "candidate_3",
+          "novelty": "high",
+          "feasibility": "high",
+          "evidence_strength": "medium_high",
+          "data_availability": "medium_high",
+          "implementation_cost": "high",
+          "risk": "medium",
+          "novelty_reason": "Rated high because the direction frames a distinct question around benchmark design and stress-testing for llm agents for automated bug fixing, trustworthy evaluation and failure analysis in llm agents for automated bug fixing instead of restating the topic broadly.",
+          "feasibility_reason": "Rated high because the scope implied by benchmark design and stress-testing for llm agents for automated bug fixing, trustworthy evaluation and failure analysis in llm agents for automated bug fixing is compatible with the current time and resource constraints.",
+          "evidence_strength_reason": "Rated medium_high because it is currently supported by 2 directly linked sources.",
+          "data_availability_reason": "Rated medium_high because the supporting materials around benchmark design and stress-testing for llm agents for automated bug fixing, trustworthy evaluation and failure analysis in llm agents for automated bug fixing appear sufficiently visible for a bounded prototype or evaluation slice.",
+          "implementation_cost_reason": "Rated high because the expected build effort around benchmark design and stress-testing for llm agents for automated bug fixing, trustworthy evaluation and failure analysis in llm agents for automated bug fixing remains bounded for this stage.",
+          "risk_reason": "Rated medium because the current evidence still leaves non-trivial uncertainty around benchmark design and stress-testing for llm agents for automated bug fixing, trustworthy evaluation and failure analysis in llm agents for automated bug fixing."
+        }
+      ]
+    },
+    "convergence_result": {
+      "recommended_candidate_id": "candidate_2",
+      "backup_candidate_id": "candidate_3",
+      "rationale": "Bug-Fixing Agents: Practical Method Transfer is currently the best fit because the available materials around benchmark-centered experimental design, agent-mediated problem decomposition point to a reusable baseline, a feasible applied scope, and a cleaner path than Bug-Fixing Agents: Workflow Support under the current constraints.",
+      "manual_checks": [
+        "Confirm that the selected sub-problem is narrow enough for the available timeline.",
+        "Verify that at least one benchmark or dataset is realistically accessible.",
+        "Check whether the proposed gap is genuinely underexplored rather than a retrieval miss.",
+        "Verify that the topic still has enough novelty signal for the intended venue."
+      ]
+    },
+    "evidence_presentation": {
+      "source_facts": [
+        {
+          "statement": "Retrieved survey evidence 'Large Language Model-Based Agents for Software Engineering: A Survey' (2024) as tier A support for the current topic.",
+          "statement_type": "source_fact",
+          "supporting_source_ids": [
+            "openalex_w4403555534"
+          ],
+          "note": "Directly grounded in retrieved source metadata and source summary.",
+          "uncertainty_reason": null,
+          "missing_evidence": []
+        },
+        {
+          "statement": "Retrieved paper evidence 'RepairAgent: An Autonomous, LLM-Based Agent for Program Repair' (2025) as tier B support for the current topic.",
+          "statement_type": "source_fact",
+          "supporting_source_ids": [
+            "openalex_w4411551762"
+          ],
+          "note": "Directly grounded in retrieved source metadata and source summary.",
+          "uncertainty_reason": null,
+          "missing_evidence": []
+        },
+        {
+          "statement": "Retrieved paper evidence 'AutoCodeRover: Autonomous Program Improvement' (2024) as tier B support for the current topic.",
+          "statement_type": "source_fact",
+          "supporting_source_ids": [
+            "openalex_w4402442868"
+          ],
+          "note": "Directly grounded in retrieved source metadata and source summary.",
+          "uncertainty_reason": null,
+          "missing_evidence": []
+        }
+      ],
+      "system_synthesis": [
+        {
+          "statement": "Current evidence clusters most strongly around benchmark design and stress-testing for llm agents for automated bug fixing, trustworthy evaluation and failure analysis in llm agents for automated bug fixing.",
+          "statement_type": "system_synthesis",
+          "supporting_source_ids": [
+            "openalex_w4390306128",
+            "openalex_w4411551762",
+            "openalex_w4399114781"
+          ],
+          "note": "Agent synthesis over multiple retrieved sources with theme-level evidence matching.",
+          "uncertainty_reason": null,
+          "missing_evidence": []
+        },
+        {
+          "statement": "The current output separates into 3 candidate directions with distinct positioning and comparison scores.",
+          "statement_type": "system_synthesis",
+          "supporting_source_ids": [
+            "openalex_w4390306128",
+            "openalex_w4411551762",
+            "openalex_w4402442868"
+          ],
+          "note": "Agent synthesis over candidate generation and comparison outputs, anchored to candidate support sets.",
+          "uncertainty_reason": null,
+          "missing_evidence": []
+        }
+      ],
+      "tentative_inferences": [
+        {
+          "statement": "candidate_2 is currently the leading direction under the present constraints.",
+          "statement_type": "tentative_inference",
+          "supporting_source_ids": [
+            "openalex_w4402442868",
+            "openalex_w4411551762"
+          ],
+          "note": "Recommendation-level inference that still requires human validation.",
+          "uncertainty_reason": "This recommendation remains constraint-sensitive and depends on the current evidence bundle, not on a settled benchmark choice or direct experimental validation.",
+          "missing_evidence": [
+            "Confirm that the selected sub-problem is narrow enough for the available timeline.",
+            "Verify that at least one benchmark or dataset is realistically accessible."
+          ]
+        },
+        {
+          "statement": "Confirm that the selected sub-problem is narrow enough for the available timeline.",
+          "statement_type": "tentative_inference",
+          "supporting_source_ids": [
+            "openalex_w4402442868",
+            "openalex_w4411551762"
+          ],
+          "note": "Open validation requirement rather than a settled fact.",
+          "uncertainty_reason": "The recommendation should not be treated as final until this validation step is checked.",
+          "missing_evidence": [
+            "Confirm that the selected sub-problem is narrow enough for the available timeline."
+          ]
+        }
+      ]
+    },
+    "human_confirmations": [
+      "Confirm that the system correctly interpreted the topic as 'llm agents for automated bug fixing'.",
+      "Confirm that candidate_2 should remain the leading direction after reviewing the supporting evidence and risks.",
+      "Manual check: Confirm that the selected sub-problem is narrow enough for the available timeline.",
+      "Manual check: Verify that at least one benchmark or dataset is realistically accessible."
+    ],
+    "clarification_suggestions": [],
+    "trace": [
+      {
+        "stage": "frame_problem",
+        "status": "completed",
+        "timestamp": "2026-03-27T20:41:44.542209+00:00",
+        "detail": "Structured the user input into a topic-exploration request."
+      },
+      {
+        "stage": "retrieve_evidence",
+        "status": "completed",
+        "timestamp": "2026-03-27T20:41:44.542221+00:00",
+        "detail": "Retrieved 5 evidence records using the openalex provider."
+      },
+      {
+        "stage": "synthesize_landscape",
+        "status": "completed",
+        "timestamp": "2026-03-27T20:41:44.542225+00:00",
+        "detail": "Organized the current evidence bundle into a lightweight research landscape summary."
+      },
+      {
+        "stage": "generate_candidates",
+        "status": "completed",
+        "timestamp": "2026-03-27T20:41:44.542228+00:00",
+        "detail": "Generated 3 candidate topic directions from the current evidence bundle."
+      },
+      {
+        "stage": "compare_candidates",
+        "status": "completed",
+        "timestamp": "2026-03-27T20:41:44.542231+00:00",
+        "detail": "Produced a structured candidate comparison across fixed MVP dimensions."
+      },
+      {
+        "stage": "converge_recommendation",
+        "status": "completed",
+        "timestamp": "2026-03-27T20:41:44.542234+00:00",
+        "detail": "Produced a recommended next-best option with manual verification checks."
+      }
+    ],
+    "confidence_summary": {
+      "evidence_coverage": "medium",
+      "source_quality": "medium_high",
+      "candidate_separation": "high",
+      "conflict_level": "low",
+      "rationale": [
+        "Evidence coverage is medium based on the current number of retrieved records.",
+        "Source quality is medium_high based on the current source-tier mix.",
+        "Candidate separation is high based on the diversity of candidate positioning.",
+        "Conflict level is low because this development slice does not yet model explicit source disagreement."
+      ]
+    },
+    "evidence_diagnostics": {
+      "requested_provider": "openalex",
+      "used_provider": "openalex",
+      "fallback_used": false,
+      "fallback_reason": null,
+      "record_count": 5,
+      "cache_hit": false,
+      "query_count": 6,
+      "provider_latency_ms": 16029,
+      "slowest_query": "agents automated fixing software engineering applied",
+      "slowest_query_latency_ms": 3070,
+      "query_diagnostics": [
+        {
+          "route": "base",
+          "query": "agents automated fixing software engineering applied",
+          "latency_ms": 3070,
+          "attempt_count": 1
+        },
+        {
+          "route": "core_focus",
+          "query": "agents automated fixing software engineering",
+          "latency_ms": 2865,
+          "attempt_count": 1
+        },
+        {
+          "route": "role_expansion",
+          "query": "llm agents for automated bug fixing software engineering benchmark evaluation",
+          "latency_ms": 2518,
+          "attempt_count": 1
+        },
+        {
+          "route": "role_expansion",
+          "query": "llm agents for automated bug fixing software engineering workflow reproducibility",
+          "latency_ms": 2661,
+          "attempt_count": 1
+        },
+        {
+          "route": "role_expansion",
+          "query": "llm agents for automated bug fixing software engineering method framework",
+          "latency_ms": 2448,
+          "attempt_count": 1
+        },
+        {
+          "route": "role_expansion",
+          "query": "llm agents for automated bug fixing software engineering developer workflow audit",
+          "latency_ms": 2376,
+          "attempt_count": 1
+        }
+      ]
+    }
+  },
+  {
+    "session_id": "ea50aa1c6ec047cb82c5eb335d919d53",
+    "created_at": "2026-03-27T20:42:27.855399+00:00",
+    "updated_at": "2026-03-27T20:45:46.996208+00:00",
+    "user_input": {
+      "interest": "ai-supported feedback workflows for programming education",
+      "problem_domain": "computing education research",
+      "seed_idea": "I want a feasible benchmark-driven topic on evaluation design for AI-supported feedback workflows in programming education.",
+      "constraints": {
+        "time_budget_months": 6,
+        "resource_level": "student",
+        "preferred_style": "benchmark-driven",
+        "notes": null
+      },
+      "disable_cache": true
+    },
+    "framing_result": {
+      "normalized_topic": "ai-supported feedback workflows for programming education",
+      "extracted_constraints": {
+        "time_budget_months": "6",
+        "resource_level": "student",
+        "preferred_style": "benchmark-driven"
+      },
+      "missing_clarifications": [],
+      "search_questions": [
+        "What are the main research themes in ai-supported feedback workflows for programming education?",
+        "What methods and benchmarks are commonly used in ai-supported feedback workflows for programming education?",
+        "What open problems or underexplored gaps exist in ai-supported feedback workflows for programming education?"
+      ]
+    },
+    "evidence_records": [
+      {
+        "source_id": "openalex_w4409701023",
+        "title": "Cognitive Computing with Large Language Models for Student Assessment Feedback",
+        "source_type": "paper",
+        "source_tier": "B",
+        "year": 2025,
+        "authors_or_publisher": "Noorhan Abbas, Eric Atwell",
+        "identifier": "https://openalex.org/W4409701023",
+        "url": "https://doi.org/10.3390/bdcc9050112",
+        "summary": "Effective student feedback is fundamental to enhancing learning outcomes in higher education. While traditional assessment methods emphasise both achievements and development areas, the process remains time-intensive for educators. This research explores the application of cognitive computing, specifically open-source Large Language Models (LLMs) Mistral-7B and CodeLlama-7B, to streamline feedback generation for student reports containing both Python programming elements and English narrative content. The findings indicate that these models can provide contextually appropriate feedback on both technical Python coding and English specification and documentation. They effectively identified coding weaknesses and provided constructive suggestions for improvement, as well as insightful feedback on English language quality, structure, and clarity in report writing. These results contribute to the growing body of knowledge on automated assessment feedback in higher education, offering practical insights for institutions considering the implementation of open-source LLMs in their workflows. There are around 22 thousand assessment submissions per year in the School of Computer Science, which is one of eight schools in the Faculty of Engineering and Physical Sciences, which is one of seven faculties in the University of Leeds, which is one of one hundred and sixty-six universities in the UK, so there is clear potential for our methods to scale up to millions of assessment submissions. This study also examines the limitations of current approaches and proposes potential enhancements. The findings support a hybrid system where cognitive computing manages routine tasks and educators focus on complex, personalised evaluations, enhancing feedback quality, consistency, and efficiency in educational settings.",
+        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
+      },
+      {
+        "source_id": "openalex_w4224273201",
+        "title": "Expanding Interactive Computing to Facilitate Informal Instruction in Research Computing",
+        "source_type": "paper",
+        "source_tier": "B",
+        "year": 2022,
+        "authors_or_publisher": "Richard Lawrence, Tri M. Pham, Phi T. Au, Xin Yang",
+        "identifier": "https://openalex.org/W4224273201",
+        "url": "https://doi.org/10.22369/issn.2153-4136/13/1/9",
+        "summary": "Successful outreach to computational researchers for informing about the benefits of switching to a different computing environment depends on the educator's ability to showcase practical research and development workflows in the new computing environment. Interactive, graphical computing environments are crucial to engage learners in computing education and offer researchers easier ways to adopt new technologies. Interactive, graphical computing allows learners to see the results of their work in real time, which provides the needed feedback for learning and enables chunking of complex tasks. Moreover, there is a natural synergy between computing education and computing research; researchers who are exposed to new computing skills within the context of an interactive and engaging environment are more likely to retain the new skills and adopt the new computing environment in their research and development workflows. Support for interactive, graphical workflows with modern computing tools in containerized computing environments has to be incorporated on high performance computing systems. To begin to address this deficiency, here we discuss our approach to teach containerization technologies in the popular integrated development environment of the Jupyter Notebook. We report on our scheme for implementing containerized software environments for interactive, graphical computing within the Open OnDemand (OOD) framework for research computing workflows, providing an accessible on-ramp for researchers transitioning to containerized technologies. In addition, we introduce several quality-of-life improvements for researchers and educators that will encourage them to continue to use the platform.",
+        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
+      },
+      {
+        "source_id": "openalex_w2982361299",
+        "title": "Open Systems Pharmacology Community—An Open Access, Open Source, Open Science Approach to Modeling and Simulation in Pharmaceutical Sciences",
+        "source_type": "paper",
+        "source_tier": "B",
+        "year": 2019,
+        "authors_or_publisher": "Jörg Lippert, Rolf Burghaus, Andrea N. Edginton, Sebastian Frechen",
+        "identifier": "https://openalex.org/W2982361299",
+        "url": "https://doi.org/10.1002/psp4.12473",
+        "summary": "Systems pharmacology integrates structural biological and pharmacological knowledge and experimental data, enabling dissection of organism and drug properties and providing excellent predictivity. The development of systems pharmacology models is a significant task requiring massive amounts of background information beyond individual trial data. The qualification of models needs repetitive demonstration of successful predictions. Open Systems Pharmacology is a community that develops, qualifies, and shares professional open source software tools and models in a collaborative open-science way. In recent years, systems pharmacology and its applications in pharmaceutical development have gained significant visibility and attention as an important pillar of model-informed drug (discovery and) development.1 Physiologically-based pharmacokinetics (PBPK) is just one of the many potential applications of systems pharmacology. Nevertheless, because of the generic relevance of pharmacokinetics in any pharmaceutical application, PBPK has seen the most rapid growth in terms of the number of organizations and scientists applying it and the published case studies. Regulatory use is documented in reviews of the European and US regulatory agencies2, 3 and has lately led both the US Food and Drug Administration (FDA)4 and European Medicines Agency5 to issue guidances for PBPK use. For some applications, PBPK has even become a recommended method (the FDA's Pharmaceutical Science and Clinical Pharmacology Advisory Committee majority vote in support of the use of PBPK modeling for pediatric drug development, March 2012). In many regards, the slow development of PBPK from the early concepts in the 1930s6 over many decades to its accelerated uptake in some regulatory applications2, 3, 7 within just a few years is a striking example of the catalytic effects of a diverse scientific community (see Important Milestones of PBPK Modeling Supplement). In light of the success seen with some applications of PBPK, it is important to find effective ways to further grow more applications of systems pharmacology (a much broader concept than mechanistic pharmacokinetics modeling alone) to a level where their full potential in supporting pharmaceutical sciences and innovation is exploited. The development of any systems pharmacology model is a significant task requiring large amounts of high-quality background information. The qualification of models builds on the repetitive demonstration of successful predictions. Only in exceptional cases, individual researchers or organizations possess the resources and time for this undertaking. The integrative nature of system pharmacology, however, lends itself to an open-science approach where information, models, and software are jointly developed. To this end, building on 2 decades of experience with PBPK and system pharmacology modeling, we have established the Open Systems Pharmacology (OSP) community. OSP offers professional open access and open source software tools (PK-Sim/MoBi) and models via a platform for collaborative development and qualification. For any specific use such as first-in-man, drug–drug interactions, or kinetics in special populations, a series of overall successful prospective predictions is needed, and for none of the popular platforms has a general qualification scheme been established yet. Despite the expectations for model/platform qualifications as detailed in the guidances,4, 5 it is very likely that any of the individual stakeholders in the PBPK field (academics, software providers and consultancy firms, industry, regulatory agencies) will no longer be able to compile the evidence required for a convincing qualification of a given PBPK use in isolation. This is a simple fact even more so because the requirements cover the full scope from scientific content (e.g., clinical and preclinical data) to technical implementation (validation of computerized system) and documentation. Collaborative approaches are needed to compile the requested evidence in all these domains. The OSP's vision is to provide robust and reliable, easy-to-use modeling and simulation tools, processes, and models for pharmaceutical and other life-sciences applications. They shall be qualified and accepted by the scientific community representing academia, regulatory agencies, and industry and available and open to everyone (see OSP Links Supplement: Vision & Mission). The OSP community wants to provide a platform for joint development, review, and qualification; application of state-of-the-art tools for PBPK and systems pharmacology modeling; and an open library of models for application as well as method and tool qualification processes. Open systems pharmacology uses GitHub (GitHub, San Francisco, CA, USA) as its collaboration and exchange platform. From the release of version 7.0 in early 2017 onward, already eight releases of the formerly commercial OSP suite comprising PK-Sim (PBPK) and MoBi (general systems pharmacology modeling) have been published as open-source software (latest release 8.0; see OSP Links Supplement: Releases; GPLv2 license, see OSP Links Supplement: License). The OSP suite provides functionality for the full range of PBPK applications from physico-chemistry-based prediction models for all relevant (pre)clinical species to elaborated simulations for drug–drug interactions and special populations. The suite comprises functionalities for parameter identification, model qualification and automated reporting as well as interfaces to R (The R Project for Statistical Computing, www.R-project.org) and Matlab (The Mathworks, Natick, MA, USA) (Figure 2a; see OSP Links Supplement: OSP Suite). The continuous development of the software suite is run on GitHub and can be monitored by everyone in real time (see OSP Links Supplement: Continuous Development). Nightly builds of prerelease versions are available for all interested parties as is the source code. For sharing of data and PBPK and systems pharmacology models, dedicated repositories exist. The current model library includes PBPK models of individual drugs in particular drug–drug interaction victims and perpetrators and sophisticated systems pharmacology models. An expression database for proteins is also part of the OSP suite. Education and training of competent PBPK and systems pharmacology users is an important goal of the OSP community. A diverse group of knowledgeable users is the source of innovative ideas and new applications and workflows and creates a motivating environment. A series of videos and tutorials are already shared on GitHub that covers a broad range of topics from introductory lessons (e.g., understanding fundamental concepts of PBPK) to advanced applications (e.g., compliance with guidelines for model development and qualification; see OSP Links Supplement: Tutorials). Training curricula and teaching materials for use in graduate programs, industry, and regulatory environments are planned. For community members interested in providing training, the platform offers a natural “market place” for interaction with interested trainees. A less formal method of education and support is provided by the discussion forum. It supports OSP users in learning from and providing support to each other. It also serves as a match-making environment for formative assessment of ideas, models, and so on. When groups of community members intend to jointly develop new data sets, models, or tools, the GitHub platform also provides project management functionality facilitating collaborative work. OSP has been selected by several publicly funded projects as the provider of modeling and simulation tools and the technical platform for sharing of project results. Funding agencies of these projects include the German Ministry for Education and Research (BMBF), European Union, Bill & Melinda Gates Foundation9, and US FDA (see Acknowledgments). Because an important goal of OSP is regulatory-accepted qualification of PBPK and systems-pharmacology-based approaches, a strong emphasis of the OSP activities is on qualification efforts and the development of a framework for certification. The OSP community establishes best practices and fully transparent processes for qualification and software validation that will enable it to certify compliance with regulatory standards as a learned society (see Figure 2b, automated qualification as an example). The OSP management team is responsible for the development and maintenance of the OSP roadmap and the formal release of certified OSP suite versions, best practices, and the coordination of all community activities. Figure 1b sketches the constitution of the OSP community where three types of active roles are distinguished. The OSP management team is a project group of (Arbeitsgemeinschaft für Angewandte Humanpharmakologie (AGAH) e.V.) the association for applied human pharmacology (https://www.agah.eu). It is responsible for regular review, endorsement, and publication of the OSP development roadmap. The management team provides certification of the software platform, models, and other content such parameter databases and qualification processes. It releases certified platform versions. A sounding board supports the management team in scientific and technological matters. Community members are all active contributors to the development of OSP content. The OSP community also invites any interested party to use the provided content (software, models, etc.) because it benefits from widespread use and feedback provided via the OSP forum and other communication channels. This includes input and feedback from users and developers of commercial platforms. During the past decade, systems pharmacology and its PBPK applications have seen a rapid development from dominant academic use to widespread applications with regulatory relevance and high ethical and commercial impact. Although the concepts and tools have reached a considerable maturity, the next level of development, namely, the demonstration of regulatory acceptable qualification is a major challenge. To be successful, the PBPK and systems pharmacology community needs to collaborate. With OSP, we intend to lower hurdles and facilitate progress. OSP offers a framework for collaboration and open-access, open-source tools. The community organization aims to combine open science development with processes for review and certification from a learned society. We invite you to join us on www.open-systems-pharmacology.org. Funds for the creation of the article were provided by authors' organizations. On behalf of the community, the authors wish to thank US Food & Drug Administration (FDA) and European Union and German Ministry for Education and Research (BMBF) for providing funding for the further development of OSP. FDA: PBPK and Population Modeling Seamlessly Linked to Clinical Trial Simulation in an Open-Source Software Platform (Agreement RGF011519-A); European Union: Horizon 2020 Research and Innovation Programme–U-PGx consortium (Grant 668353), BMBF: OSMOSES consortium (Grant 031L0161A), nanoCELL consortium (Grant 03XP0196C), VISION consortium (Grant 031L0153A). All authors use Open Systems Pharmacology software, tools, or models in their professional roles. Please note: The publisher is not responsible for the content or functionality of any supporting information supplied by the authors. Any queries (other than missing content) should be directed to the corresponding author for the article.",
+        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
+      },
+      {
+        "source_id": "openalex_w4400348041",
+        "title": "The impact of simulation-based training in medical education: A review",
+        "source_type": "paper",
+        "source_tier": "B",
+        "year": 2024,
+        "authors_or_publisher": "Chukwuka Elendu, Dependable C. Amaechi, Alexander U. Okatta, Emmanuel C. Amaechi",
+        "identifier": "https://openalex.org/W4400348041",
+        "url": "https://doi.org/10.1097/md.0000000000038813",
+        "summary": "Simulation-based training (SBT) has emerged as a transformative approach in medical education, significantly enhancing healthcare professionals' learning experience and clinical competency. This article explores the impact of SBT, tracing its historical development and examining the various types of simulations utilized today, including high-fidelity mannequins, virtual reality environments, standardized patients, and hybrid simulations. These methods offer a safe and controlled environment for students to practice and hone technical and non-technical skills, ultimately improving patient safety and clinical outcomes. The benefits of SBT are manifold, including enhanced skill acquisition, error reduction, and the opportunity for repeated practice without risk to actual patients. Immediate feedback and structured debriefing further solidify learning, making Simulation an invaluable tool in medical education. However, the implementation of SBT is challenging. It requires substantial financial investment, specialized equipment, and trained faculty. Additionally, there are concerns about the realism of simulations and the transferability of skills to real-world clinical settings. Despite these challenges, numerous case studies and empirical research underscore the effectiveness of SBT compared to traditional methods. Looking ahead, advancements in technology, such as artificial intelligence and improved virtual reality applications, promise to enhance the efficacy and accessibility of simulation training. The integration of Simulation with other training modalities and its adoption in diverse global contexts highlight its potential to revolutionize medical education worldwide. This article affirms the crucial role of SBT in preparing the next generation of healthcare professionals and its ongoing evolution driven by technological innovations.",
+        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
+      }
+    ],
+    "landscape_summary": {
+      "themes": [
+        "benchmark design and stress-testing for ai-supported feedback workflows for programming education",
+        "trustworthy evaluation and failure analysis in ai-supported feedback workflows for programming education",
+        "applied research themes around education in ai-supported feedback workflows for programming education"
+      ],
+      "active_methods": [
+        "benchmark-centered experimental design"
+      ],
+      "likely_gaps": [
+        "benchmark protocols that distinguish genuine task gains from workflow or prompt shortcuts",
+        "trustworthy evaluation signals beyond accuracy-only reporting"
+      ],
+      "saturated_areas": [
+        "broad generic summaries without a sharply defined question"
+      ]
+    },
+    "candidate_topics": [
+      {
+        "candidate_id": "candidate_1",
+        "title": "Programming Education Feedback: Benchmark Slice",
+        "research_question": "How can a narrower evaluation slice around cognitive computing reveal actionable limitations in current systems?",
+        "positioning": "benchmark-gap",
+        "novelty_note": "Frames novelty through sharper evaluation boundaries rather than broader performance reporting.",
+        "feasibility_note": "Moderate feasibility with public evidence and a bounded evaluation target.",
+        "risk_note": "May become incremental if the evaluation slice is not sharply distinguished.",
+        "supporting_source_ids": [
+          "openalex_w4409701023",
+          "openalex_w2982361299"
+        ],
+        "open_questions": [
+          "Which cognitive computing slice best isolates the intended failure mode or capability?"
+        ],
+        "origin_signals": [
+          "benchmark protocols that distinguish genuine task gains from workflow or prompt shortcuts",
+          "trustworthy evaluation signals beyond accuracy-only reporting",
+          "cognitive computing"
+        ]
+      },
+      {
+        "candidate_id": "candidate_2",
+        "title": "Programming Education Feedback: Constraint-Aware Transfer",
+        "research_question": "Can an existing method family associated with impact simulation be adapted effectively under strict practical constraints?",
+        "positioning": "transfer",
+        "novelty_note": "Frames novelty through constrained adaptation of an existing method family.",
+        "feasibility_note": "Strong fit for an applied project that can reuse a visible baseline.",
+        "risk_note": "Novelty may depend heavily on the chosen constraint and evaluation design.",
+        "supporting_source_ids": [
+          "openalex_w4400348041",
+          "openalex_w2982361299",
+          "openalex_w4224273201"
+        ],
+        "open_questions": [
+          "Which constraint creates the strongest research signal?"
+        ],
+        "origin_signals": [
+          "benchmark-centered experimental design",
+          "expanding interactive",
+          "pharmacology community"
+        ]
+      },
+      {
+        "candidate_id": "candidate_3",
+        "title": "Programming Education Feedback: Workflow Support",
+        "research_question": "What tooling or workflow support around expanding interactive would make research in this area more reproducible?",
+        "positioning": "systems",
+        "novelty_note": "Shifts value from model novelty toward reproducibility, workflow support, and evaluation reliability.",
+        "feasibility_note": "High feasibility for a short-cycle engineering-heavy project.",
+        "risk_note": "Applied impact may be clearer than publication novelty unless the workflow pain point is precisely chosen.",
+        "supporting_source_ids": [
+          "openalex_w4224273201",
+          "openalex_w2982361299",
+          "openalex_w4409701023"
+        ],
+        "open_questions": [
+          "What concrete reproducibility pain point should be prioritized first?",
+          "Which workflow improvement around expanding interactive reduces setup or audit cost the most?",
+          "What workflow support would make trustworthy evaluation and audit trails easier to reproduce?",
+          "Which workflow improvement reduces compute or setup cost the most?"
+        ],
+        "origin_signals": [
+          "benchmark design and stress-testing for ai-supported feedback workflows for programming education",
+          "trustworthy evaluation and failure analysis in ai-supported feedback workflows for programming education",
+          "cognitive computing"
+        ]
+      }
+    ],
+    "comparison_result": {
+      "dimensions": [
+        "novelty",
+        "feasibility",
+        "evidence_strength",
+        "data_availability",
+        "implementation_cost",
+        "risk"
+      ],
+      "summary": "Programming Education Feedback: Workflow Support currently leads on the current evidence and constraints, Programming Education Feedback: Benchmark Slice remains the strongest backup path, and Programming Education Feedback: Constraint-Aware Transfer stays the tertiary option for comparison.",
+      "candidate_assessments": [
+        {
+          "candidate_id": "candidate_1",
+          "novelty": "high",
+          "feasibility": "medium",
+          "evidence_strength": "high",
+          "data_availability": "medium",
+          "implementation_cost": "high",
+          "risk": "medium",
+          "novelty_reason": "Rated high because the direction frames a distinct question around benchmark protocols that distinguish genuine task gains from workflow or prompt shortcuts, trustworthy evaluation signals beyond accuracy-only reporting instead of restating the topic broadly.",
+          "feasibility_reason": "Rated medium because the scope implied by benchmark protocols that distinguish genuine task gains from workflow or prompt shortcuts, trustworthy evaluation signals beyond accuracy-only reporting is compatible with the current time and resource constraints.",
+          "evidence_strength_reason": "Rated high because it is currently supported by 2 directly linked sources.",
+          "data_availability_reason": "Rated medium because the supporting materials around benchmark protocols that distinguish genuine task gains from workflow or prompt shortcuts, trustworthy evaluation signals beyond accuracy-only reporting appear sufficiently visible for a bounded prototype or evaluation slice.",
+          "implementation_cost_reason": "Rated high because the expected build effort around benchmark protocols that distinguish genuine task gains from workflow or prompt shortcuts, trustworthy evaluation signals beyond accuracy-only reporting remains bounded for this stage.",
+          "risk_reason": "Rated medium because the current evidence still leaves non-trivial uncertainty around benchmark protocols that distinguish genuine task gains from workflow or prompt shortcuts, trustworthy evaluation signals beyond accuracy-only reporting."
+        },
+        {
+          "candidate_id": "candidate_2",
+          "novelty": "high",
+          "feasibility": "medium_high",
+          "evidence_strength": "high",
+          "data_availability": "medium",
+          "implementation_cost": "medium",
+          "risk": "medium",
+          "novelty_reason": "Rated high because the direction frames a distinct question around benchmark-centered experimental design, expanding interactive instead of restating the topic broadly.",
+          "feasibility_reason": "Rated medium_high because the scope implied by benchmark-centered experimental design, expanding interactive is compatible with the current time and resource constraints.",
+          "evidence_strength_reason": "Rated high because it is currently supported by 3 directly linked sources.",
+          "data_availability_reason": "Rated medium because the supporting materials around benchmark-centered experimental design, expanding interactive appear sufficiently visible for a bounded prototype or evaluation slice.",
+          "implementation_cost_reason": "Rated medium because the expected build effort around benchmark-centered experimental design, expanding interactive remains bounded for this stage.",
+          "risk_reason": "Rated medium because the current evidence still leaves non-trivial uncertainty around benchmark-centered experimental design, expanding interactive."
+        },
+        {
+          "candidate_id": "candidate_3",
+          "novelty": "high",
+          "feasibility": "medium_high",
+          "evidence_strength": "high",
+          "data_availability": "medium_high",
+          "implementation_cost": "high",
+          "risk": "medium",
+          "novelty_reason": "Rated high because the direction frames a distinct question around benchmark design and stress-testing for ai-supported feedback workflows for programming education, trustworthy evaluation and failure analysis in ai-supported feedback workflows for programming education instead of restating the topic broadly.",
+          "feasibility_reason": "Rated medium_high because the scope implied by benchmark design and stress-testing for ai-supported feedback workflows for programming education, trustworthy evaluation and failure analysis in ai-supported feedback workflows for programming education is compatible with the current time and resource constraints.",
+          "evidence_strength_reason": "Rated high because it is currently supported by 3 directly linked sources.",
+          "data_availability_reason": "Rated medium_high because the supporting materials around benchmark design and stress-testing for ai-supported feedback workflows for programming education, trustworthy evaluation and failure analysis in ai-supported feedback workflows for programming education appear sufficiently visible for a bounded prototype or evaluation slice.",
+          "implementation_cost_reason": "Rated high because the expected build effort around benchmark design and stress-testing for ai-supported feedback workflows for programming education, trustworthy evaluation and failure analysis in ai-supported feedback workflows for programming education remains bounded for this stage.",
+          "risk_reason": "Rated medium because the current evidence still leaves non-trivial uncertainty around benchmark design and stress-testing for ai-supported feedback workflows for programming education, trustworthy evaluation and failure analysis in ai-supported feedback workflows for programming education."
+        }
+      ]
+    },
+    "convergence_result": {
+      "recommended_candidate_id": "candidate_3",
+      "backup_candidate_id": "candidate_1",
+      "rationale": "Programming Education Feedback: Workflow Support is currently the best fit because the available materials around benchmark design and stress-testing for ai-supported feedback workflows for programming education, trustworthy evaluation and failure analysis in ai-supported feedback workflows for programming education support a bounded systems workflow with clearer reproducibility outcomes than Programming Education Feedback: Benchmark Slice.",
+      "manual_checks": [
+        "Confirm that the selected sub-problem is narrow enough for the available timeline.",
+        "Verify that at least one benchmark or dataset is realistically accessible.",
+        "Check whether the proposed gap is genuinely underexplored rather than a retrieval miss."
+      ]
+    },
+    "evidence_presentation": {
+      "source_facts": [
+        {
+          "statement": "Retrieved paper evidence 'Cognitive Computing with Large Language Models for Student Assessment Feedback' (2025) as tier B support for the current topic.",
+          "statement_type": "source_fact",
+          "supporting_source_ids": [
+            "openalex_w4409701023"
+          ],
+          "note": "Directly grounded in retrieved source metadata and source summary.",
+          "uncertainty_reason": null,
+          "missing_evidence": []
+        },
+        {
+          "statement": "Retrieved paper evidence 'Expanding Interactive Computing to Facilitate Informal Instruction in Research Computing' (2022) as tier B support for the current topic.",
+          "statement_type": "source_fact",
+          "supporting_source_ids": [
+            "openalex_w4224273201"
+          ],
+          "note": "Directly grounded in retrieved source metadata and source summary.",
+          "uncertainty_reason": null,
+          "missing_evidence": []
+        },
+        {
+          "statement": "Retrieved paper evidence 'Open Systems Pharmacology Community—An Open Access, Open Source, Open Science Approach to Modeling and Simulation in Pharmaceutical Sciences' (2019) as tier B support for the current topic.",
+          "statement_type": "source_fact",
+          "supporting_source_ids": [
+            "openalex_w2982361299"
+          ],
+          "note": "Directly grounded in retrieved source metadata and source summary.",
+          "uncertainty_reason": null,
+          "missing_evidence": []
+        }
+      ],
+      "system_synthesis": [
+        {
+          "statement": "Current evidence clusters most strongly around benchmark design and stress-testing for ai-supported feedback workflows for programming education, trustworthy evaluation and failure analysis in ai-supported feedback workflows for programming education.",
+          "statement_type": "system_synthesis",
+          "supporting_source_ids": [
+            "openalex_w4409701023",
+            "openalex_w2982361299",
+            "openalex_w4224273201"
+          ],
+          "note": "Agent synthesis over multiple retrieved sources with theme-level evidence matching.",
+          "uncertainty_reason": null,
+          "missing_evidence": []
+        },
+        {
+          "statement": "The current output separates into 3 candidate directions with distinct positioning and comparison scores.",
+          "statement_type": "system_synthesis",
+          "supporting_source_ids": [
+            "openalex_w4409701023",
+            "openalex_w2982361299",
+            "openalex_w4400348041",
+            "openalex_w4224273201"
+          ],
+          "note": "Agent synthesis over candidate generation and comparison outputs, anchored to candidate support sets.",
+          "uncertainty_reason": null,
+          "missing_evidence": []
+        }
+      ],
+      "tentative_inferences": [
+        {
+          "statement": "candidate_3 is currently the leading direction under the present constraints.",
+          "statement_type": "tentative_inference",
+          "supporting_source_ids": [
+            "openalex_w4224273201",
+            "openalex_w2982361299",
+            "openalex_w4409701023"
+          ],
+          "note": "Recommendation-level inference that still requires human validation.",
+          "uncertainty_reason": "This recommendation remains constraint-sensitive and depends on the current evidence bundle, not on a settled benchmark choice or direct experimental validation.",
+          "missing_evidence": [
+            "Confirm that the selected sub-problem is narrow enough for the available timeline.",
+            "Verify that at least one benchmark or dataset is realistically accessible."
+          ]
+        },
+        {
+          "statement": "Confirm that the selected sub-problem is narrow enough for the available timeline.",
+          "statement_type": "tentative_inference",
+          "supporting_source_ids": [
+            "openalex_w4224273201",
+            "openalex_w2982361299",
+            "openalex_w4409701023"
+          ],
+          "note": "Open validation requirement rather than a settled fact.",
+          "uncertainty_reason": "The recommendation should not be treated as final until this validation step is checked.",
+          "missing_evidence": [
+            "Confirm that the selected sub-problem is narrow enough for the available timeline."
+          ]
+        }
+      ]
+    },
+    "human_confirmations": [
+      "Confirm that the system correctly interpreted the topic as 'ai-supported feedback workflows for programming education'.",
+      "Confirm that candidate_3 should remain the leading direction after reviewing the supporting evidence and risks.",
+      "Manual check: Confirm that the selected sub-problem is narrow enough for the available timeline.",
+      "Manual check: Verify that at least one benchmark or dataset is realistically accessible."
+    ],
+    "clarification_suggestions": [],
+    "trace": [
+      {
+        "stage": "frame_problem",
+        "status": "completed",
+        "timestamp": "2026-03-27T20:46:08.710204+00:00",
+        "detail": "Structured the user input into a topic-exploration request."
+      },
+      {
+        "stage": "retrieve_evidence",
+        "status": "completed",
+        "timestamp": "2026-03-27T20:46:08.710216+00:00",
+        "detail": "Retrieved 4 evidence records using the openalex provider."
+      },
+      {
+        "stage": "synthesize_landscape",
+        "status": "completed",
+        "timestamp": "2026-03-27T20:46:08.710220+00:00",
+        "detail": "Organized the current evidence bundle into a lightweight research landscape summary."
+      },
+      {
+        "stage": "generate_candidates",
+        "status": "completed",
+        "timestamp": "2026-03-27T20:46:08.710223+00:00",
+        "detail": "Generated 3 candidate topic directions from the current evidence bundle."
+      },
+      {
+        "stage": "compare_candidates",
+        "status": "completed",
+        "timestamp": "2026-03-27T20:46:08.710226+00:00",
+        "detail": "Produced a structured candidate comparison across fixed MVP dimensions."
+      },
+      {
+        "stage": "converge_recommendation",
+        "status": "completed",
+        "timestamp": "2026-03-27T20:46:08.710229+00:00",
+        "detail": "Produced a recommended next-best option with manual verification checks."
+      }
+    ],
+    "confidence_summary": {
+      "evidence_coverage": "medium",
+      "source_quality": "medium",
+      "candidate_separation": "high",
+      "conflict_level": "low",
+      "rationale": [
+        "Evidence coverage is medium based on the current number of retrieved records.",
+        "Source quality is medium based on the current source-tier mix.",
+        "Candidate separation is high based on the diversity of candidate positioning.",
+        "Conflict level is low because this development slice does not yet model explicit source disagreement."
+      ]
+    },
+    "evidence_diagnostics": {
+      "requested_provider": "openalex",
+      "used_provider": "openalex",
+      "fallback_used": false,
+      "fallback_reason": null,
+      "record_count": 4,
+      "cache_hit": false,
+      "query_count": 7,
+      "provider_latency_ms": 21693,
+      "slowest_query": "supported feedback workflows computing education",
+      "slowest_query_latency_ms": 6664,
+      "query_diagnostics": [
+        {
+          "route": "base",
+          "query": "supported feedback workflows programming education computing benchmark driven",
+          "latency_ms": 2698,
+          "attempt_count": 1
+        },
+        {
+          "route": "core_focus",
+          "query": "supported feedback workflows computing education",
+          "latency_ms": 6664,
+          "attempt_count": 1
+        },
+        {
+          "route": "role_expansion",
+          "query": "ai-supported feedback workflows for programming education computing education research benchmark evaluation",
+          "latency_ms": 2431,
+          "attempt_count": 1
+        },
+        {
+          "route": "role_expansion",
+          "query": "ai-supported feedback workflows for programming education computing education research method framework",
+          "latency_ms": 2662,
+          "attempt_count": 1
+        },
+        {
+          "route": "role_expansion",
+          "query": "ai-supported feedback workflows for programming education computing education research workflow reproducibility",
+          "latency_ms": 2377,
+          "attempt_count": 1
+        },
+        {
+          "route": "role_expansion",
+          "query": "ai-supported feedback workflows for programming education computing education research reliability failure analysis",
+          "latency_ms": 2341,
+          "attempt_count": 1
+        },
+        {
+          "route": "role_expansion",
+          "query": "ai-supported feedback workflows for programming education computing education research benchmark stress test",
+          "latency_ms": 2433,
           "attempt_count": 1
         }
       ]

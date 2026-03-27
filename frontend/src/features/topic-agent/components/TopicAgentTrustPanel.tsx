@@ -1,6 +1,7 @@
 ﻿import { useState } from "react";
 
 import type { TopicAgentSessionResponse } from "../../../types";
+import { getTopicAgentLevelLabel } from "../display";
 
 type TopicAgentTrustPanelProps = {
   topicResult: TopicAgentSessionResponse;
@@ -145,19 +146,19 @@ export function TopicAgentTrustPanel({
       <div className="summary-strip overview-summary-strip">
         <div className="summary-card summary-card-emphasis">
           <span>{trustCopy.evidenceCoverage}</span>
-          <strong>{topicResult.confidence_summary.evidence_coverage}</strong>
+          <strong>{getTopicAgentLevelLabel(topicResult.confidence_summary.evidence_coverage, locale)}</strong>
         </div>
         <div className="summary-card">
           <span>{trustCopy.sourceQuality}</span>
-          <strong>{topicResult.confidence_summary.source_quality}</strong>
+          <strong>{getTopicAgentLevelLabel(topicResult.confidence_summary.source_quality, locale)}</strong>
         </div>
         <div className="summary-card">
           <span>{trustCopy.candidateSeparation}</span>
-          <strong>{topicResult.confidence_summary.candidate_separation}</strong>
+          <strong>{getTopicAgentLevelLabel(topicResult.confidence_summary.candidate_separation, locale)}</strong>
         </div>
         <div className="summary-card">
           <span>{trustCopy.conflictLevel}</span>
-          <strong>{topicResult.confidence_summary.conflict_level}</strong>
+          <strong>{getTopicAgentLevelLabel(topicResult.confidence_summary.conflict_level, locale)}</strong>
         </div>
       </div>
 

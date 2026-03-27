@@ -3,7 +3,7 @@
   TopicAgentComparisonAssessment,
   TopicAgentSessionResponse,
 } from "../../../types";
-import { getTopicAgentDimensionLabel } from "../display";
+import { getTopicAgentDimensionLabel, getTopicAgentLevelLabel } from "../display";
 
 type TopicAgentRecommendationSummaryProps = {
   locale: Locale;
@@ -28,7 +28,6 @@ export function TopicAgentRecommendationSummary({
           leadDecision: "当前推荐",
           backupDecision: "备选方向",
           decisionChecklist: "决策检查清单",
-          comparisonSnapshot: "比较摘要",
           recommendationReason: "推荐理由",
           recommendationLead: "先看这条推荐方向，再决定是否需要回头查看完整评分表。",
           backupLead: "如果主方向风险偏高或成本偏大，优先回看这条备选。",
@@ -40,7 +39,6 @@ export function TopicAgentRecommendationSummary({
           leadDecision: "Lead Recommendation",
           backupDecision: "Backup Direction",
           decisionChecklist: "Decision Checklist",
-          comparisonSnapshot: "Comparison Snapshot",
           recommendationReason: "Recommendation Reason",
           recommendationLead:
             "Start with the lead recommendation before deciding whether you need the full score table.",
@@ -65,13 +63,16 @@ export function TopicAgentRecommendationSummary({
           <p className="subsection-copy">{uiCopy.recommendationLead}</p>
           <div className="pill-strip">
             <span className="meta-pill">
-              {copy.confidence}: {topicResult.confidence_summary.candidate_separation}
+              {copy.confidence}: {getTopicAgentLevelLabel(topicResult.confidence_summary.candidate_separation, locale)}
             </span>
             <span className="meta-pill">
               {copy.evidenceStrength}:{" "}
-              {topicResult.comparison_result.candidate_assessments.find(
-                (item) => item.candidate_id === recommendationId,
-              )?.evidence_strength ?? "-"}
+              {getTopicAgentLevelLabel(
+                topicResult.comparison_result.candidate_assessments.find(
+                  (item) => item.candidate_id === recommendationId,
+                )?.evidence_strength ?? "-",
+                locale,
+              )}
             </span>
           </div>
         </article>
@@ -138,33 +139,33 @@ export function TopicAgentRecommendationSummary({
                 {assessment.candidate_id === backupId && (
                   <span className="status-chip">{uiCopy.backupBadge}</span>
                 )}
-                <span className="status-chip">{assessment.novelty}</span>
+                <span className="status-chip">{getTopicAgentLevelLabel(assessment.novelty, locale)}</span>
               </div>
             </div>
             <div className="comparison-metric-grid">
               <div className="comparison-metric">
                 <span className="trace-label">{copy.novelty}</span>
-                <strong>{assessment.novelty}</strong>
+                <strong>{getTopicAgentLevelLabel(assessment.novelty, locale)}</strong>
               </div>
               <div className="comparison-metric">
                 <span className="trace-label">{copy.feasibility}</span>
-                <strong>{assessment.feasibility}</strong>
+                <strong>{getTopicAgentLevelLabel(assessment.feasibility, locale)}</strong>
               </div>
               <div className="comparison-metric">
                 <span className="trace-label">{copy.evidenceStrength}</span>
-                <strong>{assessment.evidence_strength}</strong>
+                <strong>{getTopicAgentLevelLabel(assessment.evidence_strength, locale)}</strong>
               </div>
               <div className="comparison-metric">
                 <span className="trace-label">{copy.dataAvailability}</span>
-                <strong>{assessment.data_availability}</strong>
+                <strong>{getTopicAgentLevelLabel(assessment.data_availability, locale)}</strong>
               </div>
               <div className="comparison-metric">
                 <span className="trace-label">{copy.implementationCost}</span>
-                <strong>{assessment.implementation_cost}</strong>
+                <strong>{getTopicAgentLevelLabel(assessment.implementation_cost, locale)}</strong>
               </div>
               <div className="comparison-metric">
                 <span className="trace-label">{copy.risk}</span>
-                <strong>{assessment.risk}</strong>
+                <strong>{getTopicAgentLevelLabel(assessment.risk, locale)}</strong>
               </div>
             </div>
           </article>
