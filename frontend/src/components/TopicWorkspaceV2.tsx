@@ -324,6 +324,27 @@ export function TopicWorkspaceV2({
         onApplyPreset={onApplyPreset}
       />
 
+      <TopicAgentSessionHistory
+        copy={copy}
+        locale={locale}
+        topicSessions={topicSessions}
+        currentSessionId={topicResult?.session_id}
+        resolveCandidateLabel={resolveCandidateLabel}
+        onLoadSession={onLoadSession}
+        onCompareSession={onCompareSession}
+      />
+
+      {topicResult && (
+        <TopicAgentSessionDiffPanel
+          copy={copy}
+          topicResult={topicResult}
+          topicComparisonResult={topicComparisonResult}
+          addedCandidateTitles={addedCandidateTitles}
+          removedCandidateTitles={removedCandidateTitles}
+          resolveCandidateLabel={resolveCandidateLabel}
+        />
+      )}
+
       <TopicSectionShell
         label={locale === "zh" ? "输入与 framing" : "Input And Framing"}
         title={locale === "zh" ? "先定义问题，再判断方向" : "Define The Problem Before Judging Directions"}
@@ -466,41 +487,8 @@ export function TopicWorkspaceV2({
               evidenceTitleById={evidenceTitleById}
             />
           </TopicSectionShell>
-
-          <TopicSectionShell
-            label={locale === "zh" ? "辅助对比" : "Supporting Comparison"}
-            title={
-              locale === "zh"
-                ? "把会话差异留在底部，按需查看"
-                : "Keep Session Diffs At The Bottom For Optional Review"
-            }
-            description={
-              locale === "zh"
-                ? "这一块保留给回看不同运行结果之间的变化，用来辅助判断，不放进默认 demo 主路径。"
-                : "Use this section to inspect changes across runs without interrupting the default demo path."
-            }
-          >
-            <TopicAgentSessionDiffPanel
-              copy={copy}
-              topicResult={topicResult}
-              topicComparisonResult={topicComparisonResult}
-              addedCandidateTitles={addedCandidateTitles}
-              removedCandidateTitles={removedCandidateTitles}
-              resolveCandidateLabel={resolveCandidateLabel}
-            />
-          </TopicSectionShell>
         </>
       )}
-
-      <TopicAgentSessionHistory
-        copy={copy}
-        locale={locale}
-        topicSessions={topicSessions}
-        currentSessionId={topicResult?.session_id}
-        resolveCandidateLabel={resolveCandidateLabel}
-        onLoadSession={onLoadSession}
-        onCompareSession={onCompareSession}
-      />
     </section>
   );
 }
