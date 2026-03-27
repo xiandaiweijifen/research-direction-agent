@@ -175,3 +175,15 @@ Verification for this follow-up package:
 - `backend/tests/test_topic_agent_providers.py`: `47 passed`
 - `backend/tests/test_topic_agent_pipeline.py`: `21 passed`
 - `backend/tests/test_topic_agent_api.py`: `8 passed`
+
+One more retrieval-tightening step was then added for the issue-resolution family:
+
+- after anchor-preserving rewrites, some generic collaborative-engineering neighbors could still survive into the final support pool
+- the added fix narrows same-task qualification specifically for repository issue-resolution queries
+- the rule now expects joint evidence of issue-resolution intent, repository-level setting, and agent / benchmark / software-engineering framing
+
+Verification for this tightening step:
+
+- `backend/tests/test_topic_agent_providers.py`: `48 passed`
+- `backend/tests/test_topic_agent_pipeline.py`: `21 passed`
+- `backend/tests/test_topic_agent_api.py`: `8 passed`

@@ -993,6 +993,23 @@ def _software_agent_target_terms() -> set[str]:
     }
 
 
+def _issue_resolution_target_terms() -> set[str]:
+    return {
+        "github issues",
+        "issue resolution",
+        "issue-resolution",
+        "swe-bench",
+        "swe-bench lite",
+        "repository-level",
+        "repository",
+        "software engineering",
+        "agent",
+        "agents",
+        "benchmark",
+        "patch",
+    }
+
+
 def _software_library_neighbor_terms() -> set[str]:
     return {
         "numpy",
@@ -1641,6 +1658,8 @@ def _has_strong_modern_agent_anchor(record: TopicAgentSourceRecord, request: Top
     query_text = f"{request.interest} {request.problem_domain or ''}".lower()
     if _is_code_repair_query(query_text):
         return _contains_any(haystack, _code_repair_target_terms())
+    if _is_repository_issue_resolution_query(query_text):
+        return _contains_any(haystack, _issue_resolution_target_terms())
     if _is_modern_software_agent_query(query_text):
         return _contains_any(haystack, _software_agent_target_terms())
     return True
@@ -1663,6 +1682,15 @@ def _is_same_task_candidate(record: TopicAgentSourceRecord, request: TopicAgentE
         if not _contains_any(haystack, must_have_terms):
             return False
         return _contains_any(haystack, _code_repair_target_terms())
+    if _is_repository_issue_resolution_query(query_text):
+        must_have_issue_terms = {"github issues", "issue resolution", "issue-resolution", "swe-bench"}
+        must_have_setting_terms = {"repository", "repository-level", "codebase"}
+        must_have_agent_terms = {"agent", "agents", "benchmark", "software engineering", "patch"}
+        return (
+            _contains_any(haystack, must_have_issue_terms)
+            and _contains_any(haystack, must_have_setting_terms)
+            and _contains_any(haystack, must_have_agent_terms)
+        )
     if _is_modern_software_agent_query(query_text):
         must_have_terms = {
             "agent",

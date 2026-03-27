@@ -608,3 +608,16 @@ Latest result:
   - `backend/tests/test_topic_agent_providers.py`: `47 passed`
   - `backend/tests/test_topic_agent_pipeline.py`: `21 passed`
   - `backend/tests/test_topic_agent_api.py`: `8 passed`
+
+### Issue-Resolution Hygiene Tightening
+
+- Added a narrower same-task qualification path for the `repository issue-resolution` query family.
+- For this family, final candidates now need stronger joint evidence of:
+  - issue-resolution intent such as `github issues` or `issue resolution`
+  - repository-level setting
+  - agent / benchmark / software-engineering task framing
+- This is meant to stop collaborative-engineering and generic workflow neighbors from leaking into downstream support sets after the improved query rewrites have already pulled the right issue-resolution papers into the pool.
+- Current verification:
+  - `backend/tests/test_topic_agent_providers.py`: `48 passed`
+  - `backend/tests/test_topic_agent_pipeline.py`: `21 passed`
+  - `backend/tests/test_topic_agent_api.py`: `8 passed`

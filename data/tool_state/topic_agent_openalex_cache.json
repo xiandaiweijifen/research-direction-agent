@@ -2028,7 +2028,7 @@
     ]
   },
   "v4::benchmark slicing autonomous repository repair software driven engineering||repository repair benchmark evaluation software engineering||program repair benchmark validation repository-level||benchmark slicing autonomous software engineering||repository-level program repair benchmark||swe-bench repository repair evaluation||benchmark slicing for autonomous repository repair software engineering validation benchmark evaluation||benchmark slicing for autonomous repository repair software engineering validation workflow reproducibility||benchmark slicing for autonomous repository repair software engineering validation method framework::max=5": {
-    "saved_at": "2026-03-28T02:27:58.203451+08:00",
+    "saved_at": "2026-03-28T02:33:43.000020+08:00",
     "records": [
       {
         "source_id": "openalex_w4400337928",
@@ -2055,18 +2055,6 @@
         "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
       },
       {
-        "source_id": "openalex_w3208407575",
-        "title": "Automatic Software Repair: A Survey",
-        "source_type": "survey",
-        "source_tier": "A",
-        "year": 2017,
-        "authors_or_publisher": "Luca Gazzola, Daniela Micucci, Leonardo Mariani",
-        "identifier": "https://openalex.org/W3208407575",
-        "url": "https://doi.org/10.1109/tse.2017.2755013",
-        "summary": "Despite their growing complexity and increasing size, modern software applications must satisfy strict release requirements that impose short bug fixing and maintenance cycles, putting significant pressure on developers who are responsible for timely producing high-quality software. To reduce developers workload, repairing and healing techniques have been extensively investigated as solutions for efficiently repairing and maintaining software in the last few years. In particular, repairing solutions have been able to automatically produce useful fixes for several classes of bugs that might be present in software programs. A range of algorithms, techniques, and heuristics have been integrated, experimented, and studied, producing a heterogeneous and articulated research framework where automatic repair techniques are proliferating. This paper organizes the knowledge in the area by surveying a body of 108 papers about automatic software repair techniques, illustrating the algorithms and the approaches, comparing them on representative examples, and discussing the open challenges and the empirical evidence reported so far.",
-        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
-      },
-      {
         "source_id": "openalex_w4398239154",
         "title": "When Large Language Models Confront Repository-Level Automatic Program Repair: How Well They Done?",
         "source_type": "benchmark",
@@ -2088,6 +2076,59 @@
         "identifier": "https://openalex.org/W2908354350",
         "url": "https://doi.org/10.1109/apsec.2018.00085",
         "summary": "Automated program repair (APR) has extensively been developed by leveraging search-based techniques, in which fix ingredients are explored and identified in different granularities from a specific search space. State-of-the approaches often find fix ingredients by using mutation operators or leveraging manually-crafted templates. We argue that the fix ingredients can be searched in an online mode, leveraging code search techniques to find potentially-fixed versions of buggy code fragments from which repair actions can be extracted. In this study, we present an APR tool, LSRepair, that automatically explores code repositories to search for fix ingredients at the method-level granularity with three strategies of similar code search. Our preliminary evaluation shows that code search can drive a faster fix process (some bugs are fixed in a few seconds). LSRepair helps repair 19 bugs from the Defects4J benchmark successfully. We expect our approach to open new directions for fixing multiple-lines bugs.",
+        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
+      },
+      {
+        "source_id": "openalex_w3208407575",
+        "title": "Automatic Software Repair: A Survey",
+        "source_type": "survey",
+        "source_tier": "A",
+        "year": 2017,
+        "authors_or_publisher": "Luca Gazzola, Daniela Micucci, Leonardo Mariani",
+        "identifier": "https://openalex.org/W3208407575",
+        "url": "https://doi.org/10.1109/tse.2017.2755013",
+        "summary": "Despite their growing complexity and increasing size, modern software applications must satisfy strict release requirements that impose short bug fixing and maintenance cycles, putting significant pressure on developers who are responsible for timely producing high-quality software. To reduce developers workload, repairing and healing techniques have been extensively investigated as solutions for efficiently repairing and maintaining software in the last few years. In particular, repairing solutions have been able to automatically produce useful fixes for several classes of bugs that might be present in software programs. A range of algorithms, techniques, and heuristics have been integrated, experimented, and studied, producing a heterogeneous and articulated research framework where automatic repair techniques are proliferating. This paper organizes the knowledge in the area by surveying a body of 108 papers about automatic software repair techniques, illustrating the algorithms and the approaches, comparing them on representative examples, and discussing the open challenges and the empirical evidence reported so far.",
+        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
+      }
+    ]
+  },
+  "v4::repository github issue triage resolution agents engineering evaluation||repository github issue resolution agent software engineering||repository-level issue resolution benchmark evaluation||repository github issue software engineering||github issue resolution repository-level agent benchmark||repository-level github issue resolution software engineering||repository github issue triage and resolution agents software engineering workflow evaluation benchmark evaluation||repository github issue triage and resolution agents software engineering workflow evaluation workflow reproducibility||repository github issue triage and resolution agents software engineering workflow evaluation method framework||repository github issue triage and resolution agents software engineering workflow evaluation developer workflow audit::max=5": {
+    "saved_at": "2026-03-28T02:34:45.973002+08:00",
+    "records": [
+      {
+        "source_id": "openalex_w4413267850",
+        "title": "Alibaba LingmaAgent: Improving Automated Issue Resolution via Comprehensive Repository Exploration",
+        "source_type": "benchmark",
+        "source_tier": "A",
+        "year": 2025,
+        "authors_or_publisher": "Yingwei Ma, Qingping Yang, Rongyu Cao, Binhua Li",
+        "identifier": "https://openalex.org/W4413267850",
+        "url": "https://doi.org/10.1145/3696630.3728549",
+        "summary": "This paper presents Alibaba LingmaAgent, a novel Automated Software Engineering method designed to comprehensively understand and utilize whole software repositories for issue resolution. Deployed in TONGYI Lingma, an IDE-based coding assistant developed by Alibaba Cloud, LingmaAgent addresses the limitations of existing LLM-based agents that primarily focus on local code information. Our approach introduces a top-down method to condense critical repository information into a knowledge graph, reducing complexity, and employs a Monte Carlo tree search based strategy enabling agents to explore and understand entire repositories. We guide agents to summarize, analyze, and plan using repository-level knowledge, allowing them to dynamically acquire information and generate patches for real-world GitHub issues. In extensive experiments, LingmaAgent demonstrated significant improvements, achieving an 18.5% relative improvement on the SWE-bench Lite benchmark compared to SWE-agent. In production deployment and evaluation at Alibaba Cloud, LingmaAgent automatically resolved 16.9% of in-house issues faced by development engineers, and solved 43.3% of problems after manual intervention. Additionally, we have open-sourced a Python prototype of LingmaAgent for reference by other industrial developers 1. In fact, LingmaAgent has been used as a developed reference by many subsequently agents.",
+        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
+      },
+      {
+        "source_id": "openalex_w4403788984",
+        "title": "HyperAgent: Generalist Software Engineering Agents to Solve Coding Tasks at Scale",
+        "source_type": "benchmark",
+        "source_tier": "A",
+        "year": 2024,
+        "authors_or_publisher": "Huy N. Phan, Nguyen, Tien N., Phong X. Nguyen, Nghi D. Q. Bui",
+        "identifier": "https://openalex.org/W4403788984",
+        "url": "https://arxiv.org/abs/2409.16299",
+        "summary": "Large Language Models (LLMs) have revolutionized software engineering (SE), showcasing remarkable proficiency in various coding tasks. Despite recent advancements that have enabled the creation of autonomous software agents utilizing LLMs for end-to-end development tasks, these systems are typically designed for specific SE functions. We introduce HyperAgent, an innovative generalist multi-agent system designed to tackle a wide range of SE tasks across different programming languages by mimicking the workflows of human developers. HyperAgent features four specialized agents-Planner, Navigator, Code Editor, and Executor-capable of handling the entire lifecycle of SE tasks, from initial planning to final verification. HyperAgent sets new benchmarks in diverse SE tasks, including GitHub issue resolution on the renowned SWE-Bench benchmark, outperforming robust baselines. Furthermore, HyperAgent demonstrates exceptional performance in repository-level code generation (RepoExec) and fault localization and program repair (Defects4J), often surpassing state-of-the-art baselines.",
+        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
+      },
+      {
+        "source_id": "openalex_w4393248299",
+        "title": "MAGIS: LLM-Based Multi-Agent Framework for GitHub Issue Resolution",
+        "source_type": "benchmark",
+        "source_tier": "A",
+        "year": 2024,
+        "authors_or_publisher": "Wei Tao, Yucheng Zhou, Wang, Yanlin, Wenqiang Zhang",
+        "identifier": "https://openalex.org/W4393248299",
+        "url": "https://arxiv.org/abs/2403.17927",
+        "summary": "In software development, resolving the emergent issues within GitHub repositories is a complex challenge that involves not only the incorporation of new code but also the maintenance of existing code. Large Language Models (LLMs) have shown promise in code generation but face difficulties in resolving Github issues, particularly at the repository level. To overcome this challenge, we empirically study the reason why LLMs fail to resolve GitHub issues and analyze the major factors. Motivated by the empirical findings, we propose a novel LLM-based Multi-Agent framework for GitHub Issue reSolution, MAGIS, consisting of four agents customized for software evolution: Manager, Repository Custodian, Developer, and Quality Assurance Engineer agents. This framework leverages the collaboration of various agents in the planning and coding process to unlock the potential of LLMs to resolve GitHub issues. In experiments, we employ the SWE-bench benchmark to compare MAGIS with popular LLMs, including GPT-3.5, GPT-4, and Claude-2. MAGIS can resolve 13.94% GitHub issues, significantly outperforming the baselines. Specifically, MAGIS achieves an eight-fold increase in resolved ratio over the direct application of GPT-4, the advanced LLM.",
         "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
       }
     ]

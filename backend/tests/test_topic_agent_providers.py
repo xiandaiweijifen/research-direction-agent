@@ -2008,6 +2008,78 @@ def test_filter_ranked_records_prefers_same_task_candidates_over_generic_domain_
     assert "Technological Structure for Technology Integration in the Classroom, Inspired by the Maker Culture" not in filtered_titles
 
 
+def test_filter_ranked_records_excludes_collaborative_engineering_neighbors_for_issue_resolution_queries():
+    request = TopicAgentExploreRequest(
+        interest="repository issue-resolution agent workflows",
+        problem_domain="software engineering reproducibility infrastructure",
+        constraints=TopicAgentConstraintSet(preferred_style="systems"),
+    )
+    records = [
+        TopicAgentSourceRecord(
+            source_id="openalex_w1",
+            title="HyperAgent: Generalist Software Engineering Agents to Solve Coding Tasks at Scale",
+            source_type="benchmark",
+            source_tier="A",
+            year=2024,
+            authors_or_publisher="Author A",
+            identifier="https://openalex.org/W1",
+            url="https://example.org/w1",
+            summary="GitHub issue resolution on SWE-Bench, repository-level code generation, and program repair benchmarks.",
+            relevance_reason="Test",
+        ),
+        TopicAgentSourceRecord(
+            source_id="openalex_w2",
+            title="Alibaba LingmaAgent: Improving Automated Issue Resolution via Comprehensive Repository Exploration",
+            source_type="benchmark",
+            source_tier="A",
+            year=2025,
+            authors_or_publisher="Author B",
+            identifier="https://openalex.org/W2",
+            url="https://example.org/w2",
+            summary="Repository-level issue resolution with a software engineering agent using GitHub issues and benchmark evaluation.",
+            relevance_reason="Test",
+        ),
+        TopicAgentSourceRecord(
+            source_id="openalex_w3",
+            title="MAGIS: LLM-Based Multi-Agent Framework for GitHub Issue Resolution",
+            source_type="benchmark",
+            source_tier="A",
+            year=2024,
+            authors_or_publisher="Author C",
+            identifier="https://openalex.org/W3",
+            url="https://example.org/w3",
+            summary="GitHub issue resolution benchmark for repository-level software engineering agents.",
+            relevance_reason="Test",
+        ),
+        TopicAgentSourceRecord(
+            source_id="openalex_w4",
+            title="Special Issue on Collaborative Engineering",
+            source_type="paper",
+            source_tier="B",
+            year=2006,
+            authors_or_publisher="Author D",
+            identifier="https://openalex.org/W4",
+            url="https://example.org/w4",
+            summary="Collaborative workflows, engineering repositories, and distributed design agents.",
+            relevance_reason="Test",
+        ),
+    ]
+
+    filtered_titles = [
+        record.title
+        for record in _filter_ranked_records(
+            _rank_records(records, request, max_results=4),
+            request,
+            max_results=4,
+        )
+    ]
+
+    assert "HyperAgent: Generalist Software Engineering Agents to Solve Coding Tasks at Scale" in filtered_titles
+    assert "Alibaba LingmaAgent: Improving Automated Issue Resolution via Comprehensive Repository Exploration" in filtered_titles
+    assert "MAGIS: LLM-Based Multi-Agent Framework for GitHub Issue Resolution" in filtered_titles
+    assert "Special Issue on Collaborative Engineering" not in filtered_titles
+
+
 def test_fallback_provider_returns_mock_records_when_primary_fails():
     class FailingProvider:
         provider_name = "primary"
