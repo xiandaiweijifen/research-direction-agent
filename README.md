@@ -7,7 +7,7 @@ The current repository should be read as an engineering prototype and delivery s
 ## Quick Links
 
 - Topic Agent demo video: [topic-agent-demo](https://www.bilibili.com/video/BV1rdX4B5E5b/?share_source=copy_web&vd_source=e78dfd6b807119001f6cf306f3e7daa7)
-- Topic Agent solution summary (ZH): [Chinese solution summary](./docs/topic_agent_solution_summary_zh.md)
+- Topic Agent solution summary (ZH): [Markdown](./docs/topic_agent_solution_summary_zh.md) / [PDF](./docs/topic_agent_solution_summary_zh.pdf)
 - Topic Agent design: [Design overview](./docs/topic_agent_design.md)
 - Topic Agent acceptance plan: [Acceptance plan](./docs/topic_agent_acceptance.md)
 
@@ -85,7 +85,7 @@ Planned system modules:
 - Topic Agent initial design: [docs/topic_agent_design.md](./docs/topic_agent_design.md)
 - Topic Agent acceptance plan: [docs/topic_agent_acceptance.md](./docs/topic_agent_acceptance.md)
 - Topic Agent MVP plan: [docs/topic_agent_mvp.md](./docs/topic_agent_mvp.md)
-- Topic Agent solution summary (ZH): [Chinese solution summary](./docs/topic_agent_solution_summary_zh.md)
+- Topic Agent solution summary (ZH): [Markdown](./docs/topic_agent_solution_summary_zh.md) / [PDF](./docs/topic_agent_solution_summary_zh.pdf)
 
 ## Local Setup
 
