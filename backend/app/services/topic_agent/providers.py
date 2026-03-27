@@ -774,7 +774,7 @@ def _is_modern_software_agent_query(query_text: str) -> bool:
 
 
 def _is_code_repair_query(query_text: str) -> bool:
-    return _contains_any(
+    if _contains_any(
         query_text,
         {
             "code repair",
@@ -785,7 +785,11 @@ def _is_code_repair_query(query_text: str) -> bool:
             "software maintenance",
             "program improvement",
         },
-    )
+    ):
+        return True
+    repair_terms = {"repair", "fix", "fixing", "patch", "debugging"}
+    repository_terms = {"repository", "repository-level", "codebase", "workflow", "workflows"}
+    return _contains_any(query_text, repair_terms) and _contains_any(query_text, repository_terms)
 
 
 def _software_agent_target_terms() -> set[str]:
@@ -1409,6 +1413,16 @@ def _matched_interest_term_count(record: TopicAgentSourceRecord, request: TopicA
     return sum(1 for term in interest_terms if term in haystack)
 
 
+def _has_strong_modern_agent_anchor(record: TopicAgentSourceRecord, request: TopicAgentExploreRequest) -> bool:
+    haystack = f"{record.title.lower()} {record.summary.lower()}"
+    query_text = f"{request.interest} {request.problem_domain or ''}".lower()
+    if _is_code_repair_query(query_text):
+        return _contains_any(haystack, _code_repair_target_terms())
+    if _is_modern_software_agent_query(query_text):
+        return _contains_any(haystack, _software_agent_target_terms())
+    return True
+
+
 def _is_generic_overview_record(record: TopicAgentSourceRecord) -> bool:
     title_lower = record.title.lower()
     haystack = f"{title_lower} {record.summary.lower()}"
@@ -1528,6 +1542,22 @@ def _filter_ranked_records(
 
     query_text = f"{request.interest} {request.problem_domain or ''}".lower()
     if _query_has_modern_ai_topic(query_text):
+        anchor_filtered = [
+            record for record in filtered if _has_strong_modern_agent_anchor(record, request)
+        ]
+        if anchor_filtered:
+            filtered = anchor_filtered
+            topic_relevant_records = [
+                record for record in filtered if _topic_relevance_label(record, request) == "topic_relevant"
+            ]
+            domain_neighbor_records = [
+                record for record in filtered if _topic_relevance_label(record, request) == "domain_neighbor"
+            ]
+            lexical_match_records = [
+                record for record in filtered if _topic_relevance_label(record, request) == "lexical_match"
+            ]
+            non_overview_records = [record for record in filtered if not _is_generic_overview_record(record)]
+            overview_backfill_records = [record for record in filtered if _is_generic_overview_record(record)]
         preferred_records = [
             record
             for record in non_overview_records

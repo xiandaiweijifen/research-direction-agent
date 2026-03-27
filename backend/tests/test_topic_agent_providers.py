@@ -18,6 +18,7 @@ from app.services.topic_agent.providers import (
     _filter_ranked_records,
     _http_get_with_retries,
     _infer_evidence_roles,
+    _is_code_repair_query,
     _openalex_raw_pool_size,
     _parse_openalex_response,
     _parse_arxiv_response,
@@ -708,6 +709,10 @@ def test_openalex_queries_keep_software_agent_fan_out_small_for_interactive_use(
     assert len(queries) <= 6
 
 
+def test_code_repair_query_detection_handles_repository_repair_workflows():
+    assert _is_code_repair_query("llm repository repair workflows software engineering evaluation")
+
+
 def test_openalex_provider_reports_latency_and_query_diagnostics(workspace_tmp_path, monkeypatch):
     request = TopicAgentExploreRequest(
         interest="repository-level bug-fixing agents",
@@ -751,6 +756,82 @@ def test_openalex_provider_reports_latency_and_query_diagnostics(workspace_tmp_p
     assert result.diagnostics.slowest_query is not None
     assert result.diagnostics.slowest_query_latency_ms is not None
     assert all("attempt_count" in item for item in result.diagnostics.query_diagnostics)
+
+
+def test_openalex_provider_filters_off_target_repository_workflow_neighbors(workspace_tmp_path, monkeypatch):
+    request = TopicAgentExploreRequest(
+        interest="llm repository repair workflows",
+        problem_domain="software engineering evaluation",
+        constraints=TopicAgentConstraintSet(preferred_style="applied"),
+    )
+    cache_path = workspace_tmp_path / "topic_agent_openalex_cache.json"
+    provider = OpenAlexEvidenceProvider(cache_path=cache_path, cache_ttl_seconds=3600, max_results=5)
+
+    class FakeResponse:
+        def json(self):
+            return {
+                "results": [
+                    {
+                        "id": "https://openalex.org/W4403788984",
+                        "display_name": "HyperAgent: Generalist Software Engineering Agents to Solve Coding Tasks at Scale",
+                        "publication_year": 2024,
+                        "type": "article",
+                        "abstract_inverted_index": {
+                            "repository-level": [0],
+                            "program": [1],
+                            "repair": [2],
+                            "benchmark": [3],
+                            "workflow": [4],
+                        },
+                        "authorships": [{"author": {"display_name": "Author A"}}],
+                        "primary_location": {"landing_page_url": "https://example.org/hyperagent"},
+                    },
+                    {
+                        "id": "https://openalex.org/W4409724980",
+                        "display_name": "Coding Agents: A Comprehensive Survey of Automated Bug Fixing Systems and Benchmarks",
+                        "publication_year": 2025,
+                        "type": "article",
+                        "abstract_inverted_index": {
+                            "automated": [0],
+                            "bug": [1],
+                            "fixing": [2],
+                            "repository-level": [3],
+                            "benchmark": [4],
+                        },
+                        "authorships": [{"author": {"display_name": "Author B"}}],
+                        "primary_location": {"landing_page_url": "https://example.org/coding-agents"},
+                    },
+                    {
+                        "id": "https://openalex.org/W1497744507",
+                        "display_name": "SAP R/3 business blueprint (2nd ed.): understanding enterprise supply chain management",
+                        "publication_year": 1999,
+                        "type": "book",
+                        "abstract_inverted_index": {
+                            "business": [0],
+                            "blueprint": [1],
+                            "workflow": [2],
+                            "enterprise": [3],
+                            "software": [4],
+                            "engineering": [5],
+                            "autonomous": [6],
+                            "agents": [7],
+                        },
+                        "authorships": [{"author": {"display_name": "Author C"}}],
+                        "primary_location": {"landing_page_url": "https://example.org/sap"},
+                    },
+                ]
+            }
+
+        def raise_for_status(self):
+            return None
+
+    monkeypatch.setattr("app.services.topic_agent.providers.httpx.get", lambda *args, **kwargs: FakeResponse())
+
+    result = provider.retrieve(request)
+    ranked_titles = [record.title for record in result.records]
+
+    assert "SAP R/3 business blueprint (2nd ed.): understanding enterprise supply chain management" not in ranked_titles
+    assert "HyperAgent: Generalist Software Engineering Agents to Solve Coding Tasks at Scale" in ranked_titles
 
 
 def test_openalex_raw_pool_size_fetches_more_than_final_max_results():

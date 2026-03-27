@@ -1590,5 +1590,58 @@
         "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
       }
     ]
+  },
+  "v4::containerized benchmark design repository level repair agents driven||containerized benchmark design software engineering||containerized benchmark design for repository-level repair agents software engineering reproducibility benchmark evaluation||containerized benchmark design for repository-level repair agents software engineering reproducibility workflow reproducibility||containerized benchmark design for repository-level repair agents software engineering reproducibility method framework||containerized benchmark design for repository-level repair agents software engineering reproducibility developer workflow audit::max=5": {
+    "saved_at": "2026-03-28T01:14:06.159485+08:00",
+    "records": [
+      {
+        "source_id": "openalex_w4407384737",
+        "title": "ITBench: Evaluating AI Agents across Diverse Real-World IT Automation Tasks",
+        "source_type": "benchmark",
+        "source_tier": "A",
+        "year": 2025,
+        "authors_or_publisher": "Saurabh Jha, Rohan Arora, Yuji Watanabe, Toru Yanagawa",
+        "identifier": "https://openalex.org/W4407384737",
+        "url": "https://arxiv.org/abs/2502.05352",
+        "summary": "Realizing the vision of using AI agents to automate critical IT tasks depends on the ability to measure and understand effectiveness of proposed solutions. We introduce ITBench, a framework that offers a systematic methodology for benchmarking AI agents to address real-world IT automation tasks. Our initial release targets three key areas: Site Reliability Engineering (SRE), Compliance and Security Operations (CISO), and Financial Operations (FinOps). The design enables AI researchers to understand the challenges and opportunities of AI agents for IT automation with push-button workflows and interpretable metrics. ITBench includes an initial set of 94 real-world scenarios, which can be easily extended by community contributions. Our results show that agents powered by state-of-the-art models resolve only 13.8% of SRE scenarios, 25.2% of CISO scenarios, and 0% of FinOps scenarios. We expect ITBench to be a key enabler of AI-driven IT automation that is correct, safe, and fast.",
+        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
+      },
+      {
+        "source_id": "openalex_w4379743664",
+        "title": "A systematic review of Green <scp>AI</scp>",
+        "source_type": "benchmark",
+        "source_tier": "A",
+        "year": 2023,
+        "authors_or_publisher": "Roberto Verdecchia, June Sallou, Luís Cruz",
+        "identifier": "https://openalex.org/W4379743664",
+        "url": "https://doi.org/10.1002/widm.1507",
+        "summary": "Abstract With the ever‐growing adoption of artificial intelligence (AI)‐based systems, the carbon footprint of AI is no longer negligible. AI researchers and practitioners are therefore urged to hold themselves accountable for the carbon emissions of the AI models they design and use. This led in recent years to the appearance of researches tackling AI environmental sustainability, a field referred to as Green AI. Despite the rapid growth of interest in the topic, a comprehensive overview of Green AI research is to date still missing. To address this gap, in this article, we present a systematic review of the Green AI literature. From the analysis of 98 primary studies, different patterns emerge. The topic experienced a considerable growth from 2020 onward. Most studies consider monitoring AI model footprint, tuning hyperparameters to improve model sustainability, or benchmarking models. A mix of position papers, observational studies, and solution papers are present. Most papers focus on the training phase, are algorithm‐agnostic or study neural networks, and use image data. Laboratory experiments are the most common research strategy. Reported Green AI energy savings go up to 115%, with savings over 50% being rather common. Industrial parties are involved in Green AI studies, albeit most target academic readers. Green AI tool provisioning is scarce. As a conclusion, the Green AI research field results to have reached a considerable level of maturity. Therefore, from this review emerges that the time is suitable to adopt other Green AI research strategies, and port the numerous promising academic results to industrial practice. This article is categorized under: Technologies &gt; Machine Learning",
+        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
+      },
+      {
+        "source_id": "openalex_w4294685825",
+        "title": "Adding Semantics to Measurements",
+        "source_type": "benchmark",
+        "source_tier": "A",
+        "year": 2022,
+        "authors_or_publisher": "Attila Klenik, András Pataricza",
+        "identifier": "https://openalex.org/W4294685825",
+        "url": "https://doi.org/10.14232/actacyb.295182",
+        "summary": "The design and operation of modern software systems exhibit a shift towards virtualization, containerization and service-based orchestration. Performance capacity engineering and resource utilization tuning become priority requirements in such environments.&#x0D; Measurement-based performance evaluation is the cornerstone of capacity engineering and designing for performance. Moreover, the increasing complexity of systems necessitates rigorous performance analysis approaches. However, empirical performance analysis lacks sophisticated model-based support similar to the functional design of the system.&#x0D; The paper proposes an ontology-based approach for facilitating and guiding the empirical evaluation throughout its various steps. Hyperledger Fabric (HLF), an open-source blockchain platform by the Linux Foundation, is modelled and evaluated as a pilot example of the approach, using the standard TPC-C performance benchmark workload.",
+        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
+      },
+      {
+        "source_id": "openalex_w4226495197",
+        "title": "Adding semantics to measurements: Ontology-guided, systematic performance analysis",
+        "source_type": "benchmark",
+        "source_tier": "A",
+        "year": 2021,
+        "authors_or_publisher": "Attila Klenik, András Pataricza",
+        "identifier": "https://openalex.org/W4226495197",
+        "url": "https://arxiv.org/abs/2112.11270",
+        "summary": "The design and operation of modern software systems exhibit a shift towards virtualization, containerization and service-based orchestration. Performance capacity engineering and resource utilization tuning become priority requirements in such environments. Measurement-based performance evaluation is the cornerstone of capacity engineering and designing for performance. Moreover, the increasing complexity of systems necessitates rigorous performance analysis approaches. However, empirical performance analysis lacks sophisticated model-based support similar to the functional design of the system. The paper proposes an ontology-based approach for facilitating and guiding the empirical evaluation throughout its various steps. Hyperledger Fabric (HLF), an open-source blockchain platform by the Linux Foundation, is modelled and evaluated as a pilot example of the approach, using the standard TPC-C performance benchmark workload.",
+        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
+      }
+    ]
   }
 }
