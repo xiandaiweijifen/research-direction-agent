@@ -576,3 +576,17 @@ Latest result:
 - Package 2 verification for the current sub-step:
   - `backend/tests/test_topic_agent_providers.py`: `45 passed`
   - `backend/tests/test_topic_agent_api.py`: `8 passed`
+
+### Comparison And Convergence Upgrade
+
+- Comparison scoring is no longer assigned only by fixed candidate slot.
+- Candidate assessments now derive more of their dimension labels from:
+  - support count
+  - candidate positioning
+  - origin signals
+  - style and budget constraints
+- Convergence recommendation is no longer selected only from a style-to-slot mapping.
+- Recommendation and backup selection now consume the comparison assessments as the primary decision surface, while still respecting style and budget as soft preferences rather than hard slot rules.
+- Current verification:
+  - `backend/tests/test_topic_agent_pipeline.py`: `21 passed`
+  - `backend/tests/test_topic_agent_api.py`: `8 passed`

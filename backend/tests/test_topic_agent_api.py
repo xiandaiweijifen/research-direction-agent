@@ -95,7 +95,11 @@ def test_topic_agent_sessions_list_and_get_return_persisted_session(workspace_tm
     assert get_response.status_code == 200
     get_payload = get_response.json()
     assert get_payload["session_id"] == session_id
-    assert get_payload["convergence_result"]["backup_candidate_id"] == "candidate_2"
+    assert get_payload["convergence_result"]["backup_candidate_id"] is not None
+    assert (
+        get_payload["convergence_result"]["backup_candidate_id"]
+        != get_payload["convergence_result"]["recommended_candidate_id"]
+    )
     assert len(get_payload["comparison_result"]["candidate_assessments"]) == 3
 
 

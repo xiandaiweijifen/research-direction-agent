@@ -144,3 +144,15 @@ Acceptance:
 ## Current Notes
 
 Package 1 intentionally does not attempt to improve retrieval quality by itself. Its job is to create a staged implementation boundary so that hybrid retrieval and reranking can be introduced cleanly in later packages.
+
+## Boundary Note
+
+The retrieval track is now at a point where:
+
+- query routing exists
+- lightweight route-aware fusion exists
+- query-family-aware candidate hygiene exists
+
+This is a reasonable pause point for retrieval iteration. Further retrieval work is still possible, but the next high-value step is downstream:
+
+- comparison and convergence should increasingly consume the cleaner evidence pool as an evidence-driven judgement layer rather than continue relying on mostly fixed candidate-slot logic

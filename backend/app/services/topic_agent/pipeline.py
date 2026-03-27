@@ -1667,63 +1667,86 @@ def compare_candidates(context: TopicAgentPipelineContext) -> TopicAgentComparis
     budget_bucket = _time_budget_bucket(context.request.constraints.time_budget_months)
     style = _preferred_style(context.request)
     candidate_map = _candidate_by_id_map(context.candidate_topics or [])
-    assessments_by_id: dict[str, dict[str, str]] = {
-        "candidate_1": {
-            "candidate_id": "candidate_1",
-            "novelty": "high",
-            "feasibility": "medium",
-            "evidence_strength": "medium_high",
-            "data_availability": "medium",
-            "implementation_cost": "medium",
-            "risk": "medium",
-        },
-        "candidate_2": {
-            "candidate_id": "candidate_2",
-            "novelty": "medium",
-            "feasibility": "high",
-            "evidence_strength": "medium",
-            "data_availability": "medium_high",
-            "implementation_cost": "medium_low",
-            "risk": "medium",
-        },
-        "candidate_3": {
-            "candidate_id": "candidate_3",
-            "novelty": "medium",
-            "feasibility": "high",
-            "evidence_strength": "medium",
-            "data_availability": "high",
-            "implementation_cost": "low",
-            "risk": "medium_high",
-        },
-    }
+    assessments_by_id: dict[str, dict[str, str]] = {}
 
-    if budget_bucket == "tight":
-        assessments_by_id["candidate_1"]["feasibility"] = "low_medium"
-        assessments_by_id["candidate_1"]["implementation_cost"] = "medium_high"
-        assessments_by_id["candidate_2"]["feasibility"] = "high"
-        assessments_by_id["candidate_3"]["feasibility"] = "high"
+    def _candidate_support_count(candidate: TopicAgentCandidateTopic | None) -> int:
+        return len(candidate.supporting_source_ids) if candidate else 0
 
-    if style == "applied":
-        assessments_by_id["candidate_2"]["novelty"] = "medium_high"
-        assessments_by_id["candidate_2"]["evidence_strength"] = "medium_high"
-        assessments_by_id["candidate_2"]["risk"] = "medium_low"
-        summary = (
-            "Candidate 2 is strongest for applied feasibility under the current constraints, "
-            "candidate 1 remains strongest on research framing, and candidate 3 remains the fastest engineering path."
-        )
-    elif style == "systems":
-        assessments_by_id["candidate_3"]["novelty"] = "medium_high"
-        assessments_by_id["candidate_3"]["evidence_strength"] = "medium_high"
-        assessments_by_id["candidate_3"]["risk"] = "medium"
-        summary = (
-            "Candidate 3 is strongest for a systems-oriented project, candidate 1 still offers the clearest research framing, "
-            "and candidate 2 remains the most direct transfer path."
-        )
-    else:
-        summary = (
-            "Candidate 1 is strongest on research focus, candidate 2 is strongest on practical feasibility, "
-            "and candidate 3 is strongest on execution speed for an engineering-oriented project."
-        )
+    def _candidate_origin_text(candidate: TopicAgentCandidateTopic | None) -> str:
+        if candidate is None:
+            return ""
+        return " ".join(candidate.origin_signals).lower()
+
+    def _score_to_label(score: int) -> str:
+        if score >= 5:
+            return "high"
+        if score >= 4:
+            return "medium_high"
+        if score >= 3:
+            return "medium"
+        if score >= 2:
+            return "low_medium"
+        if score >= 1:
+            return "medium_low"
+        return "low"
+
+    for candidate_id in ("candidate_1", "candidate_2", "candidate_3"):
+        candidate = candidate_map.get(candidate_id)
+        support_count = _candidate_support_count(candidate)
+        origin_text = _candidate_origin_text(candidate)
+        title_text = (candidate.title.lower() if candidate else "")
+        question_text = (candidate.research_question.lower() if candidate else "")
+        positioning = candidate.positioning if candidate else ""
+
+        novelty_score = 3
+        feasibility_score = 3
+        evidence_strength_score = 2 + min(3, support_count)
+        data_availability_score = 3
+        implementation_cost_score = 3
+        risk_score = 3
+
+        if "benchmark" in origin_text or positioning in {"gap-driven", "benchmark-gap"}:
+            novelty_score += 2
+        if "workflow" in origin_text or "systems" in positioning:
+            implementation_cost_score += 2
+            feasibility_score += 1
+        if "agent" in origin_text or "transfer" in positioning:
+            feasibility_score += 1
+        if "reproducib" in question_text or "workflow support" in question_text:
+            data_availability_score += 1
+        if "narrow" in question_text or "slice" in question_text:
+            novelty_score += 1
+            feasibility_score -= 1
+        if budget_bucket == "tight":
+            if candidate_id == "candidate_1":
+                feasibility_score -= 1
+                implementation_cost_score -= 1
+            else:
+                feasibility_score += 1
+        if style == "applied" and candidate_id == "candidate_2":
+            novelty_score += 1
+            evidence_strength_score += 1
+            risk_score += 1
+        if style == "systems" and candidate_id == "candidate_3":
+            novelty_score += 1
+            evidence_strength_score += 1
+            risk_score += 1
+        if style == "benchmark-driven" and candidate_id == "candidate_1":
+            novelty_score += 1
+            evidence_strength_score += 1
+        if support_count <= 1:
+            evidence_strength_score -= 1
+            data_availability_score -= 1
+
+        assessments_by_id[candidate_id] = {
+            "candidate_id": candidate_id,
+            "novelty": _score_to_label(max(0, novelty_score)),
+            "feasibility": _score_to_label(max(0, feasibility_score)),
+            "evidence_strength": _score_to_label(max(0, evidence_strength_score)),
+            "data_availability": _score_to_label(max(0, data_availability_score)),
+            "implementation_cost": _score_to_label(max(0, implementation_cost_score)),
+            "risk": _score_to_label(max(0, risk_score)),
+        }
 
     def _dimension_reason(candidate_id: str, dimension: str, score: str) -> str:
         candidate = candidate_map.get(candidate_id)
@@ -1793,9 +1816,35 @@ def compare_candidates(context: TopicAgentPipelineContext) -> TopicAgentComparis
             )
         )
 
-    candidate_1_title = candidate_map.get("candidate_1").title if candidate_map.get("candidate_1") else "Candidate 1"
-    candidate_2_title = candidate_map.get("candidate_2").title if candidate_map.get("candidate_2") else "Candidate 2"
-    candidate_3_title = candidate_map.get("candidate_3").title if candidate_map.get("candidate_3") else "Candidate 3"
+    def _assessment_decision_score(assessment: TopicAgentCandidateAssessment) -> int:
+        label_score = {
+            "high": 5,
+            "medium_high": 4,
+            "medium": 3,
+            "low_medium": 2,
+            "medium_low": 2,
+            "low": 1,
+        }
+        return (
+            label_score[assessment.novelty]
+            + label_score[assessment.feasibility] * 2
+            + label_score[assessment.evidence_strength] * 2
+            + label_score[assessment.data_availability]
+            + label_score[assessment.implementation_cost]
+            + label_score[assessment.risk]
+        )
+
+    ranked_assessments = sorted(
+        ordered_assessments,
+        key=_assessment_decision_score,
+        reverse=True,
+    )
+    top_titles = [
+        candidate_map.get(assessment.candidate_id).title
+        if candidate_map.get(assessment.candidate_id)
+        else assessment.candidate_id
+        for assessment in ranked_assessments[:3]
+    ]
 
     result = TopicAgentComparisonResult(
         dimensions=[
@@ -1807,21 +1856,11 @@ def compare_candidates(context: TopicAgentPipelineContext) -> TopicAgentComparis
             "risk",
         ],
         summary=(
-            f"{candidate_2_title} currently leads on practical execution, "
-            f"{candidate_1_title} remains the sharpest framing option, "
-            f"and {candidate_3_title} stays the fastest systems-oriented path."
-            if style == "applied"
-            else (
-                f"{candidate_3_title} currently leads on systems-oriented execution, "
-                f"{candidate_1_title} remains the clearest framing option, "
-                f"and {candidate_2_title} stays the most direct adaptation path."
-                if style == "systems"
-                else (
-                    f"{candidate_1_title} is strongest on framing clarity, "
-                    f"{candidate_2_title} is strongest on practical feasibility, "
-                    f"and {candidate_3_title} is strongest on delivery speed."
-                )
-            )
+            f"{top_titles[0]} currently leads on the current evidence and constraints, "
+            f"{top_titles[1]} remains the strongest backup path, "
+            f"and {top_titles[2]} stays the tertiary option for comparison."
+            if len(top_titles) >= 3
+            else "Candidate comparison completed using the current evidence bundle."
         ),
         candidate_assessments=ordered_assessments,
     )
@@ -1833,17 +1872,44 @@ def converge_recommendation(context: TopicAgentPipelineContext) -> TopicAgentCon
     budget_bucket = _time_budget_bucket(context.request.constraints.time_budget_months)
     style = _preferred_style(context.request)
     candidate_map = _candidate_by_id_map(context.candidate_topics or [])
+    comparison = context.comparison_result
 
-    recommended_candidate_id = "candidate_1"
-    backup_candidate_id = "candidate_2"
+    label_score = {
+        "high": 5,
+        "medium_high": 4,
+        "medium": 3,
+        "low_medium": 2,
+        "medium_low": 2,
+        "low": 1,
+    }
+
+    def _assessment_decision_score(assessment: TopicAgentCandidateAssessment) -> int:
+        score = (
+            label_score[assessment.novelty]
+            + label_score[assessment.feasibility] * 2
+            + label_score[assessment.evidence_strength] * 2
+            + label_score[assessment.data_availability]
+            + label_score[assessment.implementation_cost]
+            + label_score[assessment.risk]
+        )
+        if style == "applied" and assessment.candidate_id == "candidate_2":
+            score += 2
+        if style == "systems" and assessment.candidate_id == "candidate_3":
+            score += 2
+        if style == "benchmark-driven" and assessment.candidate_id == "candidate_1":
+            score += 2
+        if budget_bucket == "tight" and assessment.candidate_id in {"candidate_2", "candidate_3"}:
+            score += 1
+        return score
+
+    ranked_assessments = sorted(
+        comparison.candidate_assessments,
+        key=_assessment_decision_score,
+        reverse=True,
+    )
+    recommended_candidate_id = ranked_assessments[0].candidate_id if ranked_assessments else "candidate_1"
+    backup_candidate_id = ranked_assessments[1].candidate_id if len(ranked_assessments) > 1 else None
     rationale = ""
-
-    if style == "applied" or budget_bucket == "tight":
-        recommended_candidate_id = "candidate_2"
-        backup_candidate_id = "candidate_1"
-    elif style == "systems":
-        recommended_candidate_id = "candidate_3"
-        backup_candidate_id = "candidate_2"
 
     recommended_candidate = candidate_map.get(recommended_candidate_id)
     backup_candidate = candidate_map.get(backup_candidate_id)
