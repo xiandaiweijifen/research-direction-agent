@@ -13,6 +13,7 @@ class TopicAgentExploreRequest(BaseModel):
     problem_domain: str | None = None
     seed_idea: str | None = None
     constraints: TopicAgentConstraintSet = Field(default_factory=TopicAgentConstraintSet)
+    disable_cache: bool = False
 
 
 class TopicAgentRefineRequest(BaseModel):
@@ -20,6 +21,7 @@ class TopicAgentRefineRequest(BaseModel):
     problem_domain: str | None = None
     seed_idea: str | None = None
     constraints: TopicAgentConstraintSet = Field(default_factory=TopicAgentConstraintSet)
+    disable_cache: bool | None = None
 
 
 class TopicAgentSourceRecord(BaseModel):

@@ -621,3 +621,17 @@ Latest result:
   - `backend/tests/test_topic_agent_providers.py`: `48 passed`
   - `backend/tests/test_topic_agent_pipeline.py`: `21 passed`
   - `backend/tests/test_topic_agent_api.py`: `8 passed`
+
+### Cache Control And Clean Backfill
+
+- Added a request-level `disable_cache` flag for topic-agent explore requests.
+- This is intended for manual validation and debugging so retrieval changes can be tested without having to keep mutating the request body just to miss cache.
+- Normal cached behavior remains the default.
+- Added a limited clean-backfill step after same-task filtering:
+  - retrieval still prefers same-task evidence first
+  - if the final pool becomes too tight, the system can backfill from clean anchor-aligned candidates
+  - off-target and generic collaborative-engineering neighbors are still excluded from this backfill path
+- Current verification:
+  - `backend/tests/test_topic_agent_providers.py`: `50 passed`
+  - `backend/tests/test_topic_agent_pipeline.py`: `21 passed`
+  - `backend/tests/test_topic_agent_api.py`: `9 passed`

@@ -53,6 +53,7 @@ def _normalize_request(request: TopicAgentExploreRequest) -> TopicAgentExploreRe
         problem_domain=_normalize_optional(request.problem_domain),
         seed_idea=_normalize_optional(request.seed_idea),
         constraints=request.constraints,
+        disable_cache=request.disable_cache,
     )
 
 
@@ -171,6 +172,11 @@ def refine_topic_agent_session(
             request.constraints
             if request.constraints.model_dump(exclude_none=True)
             else existing.user_input.constraints
+        ),
+        disable_cache=(
+            request.disable_cache
+            if request.disable_cache is not None
+            else existing.user_input.disable_cache
         ),
     )
     normalized_request = _normalize_request(merged_request)

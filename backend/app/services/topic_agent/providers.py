@@ -181,20 +181,21 @@ class OpenAlexEvidenceProvider:
 
     def retrieve(self, request: TopicAgentExploreRequest) -> TopicAgentEvidenceRetrievalResult:
         plan = _build_openalex_retrieval_plan(request, self.max_results)
-        cached_records = _load_cached_records(
-            self.cache_path,
-            plan.cache_key,
-            self.cache_ttl_seconds,
-        )
-        if cached_records:
-            cached_records, changed = _normalize_openalex_cached_records(cached_records, request, self.max_results)
-            if changed:
-                _save_cached_records(self.cache_path, plan.cache_key, cached_records)
-            return _build_cached_retrieval_result(
-                records=cached_records,
-                requested_provider=self.provider_name,
-                used_provider=self.provider_name,
+        if not request.disable_cache:
+            cached_records = _load_cached_records(
+                self.cache_path,
+                plan.cache_key,
+                self.cache_ttl_seconds,
             )
+            if cached_records:
+                cached_records, changed = _normalize_openalex_cached_records(cached_records, request, self.max_results)
+                if changed:
+                    _save_cached_records(self.cache_path, plan.cache_key, cached_records)
+                return _build_cached_retrieval_result(
+                    records=cached_records,
+                    requested_provider=self.provider_name,
+                    used_provider=self.provider_name,
+                )
         started_at = time.perf_counter()
         (
             merged_records,
@@ -249,17 +250,18 @@ class ArxivEvidenceProvider:
     def retrieve(self, request: TopicAgentExploreRequest) -> TopicAgentEvidenceRetrievalResult:
         query_text = _build_arxiv_query(request)
         cache_key = _build_cache_key(query_text, self.max_results)
-        cached_records = _load_cached_records(
-            self.cache_path,
-            cache_key,
-            self.cache_ttl_seconds,
-        )
-        if cached_records:
-            return _build_cached_retrieval_result(
-                records=cached_records,
-                requested_provider=self.provider_name,
-                used_provider=self.provider_name,
+        if not request.disable_cache:
+            cached_records = _load_cached_records(
+                self.cache_path,
+                cache_key,
+                self.cache_ttl_seconds,
             )
+            if cached_records:
+                return _build_cached_retrieval_result(
+                    records=cached_records,
+                    requested_provider=self.provider_name,
+                    used_provider=self.provider_name,
+                )
         started_at = time.perf_counter()
         response, metrics = _http_get_with_retries(
             self.api_url,
@@ -1659,7 +1661,16 @@ def _has_strong_modern_agent_anchor(record: TopicAgentSourceRecord, request: Top
     if _is_code_repair_query(query_text):
         return _contains_any(haystack, _code_repair_target_terms())
     if _is_repository_issue_resolution_query(query_text):
-        return _contains_any(haystack, _issue_resolution_target_terms())
+        has_issue_resolution_intent = _contains_any(
+            haystack,
+            {"github issues", "issue resolution", "issue-resolution"},
+        )
+        has_repository_benchmark_agent_frame = (
+            _contains_any(haystack, {"benchmark", "swe-bench", "swe-bench lite"})
+            and _contains_any(haystack, {"repository", "repository-level", "codebase"})
+            and _contains_any(haystack, {"agent", "agents"})
+        )
+        return has_issue_resolution_intent or has_repository_benchmark_agent_frame
     if _is_modern_software_agent_query(query_text):
         return _contains_any(haystack, _software_agent_target_terms())
     return True
@@ -1830,10 +1841,12 @@ def _filter_ranked_records(
     overview_backfill_records = [record for record in filtered if _is_generic_overview_record(record)]
 
     query_text = f"{request.interest} {request.problem_domain or ''}".lower()
+    clean_backfill_source_records: list[TopicAgentSourceRecord] = []
     if _query_has_modern_ai_topic(query_text):
         anchor_filtered = [
             record for record in filtered if _has_strong_modern_agent_anchor(record, request)
         ]
+        clean_backfill_source_records = anchor_filtered
         same_task_filtered = [
             record for record in anchor_filtered if _is_same_task_candidate(record, request)
         ]
@@ -1889,6 +1902,20 @@ def _filter_ranked_records(
             continue
         seen_ids.add(record.source_id)
         deduped_ranked_filtered.append(record)
+    if clean_backfill_source_records and len(deduped_ranked_filtered) < max_results:
+        clean_backfill_candidates = [
+            record
+            for record in clean_backfill_source_records
+            if record.source_id not in seen_ids
+            and "off_target_neighbor" not in _infer_evidence_roles(record, request)
+            and not _is_generic_overview_record(record)
+            and _topic_relevance_label(record, request) != "lexical_match"
+        ]
+        for record in clean_backfill_candidates:
+            deduped_ranked_filtered.append(record)
+            seen_ids.add(record.source_id)
+            if len(deduped_ranked_filtered) >= max_results:
+                break
     return deduped_ranked_filtered[:max_results]
 
 

@@ -512,6 +512,85 @@ def test_openalex_provider_uses_cache_when_query_key_is_present(workspace_tmp_pa
     assert cached_result.records[0].source_id == "openalex_w123"
 
 
+def test_openalex_provider_can_bypass_cache_for_debug_requests(workspace_tmp_path, monkeypatch):
+    request = TopicAgentExploreRequest(
+        interest="trustworthy multimodal reasoning in medical imaging",
+        problem_domain="medical AI",
+        constraints=TopicAgentConstraintSet(preferred_style="benchmark-driven"),
+        disable_cache=True,
+    )
+    cache_path = workspace_tmp_path / "topic_agent_openalex_cache.json"
+    provider = OpenAlexEvidenceProvider(cache_path=cache_path, cache_ttl_seconds=3600)
+
+    class FakeResponse:
+        def json(self):
+            return {
+                "results": [
+                    {
+                        "id": "https://openalex.org/W999",
+                        "display_name": "Fresh Benchmarking Grounded Medical Reasoning",
+                        "publication_year": 2025,
+                        "abstract_inverted_index": {
+                            "Fresh": [0],
+                            "benchmarking": [1],
+                            "grounded": [2],
+                            "medical": [3],
+                            "reasoning": [4],
+                        },
+                        "authorships": [
+                            {"author": {"display_name": "Jane Doe"}},
+                        ],
+                        "primary_location": {
+                            "landing_page_url": "https://example.org/fresh-paper"
+                        },
+                    }
+                ]
+            }
+
+        def raise_for_status(self):
+            return None
+
+    cache_key = _build_cache_key(
+        "||".join(_build_openalex_queries(request)),
+        provider.max_results,
+        version=OPENALEX_CACHE_SCHEMA_VERSION,
+    )
+    cache_path.write_text(
+        json.dumps(
+            {
+                cache_key: {
+                    "saved_at": datetime.now(timezone.utc).isoformat(),
+                    "records": [
+                        {
+                            "source_id": "openalex_w123",
+                            "title": "Cached Benchmarking Grounded Medical Reasoning",
+                            "source_type": "benchmark",
+                            "source_tier": "A",
+                            "year": 2025,
+                            "authors_or_publisher": "Author A",
+                            "identifier": "https://openalex.org/W123",
+                            "url": "https://example.org/cached-paper",
+                            "summary": "Cached summary",
+                            "relevance_reason": "Cached",
+                        }
+                    ],
+                }
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    monkeypatch.setattr(
+        "app.services.topic_agent.providers.httpx.get",
+        lambda *args, **kwargs: FakeResponse(),
+    )
+
+    result = provider.retrieve(request)
+
+    assert result.diagnostics.cache_hit is False
+    assert result.records[0].source_id == "openalex_w999"
+
+
 def test_http_get_with_retries_retries_transient_connect_errors(monkeypatch):
     call_count = {"value": 0}
 
@@ -2077,6 +2156,91 @@ def test_filter_ranked_records_excludes_collaborative_engineering_neighbors_for_
     assert "HyperAgent: Generalist Software Engineering Agents to Solve Coding Tasks at Scale" in filtered_titles
     assert "Alibaba LingmaAgent: Improving Automated Issue Resolution via Comprehensive Repository Exploration" in filtered_titles
     assert "MAGIS: LLM-Based Multi-Agent Framework for GitHub Issue Resolution" in filtered_titles
+    assert "Special Issue on Collaborative Engineering" not in filtered_titles
+
+
+def test_filter_ranked_records_uses_clean_backfill_when_same_task_pool_is_small():
+    request = TopicAgentExploreRequest(
+        interest="repository github issue triage and resolution agents",
+        problem_domain="software engineering workflow evaluation",
+        constraints=TopicAgentConstraintSet(preferred_style="systems"),
+    )
+    records = [
+        TopicAgentSourceRecord(
+            source_id="openalex_w1",
+            title="Alibaba LingmaAgent: Improving Automated Issue Resolution via Comprehensive Repository Exploration",
+            source_type="benchmark",
+            source_tier="A",
+            year=2025,
+            authors_or_publisher="Author A",
+            identifier="https://openalex.org/W1",
+            url="https://example.org/w1",
+            summary="Repository-level GitHub issue resolution with software engineering agents and benchmark evaluation.",
+            relevance_reason="Test",
+        ),
+        TopicAgentSourceRecord(
+            source_id="openalex_w2",
+            title="HyperAgent: Generalist Software Engineering Agents to Solve Coding Tasks at Scale",
+            source_type="benchmark",
+            source_tier="A",
+            year=2024,
+            authors_or_publisher="Author B",
+            identifier="https://openalex.org/W2",
+            url="https://example.org/w2",
+            summary="GitHub issue resolution on SWE-Bench for repository-level software engineering agents.",
+            relevance_reason="Test",
+        ),
+        TopicAgentSourceRecord(
+            source_id="openalex_w3",
+            title="MAGIS: LLM-Based Multi-Agent Framework for GitHub Issue Resolution",
+            source_type="benchmark",
+            source_tier="A",
+            year=2024,
+            authors_or_publisher="Author C",
+            identifier="https://openalex.org/W3",
+            url="https://example.org/w3",
+            summary="Repository-level GitHub issue resolution benchmark for multi-agent software engineering workflows.",
+            relevance_reason="Test",
+        ),
+        TopicAgentSourceRecord(
+            source_id="openalex_w4",
+            title="ML-Bench: Evaluating Large Language Models and Agents for Machine Learning Tasks on Repository-Level Code",
+            source_type="benchmark",
+            source_tier="A",
+            year=2023,
+            authors_or_publisher="Author D",
+            identifier="https://openalex.org/W4",
+            url="https://example.org/w4",
+            summary="Repository-level code benchmark for agents with workflow evaluation and reproducibility concerns.",
+            relevance_reason="Test",
+        ),
+        TopicAgentSourceRecord(
+            source_id="openalex_w5",
+            title="Special Issue on Collaborative Engineering",
+            source_type="paper",
+            source_tier="B",
+            year=2006,
+            authors_or_publisher="Author E",
+            identifier="https://openalex.org/W5",
+            url="https://example.org/w5",
+            summary="Collaborative engineering workflows and repositories for distributed design agents.",
+            relevance_reason="Test",
+        ),
+    ]
+
+    filtered_titles = [
+        record.title
+        for record in _filter_ranked_records(
+            _rank_records(records, request, max_results=5),
+            request,
+            max_results=5,
+        )
+    ]
+
+    assert "Alibaba LingmaAgent: Improving Automated Issue Resolution via Comprehensive Repository Exploration" in filtered_titles
+    assert "HyperAgent: Generalist Software Engineering Agents to Solve Coding Tasks at Scale" in filtered_titles
+    assert "MAGIS: LLM-Based Multi-Agent Framework for GitHub Issue Resolution" in filtered_titles
+    assert "ML-Bench: Evaluating Large Language Models and Agents for Machine Learning Tasks on Repository-Level Code" in filtered_titles
     assert "Special Issue on Collaborative Engineering" not in filtered_titles
 
 

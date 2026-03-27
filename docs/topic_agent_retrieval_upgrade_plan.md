@@ -187,3 +187,15 @@ Verification for this tightening step:
 - `backend/tests/test_topic_agent_providers.py`: `48 passed`
 - `backend/tests/test_topic_agent_pipeline.py`: `21 passed`
 - `backend/tests/test_topic_agent_api.py`: `8 passed`
+
+An additional usability-and-balance package was then added:
+
+- a request-level `disable_cache` flag now exists for manual validation and debugging
+- retrieval can now do limited clean backfill after same-task filtering when the final pool becomes too tight
+- this backfill is still constrained to anchor-aligned candidates and explicitly avoids off-target neighbors
+
+Verification for this package:
+
+- `backend/tests/test_topic_agent_providers.py`: `50 passed`
+- `backend/tests/test_topic_agent_pipeline.py`: `21 passed`
+- `backend/tests/test_topic_agent_api.py`: `9 passed`

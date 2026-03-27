@@ -56,6 +56,7 @@ def test_topic_agent_explore_creates_session_with_mock_outputs(workspace_tmp_pat
     )
     assert payload["human_confirmations"]
     assert isinstance(payload["clarification_suggestions"], list)
+    assert payload["user_input"]["disable_cache"] is False
     assert [event["stage"] for event in payload["trace"]] == [
         "frame_problem",
         "retrieve_evidence",
@@ -205,6 +206,28 @@ def test_topic_agent_explore_rejects_empty_interest(workspace_tmp_path, monkeypa
 
     assert response.status_code == 400
     assert response.json()["detail"] == "interest_must_not_be_empty"
+
+
+def test_topic_agent_explore_accepts_disable_cache_flag(workspace_tmp_path, monkeypatch):
+    session_store_path = workspace_tmp_path / "topic_agent_sessions.json"
+    monkeypatch.setattr(
+        "app.services.topic_agent.topic_agent_runtime.TOPIC_AGENT_STORE_PATH",
+        session_store_path,
+    )
+
+    client = TestClient(app)
+    response = client.post(
+        "/api/topic-agent/explore",
+        json={
+            "interest": "repository github issue triage and resolution agents",
+            "problem_domain": "software engineering workflow evaluation",
+            "constraints": {},
+            "disable_cache": True,
+        },
+    )
+
+    assert response.status_code == 200
+    assert response.json()["user_input"]["disable_cache"] is True
 
 
 def test_topic_agent_session_endpoints_backfill_missing_legacy_diagnostics(workspace_tmp_path, monkeypatch):
