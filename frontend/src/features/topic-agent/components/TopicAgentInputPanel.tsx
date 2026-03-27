@@ -1,4 +1,5 @@
-﻿import type { FormEvent } from "react";
+﻿import { useState } from "react";
+import type { FormEvent } from "react";
 import type { Locale } from "../../../types";
 import type { TopicAgentDemoPreset } from "../hooks/useTopicAgent";
 
@@ -53,6 +54,7 @@ export function TopicAgentInputPanel({
   onRefine,
   onApplyPreset,
 }: TopicAgentInputPanelProps) {
+  const [presetsExpanded, setPresetsExpanded] = useState(false);
   const recommendedPresets = topicPresets.filter((preset) => preset.group === "recommended");
   const boundaryPresets = topicPresets.filter((preset) => preset.group === "boundary");
   const uiCopy =
@@ -60,6 +62,8 @@ export function TopicAgentInputPanel({
       ? {
           presets: "Demo 场景",
           presetsIntro: "先用稳定场景演示，再切回自由输入。",
+          presetsExpand: "展开 Demo 场景",
+          presetsCollapse: "收起 Demo 场景",
           recommendedPresets: "推荐演示场景",
           boundaryPresets: "边界检查场景",
           recentRunsHint: "会话历史已经按 recent runs 收敛，不再作为长档案展示。",
@@ -75,6 +79,8 @@ export function TopicAgentInputPanel({
       : {
           presets: "Demo Presets",
           presetsIntro: "Start with a stable scenario, then switch back to free-form input.",
+          presetsExpand: "Show Demo Presets",
+          presetsCollapse: "Hide Demo Presets",
           recommendedPresets: "Recommended Demo Presets",
           boundaryPresets: "Boundary Check",
           recentRunsHint: "Session history is now trimmed to recent runs instead of acting like a long archive.",
@@ -98,36 +104,25 @@ export function TopicAgentInputPanel({
         </div>
       </div>
       <article className="subsection-card">
-        <span className="trace-label">{uiCopy.presets}</span>
-        <p className="subsection-copy">{uiCopy.presetsIntro}</p>
-        <span className="trace-label">{uiCopy.recommendedPresets}</span>
-        <div className="trace-list">
-          {recommendedPresets.map((preset) => {
-            const label = locale === "zh" ? preset.labelZh : preset.labelEn;
-            const summary = locale === "zh" ? preset.summaryZh : preset.summaryEn;
-            return (
-              <article key={preset.id} className="trace-card">
-                <div className="trace-meta-row">
-                  <strong>{label}</strong>
-                  <button
-                    type="button"
-                    className="ghost-button"
-                    onClick={() => onApplyPreset(preset.id)}
-                    disabled={topicBusy}
-                  >
-                    {copy.load}
-                  </button>
-                </div>
-                <p className="trace-detail">{summary}</p>
-              </article>
-            );
-          })}
+        <div className="collapsible-heading">
+          <div>
+            <span className="trace-label">{uiCopy.presets}</span>
+            <p className="subsection-copy">{uiCopy.presetsIntro}</p>
+          </div>
+          <button
+            type="button"
+            className="ghost-button"
+            aria-expanded={presetsExpanded}
+            onClick={() => setPresetsExpanded((current) => !current)}
+          >
+            {presetsExpanded ? uiCopy.presetsCollapse : uiCopy.presetsExpand}
+          </button>
         </div>
-        {boundaryPresets.length > 0 && (
+        {presetsExpanded ? (
           <>
-            <span className="trace-label">{uiCopy.boundaryPresets}</span>
+            <span className="trace-label">{uiCopy.recommendedPresets}</span>
             <div className="trace-list">
-              {boundaryPresets.map((preset) => {
+              {recommendedPresets.map((preset) => {
                 const label = locale === "zh" ? preset.labelZh : preset.labelEn;
                 const summary = locale === "zh" ? preset.summaryZh : preset.summaryEn;
                 return (
@@ -148,8 +143,35 @@ export function TopicAgentInputPanel({
                 );
               })}
             </div>
+            {boundaryPresets.length > 0 ? (
+              <>
+                <span className="trace-label">{uiCopy.boundaryPresets}</span>
+                <div className="trace-list">
+                  {boundaryPresets.map((preset) => {
+                    const label = locale === "zh" ? preset.labelZh : preset.labelEn;
+                    const summary = locale === "zh" ? preset.summaryZh : preset.summaryEn;
+                    return (
+                      <article key={preset.id} className="trace-card">
+                        <div className="trace-meta-row">
+                          <strong>{label}</strong>
+                          <button
+                            type="button"
+                            className="ghost-button"
+                            onClick={() => onApplyPreset(preset.id)}
+                            disabled={topicBusy}
+                          >
+                            {copy.load}
+                          </button>
+                        </div>
+                        <p className="trace-detail">{summary}</p>
+                      </article>
+                    );
+                  })}
+                </div>
+              </>
+            ) : null}
           </>
-        )}
+        ) : null}
       </article>
       <article className="subsection-card">
         <span className="trace-label">{uiCopy.boundaryTitle}</span>

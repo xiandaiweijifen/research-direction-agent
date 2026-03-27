@@ -964,6 +964,13 @@ textarea {
   justify-content: flex-end;
 }
 
+.collapsible-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
 .preset-block {
   display: grid;
   gap: 8px;

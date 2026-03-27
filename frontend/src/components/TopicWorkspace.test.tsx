@@ -336,6 +336,8 @@ describe("TopicWorkspaceV2", () => {
     expect(screen.getByText("Evidence coverage is medium.")).toBeInTheDocument();
     expect(screen.getByText("Recent Runs")).toBeInTheDocument();
     expect(screen.getByText("Demo Presets")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Show Demo Presets" })).toBeInTheDocument();
+    expect(screen.queryByText("Bug-Fixing Agents")).not.toBeInTheDocument();
     expect(screen.getByText("Temporary Debug Option")).toBeInTheDocument();
     expect(screen.getByRole("checkbox", { name: "Bypass retrieval cache" })).toBeInTheDocument();
     expect(screen.getByText("2 topics")).toBeInTheDocument();
@@ -366,6 +368,10 @@ describe("TopicWorkspaceV2", () => {
 
     await user.click(screen.getByRole("button", { name: "Compare" }));
     expect(onCompareSession).toHaveBeenCalledWith("session_2");
+
+    await user.click(screen.getByRole("button", { name: "Show Demo Presets" }));
+    expect(screen.getByText("Bug-Fixing Agents")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Hide Demo Presets" })).toBeInTheDocument();
 
     await user.click(screen.getByRole("button", { name: "Run Topic Agent" }));
     expect(onSubmit).toHaveBeenCalledTimes(1);
