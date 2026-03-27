@@ -289,3 +289,18 @@ If the current Topic Agent slice is judged against the original requirement, the
 - the remaining work is mainly around explicit human confirmation, conflict handling, and product-layer acceptance polish rather than basic retrieval workflow viability
 
 For the current project phase, that means the most important next milestone is not stronger backend breadth. It is a tighter user-facing demo that makes the existing workflow legible and convincing.
+
+### Current Backend Generalization Boundary
+
+For review purposes, the backend should currently be read as:
+
+- validated on a subset of topic families rather than universally generalized
+- architected for broader reuse, but only partially validated outside the stabilized software-engineering families
+
+The most defensible boundary statement is:
+
+- repository repair and repository issue-resolution families are the strongest current slice
+- adjacent software-engineering and ML-evaluation topics show partial transfer but still produce noticeable drift
+- education-oriented workflow topics should be treated as outside the currently stabilized scope
+
+This matters because the current requirement is about building a focused, defensible Topic Agent slice, not claiming complete domain coverage.

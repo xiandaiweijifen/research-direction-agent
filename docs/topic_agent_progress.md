@@ -657,3 +657,25 @@ Latest result:
   - use `disable_cache=true` only for retrieval validation and debugging
   - do not broaden retrieval heuristics again unless a new real query family shows a concrete regression
 - The next high-value work should now move away from retrieval tuning unless a demo-blocking failure appears.
+
+### Generalization Spot Check
+
+- A small post-closure spot check was run to test whether the current backend should be described as broadly generalized.
+- The answer is no: the current backend has a stronger generalization framework, but not universal validated performance across all topic families.
+
+Observed outcome by family:
+
+- stable and already validated:
+  - repository repair / benchmark
+  - repository issue-resolution / software-agent
+- partially transferable but not yet stable:
+  - adjacent software-engineering assistant topics such as repository-scale code review assistants
+  - ML reproducibility / dataset-centric LLM evaluation topics
+- clearly outside the currently stabilized retrieval families:
+  - computing-education and education-oriented AI workflow topics
+
+The main implication is:
+
+- current retrieval should be presented as family-aware and regression-driven, not as a fully domain-agnostic topic discovery engine
+- architecture-level generalization exists, but effect-level generalization has only been validated for a subset of families
+- this boundary is now explicit and should be reflected in demos and review discussion

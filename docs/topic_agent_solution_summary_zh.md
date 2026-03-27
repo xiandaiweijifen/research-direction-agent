@@ -443,3 +443,54 @@ candidate、evidence presentation 和 recommendation 都通过 `supporting_sourc
 
 - retrieval 已经从“容易漂移的演示级实现”提升到了“可解释、可调试、可阶段性收口的工程化实现”
 - 后续如果没有新的真实 query family 暴露回归，项目重点应优先转向 demo 表达、文档质量与交付收尾，而不是继续无边界地调 retrieval
+
+## 8. 当前泛化边界补充
+
+需要特别说明的是，当前系统并不应被表述为“对所有研究方向都已经稳定泛化”。
+
+更准确的判断是：
+
+- 系统已经具备较强的泛化框架
+- 但效果层面的泛化只在部分 query family 上经过了充分验证
+
+从当前抽检结果看，可以把后端状态分成三类：
+
+### 8.1 已稳定 family
+
+- repository repair / benchmark
+- repository issue-resolution / software-agent
+
+这些 family 上，retrieval、supporting source、comparison、convergence 的整体表现已经较稳定，明显优于早期版本。
+
+### 8.2 部分可迁移但未稳定 family
+
+- repository-scale code review assistants
+- dataset-centric LLM evaluation / ML reproducibility
+
+这些方向说明系统具有一定迁移能力，但仍可能出现：
+
+- evidence 混入相邻但不够贴题的论文
+- landscape summary 漂移
+- supporting source 污染 downstream synthesis
+
+因此不能把它们视为“已经验证通过”的稳定 family。
+
+### 8.3 当前明确边界外的 family
+
+- computing education
+- education-oriented AI workflow topics
+
+在这些方向上，系统当前仍会被泛 workflow、泛教育、泛开放社区等邻域结果牵引，说明尚未形成稳定的 family-aware retrieval 约束。
+
+因此，当前系统更合适的定位不是：
+
+- 一个全领域通用的 Topic Agent
+
+而是：
+
+- 一个已经在若干软件工程导向 family 上完成稳定化，并对部分相邻方向具备初步迁移能力的 Topic Agent 原型
+
+这个边界判断对后续汇报很重要，因为它能同时说明：
+
+- 系统已经具备真实工程价值
+- 但团队对当前能力边界有清楚认知，没有把系统描述得过满
