@@ -87,8 +87,11 @@ Status:
     - `role_expansion`
   - per-query diagnostics now carry route information
   - cache keys still depend on the flattened query bundle, so the external contract stays stable
+  - route-aware candidate fusion has been added in lightweight form:
+    - records that are retrieved through multiple routes receive a controlled route-coverage bonus
+    - higher-priority routes such as `base` and `core_focus` contribute more than `role_expansion`
 - still pending:
-  - route-level candidate fusion beyond ordered route collection
+  - more explicit route-level fusion such as RRF or route-balanced candidate merging
   - explicit route-aware candidate balancing
 
 ### Package 3: Candidate Fusion And Reranking

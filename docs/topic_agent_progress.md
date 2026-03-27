@@ -569,7 +569,8 @@ Latest result:
     - `alias`
     - `role_expansion`
   - per-query diagnostics now include route labels, so later fusion and reranking work can be measured route-by-route
-  - current behavior is still route-ordered collection rather than full candidate fusion
+  - added a lightweight route-aware fusion bonus so records retrieved by multiple routes are ranked more favorably than one-route-only matches
+  - current behavior is still heuristic route-aware fusion rather than full candidate fusion such as RRF
 - Package 2 verification for the current sub-step:
-  - `backend/tests/test_topic_agent_providers.py`: `43 passed`
+  - `backend/tests/test_topic_agent_providers.py`: `44 passed`
   - `backend/tests/test_topic_agent_api.py`: `8 passed`

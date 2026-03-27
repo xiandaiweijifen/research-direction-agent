@@ -196,14 +196,19 @@ class OpenAlexEvidenceProvider:
                 used_provider=self.provider_name,
             )
         started_at = time.perf_counter()
-        merged_records, query_diagnostics = _collect_openalex_candidate_records(
+        merged_records, query_diagnostics, route_hits_by_source_id = _collect_openalex_candidate_records(
             api_url=self.api_url,
             query_routes=plan.query_routes,
             raw_pool_size=plan.raw_pool_size,
             timeout_seconds=self.timeout_seconds,
             max_retries=self.max_retries,
         )
-        records = _finalize_retrieved_records(merged_records, request, self.max_results)
+        records = _finalize_retrieved_records(
+            merged_records,
+            request,
+            self.max_results,
+            route_hits_by_source_id=route_hits_by_source_id,
+        )
         _save_cached_records(self.cache_path, plan.cache_key, records)
         return _build_uncached_retrieval_result(
             records=records,
@@ -618,9 +623,10 @@ def _collect_openalex_candidate_records(
     raw_pool_size: int,
     timeout_seconds: float,
     max_retries: int,
-) -> tuple[list[TopicAgentSourceRecord], list[dict[str, str | int]]]:
+) -> tuple[list[TopicAgentSourceRecord], list[dict[str, str | int]], dict[str, set[str]]]:
     merged_records: list[TopicAgentSourceRecord] = []
     query_diagnostics: list[dict[str, str | int]] = []
+    route_hits_by_source_id: dict[str, set[str]] = {}
     for route in query_routes:
         for query_text in route.queries:
             response, metrics = _http_get_with_retries(
@@ -643,18 +649,26 @@ def _collect_openalex_candidate_records(
                 }
             )
             payload = response.json()
-            merged_records.extend(
-                [_normalize_record(record) for record in _parse_openalex_response(payload)]
-            )
-    return merged_records, query_diagnostics
+            parsed_records = [_normalize_record(record) for record in _parse_openalex_response(payload)]
+            for record in parsed_records:
+                route_hits_by_source_id.setdefault(record.source_id, set()).add(route.name)
+            merged_records.extend(parsed_records)
+    return merged_records, query_diagnostics, route_hits_by_source_id
 
 
 def _finalize_retrieved_records(
     records: list[TopicAgentSourceRecord],
     request: TopicAgentExploreRequest,
     max_results: int,
+    *,
+    route_hits_by_source_id: dict[str, set[str]] | None = None,
 ) -> list[TopicAgentSourceRecord]:
-    reranked_records = _rank_records(_dedupe_records(records), request, max_results)
+    reranked_records = _rank_records(
+        _dedupe_records(records),
+        request,
+        max_results,
+        route_hits_by_source_id=route_hits_by_source_id,
+    )
     return _filter_ranked_records(reranked_records, request, max_results)
 
 
@@ -1504,6 +1518,26 @@ def _score_record(
     return score
 
 
+def _route_coverage_score(
+    record: TopicAgentSourceRecord,
+    route_hits_by_source_id: dict[str, set[str]] | None,
+) -> int:
+    if not route_hits_by_source_id:
+        return 0
+    route_hits = route_hits_by_source_id.get(record.source_id, set())
+    if not route_hits:
+        return 0
+    route_weights = {
+        "base": 4,
+        "core_focus": 3,
+        "alias": 2,
+        "role_expansion": 1,
+    }
+    weighted_hits = sum(route_weights.get(route, 1) for route in route_hits)
+    coverage_bonus = max(0, len(route_hits) - 1) * 2
+    return weighted_hits + coverage_bonus
+
+
 def _matched_core_term_count(record: TopicAgentSourceRecord, core_terms: list[str]) -> int:
     haystack = f"{record.title.lower()} {record.summary.lower()}"
     return sum(1 for term in core_terms if term in haystack)
@@ -1590,13 +1624,16 @@ def _rank_records(
     records: list[TopicAgentSourceRecord],
     request: TopicAgentExploreRequest,
     max_results: int,
+    *,
+    route_hits_by_source_id: dict[str, set[str]] | None = None,
 ) -> list[TopicAgentSourceRecord]:
     query_terms = _build_query_terms(request)
     core_terms = _core_query_terms(request)
     scored_records = sorted(
         records,
         key=lambda record: (
-            _score_record(record, query_terms, core_terms, request),
+            _score_record(record, query_terms, core_terms, request)
+            + _route_coverage_score(record, route_hits_by_source_id),
             1 if record.source_tier == "A" else 0,
             record.year,
         ),

@@ -4,7 +4,7 @@ from datetime import datetime, timezone
 import httpx
 import pytest
 
-from app.schemas.topic_agent import TopicAgentConstraintSet, TopicAgentExploreRequest
+from app.schemas.topic_agent import TopicAgentConstraintSet, TopicAgentExploreRequest, TopicAgentSourceRecord
 from app.services.topic_agent.providers import (
     OPENALEX_CACHE_SCHEMA_VERSION,
     ArxivEvidenceProvider,
@@ -1683,6 +1683,55 @@ def test_rank_records_prefers_modern_software_agent_evidence_over_legacy_agent_n
 
     assert ranked_titles[0] == "SWE-bench: Can Language Models Resolve Real-World GitHub Issues?"
     assert ranked_titles[-1] == "Prometheus: A Pragmatic Methodology for Engineering Intelligent Agents"
+
+
+def test_rank_records_prefers_records_with_stronger_route_coverage_when_base_score_ties():
+    request = TopicAgentExploreRequest(
+        interest="repository-level bug-fixing agents",
+        problem_domain="software engineering evaluation",
+        constraints=TopicAgentConstraintSet(preferred_style="applied"),
+    )
+    records = [
+        TopicAgentSourceRecord(
+            source_id="openalex_w1",
+            title="Repository-Level Repair Benchmark",
+            source_type="benchmark",
+            source_tier="A",
+            year=2024,
+            authors_or_publisher="Author A",
+            identifier="https://openalex.org/W1",
+            url="https://example.org/w1",
+            summary="Repository-level repair benchmark with reproducible workflow support.",
+            relevance_reason="Test",
+        ),
+        TopicAgentSourceRecord(
+            source_id="openalex_w2",
+            title="Repository-Level Repair Benchmark",
+            source_type="benchmark",
+            source_tier="A",
+            year=2024,
+            authors_or_publisher="Author B",
+            identifier="https://openalex.org/W2",
+            url="https://example.org/w2",
+            summary="Repository-level repair benchmark with reproducible workflow support.",
+            relevance_reason="Test",
+        ),
+    ]
+
+    ranked_ids = [
+        record.source_id
+        for record in _rank_records(
+            records,
+            request,
+            max_results=2,
+            route_hits_by_source_id={
+                "openalex_w1": {"base", "core_focus", "alias"},
+                "openalex_w2": {"role_expansion"},
+            },
+        )
+    ]
+
+    assert ranked_ids[0] == "openalex_w1"
 
 
 def test_rank_records_penalizes_software_library_neighbors_for_modern_agent_queries():
