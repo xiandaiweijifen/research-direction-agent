@@ -4,6 +4,21 @@
 
 本文档用于针对原始要求，集中说明当前 `Topic Agent` 的方案设计、实现取舍、验收思路，以及当前版本已经达到的完成度。
 
+需要先说明的是：当前项目并不是完全从零开始搭建，而是**以我此前的项目 `agent-knowledge-system` 作为工程基础继续开发和收敛而来**。
+
+基础项目仓库：
+
+- https://github.com/xiandaiweijifen/agent-knowledge-system
+
+本次工作的重点不是重复建设底层运行时，而是在既有的工程基础之上，围绕“科研选题副驾子系统 `Topic Agent`”完成：
+
+- 任务边界收敛
+- scholarly retrieval 与 evidence workflow 接入
+- candidate comparison 与 convergence 支持
+- trust / diagnostics / frontend presentation 等交付切片
+
+因此，下面的说明会把当前成果理解为：**在既有 agent system 基座之上，新增并收敛出的 Topic Agent 子系统方案**。
+
 对应的原始任务是：
 
 - 设计一个科研选题副驾子系统 `Topic Agent`
