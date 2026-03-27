@@ -1289,6 +1289,70 @@ textarea {
   align-content: start;
 }
 
+.decision-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(280px, 0.8fr);
+  gap: 14px;
+  margin-bottom: 18px;
+}
+
+.decision-hero-card {
+  display: grid;
+  gap: 14px;
+  padding: 20px;
+  border: 1px solid rgba(159, 58, 29, 0.22);
+  border-radius: 22px;
+  background:
+    linear-gradient(180deg, rgba(247, 227, 217, 0.88), rgba(255, 249, 241, 0.96)),
+    rgba(255, 252, 245, 0.92);
+  box-shadow: 0 14px 28px rgba(159, 58, 29, 0.08);
+}
+
+.decision-hero-card strong {
+  font-size: 1.5rem;
+  line-height: 1.2;
+}
+
+.decision-side-stack {
+  display: grid;
+  gap: 14px;
+}
+
+.decision-side-card strong {
+  font-size: 1.08rem;
+  line-height: 1.35;
+}
+
+.decision-checklist {
+  display: grid;
+  gap: 10px;
+}
+
+.decision-check-item {
+  display: grid;
+  grid-template-columns: 20px 1fr;
+  gap: 10px;
+  align-items: start;
+  padding: 10px 12px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.84);
+}
+
+.decision-check-item p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.decision-check-bullet {
+  color: var(--accent-strong);
+  line-height: 1.4;
+}
+
+.comparison-summary-heading {
+  margin-top: 18px;
+}
+
 .comparison-metric-grid {
   display: grid;
   gap: 10px;
@@ -1665,6 +1729,10 @@ textarea {
   }
 
   .summary-strip {
+    grid-template-columns: 1fr;
+  }
+
+  .decision-layout {
     grid-template-columns: 1fr;
   }
 
