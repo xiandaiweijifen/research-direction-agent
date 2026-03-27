@@ -1728,6 +1728,10 @@ def test_rank_records_prefers_records_with_stronger_route_coverage_when_base_sco
                 "openalex_w1": {"base", "core_focus", "alias"},
                 "openalex_w2": {"role_expansion"},
             },
+            route_fusion_scores_by_source_id={
+                "openalex_w1": 0.12,
+                "openalex_w2": 0.01,
+            },
         )
     ]
 

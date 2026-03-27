@@ -196,7 +196,12 @@ class OpenAlexEvidenceProvider:
                 used_provider=self.provider_name,
             )
         started_at = time.perf_counter()
-        merged_records, query_diagnostics, route_hits_by_source_id = _collect_openalex_candidate_records(
+        (
+            merged_records,
+            query_diagnostics,
+            route_hits_by_source_id,
+            route_fusion_scores_by_source_id,
+        ) = _collect_openalex_candidate_records(
             api_url=self.api_url,
             query_routes=plan.query_routes,
             raw_pool_size=plan.raw_pool_size,
@@ -208,6 +213,7 @@ class OpenAlexEvidenceProvider:
             request,
             self.max_results,
             route_hits_by_source_id=route_hits_by_source_id,
+            route_fusion_scores_by_source_id=route_fusion_scores_by_source_id,
         )
         _save_cached_records(self.cache_path, plan.cache_key, records)
         return _build_uncached_retrieval_result(
@@ -623,10 +629,11 @@ def _collect_openalex_candidate_records(
     raw_pool_size: int,
     timeout_seconds: float,
     max_retries: int,
-) -> tuple[list[TopicAgentSourceRecord], list[dict[str, str | int]], dict[str, set[str]]]:
+) -> tuple[list[TopicAgentSourceRecord], list[dict[str, str | int]], dict[str, set[str]], dict[str, float]]:
     merged_records: list[TopicAgentSourceRecord] = []
     query_diagnostics: list[dict[str, str | int]] = []
     route_hits_by_source_id: dict[str, set[str]] = {}
+    route_fusion_scores_by_source_id: dict[str, float] = {}
     for route in query_routes:
         for query_text in route.queries:
             response, metrics = _http_get_with_retries(
@@ -650,10 +657,15 @@ def _collect_openalex_candidate_records(
             )
             payload = response.json()
             parsed_records = [_normalize_record(record) for record in _parse_openalex_response(payload)]
-            for record in parsed_records:
+            route_weight = _route_priority_weight(route.name)
+            for rank_index, record in enumerate(parsed_records, start=1):
                 route_hits_by_source_id.setdefault(record.source_id, set()).add(route.name)
+                route_fusion_scores_by_source_id[record.source_id] = (
+                    route_fusion_scores_by_source_id.get(record.source_id, 0.0)
+                    + (route_weight / (20 + rank_index))
+                )
             merged_records.extend(parsed_records)
-    return merged_records, query_diagnostics, route_hits_by_source_id
+    return merged_records, query_diagnostics, route_hits_by_source_id, route_fusion_scores_by_source_id
 
 
 def _finalize_retrieved_records(
@@ -662,12 +674,14 @@ def _finalize_retrieved_records(
     max_results: int,
     *,
     route_hits_by_source_id: dict[str, set[str]] | None = None,
+    route_fusion_scores_by_source_id: dict[str, float] | None = None,
 ) -> list[TopicAgentSourceRecord]:
     reranked_records = _rank_records(
         _dedupe_records(records),
         request,
         max_results,
         route_hits_by_source_id=route_hits_by_source_id,
+        route_fusion_scores_by_source_id=route_fusion_scores_by_source_id,
     )
     return _filter_ranked_records(reranked_records, request, max_results)
 
@@ -1538,6 +1552,31 @@ def _route_coverage_score(
     return weighted_hits + coverage_bonus
 
 
+def _route_priority_weight(route_name: str) -> float:
+    return {
+        "base": 1.0,
+        "core_focus": 0.9,
+        "alias": 0.75,
+        "role_expansion": 0.55,
+    }.get(route_name, 0.5)
+
+
+def _route_fusion_score(
+    record: TopicAgentSourceRecord,
+    request: TopicAgentExploreRequest,
+    route_hits_by_source_id: dict[str, set[str]] | None,
+    route_fusion_scores_by_source_id: dict[str, float] | None,
+) -> float:
+    query_text = f"{request.interest} {request.problem_domain or ''}".lower()
+    if not (_is_modern_software_agent_query(query_text) or _is_code_repair_query(query_text)):
+        return 0.0
+    route_bonus = float(_route_coverage_score(record, route_hits_by_source_id))
+    if not route_fusion_scores_by_source_id:
+        return route_bonus
+    reciprocal_score = route_fusion_scores_by_source_id.get(record.source_id, 0.0)
+    return route_bonus + reciprocal_score * 80.0
+
+
 def _matched_core_term_count(record: TopicAgentSourceRecord, core_terms: list[str]) -> int:
     haystack = f"{record.title.lower()} {record.summary.lower()}"
     return sum(1 for term in core_terms if term in haystack)
@@ -1626,6 +1665,7 @@ def _rank_records(
     max_results: int,
     *,
     route_hits_by_source_id: dict[str, set[str]] | None = None,
+    route_fusion_scores_by_source_id: dict[str, float] | None = None,
 ) -> list[TopicAgentSourceRecord]:
     query_terms = _build_query_terms(request)
     core_terms = _core_query_terms(request)
@@ -1633,7 +1673,7 @@ def _rank_records(
         records,
         key=lambda record: (
             _score_record(record, query_terms, core_terms, request)
-            + _route_coverage_score(record, route_hits_by_source_id),
+            + _route_fusion_score(record, request, route_hits_by_source_id, route_fusion_scores_by_source_id),
             1 if record.source_tier == "A" else 0,
             record.year,
         ),
