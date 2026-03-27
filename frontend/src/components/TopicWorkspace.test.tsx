@@ -156,6 +156,7 @@ describe("TopicWorkspaceV2", () => {
         topicPresets={[
           {
             id: "bug_fixing",
+            group: "recommended",
             labelEn: "Bug-Fixing Agents",
             labelZh: "Bug 修复 Agent",
             summaryEn: "Modern software-agent demo with reproducible evaluation pressure.",

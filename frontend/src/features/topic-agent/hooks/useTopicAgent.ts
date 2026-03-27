@@ -10,6 +10,7 @@ import type { TopicAgentSessionResponse, TopicAgentSessionSummary } from "../../
 
 export type TopicAgentDemoPreset = {
   id: string;
+  group: "recommended" | "boundary";
   labelEn: string;
   labelZh: string;
   summaryEn: string;
@@ -25,6 +26,7 @@ export type TopicAgentDemoPreset = {
 const TOPIC_AGENT_DEMO_PRESETS: TopicAgentDemoPreset[] = [
   {
     id: "bug_fixing",
+    group: "recommended",
     labelEn: "Bug-Fixing Agents",
     labelZh: "Bug 修复 Agent",
     summaryEn: "Modern software-agent demo with reproducible evaluation pressure.",
@@ -37,43 +39,46 @@ const TOPIC_AGENT_DEMO_PRESETS: TopicAgentDemoPreset[] = [
     preferredStyle: "applied",
   },
   {
-    id: "medical_reasoning",
-    labelEn: "Broad Medical Reasoning",
-    labelZh: "宽泛 Medical Reasoning",
-    summaryEn: "Broad-topic stress case for framing and evidence narrowing.",
-    summaryZh: "用于 framing 和证据收敛的宽主题压力场景。",
-    interest: "medical reasoning",
-    problemDomain: "medical AI",
-    seedIdea: "I want a feasible applied topic with clear benchmark or evaluation boundaries.",
-    timeBudgetMonths: "6",
-    resourceLevel: "student",
-    preferredStyle: "applied",
-  },
-  {
-    id: "radiology_vqa",
-    labelEn: "Radiology VQA",
-    labelZh: "放射学 VQA",
-    summaryEn: "Narrow benchmark-oriented multimodal topic.",
-    summaryZh: "窄范围、基准导向的多模态主题。",
-    interest: "trustworthy visual question answering in radiology",
-    problemDomain: "medical AI",
-    seedIdea: "I want a narrow and feasible benchmark-oriented topic.",
-    timeBudgetMonths: "6",
-    resourceLevel: "student",
-    preferredStyle: "applied",
-  },
-  {
     id: "repository_bug_fixing",
+    group: "recommended",
     labelEn: "Repository Bug-Fixing",
     labelZh: "仓库级 Bug 修复",
-    summaryEn: "Repository-level workflow support and evaluation demo.",
-    summaryZh: "仓库级工作流与评测支持演示场景。",
+    summaryEn: "Repository-level workflow support and reproducible evaluation demo.",
+    summaryZh: "仓库级工作流与可复现评测支持演示场景。",
     interest: "repository-level bug-fixing agents",
     problemDomain: "software engineering evaluation",
     seedIdea: "I want a feasible applied topic on reproducible evaluation and workflow support for low-cost repair agents.",
     timeBudgetMonths: "6",
     resourceLevel: "student",
     preferredStyle: "applied",
+  },
+  {
+    id: "repository_issue_resolution",
+    group: "recommended",
+    labelEn: "Repository Issue Resolution",
+    labelZh: "仓库级 Issue 解决",
+    summaryEn: "Repository issue-resolution agents with workflow and benchmark pressure.",
+    summaryZh: "带有工作流与 benchmark 压力的仓库级 issue 解决 Agent 演示场景。",
+    interest: "repository github issue triage and resolution agents",
+    problemDomain: "software engineering workflow evaluation",
+    seedIdea: "I want a feasible systems-oriented topic on reproducible workflow evaluation and infrastructure support for low-cost repository-level GitHub issue resolution agents.",
+    timeBudgetMonths: "6",
+    resourceLevel: "student",
+    preferredStyle: "systems",
+  },
+  {
+    id: "boundary_programming_education",
+    group: "boundary",
+    labelEn: "Boundary Check: Programming Education",
+    labelZh: "边界检查：编程教育",
+    summaryEn: "Cross-domain education case for showing current system boundaries.",
+    summaryZh: "用于展示当前系统边界的跨域教育场景。",
+    interest: "ai-supported feedback workflows for programming education",
+    problemDomain: "computing education research",
+    seedIdea: "I want a feasible benchmark-driven topic on evaluation design for AI-supported feedback workflows in programming education.",
+    timeBudgetMonths: "6",
+    resourceLevel: "student",
+    preferredStyle: "benchmark-driven",
   },
 ];
 

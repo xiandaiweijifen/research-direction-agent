@@ -1,372 +1,5 @@
 [
   {
-    "session_id": "b079f2ddea7141e79ef6a97e0de943c1",
-    "created_at": "2026-03-26T19:27:07.981601+00:00",
-    "updated_at": "2026-03-26T19:27:07.981601+00:00",
-    "user_input": {
-      "interest": "llm agents for software engineering",
-      "problem_domain": "developer tools",
-      "seed_idea": "I want a feasible applied topic about improving evaluation reliability for coding agents under limited resources.",
-      "constraints": {
-        "time_budget_months": 6,
-        "resource_level": "student",
-        "preferred_style": "applied",
-        "notes": null
-      }
-    },
-    "framing_result": {
-      "normalized_topic": "llm agents for software engineering",
-      "extracted_constraints": {
-        "time_budget_months": "6",
-        "resource_level": "student",
-        "preferred_style": "applied"
-      },
-      "missing_clarifications": [],
-      "search_questions": [
-        "What are the main research themes in llm agents for software engineering?",
-        "What methods and benchmarks are commonly used in llm agents for software engineering?",
-        "What open problems or underexplored gaps exist in llm agents for software engineering?"
-      ]
-    },
-    "evidence_records": [
-      {
-        "source_id": "openalex_w2982485630",
-        "title": "An Empirical Study on Culture, Automation, Measurement, and Sharing of DevSecOps",
-        "source_type": "paper",
-        "source_tier": "B",
-        "year": 2019,
-        "authors_or_publisher": "Nora Tomas, Jingyue Li, Huang Huang",
-        "identifier": "https://openalex.org/W2982485630",
-        "url": "https://doi.org/10.1109/cybersecpods.2019.8884935",
-        "summary": "Programmers are central agents in creating secure applications. However, software engineering and software security have historically worked in separate silos. DevSecOps is the practice of breaking down silos between development, operations, and quality assurance of security. To understand the state of art and challenges of DevSecOps, we interviewed six developers about their DevSecOps practices. We asked interview subjects about their security practices rooted in the four pillars of DevOps, namely culture, automation, sharing, and measurement. Results were analyzed by using qualitative methods. The results of the study show that it is necessary first to create a security culture. Several interviewees identified the importance of caring about security and issues in existing culture, such as how developers feel attacked by security engineers if they create vulnerable code. After establishing a security culture in the organization, development and operations need the necessary training and knowledge so that security automation tools can be utilized effectively. Measurements need to be applied continuously to keep track of identified vulnerabilities, the amount of training staff has received, and staffs general opinions regarding security.",
-        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
-      },
-      {
-        "source_id": "openalex_w1512603479",
-        "title": "Prometheus: A Pragmatic Methodology for Engineering Intelligent Agents",
-        "source_type": "paper",
-        "source_tier": "B",
-        "year": 2002,
-        "authors_or_publisher": "Lin Padgham, Michael Winikoff",
-        "identifier": "https://openalex.org/W1512603479",
-        "url": "http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.19.9128",
-        "summary": "Agents are a powerful technology with many significant applications. A key issue in getting the technology into mainstream software development is the development of appropriate methodologies for engineering agent-oriented software. This paper presents the Prometheus methodology, which has been developed over several years in collaboration with Agent Oriented Software. The methodology has been taught at industry workshops and university courses. It has proven effective in assisting developers to design, document, and build agent systems. Prometheus is a detailed and complete (start to end) methodology for developing intelligent agents which has evolved out of industrial and pedagogical experience, and which is supported by tools. This paper gives a brief overview of the design process as a whole and then discusses envisaged tool support as well as the implemented tool prototypes we have been using.",
-        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
-      },
-      {
-        "source_id": "openalex_w1869215669",
-        "title": "Developing Intelligent Agent Systems: A Practical Guide",
-        "source_type": "paper",
-        "source_tier": "B",
-        "year": 2004,
-        "authors_or_publisher": "Lin Padgham, Michael Winikoff",
-        "identifier": "https://openalex.org/W1869215669",
-        "url": "http://dl.acm.org/citation.cfm?id=975254&amp;coll=DL&amp;dl=GUIDE&amp;CFID=100179854&amp;CFTOKEN=11601505",
-        "summary": "Build your own intelligent agent system. Intelligent agent technology is a tool of modern computer science that can be used to engineer complex computer programmes that behave rationally in dynamic and changing environments. Applications range from small programmes that intelligently search the Web buying and selling goods via electronic commerce, to autonomous space probes. This powerful technology is not widely used, however, as developing intelligent agent software requires high levels of training and skill. The authors of this book have developed and tested a methodology and tools for developing intelligent agent systems. With this methodology (Prometheus) developers can start agent-oriented designs and implementations easily from scratch saving valuable time and resources. Developing Intelligent Agent Systems not only answers the questions 'what are agents?' and 'why are they useful?' but also the crucial question: 'how do I design and build intelligent agent systems?' The book covers everything a practitioner needs to know to begin to effectively use this technology - including an introduction to the notion of agents, a description of the concepts involved, and a software engineering methodology.",
-        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
-      },
-      {
-        "source_id": "openalex_w2150937768",
-        "title": "Capturing agent autonomy in roles and XML",
-        "source_type": "paper",
-        "source_tier": "B",
-        "year": 2003,
-        "authors_or_publisher": "Gerhard Weiß, Michael Rovatsos, Matthias Nickles",
-        "identifier": "https://openalex.org/W2150937768",
-        "url": "https://doi.org/10.1145/860575.860593",
-        "summary": "A key question in the field of agent-oriented software engineering is how the kind and extent of autonomy owned by computational agents can be appropriately captured. As long as this question is not answered convincingly, it is very unlikely that agent-oriented software (having \"autonomy\" as a real property rather than just a catchy label) gets broadly accepted in industry and commerce. In particular, in order to be of practical value an answer to this question has to come in form of concrete techniques which enable developers of agent-oriented software to precisely capture the scope of behavioral freedom and self-control they want to concede to a computational agent. This paper describes two such techniques. First, a formal schema called RNS for specifying the boundaries of autonomous agent behavior. This schema is conceptually grounded in sociological role theory, and employs the concepts of role, norm and sanction to capture agent autonomy. What makes RNS particularly valuable and distinct from related autonomy specification approaches is, among other things, its strong expressiveness and high precision. Second, a software tool called XRNS which enables developers to easily generate RNS-based autonomy specifications in XML format. Encoded in XML, these specifications are easily accessible to all stakeholders in an agent-oriented software under development, and can be even processed directly by XML enabled computational agents.",
-        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
-      },
-      {
-        "source_id": "openalex_w1576195516",
-        "title": "Multi-Agent Systems",
-        "source_type": "paper",
-        "source_tier": "B",
-        "year": 2010,
-        "authors_or_publisher": "Adelinde M. Uhrmacher",
-        "identifier": "https://openalex.org/W1576195516",
-        "url": "https://doi.org/10.1201/9781420070248",
-        "summary": "Methodological Guidelines for Modeling and Developing MAS-Based Simulations The intersection of agents, modeling, simulation, and application domains has been the subject of active research for over two decades. Although agents and simulation have been used effectively in a variety of application domains, much of the supporting research remains scattered in the literature, too often leaving scientists to develop multi-agent system (MAS) models and simulations from scratch. Multi-Agent Systems: Simulation and Applications provides an overdue review of the wide ranging facets of MAS simulation, including methodological and application-oriented guidelines. This comprehensive resource reviews two decades of research in the intersection of MAS, simulation, and different application domains. It provides scientists and developers with disciplined engineering approaches to modeling and developing MAS-based simulations. After providing an overview of the fields history and its basic principles, as well as cataloging the various simulation engines for MAS, the book devotes three sections to current and emerging approaches and applications. Simulation for MAS explains simulation support for agent decision making, the use of simulation for the design of self-organizing systems, the role of software architecture in simulating MAS, and the use of simulation for studying learning and stigmergic interaction. MAS for Simulation discusses an agent-based framework for symbiotic simulation, the use of country databases and expert systems for agent-based modeling of social systems, crowd-behavior modeling, agent-based modeling and simulation of adult stem cells, and agents for traffic simulation. Tools presents a number of representative platforms and tools for MAS and simulation, including Jason, James II, SeSAm, and RoboCup Rescue. Complete with over 200 figures and formulas, this reference book provides the necessary overview of experiences with MAS simulation and the tools needed to exploit simulation in MAS for future research in a vast array of applications including home security, computational systems biology, and traffic management.",
-        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
-      }
-    ],
-    "landscape_summary": {
-      "themes": [
-        "cross-modal grounding and visual dependence in llm agents for software engineering",
-        "trustworthy evaluation and failure analysis in llm agents for software engineering",
-        "agent-based decomposition strategies for llm agents for software engineering"
-      ],
-      "active_methods": [
-        "grounding-aware evaluation and error analysis",
-        "agent-mediated problem decomposition"
-      ],
-      "likely_gaps": [
-        "trustworthy evaluation signals beyond accuracy-only reporting",
-        "clear task scoping for narrow research questions"
-      ],
-      "saturated_areas": [
-        "broad generic summaries without a sharply defined question"
-      ]
-    },
-    "candidate_topics": [
-      {
-        "candidate_id": "candidate_1",
-        "title": "Benchmark-Guided Narrow Task Definition",
-        "research_question": "How can a narrower benchmark task reveal actionable limitations in current methods?",
-        "positioning": "gap-driven",
-        "novelty_note": "Focuses on trustworthy evaluation boundaries, not just raw task accuracy.",
-        "feasibility_note": "Moderate feasibility with public resources and modest compute.",
-        "risk_note": "May become incremental if the task boundary is not sharply differentiated.",
-        "supporting_source_ids": [
-          "openalex_w2150937768",
-          "openalex_w1869215669"
-        ],
-        "open_questions": [
-          "Which benchmark subset best represents the intended problem?"
-        ]
-      },
-      {
-        "candidate_id": "candidate_2",
-        "title": "Applied Method Transfer Under Practical Constraints",
-        "research_question": "Can an existing method family be adapted effectively under strict compute and annotation constraints?",
-        "positioning": "applied-transfer",
-        "novelty_note": "Frames novelty through adapting agent-based reasoning workflows under tighter practical constraints.",
-        "feasibility_note": "Strong fit for an applied project that needs a visible baseline-to-improvement story.",
-        "risk_note": "Novelty may depend heavily on the chosen constraint and evaluation design.",
-        "supporting_source_ids": [
-          "openalex_w2982485630",
-          "openalex_w1869215669"
-        ],
-        "open_questions": [
-          "Which constraint creates the strongest research signal?"
-        ]
-      },
-      {
-        "candidate_id": "candidate_3",
-        "title": "Tooling And Evaluation Workflow Support",
-        "research_question": "What tooling or evaluation workflow improvements would make research in this area more reproducible?",
-        "positioning": "systems",
-        "novelty_note": "Shifts from model novelty to workflow and evaluation reliability.",
-        "feasibility_note": "Strong feasibility for a short-cycle project with engineering emphasis.",
-        "risk_note": "Applied impact may be clearer than publication novelty unless evaluation endpoints are sharply chosen.",
-        "supporting_source_ids": [
-          "openalex_w2150937768",
-          "openalex_w1869215669"
-        ],
-        "open_questions": [
-          "What workflow support would make trustworthy evaluation and audit trails easier to reproduce?",
-          "What concrete reproducibility pain point should be prioritized first?",
-          "Which workflow improvement reduces compute or setup cost the most?"
-        ]
-      }
-    ],
-    "comparison_result": {
-      "dimensions": [
-        "novelty",
-        "feasibility",
-        "evidence_strength",
-        "data_availability",
-        "implementation_cost",
-        "risk"
-      ],
-      "summary": "Candidate 2 is strongest for applied feasibility under the current constraints, candidate 1 remains strongest on research framing, and candidate 3 remains the fastest engineering path.",
-      "candidate_assessments": [
-        {
-          "candidate_id": "candidate_1",
-          "novelty": "high",
-          "feasibility": "medium",
-          "evidence_strength": "medium_high",
-          "data_availability": "medium",
-          "implementation_cost": "medium",
-          "risk": "medium"
-        },
-        {
-          "candidate_id": "candidate_2",
-          "novelty": "medium_high",
-          "feasibility": "high",
-          "evidence_strength": "medium_high",
-          "data_availability": "medium_high",
-          "implementation_cost": "medium_low",
-          "risk": "medium_low"
-        },
-        {
-          "candidate_id": "candidate_3",
-          "novelty": "medium",
-          "feasibility": "high",
-          "evidence_strength": "medium",
-          "data_availability": "high",
-          "implementation_cost": "low",
-          "risk": "medium_high"
-        }
-      ]
-    },
-    "convergence_result": {
-      "recommended_candidate_id": "candidate_2",
-      "backup_candidate_id": "candidate_1",
-      "rationale": "Candidate 2 is the best fit for the current constraints because it starts from reusable baselines, matches an applied project style, and is easier to execute within a tighter timeline.",
-      "manual_checks": [
-        "Confirm that the selected sub-problem is narrow enough for the available timeline.",
-        "Verify that at least one benchmark or dataset is realistically accessible.",
-        "Check whether the proposed gap is genuinely underexplored rather than a retrieval miss.",
-        "Verify that the topic still has enough novelty signal for the intended venue."
-      ]
-    },
-    "evidence_presentation": {
-      "source_facts": [
-        {
-          "statement": "Retrieved paper evidence 'An Empirical Study on Culture, Automation, Measurement, and Sharing of DevSecOps' (2019) as tier B support for the current topic.",
-          "statement_type": "source_fact",
-          "supporting_source_ids": [
-            "openalex_w2982485630"
-          ],
-          "note": "Directly grounded in retrieved source metadata and source summary.",
-          "uncertainty_reason": null,
-          "missing_evidence": []
-        },
-        {
-          "statement": "Retrieved paper evidence 'Prometheus: A Pragmatic Methodology for Engineering Intelligent Agents' (2002) as tier B support for the current topic.",
-          "statement_type": "source_fact",
-          "supporting_source_ids": [
-            "openalex_w1512603479"
-          ],
-          "note": "Directly grounded in retrieved source metadata and source summary.",
-          "uncertainty_reason": null,
-          "missing_evidence": []
-        },
-        {
-          "statement": "Retrieved paper evidence 'Developing Intelligent Agent Systems: A Practical Guide' (2004) as tier B support for the current topic.",
-          "statement_type": "source_fact",
-          "supporting_source_ids": [
-            "openalex_w1869215669"
-          ],
-          "note": "Directly grounded in retrieved source metadata and source summary.",
-          "uncertainty_reason": null,
-          "missing_evidence": []
-        }
-      ],
-      "system_synthesis": [
-        {
-          "statement": "Current evidence clusters most strongly around cross-modal grounding and visual dependence in llm agents for software engineering, trustworthy evaluation and failure analysis in llm agents for software engineering.",
-          "statement_type": "system_synthesis",
-          "supporting_source_ids": [
-            "openalex_w1576195516",
-            "openalex_w2982485630",
-            "openalex_w2150937768"
-          ],
-          "note": "Agent synthesis over multiple retrieved sources with theme-level evidence matching.",
-          "uncertainty_reason": null,
-          "missing_evidence": []
-        },
-        {
-          "statement": "The current output separates into 3 candidate directions with distinct positioning and comparison scores.",
-          "statement_type": "system_synthesis",
-          "supporting_source_ids": [
-            "openalex_w2150937768",
-            "openalex_w1869215669",
-            "openalex_w2982485630"
-          ],
-          "note": "Agent synthesis over candidate generation and comparison outputs, anchored to candidate support sets.",
-          "uncertainty_reason": null,
-          "missing_evidence": []
-        }
-      ],
-      "tentative_inferences": [
-        {
-          "statement": "candidate_2 is currently the leading direction under the present constraints.",
-          "statement_type": "tentative_inference",
-          "supporting_source_ids": [
-            "openalex_w2982485630",
-            "openalex_w1869215669"
-          ],
-          "note": "Recommendation-level inference that still requires human validation.",
-          "uncertainty_reason": "This recommendation remains constraint-sensitive and depends on the current evidence bundle, not on a settled benchmark choice or direct experimental validation.",
-          "missing_evidence": [
-            "Confirm that the selected sub-problem is narrow enough for the available timeline.",
-            "Verify that at least one benchmark or dataset is realistically accessible."
-          ]
-        },
-        {
-          "statement": "Confirm that the selected sub-problem is narrow enough for the available timeline.",
-          "statement_type": "tentative_inference",
-          "supporting_source_ids": [
-            "openalex_w2982485630",
-            "openalex_w1869215669"
-          ],
-          "note": "Open validation requirement rather than a settled fact.",
-          "uncertainty_reason": "The recommendation should not be treated as final until this validation step is checked.",
-          "missing_evidence": [
-            "Confirm that the selected sub-problem is narrow enough for the available timeline."
-          ]
-        }
-      ]
-    },
-    "human_confirmations": [
-      "Confirm that the system correctly interpreted the topic as 'llm agents for software engineering'.",
-      "Confirm that candidate_2 should remain the leading direction after reviewing the supporting evidence and risks.",
-      "Manual check: Confirm that the selected sub-problem is narrow enough for the available timeline.",
-      "Manual check: Verify that at least one benchmark or dataset is realistically accessible."
-    ],
-    "clarification_suggestions": [],
-    "trace": [
-      {
-        "stage": "frame_problem",
-        "status": "completed",
-        "timestamp": "2026-03-26T19:27:08.006407+00:00",
-        "detail": "Structured the user input into a topic-exploration request."
-      },
-      {
-        "stage": "retrieve_evidence",
-        "status": "completed",
-        "timestamp": "2026-03-26T19:27:08.006424+00:00",
-        "detail": "Retrieved 5 evidence records using the openalex provider."
-      },
-      {
-        "stage": "synthesize_landscape",
-        "status": "completed",
-        "timestamp": "2026-03-26T19:27:08.006429+00:00",
-        "detail": "Organized the current evidence bundle into a lightweight research landscape summary."
-      },
-      {
-        "stage": "generate_candidates",
-        "status": "completed",
-        "timestamp": "2026-03-26T19:27:08.006433+00:00",
-        "detail": "Generated 3 candidate topic directions from the current evidence bundle."
-      },
-      {
-        "stage": "compare_candidates",
-        "status": "completed",
-        "timestamp": "2026-03-26T19:27:08.006437+00:00",
-        "detail": "Produced a structured candidate comparison across fixed MVP dimensions."
-      },
-      {
-        "stage": "converge_recommendation",
-        "status": "completed",
-        "timestamp": "2026-03-26T19:27:08.006441+00:00",
-        "detail": "Produced a recommended next-best option with manual verification checks."
-      }
-    ],
-    "confidence_summary": {
-      "evidence_coverage": "medium",
-      "source_quality": "medium",
-      "candidate_separation": "high",
-      "conflict_level": "low",
-      "rationale": [
-        "Evidence coverage is medium based on the current number of retrieved records.",
-        "Source quality is medium based on the current source-tier mix.",
-        "Candidate separation is high based on the diversity of candidate positioning.",
-        "Conflict level is low because this development slice does not yet model explicit source disagreement."
-      ]
-    },
-    "evidence_diagnostics": {
-      "requested_provider": "openalex",
-      "used_provider": "openalex",
-      "fallback_used": false,
-      "fallback_reason": null,
-      "record_count": 5,
-      "cache_hit": true
-    }
-  },
-  {
     "session_id": "0437a899b3834a74bd1f56011bdcafd4",
     "created_at": "2026-03-26T19:29:04.406138+00:00",
     "updated_at": "2026-03-26T19:29:04.406138+00:00",
@@ -23333,6 +22966,450 @@
           "route": "role_expansion",
           "query": "ai-supported feedback workflows for programming education computing education research benchmark stress test",
           "latency_ms": 3616,
+          "attempt_count": 1
+        }
+      ]
+    }
+  },
+  {
+    "session_id": "4088e1fc89f148e28981093cfc0541ff",
+    "created_at": "2026-03-27T19:33:17.308785+00:00",
+    "updated_at": "2026-03-27T19:33:17.308785+00:00",
+    "user_input": {
+      "interest": "llm agents for automated bug fixing",
+      "problem_domain": "software engineering",
+      "seed_idea": "I want a feasible applied topic on reproducible evaluation for low-cost bug-fixing agents.",
+      "constraints": {
+        "time_budget_months": 6,
+        "resource_level": "student",
+        "preferred_style": "applied",
+        "notes": null
+      },
+      "disable_cache": true
+    },
+    "framing_result": {
+      "normalized_topic": "llm agents for automated bug fixing",
+      "extracted_constraints": {
+        "time_budget_months": "6",
+        "resource_level": "student",
+        "preferred_style": "applied"
+      },
+      "missing_clarifications": [],
+      "search_questions": [
+        "What are the main research themes in llm agents for automated bug fixing?",
+        "What methods and benchmarks are commonly used in llm agents for automated bug fixing?",
+        "What open problems or underexplored gaps exist in llm agents for automated bug fixing?"
+      ]
+    },
+    "evidence_records": [
+      {
+        "source_id": "openalex_w4403555534",
+        "title": "Large Language Model-Based Agents for Software Engineering: A Survey",
+        "source_type": "survey",
+        "source_tier": "A",
+        "year": 2024,
+        "authors_or_publisher": "Junwei Liu, Kaixin Wang, Yixuan Chen, Xin Peng",
+        "identifier": "https://openalex.org/W4403555534",
+        "url": "https://arxiv.org/abs/2409.02977",
+        "summary": "The recent advance in Large Language Models (LLMs) has shaped a new paradigm of AI agents, i.e., LLM-based agents. Compared to standalone LLMs, LLM-based agents substantially extend the versatility and expertise of LLMs by enhancing LLMs with the capabilities of perceiving and utilizing external resources and tools. To date, LLM-based agents have been applied and shown remarkable effectiveness in Software Engineering (SE). The synergy between multiple agents and human interaction brings further promise in tackling complex real-world SE problems. In this work, we present a comprehensive and systematic survey on LLM-based agents for SE. We collect 124 papers and categorize them from two perspectives, i.e., the SE and agent perspectives. In addition, we discuss open challenges and future directions in this critical domain. The repository of this survey is at https://github.com/FudanSELab/Agent4SE-Paper-List.",
+        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
+      },
+      {
+        "source_id": "openalex_w4411551762",
+        "title": "RepairAgent: An Autonomous, LLM-Based Agent for Program Repair",
+        "source_type": "paper",
+        "source_tier": "B",
+        "year": 2025,
+        "authors_or_publisher": "Islem Bouzenia, Prémkumar Dévanbu, Michael Pradel",
+        "identifier": "https://openalex.org/W4411551762",
+        "url": "https://doi.org/10.1109/icse55347.2025.00157",
+        "summary": "Automated program repair has emerged as a powerful technique to mitigate the impact of software bugs on system reliability and user experience. This paper introduces Repair Agent, the first work to address the program repair challenge through an autonomous agent based on a large language model (LLM). Unlike existing deep learning-based approaches, which prompt a model with a fixed prompt or in a fixed feedback loop, our work treats the LLM as an agent capable of autonomously planning and executing actions to fix bugs by invoking suitable tools. Repair Agent freely interleaves gathering information about the bug, gathering repair ingredients, and validating fixes, while deciding which tools to invoke based on the gathered information and feedback from previous fix attempts. Key contributions that enable Repair Agent include a set of tools that are useful for program repair, a dynamically updated prompt format that allows the LLM to interact with these tools, and a finite state machine that guides the agent in invoking the tools. Our evaluation on the popular Defects4J dataset demonstrates Repair Agent's effectiveness in autonomously repairing 164 bugs, including 39 bugs not fixed by prior techniques. Interacting with the LLM imposes an average cost of 270k tokens per bug, which, under the current pricing of OpenAI's GPT-3.5 model, translates to 14 cents per bug. To the best of our knowledge, this work is the first to present an autonomous, LLM-based agent for program repair, paving the way for future agent-based techniques in software engineering.",
+        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
+      },
+      {
+        "source_id": "openalex_w4402442868",
+        "title": "AutoCodeRover: Autonomous Program Improvement",
+        "source_type": "paper",
+        "source_tier": "B",
+        "year": 2024,
+        "authors_or_publisher": "Yuntong Zhang, Haifeng Ruan, Zhiyu Fan, Abhik Roychoudhury",
+        "identifier": "https://openalex.org/W4402442868",
+        "url": "https://doi.org/10.1145/3650212.3680384",
+        "summary": "Researchers have made significant progress in automating the software development process in the past decades. Automated techniques for issue summarization, bug reproduction, fault localization, and program repair have been built to ease the workload of developers. Recent progress in Large Language Models (LLMs) has significantly impacted the development process, where developers can use LLM-based programming assistants to achieve automated coding. Nevertheless, software engineering involves the process of program improvement apart from coding, specifically to enable software maintenance (e.g. program repair to fix bugs) and software evolution (e.g. feature additions). In this paper, we propose an automated approach for solving Github issues to autonomously achieve program improvement. In our approach called AutoCodeRover, LLMs are combined with sophisticated code search capabilities, ultimately leading to a program modification or patch. In contrast to recent LLM agent approaches from AI researchers and practitioners, our outlook is more software engineering oriented. We work on a program representation (abstract syntax tree) as opposed to viewing a software project as a mere collection of files. Our code search exploits the program structure in the form of classes/methods to enhance LLM’s understanding of the issue’s root cause, and effectively retrieve a context via iterative search. The use of spectrum-based fault localization using tests, further sharpens the context, as long as a test-suite is available. Experiments on the recently proposed SWE-bench-lite (300 real-life Github issues) show increased efficacy in solving Github issues (19% on SWE-bench-lite), which is higher than the efficacy of the recently reported Swe-agent. Interestingly, our approach resolved 57 GitHub issues in about 4 minutes each (pass@1), whereas developers spent more than 2.68 days on average. In addition, AutoCodeRover achieved this efficacy with significantly lower cost (on average, $0.43 USD), compared to other baselines. We posit that our workflow enables autonomous software engineering, where, in future, auto-generated code from LLMs can be autonomously improved.",
+        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
+      },
+      {
+        "source_id": "openalex_w4390306128",
+        "title": "A Survey on Large Language Models for Software Engineering",
+        "source_type": "survey",
+        "source_tier": "A",
+        "year": 2023,
+        "authors_or_publisher": "Quanjun Zhang, Chunrong Fang, Yang Xie, Yaxin Zhang",
+        "identifier": "https://openalex.org/W4390306128",
+        "url": "https://arxiv.org/abs/2312.15223",
+        "summary": "Software Engineering (SE) is the systematic design, development, maintenance, and management of software applications underpinning the digital infrastructure of our modern world. Very recently, the SE community has seen a rapidly increasing number of techniques employing Large Language Models (LLMs) to automate a broad range of SE tasks. Nevertheless, existing information of the applications, effects, and possible limitations of LLMs within SE is still not well-studied. In this paper, we provide a systematic survey to summarize the current state-of-the-art research in the LLM-based SE community. We summarize 62 representative LLMs of Code across three model architectures, 15 pre-training objectives across four categories, and 16 downstream tasks across five categories. We then present a detailed summarization of the recent SE studies for which LLMs are commonly utilized, including 947 studies for 112 specific code-related tasks across five crucial phases within the SE workflow. We also discuss several critical aspects during the integration of LLMs into SE, such as empirical evaluation, benchmarking, security and reliability, domain tuning, compressing and distillation. Finally, we highlight several challenges and potential opportunities on applying LLMs for future SE studies, such as exploring domain LLMs and constructing clean evaluation datasets. Overall, our work can help researchers gain a comprehensive understanding about the achievements of the existing LLM-based SE studies and promote the practical application of these techniques. Our artifacts are publicly available and will be continuously updated at the living repository: https://github.com/iSEngLab/AwesomeLLM4SE.",
+        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
+      },
+      {
+        "source_id": "openalex_w4399114781",
+        "title": "SWE-agent: Agent-Computer Interfaces Enable Automated Software Engineering",
+        "source_type": "paper",
+        "source_tier": "B",
+        "year": 2024,
+        "authors_or_publisher": "John Yang, Carlos Jimenez-Gomez, Alexander Wettig, K. Lieret",
+        "identifier": "https://openalex.org/W4399114781",
+        "url": "https://arxiv.org/abs/2405.15793",
+        "summary": "Language model (LM) agents are increasingly being used to automate complicated tasks in digital environments. Just as humans benefit from powerful software applications, such as integrated development environments, for complex tasks like software engineering, we posit that LM agents represent a new category of end users with their own needs and abilities, and would benefit from specially-built interfaces to the software they use. We investigate how interface design affects the performance of language model agents. As a result of this exploration, we introduce SWE-agent: a system that facilitates LM agents to autonomously use computers to solve software engineering tasks. SWE-agent's custom agent-computer interface (ACI) significantly enhances an agent's ability to create and edit code files, navigate entire repositories, and execute tests and other programs. We evaluate SWE-agent on SWE-bench and HumanEvalFix, achieving state-of-the-art performance on both with a pass@1 rate of 12.5% and 87.7%, respectively, far exceeding the previous state-of-the-art achieved with non-interactive LMs. Finally, we provide insight on how the design of the ACI can impact agents' behavior and performance.",
+        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
+      }
+    ],
+    "landscape_summary": {
+      "themes": [
+        "benchmark design and stress-testing for llm agents for automated bug fixing",
+        "trustworthy evaluation and failure analysis in llm agents for automated bug fixing",
+        "agent-based decomposition strategies for llm agents for automated bug fixing"
+      ],
+      "active_methods": [
+        "benchmark-centered experimental design",
+        "agent-mediated problem decomposition"
+      ],
+      "likely_gaps": [
+        "benchmark protocols that distinguish genuine task gains from workflow or prompt shortcuts",
+        "trustworthy evaluation signals beyond accuracy-only reporting"
+      ],
+      "saturated_areas": [
+        "broad generic summaries without a sharply defined question"
+      ]
+    },
+    "candidate_topics": [
+      {
+        "candidate_id": "candidate_1",
+        "title": "Benchmark-Guided Narrow Task Definition",
+        "research_question": "How can a narrower benchmark slice expose shortcut behavior and weak evaluation robustness in current systems?",
+        "positioning": "gap-driven",
+        "novelty_note": "Focuses on trustworthy evaluation boundaries, not just raw task accuracy.",
+        "feasibility_note": "Moderate feasibility with public resources and modest compute.",
+        "risk_note": "May become incremental if the task boundary is not sharply differentiated.",
+        "supporting_source_ids": [
+          "openalex_w4390306128",
+          "openalex_w4411551762"
+        ],
+        "open_questions": [
+          "Which benchmark slice best isolates genuine task gains rather than workflow or prompt shortcuts?"
+        ],
+        "origin_signals": [
+          "benchmark protocols that distinguish genuine task gains from workflow or prompt shortcuts",
+          "trustworthy evaluation signals beyond accuracy-only reporting",
+          "software engineering"
+        ]
+      },
+      {
+        "candidate_id": "candidate_2",
+        "title": "Applied Method Transfer Under Practical Constraints",
+        "research_question": "Can an existing method family be adapted effectively under strict compute and annotation constraints?",
+        "positioning": "applied-transfer",
+        "novelty_note": "Frames novelty through adapting agent-based reasoning workflows under tighter practical constraints.",
+        "feasibility_note": "Strong fit for an applied project that needs a visible baseline-to-improvement story.",
+        "risk_note": "Novelty may depend heavily on the chosen constraint and evaluation design.",
+        "supporting_source_ids": [
+          "openalex_w4402442868",
+          "openalex_w4411551762"
+        ],
+        "open_questions": [
+          "Which constraint creates the strongest research signal?"
+        ],
+        "origin_signals": [
+          "benchmark-centered experimental design",
+          "agent-mediated problem decomposition",
+          "software engineering"
+        ]
+      },
+      {
+        "candidate_id": "candidate_3",
+        "title": "Tooling And Evaluation Workflow Support",
+        "research_question": "What tooling or workflow support for reproducible bug-fixing agent evaluation would make research in this area more reproducible?",
+        "positioning": "systems",
+        "novelty_note": "Shifts from model novelty to workflow and evaluation reliability.",
+        "feasibility_note": "Strong feasibility for a short-cycle project with engineering emphasis.",
+        "risk_note": "Applied impact may be clearer than publication novelty unless evaluation endpoints are sharply chosen.",
+        "supporting_source_ids": [
+          "openalex_w4402442868",
+          "openalex_w4390306128"
+        ],
+        "open_questions": [
+          "What concrete reproducibility pain point should be prioritized first?",
+          "Which workflow improvement for reproducible bug-fixing agent evaluation reduces setup or audit cost the most?",
+          "Which workflow improvement reduces compute or setup cost the most?",
+          "What workflow support would make trustworthy evaluation and audit trails easier to reproduce?"
+        ],
+        "origin_signals": [
+          "benchmark design and stress-testing for llm agents for automated bug fixing",
+          "trustworthy evaluation and failure analysis in llm agents for automated bug fixing",
+          "program improvement"
+        ]
+      }
+    ],
+    "comparison_result": {
+      "dimensions": [
+        "novelty",
+        "feasibility",
+        "evidence_strength",
+        "data_availability",
+        "implementation_cost",
+        "risk"
+      ],
+      "summary": "Tooling And Evaluation Workflow Support currently leads on the current evidence and constraints, Applied Method Transfer Under Practical Constraints remains the strongest backup path, and Benchmark-Guided Narrow Task Definition stays the tertiary option for comparison.",
+      "candidate_assessments": [
+        {
+          "candidate_id": "candidate_1",
+          "novelty": "high",
+          "feasibility": "medium",
+          "evidence_strength": "medium_high",
+          "data_availability": "medium",
+          "implementation_cost": "high",
+          "risk": "medium",
+          "novelty_reason": "Rated high because the direction frames a distinct question around benchmark protocols that distinguish genuine task gains from workflow or prompt shortcuts, trustworthy evaluation signals beyond accuracy-only reporting instead of restating the topic broadly.",
+          "feasibility_reason": "Rated medium because the scope implied by benchmark protocols that distinguish genuine task gains from workflow or prompt shortcuts, trustworthy evaluation signals beyond accuracy-only reporting is compatible with the current time and resource constraints.",
+          "evidence_strength_reason": "Rated medium_high because it is currently supported by 2 directly linked sources.",
+          "data_availability_reason": "Rated medium because the supporting materials around benchmark protocols that distinguish genuine task gains from workflow or prompt shortcuts, trustworthy evaluation signals beyond accuracy-only reporting appear sufficiently visible for a bounded prototype or evaluation slice.",
+          "implementation_cost_reason": "Rated high because the expected build effort around benchmark protocols that distinguish genuine task gains from workflow or prompt shortcuts, trustworthy evaluation signals beyond accuracy-only reporting remains bounded for this stage.",
+          "risk_reason": "Rated medium because the current evidence still leaves non-trivial uncertainty around benchmark protocols that distinguish genuine task gains from workflow or prompt shortcuts, trustworthy evaluation signals beyond accuracy-only reporting."
+        },
+        {
+          "candidate_id": "candidate_2",
+          "novelty": "high",
+          "feasibility": "medium_high",
+          "evidence_strength": "high",
+          "data_availability": "medium",
+          "implementation_cost": "medium",
+          "risk": "medium_high",
+          "novelty_reason": "Rated high because the direction frames a distinct question around benchmark-centered experimental design, agent-mediated problem decomposition instead of restating the topic broadly.",
+          "feasibility_reason": "Rated medium_high because the scope implied by benchmark-centered experimental design, agent-mediated problem decomposition is compatible with the current time and resource constraints.",
+          "evidence_strength_reason": "Rated high because it is currently supported by 2 directly linked sources.",
+          "data_availability_reason": "Rated medium because the supporting materials around benchmark-centered experimental design, agent-mediated problem decomposition appear sufficiently visible for a bounded prototype or evaluation slice.",
+          "implementation_cost_reason": "Rated medium because the expected build effort around benchmark-centered experimental design, agent-mediated problem decomposition remains bounded for this stage.",
+          "risk_reason": "Rated medium_high because the current evidence still leaves non-trivial uncertainty around benchmark-centered experimental design, agent-mediated problem decomposition."
+        },
+        {
+          "candidate_id": "candidate_3",
+          "novelty": "high",
+          "feasibility": "high",
+          "evidence_strength": "medium_high",
+          "data_availability": "medium_high",
+          "implementation_cost": "high",
+          "risk": "medium",
+          "novelty_reason": "Rated high because the direction frames a distinct question around benchmark design and stress-testing for llm agents for automated bug fixing, trustworthy evaluation and failure analysis in llm agents for automated bug fixing instead of restating the topic broadly.",
+          "feasibility_reason": "Rated high because the scope implied by benchmark design and stress-testing for llm agents for automated bug fixing, trustworthy evaluation and failure analysis in llm agents for automated bug fixing is compatible with the current time and resource constraints.",
+          "evidence_strength_reason": "Rated medium_high because it is currently supported by 2 directly linked sources.",
+          "data_availability_reason": "Rated medium_high because the supporting materials around benchmark design and stress-testing for llm agents for automated bug fixing, trustworthy evaluation and failure analysis in llm agents for automated bug fixing appear sufficiently visible for a bounded prototype or evaluation slice.",
+          "implementation_cost_reason": "Rated high because the expected build effort around benchmark design and stress-testing for llm agents for automated bug fixing, trustworthy evaluation and failure analysis in llm agents for automated bug fixing remains bounded for this stage.",
+          "risk_reason": "Rated medium because the current evidence still leaves non-trivial uncertainty around benchmark design and stress-testing for llm agents for automated bug fixing, trustworthy evaluation and failure analysis in llm agents for automated bug fixing."
+        }
+      ]
+    },
+    "convergence_result": {
+      "recommended_candidate_id": "candidate_2",
+      "backup_candidate_id": "candidate_3",
+      "rationale": "Applied Method Transfer Under Practical Constraints is currently the best fit because the available materials around benchmark-centered experimental design, agent-mediated problem decomposition point to a reusable baseline, a feasible applied scope, and a cleaner path than Tooling And Evaluation Workflow Support under the current constraints.",
+      "manual_checks": [
+        "Confirm that the selected sub-problem is narrow enough for the available timeline.",
+        "Verify that at least one benchmark or dataset is realistically accessible.",
+        "Check whether the proposed gap is genuinely underexplored rather than a retrieval miss.",
+        "Verify that the topic still has enough novelty signal for the intended venue."
+      ]
+    },
+    "evidence_presentation": {
+      "source_facts": [
+        {
+          "statement": "Retrieved survey evidence 'Large Language Model-Based Agents for Software Engineering: A Survey' (2024) as tier A support for the current topic.",
+          "statement_type": "source_fact",
+          "supporting_source_ids": [
+            "openalex_w4403555534"
+          ],
+          "note": "Directly grounded in retrieved source metadata and source summary.",
+          "uncertainty_reason": null,
+          "missing_evidence": []
+        },
+        {
+          "statement": "Retrieved paper evidence 'RepairAgent: An Autonomous, LLM-Based Agent for Program Repair' (2025) as tier B support for the current topic.",
+          "statement_type": "source_fact",
+          "supporting_source_ids": [
+            "openalex_w4411551762"
+          ],
+          "note": "Directly grounded in retrieved source metadata and source summary.",
+          "uncertainty_reason": null,
+          "missing_evidence": []
+        },
+        {
+          "statement": "Retrieved paper evidence 'AutoCodeRover: Autonomous Program Improvement' (2024) as tier B support for the current topic.",
+          "statement_type": "source_fact",
+          "supporting_source_ids": [
+            "openalex_w4402442868"
+          ],
+          "note": "Directly grounded in retrieved source metadata and source summary.",
+          "uncertainty_reason": null,
+          "missing_evidence": []
+        }
+      ],
+      "system_synthesis": [
+        {
+          "statement": "Current evidence clusters most strongly around benchmark design and stress-testing for llm agents for automated bug fixing, trustworthy evaluation and failure analysis in llm agents for automated bug fixing.",
+          "statement_type": "system_synthesis",
+          "supporting_source_ids": [
+            "openalex_w4390306128",
+            "openalex_w4411551762",
+            "openalex_w4399114781"
+          ],
+          "note": "Agent synthesis over multiple retrieved sources with theme-level evidence matching.",
+          "uncertainty_reason": null,
+          "missing_evidence": []
+        },
+        {
+          "statement": "The current output separates into 3 candidate directions with distinct positioning and comparison scores.",
+          "statement_type": "system_synthesis",
+          "supporting_source_ids": [
+            "openalex_w4390306128",
+            "openalex_w4411551762",
+            "openalex_w4402442868"
+          ],
+          "note": "Agent synthesis over candidate generation and comparison outputs, anchored to candidate support sets.",
+          "uncertainty_reason": null,
+          "missing_evidence": []
+        }
+      ],
+      "tentative_inferences": [
+        {
+          "statement": "candidate_2 is currently the leading direction under the present constraints.",
+          "statement_type": "tentative_inference",
+          "supporting_source_ids": [
+            "openalex_w4402442868",
+            "openalex_w4411551762"
+          ],
+          "note": "Recommendation-level inference that still requires human validation.",
+          "uncertainty_reason": "This recommendation remains constraint-sensitive and depends on the current evidence bundle, not on a settled benchmark choice or direct experimental validation.",
+          "missing_evidence": [
+            "Confirm that the selected sub-problem is narrow enough for the available timeline.",
+            "Verify that at least one benchmark or dataset is realistically accessible."
+          ]
+        },
+        {
+          "statement": "Confirm that the selected sub-problem is narrow enough for the available timeline.",
+          "statement_type": "tentative_inference",
+          "supporting_source_ids": [
+            "openalex_w4402442868",
+            "openalex_w4411551762"
+          ],
+          "note": "Open validation requirement rather than a settled fact.",
+          "uncertainty_reason": "The recommendation should not be treated as final until this validation step is checked.",
+          "missing_evidence": [
+            "Confirm that the selected sub-problem is narrow enough for the available timeline."
+          ]
+        }
+      ]
+    },
+    "human_confirmations": [
+      "Confirm that the system correctly interpreted the topic as 'llm agents for automated bug fixing'.",
+      "Confirm that candidate_2 should remain the leading direction after reviewing the supporting evidence and risks.",
+      "Manual check: Confirm that the selected sub-problem is narrow enough for the available timeline.",
+      "Manual check: Verify that at least one benchmark or dataset is realistically accessible."
+    ],
+    "clarification_suggestions": [],
+    "trace": [
+      {
+        "stage": "frame_problem",
+        "status": "completed",
+        "timestamp": "2026-03-27T19:33:35.252857+00:00",
+        "detail": "Structured the user input into a topic-exploration request."
+      },
+      {
+        "stage": "retrieve_evidence",
+        "status": "completed",
+        "timestamp": "2026-03-27T19:33:35.252870+00:00",
+        "detail": "Retrieved 5 evidence records using the openalex provider."
+      },
+      {
+        "stage": "synthesize_landscape",
+        "status": "completed",
+        "timestamp": "2026-03-27T19:33:35.252874+00:00",
+        "detail": "Organized the current evidence bundle into a lightweight research landscape summary."
+      },
+      {
+        "stage": "generate_candidates",
+        "status": "completed",
+        "timestamp": "2026-03-27T19:33:35.252878+00:00",
+        "detail": "Generated 3 candidate topic directions from the current evidence bundle."
+      },
+      {
+        "stage": "compare_candidates",
+        "status": "completed",
+        "timestamp": "2026-03-27T19:33:35.252881+00:00",
+        "detail": "Produced a structured candidate comparison across fixed MVP dimensions."
+      },
+      {
+        "stage": "converge_recommendation",
+        "status": "completed",
+        "timestamp": "2026-03-27T19:33:35.252885+00:00",
+        "detail": "Produced a recommended next-best option with manual verification checks."
+      }
+    ],
+    "confidence_summary": {
+      "evidence_coverage": "medium",
+      "source_quality": "medium_high",
+      "candidate_separation": "high",
+      "conflict_level": "low",
+      "rationale": [
+        "Evidence coverage is medium based on the current number of retrieved records.",
+        "Source quality is medium_high based on the current source-tier mix.",
+        "Candidate separation is high based on the diversity of candidate positioning.",
+        "Conflict level is low because this development slice does not yet model explicit source disagreement."
+      ]
+    },
+    "evidence_diagnostics": {
+      "requested_provider": "openalex",
+      "used_provider": "openalex",
+      "fallback_used": false,
+      "fallback_reason": null,
+      "record_count": 5,
+      "cache_hit": false,
+      "query_count": 6,
+      "provider_latency_ms": 17938,
+      "slowest_query": "llm agents for automated bug fixing software engineering workflow reproducibility",
+      "slowest_query_latency_ms": 3276,
+      "query_diagnostics": [
+        {
+          "route": "base",
+          "query": "agents automated fixing software engineering applied",
+          "latency_ms": 3188,
+          "attempt_count": 1
+        },
+        {
+          "route": "core_focus",
+          "query": "agents automated fixing software engineering",
+          "latency_ms": 3181,
+          "attempt_count": 1
+        },
+        {
+          "route": "role_expansion",
+          "query": "llm agents for automated bug fixing software engineering benchmark evaluation",
+          "latency_ms": 2820,
+          "attempt_count": 1
+        },
+        {
+          "route": "role_expansion",
+          "query": "llm agents for automated bug fixing software engineering workflow reproducibility",
+          "latency_ms": 3276,
+          "attempt_count": 1
+        },
+        {
+          "route": "role_expansion",
+          "query": "llm agents for automated bug fixing software engineering method framework",
+          "latency_ms": 2649,
+          "attempt_count": 1
+        },
+        {
+          "route": "role_expansion",
+          "query": "llm agents for automated bug fixing software engineering developer workflow audit",
+          "latency_ms": 2720,
           "attempt_count": 1
         }
       ]
