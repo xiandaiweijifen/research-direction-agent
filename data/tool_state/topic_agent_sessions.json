@@ -1,322 +1,5 @@
 [
   {
-    "session_id": "43480471e47b4ce2be6feac7aa305a41",
-    "created_at": "2026-03-26T19:35:43.624008+00:00",
-    "updated_at": "2026-03-26T19:35:43.624008+00:00",
-    "user_input": {
-      "interest": "coding agents for software engineering",
-      "problem_domain": "developer workflows",
-      "seed_idea": "I want a feasible applied topic about reliable evaluation for coding agents under limited resources.",
-      "constraints": {
-        "time_budget_months": 6,
-        "resource_level": "student",
-        "preferred_style": "applied",
-        "notes": null
-      }
-    },
-    "framing_result": {
-      "normalized_topic": "coding agents for software engineering",
-      "extracted_constraints": {
-        "time_budget_months": "6",
-        "resource_level": "student",
-        "preferred_style": "applied"
-      },
-      "missing_clarifications": [],
-      "search_questions": [
-        "What are the main research themes in coding agents for software engineering?",
-        "What methods and benchmarks are commonly used in coding agents for software engineering?",
-        "What open problems or underexplored gaps exist in coding agents for software engineering?"
-      ]
-    },
-    "evidence_records": [
-      {
-        "source_id": "openalex_w4411915058",
-        "title": "Explainable AI In Software Engineering: Enhancing Developer-AI Collaboration",
-        "source_type": "paper",
-        "source_tier": "B",
-        "year": 2024,
-        "authors_or_publisher": "Jami J. Shah, Jyoti Kunal Shah",
-        "identifier": "https://openalex.org/W4411915058",
-        "url": "https://doi.org/10.37547/tajet/volume06issue07-11",
-        "summary": "Artificial Intelligence (AI) tools are increasingly integrated into software engineering tasks such as code generation, defect prediction, and project planning. However, widespread adoption is hindered by developers’ skepticism toward opaque AI models that lack transparency. This paper explores the integration of Explainable AI (XAI) into software engineering to foster a “developer-in-the-loop” paradigm that enhances trust, understanding, and collaboration between developers and AI agents. We review existing research on XAI techniques applied to feature planning, debugging, and refactoring, and identify the challenges of embedding XAI in real-world development workflows. A modular framework and system architecture are proposed to integrate explanation engines with AI models, IDEs, dashboards, and CI tools. A case study on explainable code review demonstrates how transparent AI suggestions can improve developer trust and team learning. We conclude by highlighting future directions, including personalization of explanations, cross-SDLC integration, and human-AI dialogue mechanisms, positioning XAI as essential to the next generation of intelligent development environments.",
-        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
-      },
-      {
-        "source_id": "openalex_w4402442868",
-        "title": "AutoCodeRover: Autonomous Program Improvement",
-        "source_type": "paper",
-        "source_tier": "B",
-        "year": 2024,
-        "authors_or_publisher": "Yuntong Zhang, Haifeng Ruan, Zhiyu Fan, Abhik Roychoudhury",
-        "identifier": "https://openalex.org/W4402442868",
-        "url": "https://doi.org/10.1145/3650212.3680384",
-        "summary": "Researchers have made significant progress in automating the software development process in the past decades. Automated techniques for issue summarization, bug reproduction, fault localization, and program repair have been built to ease the workload of developers. Recent progress in Large Language Models (LLMs) has significantly impacted the development process, where developers can use LLM-based programming assistants to achieve automated coding. Nevertheless, software engineering involves the process of program improvement apart from coding, specifically to enable software maintenance (e.g. program repair to fix bugs) and software evolution (e.g. feature additions). In this paper, we propose an automated approach for solving Github issues to autonomously achieve program improvement. In our approach called AutoCodeRover, LLMs are combined with sophisticated code search capabilities, ultimately leading to a program modification or patch. In contrast to recent LLM agent approaches from AI researchers and practitioners, our outlook is more software engineering oriented. We work on a program representation (abstract syntax tree) as opposed to viewing a software project as a mere collection of files. Our code search exploits the program structure in the form of classes/methods to enhance LLM’s understanding of the issue’s root cause, and effectively retrieve a context via iterative search. The use of spectrum-based fault localization using tests, further sharpens the context, as long as a test-suite is available. Experiments on the recently proposed SWE-bench-lite (300 real-life Github issues) show increased efficacy in solving Github issues (19% on SWE-bench-lite), which is higher than the efficacy of the recently reported Swe-agent. Interestingly, our approach resolved 57 GitHub issues in about 4 minutes each (pass@1), whereas developers spent more than 2.68 days on average. In addition, AutoCodeRover achieved this efficacy with significantly lower cost (on average, $0.43 USD), compared to other baselines. We posit that our workflow enables autonomous software engineering, where, in future, auto-generated code from LLMs can be autonomously improved.",
-        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
-      }
-    ],
-    "landscape_summary": {
-      "themes": [
-        "agent-based decomposition strategies for coding agents for software engineering",
-        "software as an emerging theme in coding agents for software engineering",
-        "engineering as an emerging theme in coding agents for software engineering"
-      ],
-      "active_methods": [
-        "agent-mediated problem decomposition"
-      ],
-      "likely_gaps": [
-        "clear task scoping for narrow research questions",
-        "stronger evidence on feasibility under limited resources"
-      ],
-      "saturated_areas": [
-        "broad generic summaries without a sharply defined question"
-      ]
-    },
-    "candidate_topics": [
-      {
-        "candidate_id": "candidate_1",
-        "title": "Benchmark-Guided Narrow Task Definition",
-        "research_question": "How can a narrower benchmark task reveal actionable limitations in current methods?",
-        "positioning": "gap-driven",
-        "novelty_note": "Focuses on under-specified evaluation boundaries rather than generic performance claims.",
-        "feasibility_note": "Moderate feasibility with public resources and modest compute.",
-        "risk_note": "May become incremental if the task boundary is not sharply differentiated.",
-        "supporting_source_ids": [
-          "openalex_w4402442868",
-          "openalex_w4411915058"
-        ],
-        "open_questions": [
-          "Which benchmark subset best represents the intended problem?"
-        ]
-      },
-      {
-        "candidate_id": "candidate_2",
-        "title": "Applied Method Transfer Under Practical Constraints",
-        "research_question": "Can an existing method family be adapted effectively under strict compute and annotation constraints?",
-        "positioning": "applied-transfer",
-        "novelty_note": "Frames novelty through adapting agent-based reasoning workflows under tighter practical constraints.",
-        "feasibility_note": "Strong fit for an applied project that needs a visible baseline-to-improvement story.",
-        "risk_note": "Novelty may depend heavily on the chosen constraint and evaluation design.",
-        "supporting_source_ids": [
-          "openalex_w4402442868",
-          "openalex_w4411915058"
-        ],
-        "open_questions": [
-          "Which constraint creates the strongest research signal?"
-        ]
-      },
-      {
-        "candidate_id": "candidate_3",
-        "title": "Tooling And Evaluation Workflow Support",
-        "research_question": "What tooling or evaluation workflow improvements would make research in this area more reproducible?",
-        "positioning": "systems",
-        "novelty_note": "Shifts from model novelty to workflow and evaluation reliability.",
-        "feasibility_note": "Strong feasibility for a short-cycle project with engineering emphasis.",
-        "risk_note": "Applied impact may be clearer than publication novelty unless evaluation endpoints are sharply chosen.",
-        "supporting_source_ids": [
-          "openalex_w4402442868",
-          "openalex_w4411915058"
-        ],
-        "open_questions": [
-          "What concrete reproducibility pain point should be prioritized first?",
-          "Which workflow improvement reduces compute or setup cost the most?"
-        ]
-      }
-    ],
-    "comparison_result": {
-      "dimensions": [
-        "novelty",
-        "feasibility",
-        "evidence_strength",
-        "data_availability",
-        "implementation_cost",
-        "risk"
-      ],
-      "summary": "Candidate 2 is strongest for applied feasibility under the current constraints, candidate 1 remains strongest on research framing, and candidate 3 remains the fastest engineering path.",
-      "candidate_assessments": [
-        {
-          "candidate_id": "candidate_1",
-          "novelty": "high",
-          "feasibility": "medium",
-          "evidence_strength": "medium_high",
-          "data_availability": "medium",
-          "implementation_cost": "medium",
-          "risk": "medium"
-        },
-        {
-          "candidate_id": "candidate_2",
-          "novelty": "medium_high",
-          "feasibility": "high",
-          "evidence_strength": "medium_high",
-          "data_availability": "medium_high",
-          "implementation_cost": "medium_low",
-          "risk": "medium_low"
-        },
-        {
-          "candidate_id": "candidate_3",
-          "novelty": "medium",
-          "feasibility": "high",
-          "evidence_strength": "medium",
-          "data_availability": "high",
-          "implementation_cost": "low",
-          "risk": "medium_high"
-        }
-      ]
-    },
-    "convergence_result": {
-      "recommended_candidate_id": "candidate_2",
-      "backup_candidate_id": "candidate_1",
-      "rationale": "Candidate 2 is the best fit for the current constraints because it starts from reusable baselines, matches an applied project style, and is easier to execute within a tighter timeline.",
-      "manual_checks": [
-        "Confirm that the selected sub-problem is narrow enough for the available timeline.",
-        "Verify that at least one benchmark or dataset is realistically accessible.",
-        "Check whether the proposed gap is genuinely underexplored rather than a retrieval miss.",
-        "Verify that the topic still has enough novelty signal for the intended venue."
-      ]
-    },
-    "evidence_presentation": {
-      "source_facts": [
-        {
-          "statement": "Retrieved paper evidence 'Explainable AI In Software Engineering: Enhancing Developer-AI Collaboration' (2024) as tier B support for the current topic.",
-          "statement_type": "source_fact",
-          "supporting_source_ids": [
-            "openalex_w4411915058"
-          ],
-          "note": "Directly grounded in retrieved source metadata and source summary.",
-          "uncertainty_reason": null,
-          "missing_evidence": []
-        },
-        {
-          "statement": "Retrieved paper evidence 'AutoCodeRover: Autonomous Program Improvement' (2024) as tier B support for the current topic.",
-          "statement_type": "source_fact",
-          "supporting_source_ids": [
-            "openalex_w4402442868"
-          ],
-          "note": "Directly grounded in retrieved source metadata and source summary.",
-          "uncertainty_reason": null,
-          "missing_evidence": []
-        }
-      ],
-      "system_synthesis": [
-        {
-          "statement": "Current evidence clusters most strongly around agent-based decomposition strategies for coding agents for software engineering, software as an emerging theme in coding agents for software engineering.",
-          "statement_type": "system_synthesis",
-          "supporting_source_ids": [
-            "openalex_w4402442868",
-            "openalex_w4411915058"
-          ],
-          "note": "Agent synthesis over multiple retrieved sources with theme-level evidence matching.",
-          "uncertainty_reason": null,
-          "missing_evidence": []
-        },
-        {
-          "statement": "The current output separates into 3 candidate directions with distinct positioning and comparison scores.",
-          "statement_type": "system_synthesis",
-          "supporting_source_ids": [
-            "openalex_w4402442868",
-            "openalex_w4411915058"
-          ],
-          "note": "Agent synthesis over candidate generation and comparison outputs, anchored to candidate support sets.",
-          "uncertainty_reason": null,
-          "missing_evidence": []
-        }
-      ],
-      "tentative_inferences": [
-        {
-          "statement": "candidate_2 is currently the leading direction under the present constraints.",
-          "statement_type": "tentative_inference",
-          "supporting_source_ids": [
-            "openalex_w4402442868",
-            "openalex_w4411915058"
-          ],
-          "note": "Recommendation-level inference that still requires human validation.",
-          "uncertainty_reason": "This recommendation remains constraint-sensitive and depends on the current evidence bundle, not on a settled benchmark choice or direct experimental validation.",
-          "missing_evidence": [
-            "Confirm that the selected sub-problem is narrow enough for the available timeline.",
-            "Verify that at least one benchmark or dataset is realistically accessible."
-          ]
-        },
-        {
-          "statement": "Confirm that the selected sub-problem is narrow enough for the available timeline.",
-          "statement_type": "tentative_inference",
-          "supporting_source_ids": [
-            "openalex_w4402442868",
-            "openalex_w4411915058"
-          ],
-          "note": "Open validation requirement rather than a settled fact.",
-          "uncertainty_reason": "The recommendation should not be treated as final until this validation step is checked.",
-          "missing_evidence": [
-            "Confirm that the selected sub-problem is narrow enough for the available timeline."
-          ]
-        }
-      ]
-    },
-    "human_confirmations": [
-      "Confirm that the system correctly interpreted the topic as 'coding agents for software engineering'.",
-      "Confirm that candidate_2 should remain the leading direction after reviewing the supporting evidence and risks.",
-      "Manual check: Confirm that the selected sub-problem is narrow enough for the available timeline.",
-      "Manual check: Verify that at least one benchmark or dataset is realistically accessible."
-    ],
-    "clarification_suggestions": [],
-    "trace": [
-      {
-        "stage": "frame_problem",
-        "status": "completed",
-        "timestamp": "2026-03-26T19:35:43.637595+00:00",
-        "detail": "Structured the user input into a topic-exploration request."
-      },
-      {
-        "stage": "retrieve_evidence",
-        "status": "completed",
-        "timestamp": "2026-03-26T19:35:43.637635+00:00",
-        "detail": "Retrieved 2 evidence records using the openalex provider."
-      },
-      {
-        "stage": "synthesize_landscape",
-        "status": "completed",
-        "timestamp": "2026-03-26T19:35:43.637643+00:00",
-        "detail": "Organized the current evidence bundle into a lightweight research landscape summary."
-      },
-      {
-        "stage": "generate_candidates",
-        "status": "completed",
-        "timestamp": "2026-03-26T19:35:43.637653+00:00",
-        "detail": "Generated 3 candidate topic directions from the current evidence bundle."
-      },
-      {
-        "stage": "compare_candidates",
-        "status": "completed",
-        "timestamp": "2026-03-26T19:35:43.637659+00:00",
-        "detail": "Produced a structured candidate comparison across fixed MVP dimensions."
-      },
-      {
-        "stage": "converge_recommendation",
-        "status": "completed",
-        "timestamp": "2026-03-26T19:35:43.637664+00:00",
-        "detail": "Produced a recommended next-best option with manual verification checks."
-      }
-    ],
-    "confidence_summary": {
-      "evidence_coverage": "low",
-      "source_quality": "medium",
-      "candidate_separation": "high",
-      "conflict_level": "low",
-      "rationale": [
-        "Evidence coverage is low based on the current number of retrieved records.",
-        "Source quality is medium based on the current source-tier mix.",
-        "Candidate separation is high based on the diversity of candidate positioning.",
-        "Conflict level is low because this development slice does not yet model explicit source disagreement."
-      ]
-    },
-    "evidence_diagnostics": {
-      "requested_provider": "openalex",
-      "used_provider": "openalex",
-      "fallback_used": false,
-      "fallback_reason": null,
-      "record_count": 2,
-      "cache_hit": true
-    }
-  },
-  {
     "session_id": "29554560c90048afa716ed240963c154",
     "created_at": "2026-03-26T19:57:44.983212+00:00",
     "updated_at": "2026-03-26T19:57:44.983212+00:00",
@@ -23514,6 +23197,462 @@
           "route": "role_expansion",
           "query": "llm agents for automated bug fixing software engineering developer workflow audit",
           "latency_ms": 2736,
+          "attempt_count": 1
+        }
+      ]
+    }
+  },
+  {
+    "session_id": "5837de6e12fe462184caf1c978b193b6",
+    "created_at": "2026-03-27T20:06:08.306035+00:00",
+    "updated_at": "2026-03-27T20:06:08.306035+00:00",
+    "user_input": {
+      "interest": "repository github issue triage and resolution agents",
+      "problem_domain": "software engineering workflow evaluation",
+      "seed_idea": "I want a feasible systems-oriented topic on reproducible workflow evaluation and infrastructure support for low-cost repository-level GitHub issue resolution agents.",
+      "constraints": {
+        "time_budget_months": 6,
+        "resource_level": "student",
+        "preferred_style": "systems",
+        "notes": null
+      },
+      "disable_cache": true
+    },
+    "framing_result": {
+      "normalized_topic": "repository github issue triage and resolution agents",
+      "extracted_constraints": {
+        "time_budget_months": "6",
+        "resource_level": "student",
+        "preferred_style": "systems"
+      },
+      "missing_clarifications": [],
+      "search_questions": [
+        "What are the main research themes in repository github issue triage and resolution agents?",
+        "What methods and benchmarks are commonly used in repository github issue triage and resolution agents?",
+        "What open problems or underexplored gaps exist in repository github issue triage and resolution agents?"
+      ]
+    },
+    "evidence_records": [
+      {
+        "source_id": "openalex_w4413267850",
+        "title": "Alibaba LingmaAgent: Improving Automated Issue Resolution via Comprehensive Repository Exploration",
+        "source_type": "benchmark",
+        "source_tier": "A",
+        "year": 2025,
+        "authors_or_publisher": "Yingwei Ma, Qingping Yang, Rongyu Cao, Binhua Li",
+        "identifier": "https://openalex.org/W4413267850",
+        "url": "https://doi.org/10.1145/3696630.3728549",
+        "summary": "This paper presents Alibaba LingmaAgent, a novel Automated Software Engineering method designed to comprehensively understand and utilize whole software repositories for issue resolution. Deployed in TONGYI Lingma, an IDE-based coding assistant developed by Alibaba Cloud, LingmaAgent addresses the limitations of existing LLM-based agents that primarily focus on local code information. Our approach introduces a top-down method to condense critical repository information into a knowledge graph, reducing complexity, and employs a Monte Carlo tree search based strategy enabling agents to explore and understand entire repositories. We guide agents to summarize, analyze, and plan using repository-level knowledge, allowing them to dynamically acquire information and generate patches for real-world GitHub issues. In extensive experiments, LingmaAgent demonstrated significant improvements, achieving an 18.5% relative improvement on the SWE-bench Lite benchmark compared to SWE-agent. In production deployment and evaluation at Alibaba Cloud, LingmaAgent automatically resolved 16.9% of in-house issues faced by development engineers, and solved 43.3% of problems after manual intervention. Additionally, we have open-sourced a Python prototype of LingmaAgent for reference by other industrial developers 1. In fact, LingmaAgent has been used as a developed reference by many subsequently agents.",
+        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
+      },
+      {
+        "source_id": "openalex_w4403788984",
+        "title": "HyperAgent: Generalist Software Engineering Agents to Solve Coding Tasks at Scale",
+        "source_type": "benchmark",
+        "source_tier": "A",
+        "year": 2024,
+        "authors_or_publisher": "Huy N. Phan, Nguyen, Tien N., Phong X. Nguyen, Nghi D. Q. Bui",
+        "identifier": "https://openalex.org/W4403788984",
+        "url": "https://arxiv.org/abs/2409.16299",
+        "summary": "Large Language Models (LLMs) have revolutionized software engineering (SE), showcasing remarkable proficiency in various coding tasks. Despite recent advancements that have enabled the creation of autonomous software agents utilizing LLMs for end-to-end development tasks, these systems are typically designed for specific SE functions. We introduce HyperAgent, an innovative generalist multi-agent system designed to tackle a wide range of SE tasks across different programming languages by mimicking the workflows of human developers. HyperAgent features four specialized agents-Planner, Navigator, Code Editor, and Executor-capable of handling the entire lifecycle of SE tasks, from initial planning to final verification. HyperAgent sets new benchmarks in diverse SE tasks, including GitHub issue resolution on the renowned SWE-Bench benchmark, outperforming robust baselines. Furthermore, HyperAgent demonstrates exceptional performance in repository-level code generation (RepoExec) and fault localization and program repair (Defects4J), often surpassing state-of-the-art baselines.",
+        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
+      },
+      {
+        "source_id": "openalex_w4393248299",
+        "title": "MAGIS: LLM-Based Multi-Agent Framework for GitHub Issue Resolution",
+        "source_type": "benchmark",
+        "source_tier": "A",
+        "year": 2024,
+        "authors_or_publisher": "Wei Tao, Yucheng Zhou, Wang, Yanlin, Wenqiang Zhang",
+        "identifier": "https://openalex.org/W4393248299",
+        "url": "https://arxiv.org/abs/2403.17927",
+        "summary": "In software development, resolving the emergent issues within GitHub repositories is a complex challenge that involves not only the incorporation of new code but also the maintenance of existing code. Large Language Models (LLMs) have shown promise in code generation but face difficulties in resolving Github issues, particularly at the repository level. To overcome this challenge, we empirically study the reason why LLMs fail to resolve GitHub issues and analyze the major factors. Motivated by the empirical findings, we propose a novel LLM-based Multi-Agent framework for GitHub Issue reSolution, MAGIS, consisting of four agents customized for software evolution: Manager, Repository Custodian, Developer, and Quality Assurance Engineer agents. This framework leverages the collaboration of various agents in the planning and coding process to unlock the potential of LLMs to resolve GitHub issues. In experiments, we employ the SWE-bench benchmark to compare MAGIS with popular LLMs, including GPT-3.5, GPT-4, and Claude-2. MAGIS can resolve 13.94% GitHub issues, significantly outperforming the baselines. Specifically, MAGIS achieves an eight-fold increase in resolved ratio over the direct application of GPT-4, the advanced LLM.",
+        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
+      },
+      {
+        "source_id": "openalex_w4388788714",
+        "title": "ML-Bench: Evaluating Large Language Models and Agents for Machine Learning Tasks on Repository-Level Code",
+        "source_type": "benchmark",
+        "source_tier": "A",
+        "year": 2023,
+        "authors_or_publisher": "Xiangru Tang, Yuliang Liu, Zefan Cai, Yanjun Shao",
+        "identifier": "https://openalex.org/W4388788714",
+        "url": "https://arxiv.org/abs/2311.09835",
+        "summary": "Despite Large Language Models (LLMs) like GPT-4 achieving impressive results in function-level code generation, they struggle with repository-scale code understanding (e.g., coming up with the right arguments for calling routines), requiring a deeper comprehension of complex file interactions. Also, recently, people have developed LLM agents that attempt to interact with repository code (e.g., compiling and evaluating its execution), prompting the need to evaluate their performance. These gaps have motivated our development of ML-Bench, a benchmark rooted in real-world programming applications that leverage existing code repositories to perform tasks. Addressing the need for LLMs to interpret long code contexts and translate instructions into precise, executable scripts, ML-Bench encompasses annotated 9,641 examples across 18 GitHub repositories, challenging LLMs to accommodate user-specified arguments and documentation intricacies effectively. To evaluate both LLMs and AI agents, two setups are employed: ML-LLM-Bench for assessing LLMs' text-to-code conversion within a predefined deployment environment, and ML-Agent-Bench for testing autonomous agents in an end-to-end task execution within a Linux sandbox environment. Our findings indicate that while GPT-4o leads with a Pass@5 rate surpassing 50%, there remains significant scope for improvement, highlighted by issues such as hallucinated outputs and difficulties with bash script generation. Notably, in the more demanding ML-Agent-Bench, GPT-4o achieves a 76.47% success rate, reflecting the efficacy of iterative action and feedback in complex task resolution. Our code, dataset, and models are available at https://github.com/gersteinlab/ML-bench.",
+        "relevance_reason": "Retrieved from OpenAlex as a public scholarly metadata source for the current topic query."
+      }
+    ],
+    "landscape_summary": {
+      "themes": [
+        "benchmark design and stress-testing for repository github issue triage and resolution agents",
+        "agent-based decomposition strategies for repository github issue triage and resolution agents",
+        "applied research themes around issue resolution in repository github issue triage and resolution agents"
+      ],
+      "active_methods": [
+        "benchmark-centered experimental design",
+        "agent-mediated problem decomposition",
+        "issue resolution"
+      ],
+      "likely_gaps": [
+        "benchmark protocols that distinguish genuine task gains from workflow or prompt shortcuts",
+        "clear task scoping for narrow research questions"
+      ],
+      "saturated_areas": [
+        "broad generic summaries without a sharply defined question"
+      ]
+    },
+    "candidate_topics": [
+      {
+        "candidate_id": "candidate_1",
+        "title": "Repository Issue Resolution: Evaluation Slice",
+        "research_question": "How can a narrower benchmark slice reveal actionable limitations in current systems?",
+        "positioning": "gap-driven",
+        "novelty_note": "Frames novelty through sharper evaluation boundaries rather than broader performance reporting.",
+        "feasibility_note": "Moderate feasibility with public evidence and a bounded evaluation target.",
+        "risk_note": "May become incremental if the evaluation slice is not sharply distinguished.",
+        "supporting_source_ids": [
+          "openalex_w4413267850",
+          "openalex_w4403788984"
+        ],
+        "open_questions": [
+          "Which benchmark slice best isolates genuine task gains rather than workflow or prompt shortcuts?"
+        ],
+        "origin_signals": [
+          "benchmark protocols that distinguish genuine task gains from workflow or prompt shortcuts",
+          "clear task scoping for narrow research questions",
+          "software engineering"
+        ]
+      },
+      {
+        "candidate_id": "candidate_2",
+        "title": "Repository Issue Resolution: Constraint-Aware Transfer",
+        "research_question": "Can an existing coding-agent method family be adapted effectively under strict practical constraints?",
+        "positioning": "transfer",
+        "novelty_note": "Frames novelty through constrained adaptation of an existing method family.",
+        "feasibility_note": "Strong fit for an applied project that can reuse a visible baseline.",
+        "risk_note": "Novelty may depend heavily on the chosen constraint and evaluation design.",
+        "supporting_source_ids": [
+          "openalex_w4403788984",
+          "openalex_w4413267850",
+          "openalex_w4393248299"
+        ],
+        "open_questions": [
+          "Which constraint creates the strongest research signal?"
+        ],
+        "origin_signals": [
+          "benchmark-centered experimental design",
+          "agent-mediated problem decomposition",
+          "software engineering"
+        ]
+      },
+      {
+        "candidate_id": "candidate_3",
+        "title": "Repository Issue Resolution: Reproducible Workflow Support",
+        "research_question": "What tooling or workflow support around software engineering would make research in this area more reproducible?",
+        "positioning": "systems-priority",
+        "novelty_note": "Shifts value from model novelty toward reproducibility, workflow support, and evaluation reliability.",
+        "feasibility_note": "High feasibility for a short-cycle engineering-heavy project.",
+        "risk_note": "Applied impact may be clearer than publication novelty unless the workflow pain point is precisely chosen.",
+        "supporting_source_ids": [
+          "openalex_w4403788984",
+          "openalex_w4413267850"
+        ],
+        "open_questions": [
+          "What concrete reproducibility pain point should be prioritized first?",
+          "Which workflow improvement around software engineering reduces setup or audit cost the most?",
+          "Which workflow improvement reduces compute or setup cost the most?"
+        ],
+        "origin_signals": [
+          "benchmark design and stress-testing for repository github issue triage and resolution agents",
+          "agent-based decomposition strategies for repository github issue triage and resolution agents",
+          "software engineering"
+        ]
+      }
+    ],
+    "comparison_result": {
+      "dimensions": [
+        "novelty",
+        "feasibility",
+        "evidence_strength",
+        "data_availability",
+        "implementation_cost",
+        "risk"
+      ],
+      "summary": "Repository Issue Resolution: Reproducible Workflow Support currently leads on the current evidence and constraints, Repository Issue Resolution: Constraint-Aware Transfer remains the strongest backup path, and Repository Issue Resolution: Evaluation Slice stays the tertiary option for comparison.",
+      "candidate_assessments": [
+        {
+          "candidate_id": "candidate_1",
+          "novelty": "high",
+          "feasibility": "medium",
+          "evidence_strength": "medium_high",
+          "data_availability": "medium",
+          "implementation_cost": "high",
+          "risk": "medium",
+          "novelty_reason": "Rated high because the direction frames a distinct question around benchmark protocols that distinguish genuine task gains from workflow or prompt shortcuts, clear task scoping for narrow research questions instead of restating the topic broadly.",
+          "feasibility_reason": "Rated medium because the scope implied by benchmark protocols that distinguish genuine task gains from workflow or prompt shortcuts, clear task scoping for narrow research questions is compatible with the current time and resource constraints.",
+          "evidence_strength_reason": "Rated medium_high because it is currently supported by 2 directly linked sources.",
+          "data_availability_reason": "Rated medium because the supporting materials around benchmark protocols that distinguish genuine task gains from workflow or prompt shortcuts, clear task scoping for narrow research questions appear sufficiently visible for a bounded prototype or evaluation slice.",
+          "implementation_cost_reason": "Rated high because the expected build effort around benchmark protocols that distinguish genuine task gains from workflow or prompt shortcuts, clear task scoping for narrow research questions remains bounded for this stage.",
+          "risk_reason": "Rated medium because the current evidence still leaves non-trivial uncertainty around benchmark protocols that distinguish genuine task gains from workflow or prompt shortcuts, clear task scoping for narrow research questions."
+        },
+        {
+          "candidate_id": "candidate_2",
+          "novelty": "high",
+          "feasibility": "medium_high",
+          "evidence_strength": "high",
+          "data_availability": "medium",
+          "implementation_cost": "medium",
+          "risk": "medium",
+          "novelty_reason": "Rated high because the direction frames a distinct question around benchmark-centered experimental design, agent-mediated problem decomposition instead of restating the topic broadly.",
+          "feasibility_reason": "Rated medium_high because the scope implied by benchmark-centered experimental design, agent-mediated problem decomposition is compatible with the current time and resource constraints.",
+          "evidence_strength_reason": "Rated high because it is currently supported by 3 directly linked sources.",
+          "data_availability_reason": "Rated medium because the supporting materials around benchmark-centered experimental design, agent-mediated problem decomposition appear sufficiently visible for a bounded prototype or evaluation slice.",
+          "implementation_cost_reason": "Rated medium because the expected build effort around benchmark-centered experimental design, agent-mediated problem decomposition remains bounded for this stage.",
+          "risk_reason": "Rated medium because the current evidence still leaves non-trivial uncertainty around benchmark-centered experimental design, agent-mediated problem decomposition."
+        },
+        {
+          "candidate_id": "candidate_3",
+          "novelty": "high",
+          "feasibility": "high",
+          "evidence_strength": "high",
+          "data_availability": "medium_high",
+          "implementation_cost": "high",
+          "risk": "medium_high",
+          "novelty_reason": "Rated high because the direction frames a distinct question around benchmark design and stress-testing for repository github issue triage and resolution agents, agent-based decomposition strategies for repository github issue triage and resolution agents instead of restating the topic broadly.",
+          "feasibility_reason": "Rated high because the scope implied by benchmark design and stress-testing for repository github issue triage and resolution agents, agent-based decomposition strategies for repository github issue triage and resolution agents is compatible with the current time and resource constraints.",
+          "evidence_strength_reason": "Rated high because it is currently supported by 2 directly linked sources.",
+          "data_availability_reason": "Rated medium_high because the supporting materials around benchmark design and stress-testing for repository github issue triage and resolution agents, agent-based decomposition strategies for repository github issue triage and resolution agents appear sufficiently visible for a bounded prototype or evaluation slice.",
+          "implementation_cost_reason": "Rated high because the expected build effort around benchmark design and stress-testing for repository github issue triage and resolution agents, agent-based decomposition strategies for repository github issue triage and resolution agents remains bounded for this stage.",
+          "risk_reason": "Rated medium_high because the current evidence still leaves non-trivial uncertainty around benchmark design and stress-testing for repository github issue triage and resolution agents, agent-based decomposition strategies for repository github issue triage and resolution agents."
+        }
+      ]
+    },
+    "convergence_result": {
+      "recommended_candidate_id": "candidate_3",
+      "backup_candidate_id": "candidate_2",
+      "rationale": "Repository Issue Resolution: Reproducible Workflow Support is currently the best fit because the available materials around benchmark design and stress-testing for repository github issue triage and resolution agents, agent-based decomposition strategies for repository github issue triage and resolution agents support a bounded systems workflow with clearer reproducibility outcomes than Repository Issue Resolution: Constraint-Aware Transfer.",
+      "manual_checks": [
+        "Confirm that the selected sub-problem is narrow enough for the available timeline.",
+        "Verify that at least one benchmark or dataset is realistically accessible.",
+        "Check whether the proposed gap is genuinely underexplored rather than a retrieval miss."
+      ]
+    },
+    "evidence_presentation": {
+      "source_facts": [
+        {
+          "statement": "Retrieved benchmark evidence 'Alibaba LingmaAgent: Improving Automated Issue Resolution via Comprehensive Repository Exploration' (2025) as tier A support for the current topic.",
+          "statement_type": "source_fact",
+          "supporting_source_ids": [
+            "openalex_w4413267850"
+          ],
+          "note": "Directly grounded in retrieved source metadata and source summary.",
+          "uncertainty_reason": null,
+          "missing_evidence": []
+        },
+        {
+          "statement": "Retrieved benchmark evidence 'HyperAgent: Generalist Software Engineering Agents to Solve Coding Tasks at Scale' (2024) as tier A support for the current topic.",
+          "statement_type": "source_fact",
+          "supporting_source_ids": [
+            "openalex_w4403788984"
+          ],
+          "note": "Directly grounded in retrieved source metadata and source summary.",
+          "uncertainty_reason": null,
+          "missing_evidence": []
+        },
+        {
+          "statement": "Retrieved benchmark evidence 'MAGIS: LLM-Based Multi-Agent Framework for GitHub Issue Resolution' (2024) as tier A support for the current topic.",
+          "statement_type": "source_fact",
+          "supporting_source_ids": [
+            "openalex_w4393248299"
+          ],
+          "note": "Directly grounded in retrieved source metadata and source summary.",
+          "uncertainty_reason": null,
+          "missing_evidence": []
+        }
+      ],
+      "system_synthesis": [
+        {
+          "statement": "Current evidence clusters most strongly around benchmark design and stress-testing for repository github issue triage and resolution agents, agent-based decomposition strategies for repository github issue triage and resolution agents.",
+          "statement_type": "system_synthesis",
+          "supporting_source_ids": [
+            "openalex_w4413267850",
+            "openalex_w4403788984",
+            "openalex_w4393248299"
+          ],
+          "note": "Agent synthesis over multiple retrieved sources with theme-level evidence matching.",
+          "uncertainty_reason": null,
+          "missing_evidence": []
+        },
+        {
+          "statement": "The current output separates into 3 candidate directions with distinct positioning and comparison scores.",
+          "statement_type": "system_synthesis",
+          "supporting_source_ids": [
+            "openalex_w4413267850",
+            "openalex_w4403788984",
+            "openalex_w4393248299"
+          ],
+          "note": "Agent synthesis over candidate generation and comparison outputs, anchored to candidate support sets.",
+          "uncertainty_reason": null,
+          "missing_evidence": []
+        }
+      ],
+      "tentative_inferences": [
+        {
+          "statement": "candidate_3 is currently the leading direction under the present constraints.",
+          "statement_type": "tentative_inference",
+          "supporting_source_ids": [
+            "openalex_w4403788984",
+            "openalex_w4413267850"
+          ],
+          "note": "Recommendation-level inference that still requires human validation.",
+          "uncertainty_reason": "This recommendation remains constraint-sensitive and depends on the current evidence bundle, not on a settled benchmark choice or direct experimental validation.",
+          "missing_evidence": [
+            "Confirm that the selected sub-problem is narrow enough for the available timeline.",
+            "Verify that at least one benchmark or dataset is realistically accessible."
+          ]
+        },
+        {
+          "statement": "Confirm that the selected sub-problem is narrow enough for the available timeline.",
+          "statement_type": "tentative_inference",
+          "supporting_source_ids": [
+            "openalex_w4403788984",
+            "openalex_w4413267850"
+          ],
+          "note": "Open validation requirement rather than a settled fact.",
+          "uncertainty_reason": "The recommendation should not be treated as final until this validation step is checked.",
+          "missing_evidence": [
+            "Confirm that the selected sub-problem is narrow enough for the available timeline."
+          ]
+        }
+      ]
+    },
+    "human_confirmations": [
+      "Confirm that the system correctly interpreted the topic as 'repository github issue triage and resolution agents'.",
+      "Confirm that candidate_3 should remain the leading direction after reviewing the supporting evidence and risks.",
+      "Manual check: Confirm that the selected sub-problem is narrow enough for the available timeline.",
+      "Manual check: Verify that at least one benchmark or dataset is realistically accessible."
+    ],
+    "clarification_suggestions": [],
+    "trace": [
+      {
+        "stage": "frame_problem",
+        "status": "completed",
+        "timestamp": "2026-03-27T20:06:36.650082+00:00",
+        "detail": "Structured the user input into a topic-exploration request."
+      },
+      {
+        "stage": "retrieve_evidence",
+        "status": "completed",
+        "timestamp": "2026-03-27T20:06:36.650102+00:00",
+        "detail": "Retrieved 4 evidence records using the openalex provider."
+      },
+      {
+        "stage": "synthesize_landscape",
+        "status": "completed",
+        "timestamp": "2026-03-27T20:06:36.650109+00:00",
+        "detail": "Organized the current evidence bundle into a lightweight research landscape summary."
+      },
+      {
+        "stage": "generate_candidates",
+        "status": "completed",
+        "timestamp": "2026-03-27T20:06:36.650115+00:00",
+        "detail": "Generated 3 candidate topic directions from the current evidence bundle."
+      },
+      {
+        "stage": "compare_candidates",
+        "status": "completed",
+        "timestamp": "2026-03-27T20:06:36.650121+00:00",
+        "detail": "Produced a structured candidate comparison across fixed MVP dimensions."
+      },
+      {
+        "stage": "converge_recommendation",
+        "status": "completed",
+        "timestamp": "2026-03-27T20:06:36.650126+00:00",
+        "detail": "Produced a recommended next-best option with manual verification checks."
+      }
+    ],
+    "confidence_summary": {
+      "evidence_coverage": "medium",
+      "source_quality": "high",
+      "candidate_separation": "high",
+      "conflict_level": "low",
+      "rationale": [
+        "Evidence coverage is medium based on the current number of retrieved records.",
+        "Source quality is high based on the current source-tier mix.",
+        "Candidate separation is high based on the diversity of candidate positioning.",
+        "Conflict level is low because this development slice does not yet model explicit source disagreement."
+      ]
+    },
+    "evidence_diagnostics": {
+      "requested_provider": "openalex",
+      "used_provider": "openalex",
+      "fallback_used": false,
+      "fallback_reason": null,
+      "record_count": 4,
+      "cache_hit": false,
+      "query_count": 10,
+      "provider_latency_ms": 28338,
+      "slowest_query": "repository github issue triage resolution agents engineering evaluation",
+      "slowest_query_latency_ms": 3668,
+      "query_diagnostics": [
+        {
+          "route": "base",
+          "query": "repository github issue triage resolution agents engineering evaluation",
+          "latency_ms": 3668,
+          "attempt_count": 1
+        },
+        {
+          "route": "core_focus",
+          "query": "repository github issue resolution agent software engineering",
+          "latency_ms": 2804,
+          "attempt_count": 1
+        },
+        {
+          "route": "core_focus",
+          "query": "repository-level issue resolution benchmark evaluation",
+          "latency_ms": 3047,
+          "attempt_count": 1
+        },
+        {
+          "route": "core_focus",
+          "query": "repository github issue software engineering",
+          "latency_ms": 3114,
+          "attempt_count": 1
+        },
+        {
+          "route": "alias",
+          "query": "github issue resolution repository-level agent benchmark",
+          "latency_ms": 2600,
+          "attempt_count": 1
+        },
+        {
+          "route": "alias",
+          "query": "repository-level github issue resolution software engineering",
+          "latency_ms": 2616,
+          "attempt_count": 1
+        },
+        {
+          "route": "role_expansion",
+          "query": "repository github issue triage and resolution agents software engineering workflow evaluation benchmark evaluation",
+          "latency_ms": 2654,
+          "attempt_count": 1
+        },
+        {
+          "route": "role_expansion",
+          "query": "repository github issue triage and resolution agents software engineering workflow evaluation workflow reproducibility",
+          "latency_ms": 2538,
+          "attempt_count": 1
+        },
+        {
+          "route": "role_expansion",
+          "query": "repository github issue triage and resolution agents software engineering workflow evaluation method framework",
+          "latency_ms": 2572,
+          "attempt_count": 1
+        },
+        {
+          "route": "role_expansion",
+          "query": "repository github issue triage and resolution agents software engineering workflow evaluation developer workflow audit",
+          "latency_ms": 2561,
           "attempt_count": 1
         }
       ]

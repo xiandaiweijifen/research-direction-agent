@@ -856,6 +856,74 @@ def _non_visual_benchmark_question(anchor: str) -> tuple[str, list[str]]:
     )
 
 
+def _candidate_title_focus(
+    request: TopicAgentExploreRequest,
+    *,
+    fallback_anchor: str = "",
+) -> str:
+    query_text = _query_context_text(request)
+    interest = request.interest.strip()
+
+    if "github issue" in query_text or "issue resolution" in query_text:
+        return "Repository Issue Resolution"
+    if "repository" in query_text and any(term in query_text for term in {"bug fixing", "bug-fixing", "program repair", "repair"}):
+        return "Repository Bug Fixing"
+    if any(term in query_text for term in {"bug fixing", "bug-fixing", "program repair", "repair agent"}):
+        return "Bug-Fixing Agents"
+    if any(term in query_text for term in {"coding agents", "software engineering agents", "developer workflows"}):
+        return "Coding Agents"
+    if "programming education" in query_text:
+        return "Programming Education Feedback"
+    if "medical reasoning" in query_text:
+        return "Medical Reasoning"
+
+    if fallback_anchor and not _is_generic_anchor(fallback_anchor):
+        return fallback_anchor.title()
+
+    blocked_words = {
+        "a",
+        "an",
+        "and",
+        "cost",
+        "for",
+        "in",
+        "low",
+        "of",
+        "on",
+        "the",
+        "to",
+        "with",
+    }
+    words = [
+        word
+        for word in re.findall(r"[A-Za-z0-9]+", interest)
+        if word.lower() not in blocked_words
+    ]
+    shortened = " ".join(words[:3]).strip()
+    if shortened:
+        return shortened.title()
+    return "Target Topic"
+
+
+def _dynamic_candidate_title(
+    request: TopicAgentExploreRequest,
+    *,
+    candidate_id: str,
+    style: str,
+    fallback_anchor: str = "",
+) -> str:
+    focus = _candidate_title_focus(request, fallback_anchor=fallback_anchor)
+    if candidate_id == "candidate_1":
+        return f"{focus}: Benchmark Slice" if style == "benchmark-driven" else f"{focus}: Evaluation Slice"
+    if candidate_id == "candidate_2":
+        return f"{focus}: Practical Method Transfer" if style == "applied" else f"{focus}: Constraint-Aware Transfer"
+    return (
+        f"{focus}: Reproducible Workflow Support"
+        if style == "systems"
+        else f"{focus}: Workflow Support"
+    )
+
+
 def _generate_candidate_drafts(
     evidence_records: list[TopicAgentSourceRecord],
     request: TopicAgentExploreRequest,
@@ -1622,6 +1690,88 @@ def generate_candidates(context: TopicAgentPipelineContext) -> list[TopicAgentCa
                 ]
                 + candidate_3.open_questions
             )
+
+    candidate_1.title = _dynamic_candidate_title(
+        context.request,
+        candidate_id="candidate_1",
+        style=style,
+        fallback_anchor=(
+            _record_title_anchor(next(
+                (
+                    record
+                    for record in evidence_records
+                    if draft_for_candidate_1
+                    and record.source_id == draft_for_candidate_1.supporting_source_ids[0]
+                ),
+                evidence_records[0] if evidence_records else TopicAgentSourceRecord(
+                    source_id="",
+                    title="",
+                    source_type="paper",
+                    source_tier="B",
+                    year=0,
+                    authors_or_publisher="",
+                    identifier="",
+                    url="",
+                    summary="",
+                    relevance_reason="",
+                ),
+            ))
+        ) if evidence_records else "",
+    )
+    candidate_2.title = _dynamic_candidate_title(
+        context.request,
+        candidate_id="candidate_2",
+        style=style,
+        fallback_anchor=(
+            _record_title_anchor(next(
+                (
+                    record
+                    for record in evidence_records
+                    if draft_for_candidate_2
+                    and record.source_id == draft_for_candidate_2.supporting_source_ids[0]
+                ),
+                evidence_records[0] if evidence_records else TopicAgentSourceRecord(
+                    source_id="",
+                    title="",
+                    source_type="paper",
+                    source_tier="B",
+                    year=0,
+                    authors_or_publisher="",
+                    identifier="",
+                    url="",
+                    summary="",
+                    relevance_reason="",
+                ),
+            ))
+        ) if evidence_records else "",
+    )
+    candidate_3.title = _dynamic_candidate_title(
+        context.request,
+        candidate_id="candidate_3",
+        style=style,
+        fallback_anchor=(
+            _record_title_anchor(next(
+                (
+                    record
+                    for record in evidence_records
+                    if draft_for_candidate_3
+                    and record.source_id == draft_for_candidate_3.supporting_source_ids[0]
+                ),
+                evidence_records[0] if evidence_records else TopicAgentSourceRecord(
+                    source_id="",
+                    title="",
+                    source_type="paper",
+                    source_tier="B",
+                    year=0,
+                    authors_or_publisher="",
+                    identifier="",
+                    url="",
+                    summary="",
+                    relevance_reason="",
+                ),
+            ))
+        ) if evidence_records else "",
+    )
 
     result = [
         candidate_1,

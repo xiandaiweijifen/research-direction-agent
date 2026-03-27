@@ -176,11 +176,11 @@ def test_topic_agent_refine_updates_existing_session(workspace_tmp_path, monkeyp
     )
     assert (
         refined_payload["candidate_topics"][1]["title"]
-        == "Applied Method Transfer Under Practical Constraints"
+        == "Agentic Literature Review: Practical Method Transfer"
     )
     assert refined_payload["convergence_result"]["recommended_candidate_id"] == "candidate_2"
     assert "reusable baseline" in refined_payload["convergence_result"]["rationale"].lower()
-    assert "Applied Method Transfer Under Practical Constraints" in refined_payload["comparison_result"]["summary"]
+    assert "Agentic Literature Review: Practical Method Transfer" in refined_payload["comparison_result"]["summary"]
     joined_confirmations = " ".join(refined_payload["human_confirmations"]).lower()
     assert "project timeline" not in joined_confirmations
     assert "resource level" not in joined_confirmations

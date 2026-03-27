@@ -66,9 +66,9 @@ def test_topic_agent_pipeline_changes_recommendation_for_applied_tight_constrain
     )
 
     assert response.convergence_result.recommended_candidate_id == "candidate_2"
-    assert response.candidate_topics[1].title == "Applied Method Transfer Under Practical Constraints"
+    assert response.candidate_topics[1].title == "Trustworthy Multimodal Reasoning: Practical Method Transfer"
     assert response.evidence_diagnostics.used_provider == "mock"
-    assert "Applied Method Transfer Under Practical Constraints" in response.comparison_result.summary
+    assert "Trustworthy Multimodal Reasoning: Practical Method Transfer" in response.comparison_result.summary
     assert "reusable baseline" in response.convergence_result.rationale.lower()
 
 
