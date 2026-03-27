@@ -366,6 +366,54 @@ def _openalex_raw_pool_size(max_results: int) -> int:
     return max(15, min(max_results * 4, 20))
 
 
+def _is_repository_issue_resolution_query(query_text: str) -> bool:
+    return (
+        _is_modern_software_agent_query(query_text)
+        and _contains_any(query_text, {"repository", "repository-level", "codebase"})
+        and _contains_any(query_text, {"issue", "issues", "issue resolution", "issue-resolution"})
+    )
+
+
+def _is_repository_repair_benchmark_query(query_text: str) -> bool:
+    return (
+        _is_code_repair_query(query_text)
+        and _contains_any(query_text, {"benchmark", "benchmark slicing", "validation", "protocol", "protocols"})
+        and _contains_any(query_text, {"repository", "repository-level", "codebase"})
+    )
+
+
+def _openalex_query_family_aliases(request: TopicAgentExploreRequest) -> list[str]:
+    query_text = f"{request.interest} {request.problem_domain or ''}".lower()
+
+    if _is_repository_issue_resolution_query(query_text):
+        return [
+            "github issue resolution repository-level agent benchmark",
+            "repository-level github issue resolution software engineering",
+        ]
+    if _is_repository_repair_benchmark_query(query_text):
+        return [
+            "repository-level program repair benchmark",
+            "swe-bench repository repair evaluation",
+        ]
+    return []
+
+
+def _openalex_query_family_core_focus_queries(request: TopicAgentExploreRequest) -> list[str]:
+    query_text = f"{request.interest} {request.problem_domain or ''}".lower()
+
+    if _is_repository_issue_resolution_query(query_text):
+        return [
+            "repository github issue resolution agent software engineering",
+            "repository-level issue resolution benchmark evaluation",
+        ]
+    if _is_repository_repair_benchmark_query(query_text):
+        return [
+            "repository repair benchmark evaluation software engineering",
+            "program repair benchmark validation repository-level",
+        ]
+    return []
+
+
 def _general_query_role_expansions(request: TopicAgentExploreRequest) -> list[str]:
     interest = request.interest.strip()
     problem_domain = (request.problem_domain or "").strip()
@@ -437,7 +485,7 @@ def _general_query_role_expansions(request: TopicAgentExploreRequest) -> list[st
 
 def _openalex_query_aliases(request: TopicAgentExploreRequest) -> list[str]:
     topic_text = f"{request.interest} {request.problem_domain or ''}".lower()
-    aliases: list[str] = []
+    aliases: list[str] = _openalex_query_family_aliases(request)
 
     if "visual question answering" in topic_text or "vqa" in topic_text:
         aliases.extend(
@@ -524,7 +572,7 @@ def _build_openalex_query_routes(request: TopicAgentExploreRequest) -> list[Open
         if len(term) >= 4
     ]
     base_queries: list[str] = [base_query]
-    core_focus_queries: list[str] = []
+    core_focus_queries: list[str] = list(_openalex_query_family_core_focus_queries(request))
     if len(core_terms) >= 3:
         core_focus_queries.append(" ".join(core_terms[:3] + domain_terms[:2]))
     if "multimodal" in core_terms and "reasoning" in core_terms:

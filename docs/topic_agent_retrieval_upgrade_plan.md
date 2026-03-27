@@ -156,3 +156,22 @@ The retrieval track is now at a point where:
 This is a reasonable pause point for retrieval iteration. Further retrieval work is still possible, but the next high-value step is downstream:
 
 - comparison and convergence should increasingly consume the cleaner evidence pool as an evidence-driven judgement layer rather than continue relying on mostly fixed candidate-slot logic
+
+## Follow-Up Retrieval Note
+
+A narrower retrieval follow-up was still worth adding after the downstream comparison upgrade:
+
+- some software-agent query families were still drifting because query rewriting did not preserve strong task anchors
+- the main examples were repository issue-resolution workflows and benchmark-slicing style repository repair queries
+
+The current fix keeps this generic:
+
+- query-family-aware anchor-preserving rewrites now add family-specific `core_focus` and `alias` queries before generic role expansions
+- the intent is to preserve task phrases such as `github issue resolution`, `repository-level agent`, `repository repair benchmark`, and `program repair benchmark`
+- this is a positive rewrite layer, not a title blacklist layer
+
+Verification for this follow-up package:
+
+- `backend/tests/test_topic_agent_providers.py`: `47 passed`
+- `backend/tests/test_topic_agent_pipeline.py`: `21 passed`
+- `backend/tests/test_topic_agent_api.py`: `8 passed`

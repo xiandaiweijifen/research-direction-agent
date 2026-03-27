@@ -590,3 +590,21 @@ Latest result:
 - Current verification:
   - `backend/tests/test_topic_agent_pipeline.py`: `21 passed`
   - `backend/tests/test_topic_agent_api.py`: `8 passed`
+
+### Query Rewrite Stabilization
+
+- Added a query-family-aware anchor-preserving rewrite layer in OpenAlex query planning.
+- The new logic targets retrieval drift at the query-construction layer rather than adding more negative-result blacklists.
+- Two query families now receive stronger task-preserving `core_focus` and `alias` rewrites before generic role expansions:
+  - repository issue-resolution agent workflows
+  - benchmark-slicing style repository repair / validation queries
+- This keeps retrieval queries closer to task anchors such as:
+  - `github issue resolution`
+  - `repository-level agent`
+  - `repository repair benchmark`
+  - `program repair benchmark`
+- The software-agent interactive fan-out cap remains intact after narrowing the family trigger.
+- Current verification:
+  - `backend/tests/test_topic_agent_providers.py`: `47 passed`
+  - `backend/tests/test_topic_agent_pipeline.py`: `21 passed`
+  - `backend/tests/test_topic_agent_api.py`: `8 passed`

@@ -673,6 +673,41 @@ def test_openalex_queries_expand_generic_medical_reasoning_aliases():
     assert "clinical reasoning benchmark medical ai" in joined_queries
 
 
+def test_openalex_queries_preserve_issue_resolution_task_anchors_for_repository_agent_workflows():
+    request = TopicAgentExploreRequest(
+        interest="repository issue-resolution agent workflows",
+        problem_domain="software engineering reproducibility infrastructure",
+        constraints=TopicAgentConstraintSet(preferred_style="systems"),
+    )
+
+    routes = _build_openalex_query_routes(request)
+    flattened = _build_openalex_queries(request)
+    joined_queries = " || ".join(flattened).lower()
+
+    assert "repository github issue resolution agent software engineering" in joined_queries
+    assert "github issue resolution repository-level agent benchmark" in joined_queries
+    assert any(route.name == "core_focus" for route in routes)
+    assert any(route.name == "alias" for route in routes)
+
+
+def test_openalex_queries_preserve_repository_repair_benchmark_task_anchors():
+    request = TopicAgentExploreRequest(
+        interest="benchmark slicing for autonomous repository repair",
+        problem_domain="software engineering validation",
+        constraints=TopicAgentConstraintSet(preferred_style="benchmark-driven"),
+    )
+
+    routes = _build_openalex_query_routes(request)
+    flattened = _build_openalex_queries(request)
+    joined_queries = " || ".join(flattened).lower()
+
+    assert "repository repair benchmark evaluation software engineering" in joined_queries
+    assert "repository-level program repair benchmark" in joined_queries
+    assert "swe-bench repository repair evaluation" in joined_queries
+    assert any(route.name == "core_focus" for route in routes)
+    assert any(route.name == "alias" for route in routes)
+
+
 def test_openalex_queries_add_general_research_role_expansions_for_modern_topics():
     request = TopicAgentExploreRequest(
         interest="coding agents for software engineering",
