@@ -1,4 +1,4 @@
-import type { FormEvent } from "react";
+﻿import type { FormEvent } from "react";
 import type { Locale } from "../../../types";
 import type { TopicAgentDemoPreset } from "../hooks/useTopicAgent";
 
@@ -54,7 +54,7 @@ export function TopicAgentInputPanel({
       ? {
           presets: "Demo 场景",
           presetsIntro: "先用稳定场景演示，再切回自由输入。",
-          recentRunsHint: "会话历史已按 recent runs 收敛，不再作为长档案展示。",
+          recentRunsHint: "会话历史已经按 recent runs 收敛，不再作为长档案展示。",
         }
       : {
           presets: "Demo Presets",

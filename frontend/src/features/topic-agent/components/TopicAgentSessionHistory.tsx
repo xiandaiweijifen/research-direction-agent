@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+﻿import { useMemo, useState } from "react";
 
 import type { TopicAgentSessionSummary } from "../../../types";
 
@@ -30,6 +30,8 @@ export function TopicAgentSessionHistory({
   const uiCurrent = locale === "zh" ? "当前" : "Current";
   const uiUpdated = locale === "zh" ? "更新于" : "Updated";
 
+  void onCompareSession;
+
   function formatUpdatedAt(value: string) {
     const date = new Date(value);
     if (Number.isNaN(date.getTime())) {
@@ -47,8 +49,8 @@ export function TopicAgentSessionHistory({
   const uiCopy =
     locale === "zh"
       ? {
-          showMore: `灞曞紑鍓?${hiddenCount} 鏉¤褰?`,
-          showLess: "鏀惰捣鍘嗗彶璁板綍",
+          showMore: `展开其余 ${hiddenCount} 条`,
+          showLess: "收起",
         }
       : {
           showMore: `Show ${hiddenCount} more`,
@@ -97,15 +99,6 @@ export function TopicAgentSessionHistory({
                 >
                   {copy.load}
                 </button>
-                {currentSessionId && session.session_id !== currentSessionId && (
-                  <button
-                    type="button"
-                    className="ghost-button"
-                    onClick={() => onCompareSession(session.session_id)}
-                  >
-                    {copy.compare}
-                  </button>
-                )}
               </div>
             </article>
           ))}

@@ -1,4 +1,4 @@
-import { FormEvent, useEffect, useState } from "react";
+﻿import { FormEvent, useEffect, useState } from "react";
 
 import {
   fetchTopicAgentSession,
@@ -6,10 +6,7 @@ import {
   refineTopicAgentSession as refineTopicAgentSessionRequest,
   runTopicAgentExplore as runTopicAgentExploreRequest,
 } from "../../../api";
-import type {
-  TopicAgentSessionResponse,
-  TopicAgentSessionSummary,
-} from "../../../types";
+import type { TopicAgentSessionResponse, TopicAgentSessionSummary } from "../../../types";
 
 export type TopicAgentDemoPreset = {
   id: string;
@@ -70,7 +67,7 @@ const TOPIC_AGENT_DEMO_PRESETS: TopicAgentDemoPreset[] = [
     labelEn: "Repository Bug-Fixing",
     labelZh: "仓库级 Bug 修复",
     summaryEn: "Repository-level workflow support and evaluation demo.",
-    summaryZh: "仓库级工作流与评测支撑演示场景。",
+    summaryZh: "仓库级工作流与评测支持演示场景。",
     interest: "repository-level bug-fixing agents",
     problemDomain: "software engineering evaluation",
     seedIdea: "I want a feasible applied topic on reproducible evaluation and workflow support for low-cost repair agents.",

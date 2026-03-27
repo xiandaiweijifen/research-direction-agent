@@ -1,4 +1,4 @@
-import type { TopicAgentSessionResponse } from "../../../types";
+﻿import type { TopicAgentSessionResponse } from "../../../types";
 
 type TopicAgentTrustPanelProps = {
   topicResult: TopicAgentSessionResponse;
@@ -32,7 +32,7 @@ export function TopicAgentTrustPanel({
   const trustCopy =
     locale === "zh"
       ? {
-          trust: "信任与诊断",
+          trust: "可信度与诊断",
           trustIntro: "展示当前结论如何被证据支撑，以及哪些地方仍需人工确认。",
           sourceFacts: "来源事实",
           systemSynthesis: "系统综合",
