@@ -3,6 +3,9 @@ import type { FormEvent } from "react";
 import type { Locale } from "../../../types";
 import type { TopicAgentDemoPreset } from "../hooks/useTopicAgent";
 
+const RESOURCE_LEVEL_OPTIONS = ["student", "lab", "team"] as const;
+const PREFERRED_STYLE_OPTIONS = ["applied", "systems", "benchmark-driven"] as const;
+
 type TopicAgentInputPanelProps = {
   locale: Locale;
   copy: Record<string, string>;
@@ -57,6 +60,15 @@ export function TopicAgentInputPanel({
   const [presetsExpanded, setPresetsExpanded] = useState(false);
   const recommendedPresets = topicPresets.filter((preset) => preset.group === "recommended");
   const boundaryPresets = topicPresets.filter((preset) => preset.group === "boundary");
+  const resourceOptions =
+    resourceLevel && !RESOURCE_LEVEL_OPTIONS.includes(resourceLevel as (typeof RESOURCE_LEVEL_OPTIONS)[number])
+      ? [resourceLevel, ...RESOURCE_LEVEL_OPTIONS]
+      : [...RESOURCE_LEVEL_OPTIONS];
+  const styleOptions =
+    preferredStyle &&
+    !PREFERRED_STYLE_OPTIONS.includes(preferredStyle as (typeof PREFERRED_STYLE_OPTIONS)[number])
+      ? [preferredStyle, ...PREFERRED_STYLE_OPTIONS]
+      : [...PREFERRED_STYLE_OPTIONS];
   const uiCopy =
     locale === "zh"
       ? {
@@ -75,6 +87,14 @@ export function TopicAgentInputPanel({
           debugTitle: "临时调试选项",
           disableCache: "绕过 retrieval 缓存",
           debugHint: "仅用于 demo 或手测，开启后会强制走 uncached retrieval。",
+          optionLabels: {
+            student: "student · 学生/个人",
+            lab: "lab · 课题组/实验室",
+            team: "team · 团队",
+            applied: "applied · 应用导向",
+            systems: "systems · 系统导向",
+            "benchmark-driven": "benchmark-driven · 基准导向",
+          } as Record<string, string>,
         }
       : {
           presets: "Demo Presets",
@@ -93,6 +113,14 @@ export function TopicAgentInputPanel({
           debugTitle: "Temporary Debug Option",
           disableCache: "Bypass retrieval cache",
           debugHint: "Use this only for demos or manual checks when you want an uncached retrieval run.",
+          optionLabels: {
+            student: "student",
+            lab: "lab",
+            team: "team",
+            applied: "applied",
+            systems: "systems",
+            "benchmark-driven": "benchmark-driven",
+          } as Record<string, string>,
         };
 
   return (
@@ -206,14 +234,23 @@ export function TopicAgentInputPanel({
         </label>
         <label>
           <span>{copy.resourceLevel}</span>
-          <input value={resourceLevel} onChange={(event) => onChangeResourceLevel(event.target.value)} />
+          <select value={resourceLevel} onChange={(event) => onChangeResourceLevel(event.target.value)}>
+            {resourceOptions.map((option) => (
+              <option key={option} value={option}>
+                {uiCopy.optionLabels[option] ?? option}
+              </option>
+            ))}
+          </select>
         </label>
         <label>
           <span>{copy.preferredStyle}</span>
-          <input
-            value={preferredStyle}
-            onChange={(event) => onChangePreferredStyle(event.target.value)}
-          />
+          <select value={preferredStyle} onChange={(event) => onChangePreferredStyle(event.target.value)}>
+            {styleOptions.map((option) => (
+              <option key={option} value={option}>
+                {uiCopy.optionLabels[option] ?? option}
+              </option>
+            ))}
+          </select>
         </label>
         <article className="subsection-card">
           <span className="trace-label">{uiCopy.debugTitle}</span>
