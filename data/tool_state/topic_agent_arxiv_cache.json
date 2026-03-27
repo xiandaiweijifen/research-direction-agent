@@ -367,5 +367,22 @@
         "relevance_reason": "Retrieved from arXiv as a public academic source for the current topic query."
       }
     ]
+  },
+  "\"repository-scale repair agent evaluation protocols\" repository scale repair agent evaluation protocols::max=3": {
+    "saved_at": "2026-03-28T02:00:07.852808+08:00",
+    "records": [
+      {
+        "source_id": "arxiv_3",
+        "title": "citecheck: An MCP Server for Automated Bibliographic Verification and Repair in Scholarly Manuscripts",
+        "source_type": "paper",
+        "source_tier": "B",
+        "year": 2026,
+        "authors_or_publisher": "Junhyeok Lee",
+        "identifier": "https://arxiv.org/abs/2603.17339v1",
+        "url": "https://arxiv.org/abs/2603.17339v1",
+        "summary": "Reference lists in scholarly manuscripts frequently contain errors, including incorrect identifiers, incomplete metadata, misattributed authors, and mismatches between preprint and published versions. These problems are tedious to repair manually and have become more visible in workflows that rely on large language models, which can fabricate or corrupt citations. We present citecheck, a TypeScript system and MCP server for automated bibliographic verification and repair in paper-like project folders. Given a manuscript file or workspace, citecheck selects the most likely paper artifact, extracts references from .bib, .tex, .md, .txt, or .docx, validates entries against PubMed, Crossref, arXiv, and Semantic Scholar, and returns structured correction proposals together with replacement-safety diagnostics. The current repository provides a working research prototype with multi-pass retrieval, manifestation-aware matching, policy-gated rewrite planning, and 47 passing tests covering repair behavior, malformed payload handling, transport failures, and MCP exposure. We position citecheck as infrastructure for agentic scholarly editing and as a practical guardrail against both traditional reference errors and LLM-induced citation hallucinations.",
+        "relevance_reason": "Retrieved from arXiv as a public academic source for the current topic query."
+      }
+    ]
   }
 }

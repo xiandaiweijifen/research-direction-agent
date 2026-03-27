@@ -91,6 +91,9 @@ Status:
     - records that are retrieved through multiple routes receive a controlled route-coverage bonus
     - higher-priority routes such as `base` and `core_focus` contribute more than `role_expansion`
     - a lightweight reciprocal-rank-style signal is now included for software-agent and code-repair query families, so route-local high-ranked candidates contribute more than low-ranked expansion-only neighbors
+  - a query-family-aware candidate hygiene layer now runs before the final pool is exposed:
+    - software-agent and code-repair topic families must satisfy same-task qualification rather than only broad domain overlap
+    - this is implemented as task-anchor qualification, not as a title-specific blacklist
 - still pending:
   - more explicit route-level fusion such as RRF or route-balanced candidate merging
   - explicit route-aware candidate balancing

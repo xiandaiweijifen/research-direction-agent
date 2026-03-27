@@ -1598,6 +1598,40 @@ def _has_strong_modern_agent_anchor(record: TopicAgentSourceRecord, request: Top
     return True
 
 
+def _is_same_task_candidate(record: TopicAgentSourceRecord, request: TopicAgentExploreRequest) -> bool:
+    haystack = f"{record.title.lower()} {record.summary.lower()}"
+    query_text = f"{request.interest} {request.problem_domain or ''}".lower()
+    if _is_code_repair_query(query_text):
+        must_have_terms = {
+            "repair",
+            "bug",
+            "benchmark",
+            "repository",
+            "codebase",
+            "fault localization",
+            "github issues",
+            "issue resolution",
+        }
+        if not _contains_any(haystack, must_have_terms):
+            return False
+        return _contains_any(haystack, _code_repair_target_terms())
+    if _is_modern_software_agent_query(query_text):
+        must_have_terms = {
+            "agent",
+            "agents",
+            "repository",
+            "benchmark",
+            "evaluation",
+            "workflow",
+            "developer",
+            "coding",
+        }
+        if not _contains_any(haystack, must_have_terms):
+            return False
+        return _contains_any(haystack, _software_agent_target_terms())
+    return True
+
+
 def _is_generic_overview_record(record: TopicAgentSourceRecord) -> bool:
     title_lower = record.title.lower()
     haystack = f"{title_lower} {record.summary.lower()}"
@@ -1724,8 +1758,14 @@ def _filter_ranked_records(
         anchor_filtered = [
             record for record in filtered if _has_strong_modern_agent_anchor(record, request)
         ]
-        if anchor_filtered:
+        same_task_filtered = [
+            record for record in anchor_filtered if _is_same_task_candidate(record, request)
+        ]
+        if len(same_task_filtered) >= 2:
+            filtered = same_task_filtered
+        elif anchor_filtered:
             filtered = anchor_filtered
+        if filtered:
             topic_relevant_records = [
                 record for record in filtered if _topic_relevance_label(record, request) == "topic_relevant"
             ]

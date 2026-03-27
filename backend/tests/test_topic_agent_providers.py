@@ -1901,6 +1901,78 @@ def test_rank_records_penalizes_generic_autonomous_maintenance_neighbors_for_cod
     assert "AutoCodeRover: Autonomous Program Improvement" in filtered_titles
 
 
+def test_filter_ranked_records_prefers_same_task_candidates_over_generic_domain_neighbors_for_agentic_repair_queries():
+    request = TopicAgentExploreRequest(
+        interest="agentic repository repair benchmark workflows",
+        problem_domain="software engineering reproducibility",
+        constraints=TopicAgentConstraintSet(preferred_style="benchmark-driven"),
+    )
+    records = [
+        TopicAgentSourceRecord(
+            source_id="openalex_w1",
+            title="Coding Agents: A Comprehensive Survey of Automated Bug Fixing Systems and Benchmarks",
+            source_type="survey",
+            source_tier="A",
+            year=2025,
+            authors_or_publisher="Author A",
+            identifier="https://openalex.org/W1",
+            url="https://example.org/w1",
+            summary="Automated bug fixing systems, repository-level difficulties, and benchmarks for coding agents.",
+            relevance_reason="Test",
+        ),
+        TopicAgentSourceRecord(
+            source_id="openalex_w2",
+            title="HyperAgent: Generalist Software Engineering Agents to Solve Coding Tasks at Scale",
+            source_type="benchmark",
+            source_tier="A",
+            year=2024,
+            authors_or_publisher="Author B",
+            identifier="https://openalex.org/W2",
+            url="https://example.org/w2",
+            summary="Repository-level code generation and program repair benchmarks for software agents.",
+            relevance_reason="Test",
+        ),
+        TopicAgentSourceRecord(
+            source_id="openalex_w3",
+            title="SAP R/3 business blueprint (2nd ed.): understanding enterprise supply chain management",
+            source_type="paper",
+            source_tier="B",
+            year=1999,
+            authors_or_publisher="Author C",
+            identifier="https://openalex.org/W3",
+            url="https://example.org/w3",
+            summary="Workflow, software engineering, and autonomous software agents in enterprise process design.",
+            relevance_reason="Test",
+        ),
+        TopicAgentSourceRecord(
+            source_id="openalex_w4",
+            title="Technological Structure for Technology Integration in the Classroom, Inspired by the Maker Culture",
+            source_type="paper",
+            source_tier="B",
+            year=2020,
+            authors_or_publisher="Author D",
+            identifier="https://openalex.org/W4",
+            url="https://example.org/w4",
+            summary="Teachers, workflow, technology integration, and repair activities in education.",
+            relevance_reason="Test",
+        ),
+    ]
+
+    filtered_titles = [
+        record.title
+        for record in _filter_ranked_records(
+            _rank_records(records, request, max_results=4),
+            request,
+            max_results=4,
+        )
+    ]
+
+    assert "Coding Agents: A Comprehensive Survey of Automated Bug Fixing Systems and Benchmarks" in filtered_titles
+    assert "HyperAgent: Generalist Software Engineering Agents to Solve Coding Tasks at Scale" in filtered_titles
+    assert "SAP R/3 business blueprint (2nd ed.): understanding enterprise supply chain management" not in filtered_titles
+    assert "Technological Structure for Technology Integration in the Classroom, Inspired by the Maker Culture" not in filtered_titles
+
+
 def test_fallback_provider_returns_mock_records_when_primary_fails():
     class FailingProvider:
         provider_name = "primary"

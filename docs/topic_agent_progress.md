@@ -571,7 +571,8 @@ Latest result:
   - per-query diagnostics now include route labels, so later fusion and reranking work can be measured route-by-route
   - added a lightweight route-aware fusion bonus so records retrieved by multiple routes are ranked more favorably than one-route-only matches
   - added a lightweight reciprocal-rank-style route signal for software-agent and code-repair topics, so route-local top candidates matter more than weak expansion-only neighbors
+  - added a query-family-aware candidate hygiene layer so software-agent and code-repair queries require same-task qualification before candidates enter the final evidence pool
   - current behavior is still heuristic route-aware fusion rather than full candidate fusion such as RRF
 - Package 2 verification for the current sub-step:
-  - `backend/tests/test_topic_agent_providers.py`: `44 passed`
+  - `backend/tests/test_topic_agent_providers.py`: `45 passed`
   - `backend/tests/test_topic_agent_api.py`: `8 passed`
