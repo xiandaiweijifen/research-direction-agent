@@ -86,6 +86,7 @@ export function useTopicAgent() {
   const [timeBudgetMonths, setTimeBudgetMonths] = useState(DEFAULT_INPUT.timeBudgetMonths);
   const [resourceLevel, setResourceLevel] = useState(DEFAULT_INPUT.resourceLevel);
   const [preferredStyle, setPreferredStyle] = useState(DEFAULT_INPUT.preferredStyle);
+  const [disableCache, setDisableCache] = useState(false);
 
   const [topicResult, setTopicResult] = useState<TopicAgentSessionResponse | null>(null);
   const [topicComparisonResult, setTopicComparisonResult] =
@@ -119,6 +120,8 @@ export function useTopicAgent() {
         time_budget_months: timeBudgetMonths ? Number(timeBudgetMonths) : undefined,
         resource_level: resourceLevel || undefined,
         preferred_style: preferredStyle || undefined,
+      }, {
+        disable_cache: disableCache,
       });
       setTopicResult(payload);
       await loadTopicAgentSessions();
@@ -148,6 +151,7 @@ export function useTopicAgent() {
           resource_level: resourceLevel || undefined,
           preferred_style: preferredStyle || undefined,
         },
+        disable_cache: disableCache,
       });
       setTopicResult(payload);
       await loadTopicAgentSessions();
@@ -199,6 +203,7 @@ export function useTopicAgent() {
     );
     setResourceLevel(payload.user_input.constraints.resource_level ?? "");
     setPreferredStyle(payload.user_input.constraints.preferred_style ?? "");
+    setDisableCache(payload.user_input.disable_cache ?? false);
   }
 
   function applyTopicPreset(presetId: string) {
@@ -213,6 +218,7 @@ export function useTopicAgent() {
     setTimeBudgetMonths(preset.timeBudgetMonths);
     setResourceLevel(preset.resourceLevel);
     setPreferredStyle(preset.preferredStyle);
+    setDisableCache(false);
     setTopicComparisonResult(null);
     setTopicError("");
   }
@@ -224,6 +230,7 @@ export function useTopicAgent() {
     timeBudgetMonths,
     resourceLevel,
     preferredStyle,
+    disableCache,
     topicResult,
     topicComparisonResult,
     topicSessions,
@@ -236,6 +243,7 @@ export function useTopicAgent() {
     setTimeBudgetMonths,
     setResourceLevel,
     setPreferredStyle,
+    setDisableCache,
     submitTopicExplore,
     refineCurrentTopicSession,
     loadTopicAgentSession,

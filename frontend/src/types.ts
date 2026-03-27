@@ -357,6 +357,7 @@ export type TopicAgentExploreRequest = {
   problem_domain?: string | null;
   seed_idea?: string | null;
   constraints: TopicAgentConstraintSet;
+  disable_cache?: boolean;
 };
 
 export type TopicAgentSourceRecord = {

@@ -12,6 +12,7 @@ type TopicAgentInputPanelProps = {
   timeBudgetMonths: string;
   resourceLevel: string;
   preferredStyle: string;
+  disableCache: boolean;
   topicBusy: boolean;
   topicError: string;
   hasTopicResult: boolean;
@@ -21,6 +22,7 @@ type TopicAgentInputPanelProps = {
   onChangeTimeBudgetMonths: (value: string) => void;
   onChangeResourceLevel: (value: string) => void;
   onChangePreferredStyle: (value: string) => void;
+  onChangeDisableCache: (value: boolean) => void;
   onSubmit: (event: FormEvent<HTMLFormElement>) => void;
   onRefine: () => void;
   onApplyPreset: (presetId: string) => void;
@@ -36,6 +38,7 @@ export function TopicAgentInputPanel({
   timeBudgetMonths,
   resourceLevel,
   preferredStyle,
+  disableCache,
   topicBusy,
   topicError,
   hasTopicResult,
@@ -45,6 +48,7 @@ export function TopicAgentInputPanel({
   onChangeTimeBudgetMonths,
   onChangeResourceLevel,
   onChangePreferredStyle,
+  onChangeDisableCache,
   onSubmit,
   onRefine,
   onApplyPreset,
@@ -60,6 +64,9 @@ export function TopicAgentInputPanel({
             "当前后端在软件工程导向 family 上更稳定，尤其是 repository repair、repository issue-resolution 及其相邻方向。跨域方向仍应视为边界检查，而不是默认稳定能力。",
           readingPathTitle: "默认阅读顺序",
           readingPathCopy: "建议按 framing → top evidence → comparison → recommendation 的顺序查看结果。",
+          debugTitle: "临时调试选项",
+          disableCache: "绕过 retrieval 缓存",
+          debugHint: "仅用于 demo 或手测，开启后会强制走 uncached retrieval。",
         }
       : {
           presets: "Demo Presets",
@@ -71,6 +78,9 @@ export function TopicAgentInputPanel({
           readingPathTitle: "Default Reading Path",
           readingPathCopy:
             "For demos, read the result in this order: framing → top evidence → comparison → recommendation.",
+          debugTitle: "Temporary Debug Option",
+          disableCache: "Bypass retrieval cache",
+          debugHint: "Use this only for demos or manual checks when you want an uncached retrieval run.",
         };
 
   return (
@@ -145,6 +155,18 @@ export function TopicAgentInputPanel({
             onChange={(event) => onChangePreferredStyle(event.target.value)}
           />
         </label>
+        <article className="subsection-card">
+          <span className="trace-label">{uiCopy.debugTitle}</span>
+          <label className="checkbox-row">
+            <input
+              type="checkbox"
+              checked={disableCache}
+              onChange={(event) => onChangeDisableCache(event.target.checked)}
+            />
+            <span>{uiCopy.disableCache}</span>
+          </label>
+          <p className="subsection-copy">{uiCopy.debugHint}</p>
+        </article>
         <div className="button-row">
           <button type="submit" className="primary-button" disabled={topicBusy}>
             {topicBusy ? copy.running : copy.run}

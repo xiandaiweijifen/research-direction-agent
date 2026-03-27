@@ -333,6 +333,9 @@ export function runTopicAgentExplore(
     preferred_style?: string;
     notes?: string;
   },
+  options?: {
+    disable_cache?: boolean;
+  },
 ) {
   return apiFetch<TopicAgentSessionResponse>("/api/topic-agent/explore", {
     method: "POST",
@@ -341,6 +344,7 @@ export function runTopicAgentExplore(
       problem_domain: problemDomain || null,
       seed_idea: seedIdea || null,
       constraints,
+      disable_cache: options?.disable_cache ?? false,
     }),
   });
 }
@@ -367,6 +371,7 @@ export function refineTopicAgentSession(
       preferred_style?: string;
       notes?: string;
     };
+    disable_cache?: boolean;
   },
 ) {
   return apiFetch<TopicAgentSessionResponse>(

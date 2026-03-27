@@ -24,6 +24,7 @@ type TopicWorkspaceProps = {
   timeBudgetMonths: string;
   resourceLevel: string;
   preferredStyle: string;
+  disableCache: boolean;
   topicResult: TopicAgentSessionResponse | null;
   topicComparisonResult: TopicAgentSessionResponse | null;
   topicSessions: TopicAgentSessionSummary[];
@@ -36,6 +37,7 @@ type TopicWorkspaceProps = {
   onChangeTimeBudgetMonths: (value: string) => void;
   onChangeResourceLevel: (value: string) => void;
   onChangePreferredStyle: (value: string) => void;
+  onChangeDisableCache: (value: boolean) => void;
   onSubmit: (event: FormEvent<HTMLFormElement>) => void;
   onRefine: () => void;
   onLoadSession: (sessionId: string) => void;
@@ -80,6 +82,7 @@ export function TopicWorkspaceV2({
   timeBudgetMonths,
   resourceLevel,
   preferredStyle,
+  disableCache,
   topicResult,
   topicComparisonResult,
   topicSessions,
@@ -92,6 +95,7 @@ export function TopicWorkspaceV2({
   onChangeTimeBudgetMonths,
   onChangeResourceLevel,
   onChangePreferredStyle,
+  onChangeDisableCache,
   onSubmit,
   onRefine,
   onLoadSession,
@@ -310,6 +314,7 @@ export function TopicWorkspaceV2({
         timeBudgetMonths={timeBudgetMonths}
         resourceLevel={resourceLevel}
         preferredStyle={preferredStyle}
+        disableCache={disableCache}
         topicBusy={topicBusy}
         topicError={topicError}
         hasTopicResult={Boolean(topicResult)}
@@ -319,6 +324,7 @@ export function TopicWorkspaceV2({
         onChangeTimeBudgetMonths={onChangeTimeBudgetMonths}
         onChangeResourceLevel={onChangeResourceLevel}
         onChangePreferredStyle={onChangePreferredStyle}
+        onChangeDisableCache={onChangeDisableCache}
         onSubmit={onSubmit}
         onRefine={onRefine}
         onApplyPreset={onApplyPreset}

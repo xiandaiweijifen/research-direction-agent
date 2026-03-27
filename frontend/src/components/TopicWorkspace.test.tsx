@@ -22,6 +22,7 @@ describe("TopicWorkspaceV2", () => {
         timeBudgetMonths="6"
         resourceLevel="student"
         preferredStyle="benchmark-driven"
+        disableCache={false}
         topicComparisonResult={{
           session_id: "session_2",
           created_at: "2026-03-24T00:00:00+00:00",
@@ -313,6 +314,7 @@ describe("TopicWorkspaceV2", () => {
         onChangeTimeBudgetMonths={vi.fn()}
         onChangeResourceLevel={vi.fn()}
         onChangePreferredStyle={vi.fn()}
+        onChangeDisableCache={vi.fn()}
         onSubmit={onSubmit}
         onRefine={onRefine}
         onLoadSession={vi.fn()}
@@ -333,6 +335,8 @@ describe("TopicWorkspaceV2", () => {
     expect(screen.getByText("Evidence coverage is medium.")).toBeInTheDocument();
     expect(screen.getByText("Recent Runs")).toBeInTheDocument();
     expect(screen.getByText("Demo Presets")).toBeInTheDocument();
+    expect(screen.getByText("Temporary Debug Option")).toBeInTheDocument();
+    expect(screen.getByRole("checkbox", { name: "Bypass retrieval cache" })).toBeInTheDocument();
     expect(screen.getByText("2 topics")).toBeInTheDocument();
     expect(screen.getByText("Session Diff")).toBeInTheDocument();
     expect(screen.getByText("Previous rationale.")).toBeInTheDocument();

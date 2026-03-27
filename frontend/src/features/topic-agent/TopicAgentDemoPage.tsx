@@ -18,6 +18,7 @@ export function TopicAgentDemoPage({ locale }: TopicAgentDemoPageProps) {
       timeBudgetMonths={topicAgent.timeBudgetMonths}
       resourceLevel={topicAgent.resourceLevel}
       preferredStyle={topicAgent.preferredStyle}
+      disableCache={topicAgent.disableCache}
       topicResult={topicAgent.topicResult}
       topicComparisonResult={topicAgent.topicComparisonResult}
       topicSessions={topicAgent.topicSessions}
@@ -30,6 +31,7 @@ export function TopicAgentDemoPage({ locale }: TopicAgentDemoPageProps) {
       onChangeTimeBudgetMonths={topicAgent.setTimeBudgetMonths}
       onChangeResourceLevel={topicAgent.setResourceLevel}
       onChangePreferredStyle={topicAgent.setPreferredStyle}
+      onChangeDisableCache={topicAgent.setDisableCache}
       onSubmit={topicAgent.submitTopicExplore}
       onRefine={() => void topicAgent.refineCurrentTopicSession()}
       onLoadSession={(sessionId) => void topicAgent.loadTopicAgentSession(sessionId)}
