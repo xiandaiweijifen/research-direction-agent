@@ -966,9 +966,22 @@ textarea {
 
 .collapsible-heading {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: space-between;
   gap: 16px;
+}
+
+.collapsible-copy {
+  min-width: 0;
+  display: grid;
+  gap: 4px;
+}
+
+.collapse-toggle-button {
+  min-height: 38px;
+  padding: 8px 14px;
+  white-space: nowrap;
+  flex: 0 0 auto;
 }
 
 .preset-block {
@@ -1087,6 +1100,20 @@ textarea {
   border: 1px solid var(--line);
   border-radius: 18px;
   background: rgba(255, 252, 245, 0.88);
+}
+
+.subsection-card-compact {
+  gap: 10px;
+  padding: 14px 16px;
+}
+
+.info-slab {
+  display: grid;
+  gap: 6px;
+  padding: 10px 12px;
+  border: 1px solid rgba(31, 41, 51, 0.06);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.45);
 }
 
 .subsection-copy {
@@ -1775,6 +1802,16 @@ textarea {
 
   .button-cluster-danger {
     justify-content: flex-start;
+  }
+
+  .collapsible-heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .collapse-toggle-button {
+    width: 100%;
+    justify-content: center;
   }
 }
 

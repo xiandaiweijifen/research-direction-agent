@@ -103,15 +103,15 @@ export function TopicAgentInputPanel({
           <p className="panel-intro">{copy.formCopy}</p>
         </div>
       </div>
-      <article className="subsection-card">
+      <article className="subsection-card subsection-card-compact">
         <div className="collapsible-heading">
-          <div>
+          <div className="collapsible-copy">
             <span className="trace-label">{uiCopy.presets}</span>
             <p className="subsection-copy">{uiCopy.presetsIntro}</p>
           </div>
           <button
             type="button"
-            className="ghost-button"
+            className="ghost-button collapse-toggle-button"
             aria-expanded={presetsExpanded}
             onClick={() => setPresetsExpanded((current) => !current)}
           >
@@ -173,11 +173,15 @@ export function TopicAgentInputPanel({
           </>
         ) : null}
       </article>
-      <article className="subsection-card">
-        <span className="trace-label">{uiCopy.boundaryTitle}</span>
-        <p className="subsection-copy">{uiCopy.boundaryCopy}</p>
-        <span className="trace-label">{uiCopy.readingPathTitle}</span>
-        <p className="subsection-copy">{uiCopy.readingPathCopy}</p>
+      <article className="subsection-card subsection-card-compact">
+        <div className="info-slab">
+          <span className="trace-label">{uiCopy.boundaryTitle}</span>
+          <p className="subsection-copy">{uiCopy.boundaryCopy}</p>
+        </div>
+        <div className="info-slab">
+          <span className="trace-label">{uiCopy.readingPathTitle}</span>
+          <p className="subsection-copy">{uiCopy.readingPathCopy}</p>
+        </div>
       </article>
       <form className="stack-form" onSubmit={onSubmit}>
         <label>
