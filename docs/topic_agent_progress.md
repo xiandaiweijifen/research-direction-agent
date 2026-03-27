@@ -562,3 +562,14 @@ Latest result:
   - `backend/tests/test_topic_agent_providers.py`: `40 passed`
   - `backend/tests/test_topic_agent_api.py`: `8 passed`
   - the API pytest process completed successfully even when the shell wrapper timed out immediately after completion
+- Retrieval upgrade package 2 has started:
+  - OpenAlex query construction is now grouped into explicit retrieval routes:
+    - `base`
+    - `core_focus`
+    - `alias`
+    - `role_expansion`
+  - per-query diagnostics now include route labels, so later fusion and reranking work can be measured route-by-route
+  - current behavior is still route-ordered collection rather than full candidate fusion
+- Package 2 verification for the current sub-step:
+  - `backend/tests/test_topic_agent_providers.py`: `43 passed`
+  - `backend/tests/test_topic_agent_api.py`: `8 passed`

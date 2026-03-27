@@ -76,6 +76,21 @@ Acceptance:
 - query fan-out remains bounded
 - evidence quality does not regress on current stable query families
 
+Status:
+
+- in progress
+- current sub-step completed:
+  - OpenAlex query construction is now grouped into explicit retrieval routes:
+    - `base`
+    - `core_focus`
+    - `alias`
+    - `role_expansion`
+  - per-query diagnostics now carry route information
+  - cache keys still depend on the flattened query bundle, so the external contract stays stable
+- still pending:
+  - route-level candidate fusion beyond ordered route collection
+  - explicit route-aware candidate balancing
+
 ### Package 3: Candidate Fusion And Reranking
 
 Objective:

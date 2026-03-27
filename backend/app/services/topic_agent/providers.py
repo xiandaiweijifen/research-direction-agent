@@ -67,9 +67,16 @@ class TopicAgentHttpRequestMetrics:
 
 @dataclass
 class OpenAlexRetrievalPlan:
+    query_routes: list["OpenAlexQueryRoute"]
     query_texts: list[str]
     raw_pool_size: int
     cache_key: str
+
+
+@dataclass
+class OpenAlexQueryRoute:
+    name: str
+    queries: list[str]
 
 
 def _normalize_optional(value: str | None) -> str | None:
@@ -191,7 +198,7 @@ class OpenAlexEvidenceProvider:
         started_at = time.perf_counter()
         merged_records, query_diagnostics = _collect_openalex_candidate_records(
             api_url=self.api_url,
-            query_texts=plan.query_texts,
+            query_routes=plan.query_routes,
             raw_pool_size=plan.raw_pool_size,
             timeout_seconds=self.timeout_seconds,
             max_retries=self.max_retries,
@@ -493,6 +500,11 @@ def _openalex_query_aliases(request: TopicAgentExploreRequest) -> list[str]:
 
 
 def _build_openalex_queries(request: TopicAgentExploreRequest) -> list[str]:
+    routes = _build_openalex_query_routes(request)
+    return _flatten_openalex_query_routes(routes)
+
+
+def _build_openalex_query_routes(request: TopicAgentExploreRequest) -> list[OpenAlexQueryRoute]:
     base_query = _build_openalex_query(request)
     core_terms = _core_query_terms(request)
     domain_terms = [
@@ -500,21 +512,56 @@ def _build_openalex_queries(request: TopicAgentExploreRequest) -> list[str]:
         for term in re.findall(r"[a-z0-9]+", (request.problem_domain or "").lower())
         if len(term) >= 4
     ]
-    queries: list[str] = [base_query]
+    base_queries: list[str] = [base_query]
+    core_focus_queries: list[str] = []
     if len(core_terms) >= 3:
-        queries.append(" ".join(core_terms[:3] + domain_terms[:2]))
+        core_focus_queries.append(" ".join(core_terms[:3] + domain_terms[:2]))
     if "multimodal" in core_terms and "reasoning" in core_terms:
-        queries.append(" ".join(["multimodal", "reasoning", *domain_terms[:2], "benchmark"]))
+        core_focus_queries.append(" ".join(["multimodal", "reasoning", *domain_terms[:2], "benchmark"]))
     if "trustworthy" in core_terms:
-        queries.append(" ".join(["trustworthy", "reasoning", *domain_terms[:2], "evaluation"]))
-    queries.extend(_openalex_query_aliases(request))
-    queries.extend(_general_query_role_expansions(request))
-    deduped_queries: list[str] = []
-    for query in queries:
-        normalized = query.strip()
-        if normalized and normalized not in deduped_queries:
-            deduped_queries.append(normalized)
-    return deduped_queries[:OPENALEX_MAX_QUERY_VARIANTS]
+        core_focus_queries.append(" ".join(["trustworthy", "reasoning", *domain_terms[:2], "evaluation"]))
+    routes = [
+        OpenAlexQueryRoute(name="base", queries=base_queries),
+        OpenAlexQueryRoute(name="core_focus", queries=core_focus_queries),
+        OpenAlexQueryRoute(name="alias", queries=_openalex_query_aliases(request)),
+        OpenAlexQueryRoute(name="role_expansion", queries=_general_query_role_expansions(request)),
+    ]
+    return _truncate_openalex_query_routes(routes, OPENALEX_MAX_QUERY_VARIANTS)
+
+
+def _flatten_openalex_query_routes(routes: list[OpenAlexQueryRoute]) -> list[str]:
+    flattened: list[str] = []
+    for route in routes:
+        for query in route.queries:
+            normalized = query.strip()
+            if normalized and normalized not in flattened:
+                flattened.append(normalized)
+    return flattened
+
+
+def _truncate_openalex_query_routes(
+    routes: list[OpenAlexQueryRoute],
+    max_queries: int,
+) -> list[OpenAlexQueryRoute]:
+    flattened_seen: set[str] = set()
+    selected_routes: list[OpenAlexQueryRoute] = []
+    remaining = max_queries
+    for route in routes:
+        if remaining <= 0:
+            break
+        selected_queries: list[str] = []
+        for query in route.queries:
+            normalized = query.strip()
+            if not normalized or normalized in flattened_seen:
+                continue
+            if remaining <= 0:
+                break
+            flattened_seen.add(normalized)
+            selected_queries.append(normalized)
+            remaining -= 1
+        if selected_queries:
+            selected_routes.append(OpenAlexQueryRoute(name=route.name, queries=selected_queries))
+    return selected_routes
 
 
 def _build_cache_key(query_text: str, max_results: int, *, version: str | None = None) -> str:
@@ -526,8 +573,10 @@ def _build_openalex_retrieval_plan(
     request: TopicAgentExploreRequest,
     max_results: int,
 ) -> OpenAlexRetrievalPlan:
-    query_texts = _build_openalex_queries(request)
+    query_routes = _build_openalex_query_routes(request)
+    query_texts = _flatten_openalex_query_routes(query_routes)
     return OpenAlexRetrievalPlan(
+        query_routes=query_routes,
         query_texts=query_texts,
         raw_pool_size=_openalex_raw_pool_size(max_results),
         cache_key=_build_cache_key(
@@ -565,36 +614,38 @@ def _build_cached_retrieval_result(
 def _collect_openalex_candidate_records(
     *,
     api_url: str,
-    query_texts: list[str],
+    query_routes: list[OpenAlexQueryRoute],
     raw_pool_size: int,
     timeout_seconds: float,
     max_retries: int,
 ) -> tuple[list[TopicAgentSourceRecord], list[dict[str, str | int]]]:
     merged_records: list[TopicAgentSourceRecord] = []
     query_diagnostics: list[dict[str, str | int]] = []
-    for query_text in query_texts:
-        response, metrics = _http_get_with_retries(
-            api_url,
-            params={
-                "search": query_text,
-                "filter": "has_abstract:true",
-                "per-page": raw_pool_size,
-            },
-            timeout_seconds=timeout_seconds,
-            max_retries=max_retries,
-            user_agent="research-topic-copilot/0.1",
-        )
-        query_diagnostics.append(
-            {
-                "query": query_text,
-                "latency_ms": metrics.latency_ms,
-                "attempt_count": metrics.attempt_count,
-            }
-        )
-        payload = response.json()
-        merged_records.extend(
-            [_normalize_record(record) for record in _parse_openalex_response(payload)]
-        )
+    for route in query_routes:
+        for query_text in route.queries:
+            response, metrics = _http_get_with_retries(
+                api_url,
+                params={
+                    "search": query_text,
+                    "filter": "has_abstract:true",
+                    "per-page": raw_pool_size,
+                },
+                timeout_seconds=timeout_seconds,
+                max_retries=max_retries,
+                user_agent="research-topic-copilot/0.1",
+            )
+            query_diagnostics.append(
+                {
+                    "route": route.name,
+                    "query": query_text,
+                    "latency_ms": metrics.latency_ms,
+                    "attempt_count": metrics.attempt_count,
+                }
+            )
+            payload = response.json()
+            merged_records.extend(
+                [_normalize_record(record) for record in _parse_openalex_response(payload)]
+            )
     return merged_records, query_diagnostics
 
 

@@ -11,7 +11,9 @@ from app.services.topic_agent.providers import (
     FallbackEvidenceProvider,
     MockTopicAgentEvidenceProvider,
     OpenAlexEvidenceProvider,
+    OpenAlexQueryRoute,
     _build_openalex_retrieval_plan,
+    _build_openalex_query_routes,
     _build_openalex_queries,
     _build_cache_key,
     _build_arxiv_query,
@@ -21,6 +23,7 @@ from app.services.topic_agent.providers import (
     _infer_evidence_roles,
     _is_code_repair_query,
     _openalex_raw_pool_size,
+    _truncate_openalex_query_routes,
     _parse_openalex_response,
     _parse_arxiv_response,
     _rank_records,
@@ -698,6 +701,23 @@ def test_openalex_queries_are_capped_to_reduce_request_fan_out():
     assert len(queries) <= 10
 
 
+def test_openalex_query_routes_keep_base_alias_and_role_groups_explicit():
+    request = TopicAgentExploreRequest(
+        interest="trustworthy visual question answering in radiology",
+        problem_domain="medical AI",
+        constraints=TopicAgentConstraintSet(preferred_style="applied"),
+    )
+
+    routes = _build_openalex_query_routes(request)
+    route_names = [route.name for route in routes]
+    flattened = _build_openalex_queries(request)
+
+    assert route_names[0] == "base"
+    assert "alias" in route_names
+    assert "role_expansion" in route_names
+    assert flattened == [query for route in routes for query in route.queries]
+
+
 def test_openalex_queries_keep_software_agent_fan_out_small_for_interactive_use():
     request = TopicAgentExploreRequest(
         interest="llm repository repair workflows",
@@ -708,6 +728,21 @@ def test_openalex_queries_keep_software_agent_fan_out_small_for_interactive_use(
     queries = _build_openalex_queries(request)
 
     assert len(queries) <= 6
+
+
+def test_openalex_query_route_truncation_preserves_route_order_while_capping_total_queries():
+    routes = [
+        OpenAlexQueryRoute(name="base", queries=["q1"]),
+        OpenAlexQueryRoute(name="alias", queries=["q2", "q3"]),
+        OpenAlexQueryRoute(name="role_expansion", queries=["q4", "q5"]),
+    ]
+
+    truncated = _truncate_openalex_query_routes(routes, 3)
+
+    assert [(route.name, route.queries) for route in truncated] == [
+        ("base", ["q1"]),
+        ("alias", ["q2", "q3"]),
+    ]
 
 
 def test_openalex_retrieval_plan_reuses_query_bundle_for_cache_key():
@@ -774,6 +809,7 @@ def test_openalex_provider_reports_latency_and_query_diagnostics(workspace_tmp_p
     assert result.diagnostics.query_diagnostics
     assert result.diagnostics.slowest_query is not None
     assert result.diagnostics.slowest_query_latency_ms is not None
+    assert all("route" in item for item in result.diagnostics.query_diagnostics)
     assert all("attempt_count" in item for item in result.diagnostics.query_diagnostics)
 
 
