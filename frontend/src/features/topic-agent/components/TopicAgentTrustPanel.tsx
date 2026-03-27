@@ -1,4 +1,6 @@
-Ôªøimport type { TopicAgentSessionResponse } from "../../../types";
+import { useState } from "react";
+
+import type { TopicAgentSessionResponse } from "../../../types";
 
 type TopicAgentTrustPanelProps = {
   topicResult: TopicAgentSessionResponse;
@@ -29,31 +31,40 @@ export function TopicAgentTrustPanel({
   locale,
   evidenceTitleById,
 }: TopicAgentTrustPanelProps) {
+  const [showDetails, setShowDetails] = useState(false);
+
   const trustCopy =
     locale === "zh"
       ? {
-          trust: "ÂèØ‰ø°Â∫¶‰∏éËØäÊñ≠",
-          trustIntro: "Â±ïÁ§∫ÂΩìÂâçÁªìËÆ∫Â¶Ç‰ΩïË¢´ËØÅÊçÆÊîØÊíëÔºå‰ª•ÂèäÂì™‰∫õÂú∞Êñπ‰ªçÈúÄ‰∫∫Â∑•Á°ÆËÆ§„ÄÇ",
-          sourceFacts: "Êù•Ê∫ê‰∫ãÂÆû",
-          systemSynthesis: "Á≥ªÁªüÁªºÂêà",
-          tentativeInferences: "ÊöÇÂÆöÊé®Êñ≠",
-          supportingSources: "ÊîØÊíëÊù•Ê∫ê",
-          note: "ËØ¥Êòé",
-          uncertainty: "‰∏çÁ°ÆÂÆöÊÄß",
-          missingEvidence: "Áº∫Â§±ËØÅÊçÆ",
-          confirmations: "‰∫∫Â∑•Á°ÆËÆ§È°π",
-          clarifications: "ÊæÑÊ∏ÖÂª∫ËÆÆ",
-          diagnostics: "ËØÅÊçÆËØäÊñ≠",
-          requestedProvider: "ËØ∑Ê±Ç Provider",
-          usedProvider: "ÂÆûÈôÖ Provider",
-          fallbackUsed: "ÊòØÂê¶ fallback",
-          recordCount: "ËÆ∞ÂΩïÊï∞",
-          cacheHit: "ÁºìÂ≠òÂëΩ‰∏≠",
+          trust: "ø…–≈∂»”Î’Ô∂œ",
+          trustIntro: "’π æµ±«∞Ω·¬€»Á∫Œ±ª÷§æ›÷ß≥≈£¨“‘º∞ƒƒ–©µÿ∑Ω»‘–Ë»Àπ§»∑»œ°£",
+          sourceFacts: "¿¥‘¥ ¬ µ",
+          systemSynthesis: "œµÕ≥◊€∫œ",
+          tentativeInferences: "‘›∂®Õ∆∂œ",
+          note: "Àµ√˜",
+          uncertainty: "≤ª»∑∂®–‘",
+          missingEvidence: "»± ß÷§æ›",
+          confirmations: "»Àπ§»∑»œœÓ",
+          clarifications: "≥Œ«ÂΩ®“È",
+          diagnostics: "÷§æ›’Ô∂œ",
+          requestedProvider: "«Î«Û Provider",
+          usedProvider: " µº  Provider",
+          fallbackUsed: " «∑Ò fallback",
+          recordCount: "º«¬º ˝",
+          cacheHit: "ª∫¥Ê√¸÷–",
+          retrievalSnapshot: "µ±«∞ºÏÀ˜’™“™",
+          detailedTrust: "œÍœ∏÷§æ›¡¥",
+          showDetails: "’πø™œÍœ∏ ”Õº",
+          hideDetails: " ’∆œÍœ∏ ”Õº",
+          evidenceCoverage: "÷§æ›∏≤∏«",
+          sourceQuality: "¿¥‘¥÷ ¡ø",
+          candidateSeparation: "∫Ú—°«¯∑÷∂»",
+          conflictLevel: "≥ÂÕªÀÆ∆Ω",
           trace: copy.trace,
           confidence: copy.confidence,
           stages: copy.stages,
-          yes: "ÊòØ",
-          no: "Âê¶",
+          yes: " «",
+          no: "∑Ò",
         }
       : {
           trust: "Trust And Diagnostics",
@@ -62,7 +73,6 @@ export function TopicAgentTrustPanel({
           sourceFacts: "Source Facts",
           systemSynthesis: "System Synthesis",
           tentativeInferences: "Tentative Inferences",
-          supportingSources: "Supporting Sources",
           note: "Note",
           uncertainty: "Uncertainty",
           missingEvidence: "Missing Evidence",
@@ -74,6 +84,14 @@ export function TopicAgentTrustPanel({
           fallbackUsed: "Fallback Used",
           recordCount: "Record Count",
           cacheHit: "Cache Hit",
+          retrievalSnapshot: "Current Retrieval Snapshot",
+          detailedTrust: "Detailed Trust View",
+          showDetails: "Show detailed view",
+          hideDetails: "Hide detailed view",
+          evidenceCoverage: "Evidence Coverage",
+          sourceQuality: "Source Quality",
+          candidateSeparation: "Candidate Separation",
+          conflictLevel: "Conflict Level",
           trace: copy.trace,
           confidence: copy.confidence,
           stages: copy.stages,
@@ -96,6 +114,18 @@ export function TopicAgentTrustPanel({
     },
   ];
 
+  const diagnosticsSummary = [
+    `${trustCopy.usedProvider}: ${topicResult.evidence_diagnostics.used_provider}`,
+    `${trustCopy.recordCount}: ${topicResult.evidence_diagnostics.record_count}`,
+    `${trustCopy.cacheHit}: ${
+      topicResult.evidence_diagnostics.cache_hit ? trustCopy.yes : trustCopy.no
+    }`,
+  ];
+
+  if (topicResult.evidence_diagnostics.fallback_used) {
+    diagnosticsSummary.push(`${trustCopy.fallbackUsed}: ${trustCopy.yes}`);
+  }
+
   return (
     <article className="panel panel-span">
       <div className="panel-heading">
@@ -103,155 +133,212 @@ export function TopicAgentTrustPanel({
           <h2>{trustCopy.trust}</h2>
           <p className="panel-intro">{trustCopy.trustIntro}</p>
         </div>
+        <button
+          type="button"
+          className="ghost-button"
+          onClick={() => setShowDetails((current) => !current)}
+        >
+          {showDetails ? trustCopy.hideDetails : trustCopy.showDetails}
+        </button>
       </div>
 
-      <div className="comparison-diff-grid">
-        {evidenceSections.map((section) => (
-          <article key={section.title} className="subsection-card">
-            <span className="trace-label">{section.title}</span>
-            {section.statements.length === 0 ? (
-              <p className="subsection-copy">-</p>
-            ) : (
-              <div className="trace-list">
-                {section.statements.map((item, index) => (
-                  <article
-                    key={`${section.title}-${index}-${item.statement}`}
-                    className="trace-card"
-                  >
-                    <p className="trace-detail">{item.statement}</p>
-                    {renderEvidenceLinks(item.supporting_source_ids, evidenceTitleById)}
-                    {item.note && (
-                      <p className="trace-detail">
-                        {trustCopy.note}: {item.note}
-                      </p>
-                    )}
-                    {item.uncertainty_reason && (
-                      <p className="trace-detail">
-                        {trustCopy.uncertainty}: {item.uncertainty_reason}
-                      </p>
-                    )}
-                    {item.missing_evidence.length > 0 && (
-                      <div className="list-block">
-                        {item.missing_evidence.map((missing) => (
-                          <p key={missing}>
-                            {trustCopy.missingEvidence}: {missing}
-                          </p>
-                        ))}
-                      </div>
-                    )}
-                  </article>
-                ))}
-              </div>
-            )}
-          </article>
-        ))}
+      <div className="summary-strip overview-summary-strip">
+        <div className="summary-card summary-card-emphasis">
+          <span>{trustCopy.evidenceCoverage}</span>
+          <strong>{topicResult.confidence_summary.evidence_coverage}</strong>
+        </div>
+        <div className="summary-card">
+          <span>{trustCopy.sourceQuality}</span>
+          <strong>{topicResult.confidence_summary.source_quality}</strong>
+        </div>
+        <div className="summary-card">
+          <span>{trustCopy.candidateSeparation}</span>
+          <strong>{topicResult.confidence_summary.candidate_separation}</strong>
+        </div>
+        <div className="summary-card">
+          <span>{trustCopy.conflictLevel}</span>
+          <strong>{topicResult.confidence_summary.conflict_level}</strong>
+        </div>
       </div>
 
       <div className="comparison-diff-grid">
         <article className="subsection-card">
           <span className="trace-label">{trustCopy.confirmations}</span>
-          <div className="list-block">
-            {topicResult.human_confirmations.map((item) => (
-              <p key={item}>{item}</p>
-            ))}
-          </div>
-        </article>
-
-        <article className="subsection-card">
-          <span className="trace-label">{trustCopy.clarifications}</span>
-          {topicResult.clarification_suggestions.length === 0 ? (
+          {topicResult.human_confirmations.length === 0 ? (
             <p className="subsection-copy">-</p>
           ) : (
-            <div className="trace-list">
-              {topicResult.clarification_suggestions.map((item) => (
-                <article key={item.field_key} className="trace-card">
-                  <div className="trace-meta-row">
-                    <strong>{item.field_key}</strong>
-                  </div>
-                  <p className="trace-detail">{item.prompt}</p>
-                  <p className="trace-detail">
-                    {trustCopy.note}: {item.reason}
-                  </p>
-                  {item.suggested_values.length > 0 && (
-                    <div className="pill-strip">
-                      {item.suggested_values.map((value) => (
-                        <span key={value} className="meta-pill">
-                          {value}
-                        </span>
-                      ))}
-                    </div>
-                  )}
-                </article>
+            <div className="list-block">
+              {topicResult.human_confirmations.map((item) => (
+                <p key={item}>{item}</p>
               ))}
             </div>
           )}
         </article>
-      </div>
-
-      <div className="comparison-diff-grid">
-        <article className="subsection-card">
-          <span className="trace-label">{trustCopy.diagnostics}</span>
-          <div className="trace-grid">
-            <div>
-              <span className="trace-label">{trustCopy.requestedProvider}</span>
-              <strong>{topicResult.evidence_diagnostics.requested_provider}</strong>
-            </div>
-            <div>
-              <span className="trace-label">{trustCopy.usedProvider}</span>
-              <strong>{topicResult.evidence_diagnostics.used_provider}</strong>
-            </div>
-            <div>
-              <span className="trace-label">{trustCopy.fallbackUsed}</span>
-              <strong>
-                {topicResult.evidence_diagnostics.fallback_used ? trustCopy.yes : trustCopy.no}
-              </strong>
-            </div>
-            <div>
-              <span className="trace-label">{trustCopy.recordCount}</span>
-              <strong>{topicResult.evidence_diagnostics.record_count}</strong>
-            </div>
-            <div>
-              <span className="trace-label">{trustCopy.cacheHit}</span>
-              <strong>
-                {topicResult.evidence_diagnostics.cache_hit ? trustCopy.yes : trustCopy.no}
-              </strong>
-            </div>
-          </div>
-          {topicResult.evidence_diagnostics.fallback_reason && (
-            <p className="trace-detail">
-              {trustCopy.note}: {topicResult.evidence_diagnostics.fallback_reason}
-            </p>
-          )}
-        </article>
 
         <article className="subsection-card">
-          <span className="trace-label">{trustCopy.confidence}</span>
-          <div className="trace-list">
-            {topicResult.confidence_summary.rationale.map((reason) => (
-              <article key={reason} className="trace-card">
-                <p className="trace-detail">{reason}</p>
-              </article>
+          <span className="trace-label">{trustCopy.retrievalSnapshot}</span>
+          <div className="list-block">
+            {diagnosticsSummary.map((item) => (
+              <p key={item}>{item}</p>
             ))}
+            {topicResult.evidence_diagnostics.fallback_reason && (
+              <p>
+                {trustCopy.note}: {topicResult.evidence_diagnostics.fallback_reason}
+              </p>
+            )}
           </div>
         </article>
       </div>
 
       <article className="subsection-card">
-        <span className="trace-label">
-          {trustCopy.trace} ¬∑ {topicResult.trace.length} {trustCopy.stages}
-        </span>
+        <span className="trace-label">{trustCopy.confidence}</span>
         <div className="trace-list">
-          {topicResult.trace.map((event) => (
-            <article key={`${event.stage}-${event.timestamp}`} className="trace-card">
-              <div className="trace-meta-row">
-                <span className="trace-label">{event.stage}</span>
-                <span className="status-chip success">{event.status}</span>
-              </div>
-              <p className="trace-detail">{event.detail}</p>
+          {topicResult.confidence_summary.rationale.map((reason) => (
+            <article key={reason} className="trace-card">
+              <p className="trace-detail">{reason}</p>
             </article>
           ))}
         </div>
       </article>
+
+      {showDetails && (
+        <div className="result-stack">
+          <article className="subsection-card">
+            <span className="trace-label">{trustCopy.detailedTrust}</span>
+            <p className="subsection-copy">
+              {locale === "zh"
+                ? "∞¥–Ë’πø™¿¥‘¥ ¬ µ°¢œµÕ≥◊€∫œ°¢‘›∂®Õ∆∂œ°¢≥Œ«ÂΩ®“È∫Õ÷¥––πÏº£°£"
+                : "Expand this section when you need the full evidence chain, clarifications, and execution trace."}
+            </p>
+          </article>
+
+          <div className="comparison-diff-grid">
+            {evidenceSections.map((section) => (
+              <article key={section.title} className="subsection-card">
+                <span className="trace-label">{section.title}</span>
+                {section.statements.length === 0 ? (
+                  <p className="subsection-copy">-</p>
+                ) : (
+                  <div className="trace-list">
+                    {section.statements.map((item, index) => (
+                      <article
+                        key={`${section.title}-${index}-${item.statement}`}
+                        className="trace-card"
+                      >
+                        <p className="trace-detail">{item.statement}</p>
+                        {renderEvidenceLinks(item.supporting_source_ids, evidenceTitleById)}
+                        {item.note && (
+                          <p className="trace-detail">
+                            {trustCopy.note}: {item.note}
+                          </p>
+                        )}
+                        {item.uncertainty_reason && (
+                          <p className="trace-detail">
+                            {trustCopy.uncertainty}: {item.uncertainty_reason}
+                          </p>
+                        )}
+                        {item.missing_evidence.length > 0 && (
+                          <div className="list-block">
+                            {item.missing_evidence.map((missing) => (
+                              <p key={missing}>
+                                {trustCopy.missingEvidence}: {missing}
+                              </p>
+                            ))}
+                          </div>
+                        )}
+                      </article>
+                    ))}
+                  </div>
+                )}
+              </article>
+            ))}
+          </div>
+
+          <div className="comparison-diff-grid">
+            <article className="subsection-card">
+              <span className="trace-label">{trustCopy.clarifications}</span>
+              {topicResult.clarification_suggestions.length === 0 ? (
+                <p className="subsection-copy">-</p>
+              ) : (
+                <div className="trace-list">
+                  {topicResult.clarification_suggestions.map((item) => (
+                    <article key={item.field_key} className="trace-card">
+                      <div className="trace-meta-row">
+                        <strong>{item.field_key}</strong>
+                      </div>
+                      <p className="trace-detail">{item.prompt}</p>
+                      <p className="trace-detail">
+                        {trustCopy.note}: {item.reason}
+                      </p>
+                      {item.suggested_values.length > 0 && (
+                        <div className="pill-strip">
+                          {item.suggested_values.map((value) => (
+                            <span key={value} className="meta-pill">
+                              {value}
+                            </span>
+                          ))}
+                        </div>
+                      )}
+                    </article>
+                  ))}
+                </div>
+              )}
+            </article>
+
+            <article className="subsection-card">
+              <span className="trace-label">{trustCopy.diagnostics}</span>
+              <div className="trace-grid">
+                <div>
+                  <span className="trace-label">{trustCopy.requestedProvider}</span>
+                  <strong>{topicResult.evidence_diagnostics.requested_provider}</strong>
+                </div>
+                <div>
+                  <span className="trace-label">{trustCopy.usedProvider}</span>
+                  <strong>{topicResult.evidence_diagnostics.used_provider}</strong>
+                </div>
+                <div>
+                  <span className="trace-label">{trustCopy.fallbackUsed}</span>
+                  <strong>
+                    {topicResult.evidence_diagnostics.fallback_used ? trustCopy.yes : trustCopy.no}
+                  </strong>
+                </div>
+                <div>
+                  <span className="trace-label">{trustCopy.recordCount}</span>
+                  <strong>{topicResult.evidence_diagnostics.record_count}</strong>
+                </div>
+                <div>
+                  <span className="trace-label">{trustCopy.cacheHit}</span>
+                  <strong>
+                    {topicResult.evidence_diagnostics.cache_hit ? trustCopy.yes : trustCopy.no}
+                  </strong>
+                </div>
+              </div>
+              {topicResult.evidence_diagnostics.fallback_reason && (
+                <p className="trace-detail">
+                  {trustCopy.note}: {topicResult.evidence_diagnostics.fallback_reason}
+                </p>
+              )}
+            </article>
+          </div>
+
+          <article className="subsection-card">
+            <span className="trace-label">
+              {trustCopy.trace} °§ {topicResult.trace.length} {trustCopy.stages}
+            </span>
+            <div className="trace-list">
+              {topicResult.trace.map((event) => (
+                <article key={`${event.stage}-${event.timestamp}`} className="trace-card">
+                  <div className="trace-meta-row">
+                    <span className="trace-label">{event.stage}</span>
+                    <span className="status-chip success">{event.status}</span>
+                  </div>
+                  <p className="trace-detail">{event.detail}</p>
+                </article>
+              ))}
+            </div>
+          </article>
+        </div>
+      )}
     </article>
   );
 }
