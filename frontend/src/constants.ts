@@ -1,4 +1,4 @@
-import type { Locale, ViewKey } from "./types";
+﻿import type { Locale, ViewKey } from "./types";
 
 export const presetQuestions: Record<string, string[]> = {
   "rag_overview.md": [

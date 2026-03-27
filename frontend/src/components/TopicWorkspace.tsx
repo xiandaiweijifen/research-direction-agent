@@ -1,4 +1,4 @@
-import type { FormEvent } from "react";
+﻿import type { FormEvent } from "react";
 
 import type { Locale, TopicAgentSessionResponse, TopicAgentSessionSummary } from "../types";
 
@@ -55,11 +55,11 @@ export function TopicWorkspace({
       ? {
           workspace: "选题工作台",
           title: "科研选题副驾",
-          banner: "从研究兴趣出发，查看问题 framing、证据记录、候选选题和收敛建议。",
+          banner: "从研究兴趣出发，查看问题定义、证据记录、候选方向与收敛建议。",
           formTitle: "探索输入",
-          formCopy: "先用一个很小的结构化表单驱动 Topic Agent MVP 工作流。",
+          formCopy: "用一组紧凑的结构化输入启动一次选题探索。",
           interest: "研究兴趣",
-          problemDomain: "问题域",
+          problemDomain: "问题领域",
           seedIdea: "初步想法",
           timeBudget: "时间预算（月）",
           resourceLevel: "资源水平",
@@ -67,21 +67,21 @@ export function TopicWorkspace({
           run: "运行 Topic Agent",
           refine: "基于当前结果收敛",
           running: "正在运行 Topic Agent...",
-          framing: "问题 Framing",
+          framing: "问题定义",
           evidence: "证据记录",
-          candidates: "候选选题",
+          candidates: "候选方向",
           supportingEvidence: "支撑证据",
           comparison: "比较与收敛",
           candidateScores: "候选比较",
           trace: "执行轨迹",
           confidence: "可信度摘要",
-          recentSessions: "最近探索记录",
+          recentSessions: "最近运行记录",
           load: "加载",
           noResult: "还没有 Topic Agent 结果",
-          noResultCopy: "填写研究兴趣并运行后，这里会展示结构化结果。",
+          noResultCopy: "提交研究兴趣后，这里会展示结构化的选题分析结果。",
           recommendation: "推荐方向",
           backup: "备选方向",
-          searchQuestions: "检索子问题",
+          searchQuestions: "搜索问题",
           manualChecks: "人工确认",
         }
       : {
@@ -90,7 +90,7 @@ export function TopicWorkspace({
           banner:
             "Start from a research interest and inspect framing, evidence, candidate topics, and convergence support.",
           formTitle: "Exploration Input",
-          formCopy: "Use a small structured form to drive the Topic Agent MVP workflow.",
+          formCopy: "Use a compact structured form to run a topic exploration pass.",
           interest: "Research Interest",
           problemDomain: "Problem Domain",
           seedIdea: "Seed Idea",
@@ -104,7 +104,7 @@ export function TopicWorkspace({
           evidence: "Evidence Records",
           candidates: "Candidate Topics",
           supportingEvidence: "Supporting Evidence",
-          comparison: "Comparison And Convergence",
+          comparison: "Recommendation And Comparison",
           candidateScores: "Candidate Comparison",
           trace: "Execution Trace",
           confidence: "Confidence Summary",
@@ -196,7 +196,9 @@ export function TopicWorkspace({
         <div className="panel-heading">
           <div>
             <h2>{copy.recentSessions}</h2>
-            <p className="panel-intro">{topicSessions.length} sessions</p>
+            <p className="panel-intro">
+              {topicSessions.length} {copy.recentSessions.toLowerCase?.() ?? copy.recentSessions}
+            </p>
           </div>
         </div>
         {topicSessions.length === 0 ? (
@@ -206,61 +208,58 @@ export function TopicWorkspace({
           </div>
         ) : (
           <div className="trace-list">
-            {topicSessions.map((session) => (
+            {topicSessions.slice(0, 4).map((session) => (
               <article key={session.session_id} className="trace-card">
                 <div className="trace-meta-row">
                   <strong>{session.interest}</strong>
-                  <span className="status-chip">{session.candidate_count} topics</span>
-                </div>
-                <p className="trace-detail">{session.recommended_candidate_id ?? "-"}</p>
-                <div className="button-row">
                   <button
                     type="button"
-                    className="secondary-button"
+                    className="ghost-button"
                     onClick={() => onLoadSession(session.session_id)}
                   >
                     {copy.load}
                   </button>
                 </div>
+                <p className="trace-detail">
+                  {session.problem_domain || session.recommended_candidate_id || session.session_id}
+                </p>
               </article>
             ))}
           </div>
         )}
       </article>
 
-      <article className="panel preview-panel">
-        <div className="panel-heading">
-          <div>
-            <h2>{copy.framing}</h2>
-            <p className="panel-intro">
-              {topicResult ? topicResult.framing_result.normalized_topic : copy.noResult}
-            </p>
-          </div>
-        </div>
-        {!topicResult ? (
-          <div className="empty-state">
-            <strong>{copy.noResult}</strong>
-            <p>{copy.noResultCopy}</p>
-          </div>
-        ) : (
-          <div className="trace-list">
-            {topicResult.framing_result.search_questions.map((question) => (
-              <article key={question} className="trace-card">
-                <span className="trace-label">{copy.searchQuestions}</span>
-                <p className="trace-detail">{question}</p>
-              </article>
-            ))}
-          </div>
-        )}
-      </article>
-
-      {topicResult && (
+      {!topicResult ? (
+        <article className="panel panel-span empty-state">
+          <strong>{copy.noResult}</strong>
+          <p>{copy.noResultCopy}</p>
+        </article>
+      ) : (
         <>
           <article className="panel">
             <div className="panel-heading">
               <div>
+                <h2>{copy.framing}</h2>
+                <p className="panel-intro">{topicResult.framing_result.normalized_topic}</p>
+              </div>
+            </div>
+            <article className="subsection-card">
+              <span className="trace-label">{copy.searchQuestions}</span>
+              <div className="list-block">
+                {topicResult.framing_result.search_questions.map((question) => (
+                  <p key={question}>{question}</p>
+                ))}
+              </div>
+            </article>
+          </article>
+
+          <article className="panel panel-span">
+            <div className="panel-heading">
+              <div>
                 <h2>{copy.evidence}</h2>
-                <p className="panel-intro">{topicResult.evidence_records.length} records</p>
+                <p className="panel-intro">
+                  {topicResult.evidence_records.length} {topicResult.evidence_records.length === 1 ? "record" : "records"}
+                </p>
               </div>
             </div>
             <div className="trace-list">
@@ -276,14 +275,14 @@ export function TopicWorkspace({
             </div>
           </article>
 
-          <article className="panel">
+          <article className="panel panel-span">
             <div className="panel-heading">
               <div>
                 <h2>{copy.candidates}</h2>
-                <p className="panel-intro">{topicResult.candidate_topics.length} candidates</p>
+                <p className="panel-intro">{topicResult.candidate_topics.length}</p>
               </div>
             </div>
-            <div className="trace-list">
+            <div className="trace-list candidate-grid">
               {topicResult.candidate_topics.map((candidate) => (
                 <article key={candidate.candidate_id} className="trace-card">
                   <div className="trace-meta-row">
@@ -292,105 +291,13 @@ export function TopicWorkspace({
                   </div>
                   <p className="trace-detail">{candidate.research_question}</p>
                   <span className="trace-label">{copy.supportingEvidence}</span>
-                  {candidate.supporting_source_ids.map((sourceId) => (
-                    <p key={`${candidate.candidate_id}-${sourceId}`} className="trace-detail">
-                      {sourceId}: {evidenceTitleById.get(sourceId) ?? sourceId}
-                    </p>
-                  ))}
-                </article>
-              ))}
-            </div>
-          </article>
-
-          <article className="panel panel-span">
-            <div className="panel-heading">
-              <div>
-                <h2>{copy.comparison}</h2>
-                <p className="panel-intro">{topicResult.comparison_result.summary}</p>
-              </div>
-            </div>
-            <div className="summary-strip">
-              <div className="summary-card">
-                <span>{copy.recommendation}</span>
-                <strong>{topicResult.convergence_result.recommended_candidate_id}</strong>
-              </div>
-              <div className="summary-card">
-                <span>{copy.backup}</span>
-                <strong>{topicResult.convergence_result.backup_candidate_id ?? "-"}</strong>
-              </div>
-              <div className="summary-card">
-                <span>{copy.confidence}</span>
-                <strong>{topicResult.confidence_summary.candidate_separation}</strong>
-              </div>
-            </div>
-            <div className="trace-list">
-              {topicResult.convergence_result.manual_checks.map((check) => (
-                <article key={check} className="trace-card">
-                  <span className="trace-label">{copy.manualChecks}</span>
-                  <p className="trace-detail">{check}</p>
-                </article>
-              ))}
-            </div>
-            <div className="panel-heading">
-              <div>
-                <h2>{copy.candidateScores}</h2>
-                <p className="panel-intro">
-                  {topicResult.comparison_result.candidate_assessments.length} assessments
-                </p>
-              </div>
-            </div>
-            <div className="trace-list">
-              {topicResult.comparison_result.candidate_assessments.map((assessment) => (
-                <article key={assessment.candidate_id} className="trace-card">
-                  <div className="trace-meta-row">
-                    <strong>{assessment.candidate_id}</strong>
-                    <span className="status-chip">{assessment.novelty}</span>
+                  <div className="list-block">
+                    {candidate.supporting_source_ids.map((sourceId) => (
+                      <p key={`${candidate.candidate_id}-${sourceId}`}>
+                        {evidenceTitleById.get(sourceId) ?? sourceId}
+                      </p>
+                    ))}
                   </div>
-                  <p className="trace-detail">
-                    Feasibility: {assessment.feasibility} | Evidence: {assessment.evidence_strength}
-                  </p>
-                  <p className="trace-detail">
-                    Data: {assessment.data_availability} | Cost: {assessment.implementation_cost} | Risk: {assessment.risk}
-                  </p>
-                </article>
-              ))}
-            </div>
-          </article>
-
-          <article className="panel">
-            <div className="panel-heading">
-              <div>
-                <h2>{copy.trace}</h2>
-                <p className="panel-intro">{topicResult.trace.length} stages</p>
-              </div>
-            </div>
-            <div className="trace-list">
-              {topicResult.trace.map((event) => (
-                <article key={`${event.stage}-${event.timestamp}`} className="trace-card">
-                  <div className="trace-meta-row">
-                    <span className="trace-label">{event.stage}</span>
-                    <span className="status-chip success">{event.status}</span>
-                  </div>
-                  <p className="trace-detail">{event.detail}</p>
-                </article>
-              ))}
-            </div>
-          </article>
-
-          <article className="panel">
-            <div className="panel-heading">
-              <div>
-                <h2>{copy.confidence}</h2>
-                <p className="panel-intro">
-                  {topicResult.confidence_summary.evidence_coverage} /{" "}
-                  {topicResult.confidence_summary.source_quality}
-                </p>
-              </div>
-            </div>
-            <div className="trace-list">
-              {topicResult.confidence_summary.rationale.map((reason) => (
-                <article key={reason} className="trace-card">
-                  <p className="trace-detail">{reason}</p>
                 </article>
               ))}
             </div>

@@ -1,4 +1,4 @@
-import type {
+﻿import type {
   Locale,
   TopicAgentComparisonAssessment,
   TopicAgentSessionResponse,
@@ -30,10 +30,9 @@ export function TopicAgentRecommendationSummary({
           decisionChecklist: "决策检查清单",
           comparisonSnapshot: "比较摘要",
           recommendationReason: "推荐理由",
-          recommendationLead:
-            "先看这条推荐方向，再决定是否需要回头检查完整评分表。",
-          backupLead: "如果主方向太冒险或资源不够，优先回看这条备选。",
-          candidateAssessmentLead: "候选评估概览",
+          recommendationLead: "先看这条推荐方向，再决定是否需要回头查看完整评分表。",
+          backupLead: "如果主方向风险偏高或成本偏大，优先回看这条备选。",
+          candidateAssessmentLead: "候选评估摘要",
           recommendedBadge: "推荐",
           backupBadge: "备选",
         }
@@ -62,13 +61,18 @@ export function TopicAgentRecommendationSummary({
       <div className="decision-layout">
         <article className="decision-hero-card">
           <span className="trace-label">{uiCopy.leadDecision}</span>
-          <strong>
-            {resolveCandidateLabel(recommendationId)}
-          </strong>
+          <strong>{resolveCandidateLabel(recommendationId)}</strong>
           <p className="subsection-copy">{uiCopy.recommendationLead}</p>
           <div className="pill-strip">
-            <span className="meta-pill">{copy.confidence}: {topicResult.confidence_summary.candidate_separation}</span>
-            <span className="meta-pill">{copy.evidenceStrength}: {topicResult.comparison_result.candidate_assessments.find((item) => item.candidate_id === recommendationId)?.evidence_strength ?? "-"}</span>
+            <span className="meta-pill">
+              {copy.confidence}: {topicResult.confidence_summary.candidate_separation}
+            </span>
+            <span className="meta-pill">
+              {copy.evidenceStrength}:{" "}
+              {topicResult.comparison_result.candidate_assessments.find(
+                (item) => item.candidate_id === recommendationId,
+              )?.evidence_strength ?? "-"}
+            </span>
           </div>
         </article>
 

@@ -49,7 +49,7 @@ export function TopicAgentSessionHistory({
       ? {
           showMore: `展开其余 ${hiddenCount} 条`,
           showLess: "收起",
-          intro: "把 recent runs 当作辅助参考，而不是主要阅读路径。",
+          intro: "把最近运行当作辅助参考，而不是主要阅读路径。",
         }
       : {
           showMore: `Show ${hiddenCount} more`,

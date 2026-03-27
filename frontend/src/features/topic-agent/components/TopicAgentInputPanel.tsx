@@ -66,10 +66,10 @@ export function TopicAgentInputPanel({
           presetsCollapse: "收起 Demo 场景",
           recommendedPresets: "推荐演示场景",
           boundaryPresets: "边界检查场景",
-          recentRunsHint: "会话历史已经按 recent runs 收敛，不再作为长档案展示。",
+          recentRunsHint: "会话历史只保留最近几次运行，作为辅助参考，不再充当长档案。",
           boundaryTitle: "当前更适合演示的方向",
           boundaryCopy:
-            "当前后端在软件工程导向 family 上更稳定，尤其是 repository repair、repository issue-resolution 及其相邻方向。跨域方向仍应视为边界检查，而不是默认稳定能力。",
+            "当前后端在软件工程导向方向上更稳定，尤其是仓库级修复、仓库级 issue 解决及其相邻方向。跨域主题仍应视为边界检查，而不是默认稳定能力。",
           readingPathTitle: "默认阅读顺序",
           readingPathCopy: "建议按 framing → top evidence → comparison → recommendation 的顺序查看结果。",
           debugTitle: "临时调试选项",
