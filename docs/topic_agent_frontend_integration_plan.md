@@ -8,6 +8,8 @@ This step does not change backend semantics. It reorganizes the frontend so the 
 
 For the current phase, backend quality iteration is intentionally deferred. The goal is to complete a clear and credible Topic Agent presentation layer on top of the stabilized backend slice rather than continue retrieval or synthesis tuning.
 
+Note: a staged retrieval architecture upgrade is now being tracked separately in `docs/topic_agent_retrieval_upgrade_plan.md`. Package 1 keeps the frontend contract stable; later retrieval packages may improve evidence quality without requiring a full frontend redesign.
+
 ## 2. Current Frontend Assessment
 
 The current frontend already has Topic Agent API wiring:

@@ -65,6 +65,13 @@ class TopicAgentHttpRequestMetrics:
     latency_ms: int
 
 
+@dataclass
+class OpenAlexRetrievalPlan:
+    query_texts: list[str]
+    raw_pool_size: int
+    cache_key: str
+
+
 def _normalize_optional(value: str | None) -> str | None:
     if value is None:
         return None
@@ -166,100 +173,38 @@ class OpenAlexEvidenceProvider:
         self.max_retries = max_retries
 
     def retrieve(self, request: TopicAgentExploreRequest) -> TopicAgentEvidenceRetrievalResult:
-        query_texts = _build_openalex_queries(request)
-        raw_pool_size = _openalex_raw_pool_size(self.max_results)
-        cache_key = _build_cache_key(
-            "||".join(query_texts),
-            self.max_results,
-            version=OPENALEX_CACHE_SCHEMA_VERSION,
-        )
+        plan = _build_openalex_retrieval_plan(request, self.max_results)
         cached_records = _load_cached_records(
             self.cache_path,
-            cache_key,
+            plan.cache_key,
             self.cache_ttl_seconds,
         )
         if cached_records:
             cached_records, changed = _normalize_openalex_cached_records(cached_records, request, self.max_results)
             if changed:
-                _save_cached_records(self.cache_path, cache_key, cached_records)
-            return TopicAgentEvidenceRetrievalResult(
+                _save_cached_records(self.cache_path, plan.cache_key, cached_records)
+            return _build_cached_retrieval_result(
                 records=cached_records,
-                diagnostics=TopicAgentEvidenceDiagnostics(
-                    requested_provider=self.provider_name,
-                    used_provider=self.provider_name,
-                    fallback_used=False,
-                    fallback_reason=None,
-                    record_count=len(cached_records),
-                    cache_hit=True,
-                    query_count=0,
-                    provider_latency_ms=0,
-                    slowest_query=None,
-                    slowest_query_latency_ms=None,
-                    query_diagnostics=[],
-                ),
-            )
-        merged_records: list[TopicAgentSourceRecord] = []
-        started_at = time.perf_counter()
-        query_diagnostics: list[dict[str, str | int]] = []
-        for query_text in query_texts:
-            response, metrics = _http_get_with_retries(
-                self.api_url,
-                params={
-                    "search": query_text,
-                    "filter": "has_abstract:true",
-                    "per-page": raw_pool_size,
-                },
-                timeout_seconds=self.timeout_seconds,
-                max_retries=self.max_retries,
-                user_agent="research-topic-copilot/0.1",
-            )
-            query_diagnostics.append(
-                {
-                    "query": query_text,
-                    "latency_ms": metrics.latency_ms,
-                    "attempt_count": metrics.attempt_count,
-                }
-            )
-            payload = response.json()
-            merged_records.extend(
-                [_normalize_record(record) for record in _parse_openalex_response(payload)]
-            )
-        records = _rank_records(
-            _dedupe_records(merged_records),
-            request,
-            self.max_results,
-        )
-        records = _filter_ranked_records(records, request, self.max_results)
-        _save_cached_records(self.cache_path, cache_key, records)
-        provider_latency_ms = int((time.perf_counter() - started_at) * 1000)
-        slowest_query_entry = max(
-            query_diagnostics,
-            key=lambda item: int(item["latency_ms"]),
-            default=None,
-        )
-        return TopicAgentEvidenceRetrievalResult(
-            records=records,
-            diagnostics=TopicAgentEvidenceDiagnostics(
                 requested_provider=self.provider_name,
                 used_provider=self.provider_name,
-                fallback_used=False,
-                fallback_reason=None,
-                record_count=len(records),
-                cache_hit=False,
-                query_count=len(query_texts),
-                provider_latency_ms=provider_latency_ms,
-                slowest_query=(
-                    str(slowest_query_entry["query"])
-                    if slowest_query_entry is not None
-                    else None
-                ),
-                slowest_query_latency_ms=(
-                    int(slowest_query_entry["latency_ms"])
-                    if slowest_query_entry is not None
-                    else None
-                ),
-                query_diagnostics=query_diagnostics,
-            ),
+            )
+        started_at = time.perf_counter()
+        merged_records, query_diagnostics = _collect_openalex_candidate_records(
+            api_url=self.api_url,
+            query_texts=plan.query_texts,
+            raw_pool_size=plan.raw_pool_size,
+            timeout_seconds=self.timeout_seconds,
+            max_retries=self.max_retries,
+        )
+        records = _finalize_retrieved_records(merged_records, request, self.max_results)
+        _save_cached_records(self.cache_path, plan.cache_key, records)
+        return _build_uncached_retrieval_result(
+            records=records,
+            requested_provider=self.provider_name,
+            used_provider=self.provider_name,
+            query_texts=plan.query_texts,
+            query_diagnostics=query_diagnostics,
+            started_at=started_at,
         )
 
 
@@ -292,21 +237,10 @@ class ArxivEvidenceProvider:
             self.cache_ttl_seconds,
         )
         if cached_records:
-            return TopicAgentEvidenceRetrievalResult(
+            return _build_cached_retrieval_result(
                 records=cached_records,
-                diagnostics=TopicAgentEvidenceDiagnostics(
-                    requested_provider=self.provider_name,
-                    used_provider=self.provider_name,
-                    fallback_used=False,
-                    fallback_reason=None,
-                    record_count=len(cached_records),
-                    cache_hit=True,
-                    query_count=0,
-                    provider_latency_ms=0,
-                    slowest_query=None,
-                    slowest_query_latency_ms=None,
-                    query_diagnostics=[],
-                ),
+                requested_provider=self.provider_name,
+                used_provider=self.provider_name,
             )
         started_at = time.perf_counter()
         response, metrics = _http_get_with_retries(
@@ -322,34 +256,25 @@ class ArxivEvidenceProvider:
             max_retries=self.max_retries,
             user_agent="research-topic-copilot/0.1",
         )
-        records = _rank_records(
+        records = _finalize_retrieved_records(
             [_normalize_record(record) for record in _parse_arxiv_response(response.text)],
             request,
             self.max_results,
         )
-        records = _filter_ranked_records(records, request, self.max_results)
         _save_cached_records(self.cache_path, cache_key, records)
-        return TopicAgentEvidenceRetrievalResult(
+        return _build_uncached_retrieval_result(
             records=records,
-            diagnostics=TopicAgentEvidenceDiagnostics(
-                requested_provider=self.provider_name,
-                used_provider=self.provider_name,
-                fallback_used=False,
-                fallback_reason=None,
-                record_count=len(records),
-                cache_hit=False,
-                query_count=1,
-                provider_latency_ms=int((time.perf_counter() - started_at) * 1000),
-                slowest_query=query_text,
-                slowest_query_latency_ms=metrics.latency_ms,
-                query_diagnostics=[
-                    {
-                        "query": query_text,
-                        "latency_ms": metrics.latency_ms,
-                        "attempt_count": metrics.attempt_count,
-                    }
-                ],
-            ),
+            requested_provider=self.provider_name,
+            used_provider=self.provider_name,
+            query_texts=[query_text],
+            query_diagnostics=[
+                {
+                    "query": query_text,
+                    "latency_ms": metrics.latency_ms,
+                    "attempt_count": metrics.attempt_count,
+                }
+            ],
+            started_at=started_at,
         )
 
 
@@ -595,6 +520,132 @@ def _build_openalex_queries(request: TopicAgentExploreRequest) -> list[str]:
 def _build_cache_key(query_text: str, max_results: int, *, version: str | None = None) -> str:
     version_prefix = f"{version}::" if version else ""
     return f"{version_prefix}{query_text.strip().lower()}::max={max_results}"
+
+
+def _build_openalex_retrieval_plan(
+    request: TopicAgentExploreRequest,
+    max_results: int,
+) -> OpenAlexRetrievalPlan:
+    query_texts = _build_openalex_queries(request)
+    return OpenAlexRetrievalPlan(
+        query_texts=query_texts,
+        raw_pool_size=_openalex_raw_pool_size(max_results),
+        cache_key=_build_cache_key(
+            "||".join(query_texts),
+            max_results,
+            version=OPENALEX_CACHE_SCHEMA_VERSION,
+        ),
+    )
+
+
+def _build_cached_retrieval_result(
+    *,
+    records: list[TopicAgentSourceRecord],
+    requested_provider: str,
+    used_provider: str,
+) -> TopicAgentEvidenceRetrievalResult:
+    return TopicAgentEvidenceRetrievalResult(
+        records=records,
+        diagnostics=TopicAgentEvidenceDiagnostics(
+            requested_provider=requested_provider,
+            used_provider=used_provider,
+            fallback_used=False,
+            fallback_reason=None,
+            record_count=len(records),
+            cache_hit=True,
+            query_count=0,
+            provider_latency_ms=0,
+            slowest_query=None,
+            slowest_query_latency_ms=None,
+            query_diagnostics=[],
+        ),
+    )
+
+
+def _collect_openalex_candidate_records(
+    *,
+    api_url: str,
+    query_texts: list[str],
+    raw_pool_size: int,
+    timeout_seconds: float,
+    max_retries: int,
+) -> tuple[list[TopicAgentSourceRecord], list[dict[str, str | int]]]:
+    merged_records: list[TopicAgentSourceRecord] = []
+    query_diagnostics: list[dict[str, str | int]] = []
+    for query_text in query_texts:
+        response, metrics = _http_get_with_retries(
+            api_url,
+            params={
+                "search": query_text,
+                "filter": "has_abstract:true",
+                "per-page": raw_pool_size,
+            },
+            timeout_seconds=timeout_seconds,
+            max_retries=max_retries,
+            user_agent="research-topic-copilot/0.1",
+        )
+        query_diagnostics.append(
+            {
+                "query": query_text,
+                "latency_ms": metrics.latency_ms,
+                "attempt_count": metrics.attempt_count,
+            }
+        )
+        payload = response.json()
+        merged_records.extend(
+            [_normalize_record(record) for record in _parse_openalex_response(payload)]
+        )
+    return merged_records, query_diagnostics
+
+
+def _finalize_retrieved_records(
+    records: list[TopicAgentSourceRecord],
+    request: TopicAgentExploreRequest,
+    max_results: int,
+) -> list[TopicAgentSourceRecord]:
+    reranked_records = _rank_records(_dedupe_records(records), request, max_results)
+    return _filter_ranked_records(reranked_records, request, max_results)
+
+
+def _build_uncached_retrieval_result(
+    *,
+    records: list[TopicAgentSourceRecord],
+    requested_provider: str,
+    used_provider: str,
+    query_texts: list[str],
+    query_diagnostics: list[dict[str, str | int]],
+    started_at: float,
+) -> TopicAgentEvidenceRetrievalResult:
+    provider_latency_ms = int((time.perf_counter() - started_at) * 1000)
+    slowest_query_entry = max(
+        query_diagnostics,
+        key=lambda item: int(item["latency_ms"]),
+        default=None,
+    )
+    return TopicAgentEvidenceRetrievalResult(
+        records=records,
+        diagnostics=TopicAgentEvidenceDiagnostics(
+            requested_provider=requested_provider,
+            used_provider=used_provider,
+            fallback_used=False,
+            fallback_reason=None,
+            record_count=len(records),
+            cache_hit=False,
+            query_count=len(query_texts),
+            provider_latency_ms=provider_latency_ms,
+            slowest_query=(
+                str(slowest_query_entry["query"])
+                if slowest_query_entry is not None
+                else None
+            ),
+            slowest_query_latency_ms=(
+                int(slowest_query_entry["latency_ms"])
+                if slowest_query_entry is not None
+                else None
+            ),
+            query_diagnostics=query_diagnostics,
+        ),
+    )
 
 
 def _normalized_title_key(title: str) -> str:

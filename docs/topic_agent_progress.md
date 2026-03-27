@@ -550,3 +550,15 @@ backend\.venv\Scripts\python.exe -m pytest backend\tests\test_topic_agent_api.py
 Latest result:
 
 - `70 passed`
+
+### Retrieval Upgrade Track
+
+- Added [topic_agent_retrieval_upgrade_plan.md](/d:/project/research-topic-copilot/docs/topic_agent_retrieval_upgrade_plan.md) to track the staged retrieval architecture upgrade.
+- Completed retrieval upgrade package 1:
+  - split provider retrieval into explicit phases for planning, cache lookup, candidate collection, normalization/ranking, and diagnostics construction
+  - kept the backend response contract stable
+  - prepared the provider implementation for later hybrid retrieval and reranking packages
+- Package 1 verification:
+  - `backend/tests/test_topic_agent_providers.py`: `40 passed`
+  - `backend/tests/test_topic_agent_api.py`: `8 passed`
+  - the API pytest process completed successfully even when the shell wrapper timed out immediately after completion

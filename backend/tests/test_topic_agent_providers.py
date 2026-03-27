@@ -11,6 +11,7 @@ from app.services.topic_agent.providers import (
     FallbackEvidenceProvider,
     MockTopicAgentEvidenceProvider,
     OpenAlexEvidenceProvider,
+    _build_openalex_retrieval_plan,
     _build_openalex_queries,
     _build_cache_key,
     _build_arxiv_query,
@@ -707,6 +708,24 @@ def test_openalex_queries_keep_software_agent_fan_out_small_for_interactive_use(
     queries = _build_openalex_queries(request)
 
     assert len(queries) <= 6
+
+
+def test_openalex_retrieval_plan_reuses_query_bundle_for_cache_key():
+    request = TopicAgentExploreRequest(
+        interest="llm repository repair workflows",
+        problem_domain="software engineering evaluation",
+        constraints=TopicAgentConstraintSet(preferred_style="applied"),
+    )
+
+    plan = _build_openalex_retrieval_plan(request, 5)
+
+    assert plan.query_texts == _build_openalex_queries(request)
+    assert plan.raw_pool_size == _openalex_raw_pool_size(5)
+    assert plan.cache_key == _build_cache_key(
+        "||".join(plan.query_texts),
+        5,
+        version=OPENALEX_CACHE_SCHEMA_VERSION,
+    )
 
 
 def test_code_repair_query_detection_handles_repository_repair_workflows():
